@@ -340,6 +340,53 @@ async function logout() {
 
 async function resetPassword() {
 
+  const emailInput = document.getElementById("email");
+  const email = emailInput.value.trim();
+
+  if (!email) {
+    showStatus(
+      "Please enter your email address first.",
+      "error"
+    );
+    return;
+  }
+
+  showStatus("Sending password reset link...", "");
+
+  try {
+
+    const { error } =
+      await supabaseClient.auth.resetPasswordForEmail(
+        email,
+        {
+          redirectTo:
+            "https://gnurseresearchhub.name.ng/admin-upload.html"
+        }
+      );
+
+    if (error) {
+      showStatus(
+        "Error: " + error.message,
+        "error"
+      );
+      return;
+    }
+
+    showStatus(
+      "✅ Password reset link sent. Check your email inbox and Spam/Junk folder.",
+      "success"
+    );
+
+  } catch (error) {
+
+    showStatus(
+      "Something went wrong: " + error.message,
+      "error"
+    );
+
+  }
+}
+
   const email =
     document.getElementById("email").value.trim();
 
