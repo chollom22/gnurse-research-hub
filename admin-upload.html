@@ -317,25 +317,7 @@ async function uploadVideo() {
 }
 
 
-// LOGOUT
 
-async function logout() {
-
-  await supabaseClient.auth.signOut();
-
-  document
-    .getElementById("uploadSection")
-    .classList.add("hidden");
-
-  document
-    .getElementById("loginSection")
-    .classList.remove("hidden");
-
-  showStatus(
-    "You have been logged out.",
-    ""
-  );
-}
   // PASSWORD RESET
 
 async function resetPassword() {
@@ -422,7 +404,25 @@ async function resetPassword() {
     "success"
   );
 }
+// LOGOUT
 
+async function logout() {
+
+  await supabaseClient.auth.signOut();
+
+  document
+    .getElementById("uploadSection")
+    .classList.add("hidden");
+
+  document
+    .getElementById("loginSection")
+    .classList.remove("hidden");
+
+  showStatus(
+    "You have been logged out.",
+    ""
+  );
+}
 
 // STATUS
 
