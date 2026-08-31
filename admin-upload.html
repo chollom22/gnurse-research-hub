@@ -132,6 +132,9 @@
     <button onclick="login()">
       🔑 Admin Login
     </button>
+    <button type="button" onclick="resetPassword()">
+  🔄 Forgot Password?
+    </button>
 
   </div>
 
@@ -315,6 +318,45 @@ async function uploadVideo() {
 
 
 // LOGOUT
+  // PASSWORD RESET
+
+async function resetPassword() {
+
+  const email =
+    document.getElementById("email").value.trim();
+
+  if (!email) {
+    showStatus(
+      "Please enter your email address first.",
+      "error"
+    );
+    return;
+  }
+
+  const { error } =
+    await supabaseClient.auth.resetPasswordForEmail(
+      email,
+      {
+        redirectTo:
+          "https://gnurseresearchhub.name.ng/admin-upload.html"
+      }
+    );
+
+  if (error) {
+
+    showStatus(
+      "Reset failed: " + error.message,
+      "error"
+    );
+
+    return;
+  }
+
+  showStatus(
+    "Password reset link sent to your email.",
+    "success"
+  );
+    }
 
 async function logout() {
 
