@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Video Upload | G Nurse Research Hub Nigeria</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f7fb;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: 40px auto;
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #0b5ed7;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 7px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+    }
+
+    button {
+      width: 100%;
+      padding: 13px;
+      margin-top: 18px;
+      border: none;
+      border-radius: 7px;
+      background: #0b5ed7;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background: #999;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #status {
+      margin-top: 20px;
+      padding: 12px;
+      border-radius: 7px;
+      text-align: center;
+    }
+
+    .success {
+      background: #d1e7dd;
+      color: #0f5132;
+    }
+
+    .error {
+      background: #f8d7da;
+      color: #842029;
+    }
+
+    .logout {
+      background: #dc3545;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>🔐 Admin Video Upload</h1>
+
+  <p class="subtitle">
+    G Nurse Research Hub Nigeria
+  </p>
+
+  <!-- LOGIN -->
+
+  <div id="loginSection">
+
+    <label>Email</label>
+
+    <input
+      type="email"
+      id="email"
+      placeholder="Admin email"
+    >
+
+    <label>Password</label>
+
+    <input
+      type="password"
+      id="password"
+      placeholder="Admin password"
+    >
+
+    <button onclick="login()">
+      🔑 Admin Login
+    </button>
+
+  </div>
+
+
+  <!-- UPLOAD -->
+
+  <div id="uploadSection" class="hidden">
+
+    <p>You are logged in as admin.</p>
+
+    <label>Select Video</label>
+
+    <input
+      type="file"
+      id="videoFile"
+      accept="video/*"
+    >
+
+    <button id="uploadButton" onclick="uploadVideo()">
+      ⬆️ Upload Video
+    </button>
+
+    <button class="logout" onclick="logout()">
+      Logout
+    </button>
+
+  </div>
+
+
+  <div id="status" class="hidden"></div>
+
+</div>
+
+
+<script>
+
+const SUPABASE_URL =
+  "https://bmiechymiyedubezhcqk.supabase.co";
+
+
+const SUPABASE_ANON_KEY =
+  "PASTE_YOUR_ANON_KEY_HERE";
+
+
+const supabaseClient =
+  supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+
+// LOGIN
+
+async function login() {
+
+  const email =
+    document.getElementById("email").value;
+
+  const password =
+    document.getElementById("password").value;
+
+  showStatus("Logging in...", "");
+
+  const { data, error } =
+    await supabaseClient.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+
+  if (error) {
+
+    showStatus(
+      "Login failed: " + error.message,
+      "error"
+    );
+
+    return;
+  }
+
+  document
+    .getElementById("loginSection")
+    .classList.add("hidden");
+
+  document
+    .getElementById("uploadSection")
+    .classList.remove("hidden");
+
+  showStatus(
+    "Login successful. You can now upload videos.",
+    "success"
+  );
+}
+
+
+// UPLOAD VIDEO
+
+async function uploadVideo() {
+
+  const file =
+    document.getElementById("videoFile").files[0];
+
+  if (!file) {
+
+    showStatus(
+      "Please select a video first.",
+      "error"
+    );
+
+    return;
+  }
+
+  const {
+    data: { user }
+  } = await supabaseClient.auth.getUser();
+
+  if (!user) {
+
+    showStatus(
+      "You must be logged in.",
+      "error"
+    );
+
+    return;
+  }
+
+  const uploadButton =
+    document.getElementById("uploadButton");
+
+  uploadButton.disabled = true;
+
+  uploadButton.textContent =
+    "Uploading...";
+
+  const fileName =
+    Date.now() + "-" +
+    file.name.replace(/\s+/g, "-");
+
+  const filePath =
+    "videos/" + fileName;
+
+  const { error } =
+    await supabaseClient.storage
+      .from("videos")
+      .upload(
+        filePath,
+        file,
+        {
+          cacheControl: "3600",
+          upsert: false
+        }
+      );
+
+  if (error) {
+
+    showStatus(
+      "Upload failed: " + error.message,
+      "error"
+    );
+
+    uploadButton.disabled = false;
+
+    uploadButton.textContent =
+      "⬆️ Upload Video";
+
+    return;
+  }
+
+  showStatus(
+    "✅ Video uploaded successfully!",
+    "success"
+  );
+
+  uploadButton.disabled = false;
+
+  uploadButton.textContent =
+    "⬆️ Upload Video";
+
+  document
+    .getElementById("videoFile")
+    .value = "";
+}
+
+
+// LOGOUT
+
+async function logout() {
+
+  await supabaseClient.auth.signOut();
+
+  document
+    .getElementById("uploadSection")
+    .classList.add("hidden");
+
+  document
+    .getElementById("loginSection")
+    .classList.remove("hidden");
+
+  showStatus(
+    "You have been logged out.",
+    ""
+  );
+}
+
+
+// STATUS
+
+function showStatus(text, type) {
+
+  const status =
+    document.getElementById("status");
+
+  status.textContent = text;
+
+  status.className = "";
+
+  status.classList.add(type);
+
+  status.classList.remove("hidden");
+}
+
+</script>
+
+</body>
+    </html>
