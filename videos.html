@@ -1,7 +1,6 @@
 <!DOCTYPE html><html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Educational Videos | G Nurse Research Hub Nigeria</title>  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <style>
+<head>  <meta charset="UTF-8">  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Educational Videos | G Nurse Research Hub Nigeria</title>  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <style>
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -100,6 +99,10 @@
       margin-top: 20px;
     }
 
+    .hidden {
+      display: none;
+    }
+
     .back-button {
       display: inline-block;
       margin-top: 25px;
@@ -120,6 +123,7 @@
     }
 
     @media (max-width: 600px) {
+
       header h1 {
         font-size: 23px;
       }
@@ -128,15 +132,21 @@
         display: inline-block;
         margin: 5px;
       }
+
     }
-  </style></head><body>  <header>
-    <h1>🎥 Educational Videos</h1>
-    <p>G Nurse Research Hub Nigeria</p>
-  </header>  <nav>
-    <a href="index.html">Home</a>
-    <a href="resources.html">📚 Resources</a>
-    <a href="videos.html">🎥 Videos</a>
-    <a href="index.html#contact">Contact</a>
+
+  </style></head><body>  <header><h1>🎥 Educational Videos</h1>
+
+<p>G Nurse Research Hub Nigeria</p>
+
+  </header>  <nav><a href="index.html">Home</a>
+
+<a href="resources.html">📚 Resources</a>
+
+<a href="videos.html">🎥 Videos</a>
+
+<a href="index.html#contact">Contact</a>
+
   </nav>  <main class="container"><h2>Educational Videos</h2>
 
 <p class="intro">
@@ -151,18 +161,16 @@
 </div>
 
 <div style="text-align:center;">
+
   <a class="back-button" href="index.html">
     ← Back to Home
   </a>
+
 </div>
 
-  </main>  <footer><p>
-  © 2026 G Nurse Research Hub Nigeria
-</p>
+  </main>  <footer><p>© 2026 G Nurse Research Hub Nigeria</p>
 
-<p>
-  All Rights Reserved.
-</p>
+<p>All Rights Reserved.</p>
 
   </footer><script>
 
@@ -170,12 +178,13 @@ const SUPABASE_URL =
   "https://bmiechymiyedubezhcqk.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
-  "sb_publishable_9JL2ALhTGlZV57hUV0mTdQ_c2hdT8O8";
+  "PASTE-YOUR-PUBLISHABLE-KEY-HERE";
+
 
 const supabaseClient =
   window.supabase.createClient(
     SUPABASE_URL,
-    SUPABASE_ANON_KEY
+    SUPABASE_PUBLISHABLE_KEY
   );
 
 
@@ -203,6 +212,7 @@ async function loadVideos() {
           }
         });
 
+
     if (error) {
 
       message.textContent =
@@ -210,6 +220,7 @@ async function loadVideos() {
 
       return;
     }
+
 
     if (!data || data.length === 0) {
 
@@ -219,26 +230,32 @@ async function loadVideos() {
       return;
     }
 
+
     message.classList.add("hidden");
+
 
     data.forEach(function(file) {
 
       const filePath =
         "videos/" + file.name;
 
+
       const { data: publicUrlData } =
         supabaseClient.storage
           .from("videos")
           .getPublicUrl(filePath);
 
+
       const videoUrl =
         publicUrlData.publicUrl;
+
 
       const card =
         document.createElement("div");
 
       card.className =
         "video-card";
+
 
       const video =
         document.createElement("video");
@@ -249,11 +266,13 @@ async function loadVideos() {
 
       video.src = videoUrl;
 
+
       const info =
         document.createElement("div");
 
       info.className =
         "video-info";
+
 
       const title =
         document.createElement("h3");
@@ -261,11 +280,13 @@ async function loadVideos() {
       title.textContent =
         file.name;
 
+
       const description =
         document.createElement("p");
 
       description.textContent =
         "Educational video";
+
 
       info.appendChild(title);
 
@@ -279,16 +300,18 @@ async function loadVideos() {
 
     });
 
-  } catch (error) {
+  }
+
+  catch (error) {
 
     message.textContent =
       "Something went wrong: " + error.message;
 
   }
+
 }
 
 
 loadVideos();
 
-</script></body>
-  </html>
+</script></body></html>
