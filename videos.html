@@ -1,0 +1,294 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Educational Videos | G Nurse Research Hub Nigeria</title>  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f5f9fc;
+      color: #222;
+      line-height: 1.6;
+    }
+
+    header {
+      background: #087f8c;
+      color: white;
+      padding: 25px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+
+    nav {
+      background: #05636e;
+      padding: 12px;
+      text-align: center;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #087f8c;
+      margin-bottom: 10px;
+    }
+
+    .intro {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #555;
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+    }
+
+    .video-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+    }
+
+    video {
+      width: 100%;
+      display: block;
+      background: black;
+    }
+
+    .video-info {
+      padding: 15px;
+    }
+
+    .video-info h3 {
+      color: #087f8c;
+      margin-bottom: 5px;
+      word-break: break-word;
+    }
+
+    .video-info p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .message {
+      text-align: center;
+      padding: 30px;
+      background: white;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+
+    .back-button {
+      display: inline-block;
+      margin-top: 25px;
+      background: #087f8c;
+      color: white;
+      padding: 12px 22px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    footer {
+      background: #05636e;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 23px;
+      }
+
+      nav a {
+        display: inline-block;
+        margin: 5px;
+      }
+    }
+  </style></head><body>  <header>
+    <h1>🎥 Educational Videos</h1>
+    <p>G Nurse Research Hub Nigeria</p>
+  </header>  <nav>
+    <a href="index.html">Home</a>
+    <a href="resources.html">📚 Resources</a>
+    <a href="videos.html">🎥 Videos</a>
+    <a href="index.html#contact">Contact</a>
+  </nav>  <main class="container"><h2>Educational Videos</h2>
+
+<p class="intro">
+  Watch nursing tutorials, presentations and other
+  educational materials from G Nurse Research Hub Nigeria.
+</p>
+
+<div id="videoGrid" class="video-grid"></div>
+
+<div id="message" class="message">
+  Loading videos...
+</div>
+
+<div style="text-align:center;">
+  <a class="back-button" href="index.html">
+    ← Back to Home
+  </a>
+</div>
+
+  </main>  <footer><p>
+  © 2026 G Nurse Research Hub Nigeria
+</p>
+
+<p>
+  All Rights Reserved.
+</p>
+
+  </footer><script>
+
+const SUPABASE_URL =
+  "https://bmiechymiyedubezhcqk.supabase.co";
+
+const SUPABASE_ANON_KEY =
+  "PASTE-YOUR-PUBLISHABLE-KEY-HERE";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+
+// LOAD VIDEOS
+
+async function loadVideos() {
+
+  const videoGrid =
+    document.getElementById("videoGrid");
+
+  const message =
+    document.getElementById("message");
+
+  try {
+
+    const { data, error } =
+      await supabaseClient.storage
+        .from("videos")
+        .list("videos", {
+          limit: 100,
+          offset: 0,
+          sortBy: {
+            column: "name",
+            order: "desc"
+          }
+        });
+
+    if (error) {
+
+      message.textContent =
+        "Unable to load videos: " + error.message;
+
+      return;
+    }
+
+    if (!data || data.length === 0) {
+
+      message.textContent =
+        "No educational videos have been uploaded yet.";
+
+      return;
+    }
+
+    message.classList.add("hidden");
+
+    data.forEach(function(file) {
+
+      const filePath =
+        "videos/" + file.name;
+
+      const { data: publicUrlData } =
+        supabaseClient.storage
+          .from("videos")
+          .getPublicUrl(filePath);
+
+      const videoUrl =
+        publicUrlData.publicUrl;
+
+      const card =
+        document.createElement("div");
+
+      card.className =
+        "video-card";
+
+      const video =
+        document.createElement("video");
+
+      video.controls = true;
+
+      video.preload = "metadata";
+
+      video.src = videoUrl;
+
+      const info =
+        document.createElement("div");
+
+      info.className =
+        "video-info";
+
+      const title =
+        document.createElement("h3");
+
+      title.textContent =
+        file.name;
+
+      const description =
+        document.createElement("p");
+
+      description.textContent =
+        "Educational video";
+
+      info.appendChild(title);
+
+      info.appendChild(description);
+
+      card.appendChild(video);
+
+      card.appendChild(info);
+
+      videoGrid.appendChild(card);
+
+    });
+
+  } catch (error) {
+
+    message.textContent =
+      "Something went wrong: " + error.message;
+
+  }
+}
+
+
+loadVideos();
+
+</script></body>
+  </html>
