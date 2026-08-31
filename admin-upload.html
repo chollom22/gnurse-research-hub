@@ -1,13 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Video Upload | G Nurse Research Hub Nigeria</title>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Admin Video Upload | G Nurse Research Hub Nigeria</title>  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <style>
     * {
       box-sizing: border-box;
       margin: 0;
@@ -96,90 +90,90 @@
     .logout {
       background: #dc3545;
     }
-  </style>
-</head>
-
-<body>
-
-<div class="container">
-
-  <h1>🔐 Admin Video Upload</h1>
-
-  <p class="subtitle">
+  </style></head><body><div class="container">  <h1>🔐 Admin Video Upload</h1>  <p class="subtitle">
     G Nurse Research Hub Nigeria
-  </p>
+  </p>  <!-- LOGIN -->  <div id="loginSection"><label>Email</label>
 
-  <!-- LOGIN -->
+<input
+  type="email"
+  id="email"
+  placeholder="Admin email"
+>
 
-  <div id="loginSection">
+<label>Password</label>
 
-    <label>Email</label>
+<input
+  type="password"
+  id="password"
+  placeholder="Admin password"
+>
 
-    <input
-      type="email"
-      id="email"
-      placeholder="Admin email"
-    >
+<button type="button" onclick="login()">
+  🔑 Admin Login
+</button>
 
-    <label>Password</label>
-
-    <input
-      type="password"
-      id="password"
-      placeholder="Admin password"
-    >
-
-    <button onclick="login()">
-      🔑 Admin Login
-    </button>
-    <button type="button" onclick="resetPassword()">
+<button type="button" onclick="resetPassword()">
   🔄 Forgot Password?
-    </button>
+</button>
 
-  </div>
+  </div>  <!-- UPLOAD -->  <div id="uploadSection" class="hidden"><p>You are logged in as admin.</p>
 
+<label>Select Video</label>
 
-  <!-- UPLOAD -->
+<input
+  type="file"
+  id="videoFile"
+  accept="video/*"
+>
 
-  <div id="uploadSection" class="hidden">
+<button
+  type="button"
+  id="uploadButton"
+  onclick="uploadVideo()"
+>
+  ⬆️ Upload Video
+</button>
 
-    <p>You are logged in as admin.</p>
+<button
+  type="button"
+  class="logout"
+  onclick="logout()"
+>
+  Logout
+</button>
 
-    <label>Select Video</label>
-
-    <input
-      type="file"
-      id="videoFile"
-      accept="video/*"
-    >
-
-    <button id="uploadButton" onclick="uploadVideo()">
-      ⬆️ Upload Video
-    </button>
-
-    <button class="logout" onclick="logout()">
-      Logout
-    </button>
-
-  </div>
-
-
-  <div id="status" class="hidden"></div>
-
-</div>
-
-
-<script>
+  </div>  <div id="status" class="hidden"></div></div><script>
 
 const SUPABASE_URL =
   "https://bmiechymiyedubezhcqk.supabase.co";
+
 const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJtaWVjaHltaXllZHViZXpoY3FrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgxMTc5ODQsImV4cCI6MjEwMzY5Mzk4NH0.8jU7v-ZYm0wmVD4PCqAsP_mhE42HTmaKwezfHkyd1Gw";
+  "PASTE-YOUR-EXISTING-SUPABASE-KEY-HERE";
+
 const supabaseClient =
-  supabase.createClient(
+  window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_ANON_KEY
   );
+
+
+// SHOW STATUS
+
+function showStatus(text, type) {
+
+  const status =
+    document.getElementById("status");
+
+  status.textContent = text;
+
+  status.className = "";
+
+  status.classList.remove("hidden");
+
+  if (type) {
+    status.classList.add(type);
+  }
+}
 
 
 // LOGIN
@@ -187,41 +181,121 @@ const supabaseClient =
 async function login() {
 
   const email =
-    document.getElementById("email").value;
+    document.getElementById("email").value.trim();
 
   const password =
     document.getElementById("password").value;
 
-  showStatus("Logging in...", "");
-
-  const { data, error } =
-    await supabaseClient.auth.signInWithPassword({
-      email: email,
-      password: password
-    });
-
-  if (error) {
+  if (!email || !password) {
 
     showStatus(
-      "Login failed: " + error.message,
+      "Please enter your email and password.",
       "error"
     );
 
     return;
   }
 
-  document
-    .getElementById("loginSection")
-    .classList.add("hidden");
+  showStatus("Logging in...", "");
 
-  document
-    .getElementById("uploadSection")
-    .classList.remove("hidden");
+  try {
+
+    const { data, error } =
+      await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+      });
+
+    if (error) {
+
+      showStatus(
+        "Login failed: " + error.message,
+        "error"
+      );
+
+      return;
+    }
+
+    document
+      .getElementById("loginSection")
+      .classList.add("hidden");
+
+    document
+      .getElementById("uploadSection")
+      .classList.remove("hidden");
+
+    showStatus(
+      "✅ Login successful. You can now upload videos.",
+      "success"
+    );
+
+  } catch (error) {
+
+    showStatus(
+      "Login error: " + error.message,
+      "error"
+    );
+
+  }
+}
+
+
+// PASSWORD RESET
+
+async function resetPassword() {
+
+  const email =
+    document.getElementById("email").value.trim();
+
+  if (!email) {
+
+    showStatus(
+      "Please enter your email address first.",
+      "error"
+    );
+
+    return;
+  }
 
   showStatus(
-    "Login successful. You can now upload videos.",
-    "success"
+    "Sending password reset link...",
+    ""
   );
+
+  try {
+
+    const { error } =
+      await supabaseClient.auth.resetPasswordForEmail(
+        email,
+        {
+          redirectTo:
+            "https://gnurseresearchhub.name.ng/admin-upload.html"
+        }
+      );
+
+    if (error) {
+
+      showStatus(
+        "Reset failed: " + error.message,
+        "error"
+      );
+
+      return;
+    }
+
+    showStatus(
+      "✅ Password reset link sent. Check your email inbox and Spam/Junk folder.",
+      "success"
+    );
+
+  } catch (error) {
+
+    showStatus(
+      "Reset error: " + error.message,
+      "error"
+    );
+
+  }
 }
 
 
@@ -271,136 +345,56 @@ async function uploadVideo() {
   const filePath =
     "videos/" + fileName;
 
-  const { error } =
-    await supabaseClient.storage
-      .from("videos")
-      .upload(
-        filePath,
-        file,
-        {
-          cacheControl: "3600",
-          upsert: false
-        }
+  try {
+
+    const { error } =
+      await supabaseClient.storage
+        .from("videos")
+        .upload(
+          filePath,
+          file,
+          {
+            cacheControl: "3600",
+            upsert: false
+          }
+        );
+
+    if (error) {
+
+      showStatus(
+        "Upload failed: " + error.message,
+        "error"
       );
 
-  if (error) {
+      return;
+    }
 
     showStatus(
-      "Upload failed: " + error.message,
+      "✅ Video uploaded successfully!",
+      "success"
+    );
+
+    document
+      .getElementById("videoFile")
+      .value = "";
+
+  } catch (error) {
+
+    showStatus(
+      "Upload error: " + error.message,
       "error"
     );
+
+  } finally {
 
     uploadButton.disabled = false;
 
     uploadButton.textContent =
       "⬆️ Upload Video";
-
-    return;
-  }
-
-  showStatus(
-    "✅ Video uploaded successfully!",
-    "success"
-  );
-
-  uploadButton.disabled = false;
-
-  uploadButton.textContent =
-    "⬆️ Upload Video";
-
-  document
-    .getElementById("videoFile")
-    .value = "";
-}
-
-
-
-  // PASSWORD RESET
-
-async function resetPassword() {
-
-  const emailInput = document.getElementById("email");
-  const email = emailInput.value.trim();
-
-  if (!email) {
-    showStatus(
-      "Please enter your email address first.",
-      "error"
-    );
-    return;
-  }
-
-  showStatus("Sending password reset link...", "");
-
-  try {
-
-    const { error } =
-      await supabaseClient.auth.resetPasswordForEmail(
-        email,
-        {
-          redirectTo:
-            "https://gnurseresearchhub.name.ng/admin-upload.html"
-        }
-      );
-
-    if (error) {
-      showStatus(
-        "Error: " + error.message,
-        "error"
-      );
-      return;
-    }
-
-    showStatus(
-      "✅ Password reset link sent. Check your email inbox and Spam/Junk folder.",
-      "success"
-    );
-
-  } catch (error) {
-
-    showStatus(
-      "Something went wrong: " + error.message,
-      "error"
-    );
-
   }
 }
 
-  const email =
-    document.getElementById("email").value.trim();
 
-  if (!email) {
-    showStatus(
-      "Please enter your email address first.",
-      "error"
-    );
-    return;
-  }
-
-  const { error } =
-    await supabaseClient.auth.resetPasswordForEmail(
-      email,
-      {
-        redirectTo:
-          "https://gnurseresearchhub.name.ng/admin-upload.html"
-      }
-    );
-
-  if (error) {
-
-    showStatus(
-      "Reset failed: " + error.message,
-      "error"
-    );
-
-    return;
-  }
-
-  showStatus(
-    "Password reset link sent to your email.",
-    "success"
-  );
-}
 // LOGOUT
 
 async function logout() {
@@ -421,23 +415,5 @@ async function logout() {
   );
 }
 
-// STATUS
-
-function showStatus(text, type) {
-
-  const status =
-    document.getElementById("status");
-
-  status.textContent = text;
-
-  status.className = "";
-
-  status.classList.add(type);
-
-  status.classList.remove("hidden");
-}
-
-</script>
-
-</body>
-    </html>
+</script></body>
+</html>
