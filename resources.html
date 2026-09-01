@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Resource Materials | G Nurse Research Hub Nigeria</title>  <style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Resource Materials | G Nurse Research Hub Nigeria</title>  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <style>
     * {
       box-sizing: border-box;
     }
@@ -67,23 +67,17 @@
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
       text-align: center;
-      transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    .subject:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.12);
+    .subject-icon {
+      font-size: 32px;
+      margin-bottom: 10px;
     }
 
     .subject h3 {
       margin: 0 0 15px;
       color: #0b5ed7;
       font-size: 18px;
-    }
-
-    .subject-icon {
-      font-size: 32px;
-      margin-bottom: 10px;
     }
 
     .button {
@@ -100,6 +94,68 @@
 
     .button:hover {
       background: #084298;
+    }
+
+    .materials {
+      display: none;
+      margin-top: 20px;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .materials.active {
+      display: block;
+    }
+
+    .materials h2 {
+      color: #0b5ed7;
+      margin-top: 0;
+      text-align: center;
+    }
+
+    .material {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 18px;
+      margin-top: 15px;
+      background: #fafafa;
+    }
+
+    .material h3 {
+      color: #0b5ed7;
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    .material p {
+      color: #555;
+      line-height: 1.5;
+    }
+
+    .no-files {
+      text-align: center;
+      padding: 25px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .error-message {
+      text-align: center;
+      padding: 20px;
+      background: #f8d7da;
+      color: #842029;
+      border-radius: 10px;
+      line-height: 1.6;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 20px;
+      color: #555;
     }
 
     .back {
@@ -136,153 +192,420 @@
       .subject {
         padding: 20px;
       }
+
     }
-  </style></head><body><header>
-  <h1>G Nurse Research Hub Nigeria</h1>
-  <p>Research Support • Nursing Education • Academic Resources</p>
-</header><div class="container">  <div class="intro">
-    <h2>📚 Resource Materials</h2><p>
-  Welcome to our Resource Materials Centre. Select a subject below
-  to access educational materials, lecture notes, study guides,
-  past questions and other academic resources.
+  </style></head><body><header>  <h1>G Nurse Research Hub Nigeria</h1>  <p>
+    Research Support • Nursing Education • Academic Resources
+  </p></header><div class="container">  <div class="intro"><h2>📚 Resource Materials</h2>
+
+<p>
+  Welcome to our Resource Materials Centre.
+  Select a subject below to view available educational
+  materials, lecture notes, study guides and other
+  academic resources.
 </p>
 
-  </div>  <div class="subjects"><div class="subject">
+  </div>  <!-- SUBJECTS -->  <div class="subjects"><div class="subject">
   <div class="subject-icon">⚛️</div>
   <h3>Physics</h3>
-  <a href="#" class="button">View Materials</a>
+  <button class="button" onclick="showMaterials('Physics')">
+    View Materials
+  </button>
 </div>
+
 
 <div class="subject">
   <div class="subject-icon">🧪</div>
   <h3>Chemistry</h3>
-  <a href="#" class="button">View Materials</a>
+  <button class="button" onclick="showMaterials('Chemistry')">
+    View Materials
+  </button>
 </div>
+
 
 <div class="subject">
   <div class="subject-icon">🧬</div>
   <h3>Biology</h3>
-  <a href="#" class="button">View Materials</a>
+  <button class="button" onclick="showMaterials('Biology')">
+    View Materials
+  </button>
 </div>
+
 
 <div class="subject">
   <div class="subject-icon">📐</div>
   <h3>Mathematics</h3>
-  <a href="#" class="button">View Materials</a>
+  <button class="button" onclick="showMaterials('Mathematics')">
+    View Materials
+  </button>
 </div>
+
 
 <div class="subject">
   <div class="subject-icon">📊</div>
   <h3>Statistics</h3>
-  <a href="#" class="button">View Materials</a>
+  <button class="button" onclick="showMaterials('Statistics')">
+    View Materials
+  </button>
 </div>
+
 
 <div class="subject">
   <div class="subject-icon">🦠</div>
   <h3>Microbiology</h3>
-  <a href="#" class="button">View Materials</a>
+  <button class="button" onclick="showMaterials('Microbiology')">
+    View Materials
+  </button>
 </div>
+
 
 <div class="subject">
   <div class="subject-icon">🔬</div>
   <h3>Parasitology</h3>
-  <a href="#" class="button">View Materials</a>
+  <button class="button" onclick="showMaterials('Parasitology')">
+    View Materials
+  </button>
 </div>
+
 
 <div class="subject">
   <div class="subject-icon">🔬</div>
   <h3>Histopathology</h3>
-  <a href="#" class="button">View Materials</a>
+  <button class="button" onclick="showMaterials('Histopathology')">
+    View Materials
+  </button>
 </div>
+
 
 <div class="subject">
   <div class="subject-icon">🩺</div>
   <h3>Medical-Surgical Nursing</h3>
-  <a href="#" class="button">View Materials</a>
+  <button class="button" onclick="showMaterials('Medical Surgical Nursing')">
+    View Materials
+  </button>
 </div>
+
 
 <div class="subject">
   <div class="subject-icon">🏥</div>
   <h3>Community Health Nursing</h3>
-  <a href="#" class="button">View Materials</a>
+  <button class="button" onclick="showMaterials('Community Health Nursing')">
+    View Materials
+  </button>
 </div>
+
 
 <div class="subject">
   <div class="subject-icon">🌍</div>
   <h3>Environmental Health</h3>
-  <a href="#" class="button">View Materials</a>
+  <button class="button" onclick="showMaterials('Environmental Health')">
+    View Materials
+  </button>
 </div>
+
 
 <div class="subject">
   <div class="subject-icon">👥</div>
   <h3>Sociology as Applied to Nursing</h3>
-  <a href="#" class="button">View Materials</a>
+  <button class="button" onclick="showMaterials('Sociology as Applied to Nursing')">
+    View Materials
+  </button>
 </div>
+
 
 <div class="subject">
   <div class="subject-icon">👶</div>
   <h3>Maternal and Child Health</h3>
-  <a href="#" class="button">View Materials</a>
+  <button class="button" onclick="showMaterials('Maternal and Child Health')">
+    View Materials
+  </button>
 </div>
+
 
 <div class="subject">
   <div class="subject-icon">🫀</div>
   <h3>Anatomy</h3>
-  <a href="#" class="button">View Materials</a>
+  <button class="button" onclick="showMaterials('Anatomy')">
+    View Materials
+  </button>
 </div>
+
 
 <div class="subject">
   <div class="subject-icon">⚗️</div>
   <h3>Biochemistry</h3>
-  <a href="#" class="button">View Materials</a>
+  <button class="button" onclick="showMaterials('Biochemistry')">
+    View Materials
+  </button>
 </div>
+
 
 <div class="subject">
   <div class="subject-icon">❤️</div>
   <h3>Physiology</h3>
-  <a href="#" class="button">View Materials</a>
+  <button class="button" onclick="showMaterials('Physiology')">
+    View Materials
+  </button>
 </div>
+
 
 <div class="subject">
   <div class="subject-icon">📈</div>
   <h3>Epidemiology</h3>
-  <a href="#" class="button">View Materials</a>
+  <button class="button" onclick="showMaterials('Epidemiology')">
+    View Materials
+  </button>
 </div>
+
 
 <div class="subject">
   <div class="subject-icon">📚</div>
   <h3>Nursing Research</h3>
-  <a href="#" class="button">View Materials</a>
+  <button class="button" onclick="showMaterials('Nursing Research')">
+    View Materials
+  </button>
 </div>
+
 
 <div class="subject">
   <div class="subject-icon">📝</div>
   <h3>Nursing Diagnosis</h3>
-  <a href="#" class="button">View Materials</a>
+  <button class="button" onclick="showMaterials('Nursing Diagnosis')">
+    View Materials
+  </button>
 </div>
+
 
 <div class="subject">
   <div class="subject-icon">💊</div>
   <h3>Pharmacology</h3>
-  <a href="#" class="button">View Materials</a>
+  <button class="button" onclick="showMaterials('Pharmacology')">
+    View Materials
+  </button>
 </div>
+
 
 <div class="subject">
   <div class="subject-icon">💻</div>
   <h3>Computer Science</h3>
-  <a href="#" class="button">View Materials</a>
+  <button class="button" onclick="showMaterials('Computer Science')">
+    View Materials
+  </button>
 </div>
+
 
 <div class="subject">
   <div class="subject-icon">📊</div>
   <h3>Biostatistics</h3>
-  <a href="#" class="button">View Materials</a>
+  <button class="button" onclick="showMaterials('Biostatistics')">
+    View Materials
+  </button>
 </div>
 
-  </div>  <div class="back">
-    <a href="index.html" class="button">← Back to Home</a>
-  </div></div><footer>
-  <p>© 2026 G Nurse Research Hub Nigeria</p>
-  <p>Professional Nursing Research & Academic Support</p>
-</footer></body>
+  </div>  <!-- MATERIAL DISPLAY -->  <div id="materials" class="materials"><h2 id="materialsTitle">
+  Materials
+</h2>
+
+<div id="materialsContent">
+</div>
+
+  </div>  <div class="back"><a href="index.html" class="button">
+  ← Back to Home
+</a>
+
+  </div></div><footer>  <p>© 2026 G Nurse Research Hub Nigeria</p>  <p>
+    Professional Nursing Research & Academic Support
+  </p></footer><script>
+
+/* ============================
+   SUPABASE
+============================ */
+
+const SUPABASE_URL =
+  "https://bmiechymiyedubezhcqk.supabase.co";
+
+const SUPABASE_ANON_KEY =
+  "sb_publishable_9JL2ALhTGlZV57hUV0mTdQ_c2hdT8O8";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+
+
+/* ============================
+   SHOW MATERIALS
+============================ */
+
+async function showMaterials(subject) {
+
+  const materialsBox =
+    document.getElementById("materials");
+
+  const materialsTitle =
+    document.getElementById("materialsTitle");
+
+  const materialsContent =
+    document.getElementById("materialsContent");
+
+
+  materialsBox.classList.add("active");
+
+
+  materialsTitle.textContent =
+    "📚 " + subject + " Materials";
+
+
+  materialsContent.innerHTML =
+    '<div class="loading">Loading materials...</div>';
+
+
+  /* Scroll to materials */
+
+  setTimeout(function() {
+
+    materialsBox.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+
+  }, 100);
+
+
+  try {
+
+    const { data, error } =
+      await supabaseClient
+        .from("resource_materials")
+        .select(
+          "title, subject, description, file_url"
+        )
+        .eq("subject", subject)
+        .order(
+          "title",
+          { ascending: true }
+        );
+
+
+    if (error) {
+
+      materialsContent.innerHTML =
+        '<div class="error-message">' +
+        'Unable to load materials right now.<br><br>' +
+        'Please try again later.' +
+        '</div>';
+
+      console.error(
+        "Supabase error:",
+        error
+      );
+
+      return;
+    }
+
+
+    /* NO FILES */
+
+    if (!data || data.length === 0) {
+
+      materialsContent.innerHTML =
+        '<div class="no-files">' +
+        '📂 <strong>No files uploaded yet.</strong><br><br>' +
+        'There are currently no resource materials available for ' +
+        subject +
+        '.' +
+        '</div>';
+
+      return;
+    }
+
+
+    /* DISPLAY FILES */
+
+    materialsContent.innerHTML = "";
+
+
+    data.forEach(function(material) {
+
+      const item =
+        document.createElement("div");
+
+      item.className = "material";
+
+
+      const title =
+        document.createElement("h3");
+
+      title.textContent =
+        "📄 " +
+        (material.title || "Untitled Resource");
+
+
+      item.appendChild(title);
+
+
+      if (material.description) {
+
+        const description =
+          document.createElement("p");
+
+        description.textContent =
+          material.description;
+
+        item.appendChild(description);
+
+      }
+
+
+      if (material.file_url) {
+
+        const link =
+          document.createElement("a");
+
+        link.href =
+          material.file_url;
+
+        link.target =
+          "_blank";
+
+        link.rel =
+          "noopener noreferrer";
+
+        link.className =
+          "button";
+
+        link.textContent =
+          "📖 Open PDF";
+
+
+        item.appendChild(link);
+
+      }
+
+
+      materialsContent.appendChild(item);
+
+    });
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "Unexpected error:",
+      error
+    );
+
+    materialsContent.innerHTML =
+      '<div class="error-message">' +
+      'Something went wrong while loading the materials.<br><br>' +
+      'Please try again.' +
+      '</div>';
+
+  }
+
+}
+
+</script></body>
 </html>
