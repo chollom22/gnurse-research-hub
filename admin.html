@@ -1,14 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Admin Dashboard | G Nurse Research Hub Nigeria</title>
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Admin Dashboard | G Nurse Research Hub Nigeria</title>  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <style>
     * {
       box-sizing: border-box;
       margin: 0;
@@ -106,6 +99,7 @@
       text-align: center;
       line-height: 1.5;
       white-space: pre-wrap;
+      word-break: break-word;
     }
 
     .success {
@@ -149,271 +143,227 @@
       color: #555;
       line-height: 1.5;
     }
-  </style>
-</head>
-
-<body>
-
-<div class="container">
-
-  <h1>🔐 Admin Dashboard</h1>
-
-  <p class="subtitle">
+  </style></head><body><div class="container">  <h1>🔐 Admin Dashboard</h1>  <p class="subtitle">
     G Nurse Research Hub Nigeria
+  </p>  <!-- LOGIN -->  <div id="loginSection"><label for="email">
+  Admin Email
+</label>
+
+<input
+  type="email"
+  id="email"
+  placeholder="Enter admin email"
+  autocomplete="email"
+>
+
+<label for="password">
+  Admin Password
+</label>
+
+<input
+  type="password"
+  id="password"
+  placeholder="Enter admin password"
+  autocomplete="current-password"
+>
+
+<button
+  type="button"
+  id="loginButton"
+  onclick="login()"
+>
+  🔐 Admin Login
+</button>
+
+<button
+  type="button"
+  id="resetButton"
+  onclick="resetPassword()"
+  class="secondary"
+>
+  🔄 Forgot Password?
+</button>
+
+  </div>  <!-- PASSWORD RESET -->  <div id="passwordSection" class="hidden"><div class="box password-box">
+
+  <h2>🔑 Create New Password</h2>
+
+  <p class="note">
+    You are securely resetting your admin password.
+    Enter your new password below.
   </p>
 
+  <label for="newPassword">
+    New Password
+  </label>
 
-  <!-- =========================
-       LOGIN SECTION
-  ========================== -->
-
-  <div id="loginSection">
-
-    <label for="email">
-      Admin Email
-    </label>
-
-    <input
-      type="email"
-      id="email"
-      placeholder="Enter admin email"
-      autocomplete="email"
-    >
-
-    <label for="password">
-      Admin Password
-    </label>
-
-    <input
-      type="password"
-      id="password"
-      placeholder="Enter admin password"
-      autocomplete="current-password"
-    >
-
-    <button
-      type="button"
-      id="loginButton"
-      onclick="login()"
-    >
-      🔐 Admin Login
-    </button>
-
-    <button
-      type="button"
-      id="resetButton"
-      onclick="resetPassword()"
-      class="secondary"
-    >
-      🔄 Forgot Password?
-    </button>
-
-  </div>
-
-
-  <!-- =========================
-       PASSWORD RESET SECTION
-  ========================== -->
-
-  <div
-    id="passwordSection"
-    class="hidden"
+  <input
+    type="password"
+    id="newPassword"
+    placeholder="Enter new password"
+    autocomplete="new-password"
   >
 
-    <div class="box password-box">
+  <label for="confirmPassword">
+    Confirm New Password
+  </label>
 
-      <h2>🔑 Create New Password</h2>
-
-      <p class="note">
-        You are securely resetting your admin password.
-        Enter your new password below.
-      </p>
-
-      <label for="newPassword">
-        New Password
-      </label>
-
-      <input
-        type="password"
-        id="newPassword"
-        placeholder="Enter new password"
-        autocomplete="new-password"
-      >
-
-      <label for="confirmPassword">
-        Confirm New Password
-      </label>
-
-      <input
-        type="password"
-        id="confirmPassword"
-        placeholder="Confirm new password"
-        autocomplete="new-password"
-      >
-
-      <button
-        type="button"
-        id="updatePasswordButton"
-        onclick="updatePassword()"
-      >
-        🔒 Update Password
-      </button>
-
-    </div>
-
-  </div>
-
-
-  <!-- =========================
-       DASHBOARD SECTION
-  ========================== -->
-
-  <div
-    id="dashboardSection"
-    class="hidden"
+  <input
+    type="password"
+    id="confirmPassword"
+    placeholder="Confirm new password"
+    autocomplete="new-password"
   >
 
-    <p>
-      ✅ You are logged in as administrator.
-    </p>
-
-
-    <!-- PDF -->
-
-    <div class="box">
-
-      <h2>📚 Upload PDF Resource</h2>
-
-      <label for="subject">
-        Subject
-      </label>
-
-      <select id="subject">
-
-        <option value="">
-          -- Select Subject --
-        </option>
-
-        <option>Physics</option>
-        <option>Chemistry</option>
-        <option>Biology</option>
-        <option>Mathematics</option>
-        <option>Statistics</option>
-        <option>Microbiology</option>
-        <option>Parasitology</option>
-        <option>Histopathology</option>
-        <option>Medical Surgical Nursing</option>
-        <option>Community Health Nursing</option>
-        <option>Environmental Health</option>
-        <option>Sociology as Applied to Nursing</option>
-        <option>Maternal and Child Health</option>
-        <option>Anatomy</option>
-        <option>Biochemistry</option>
-        <option>Physiology</option>
-        <option>Epidemiology</option>
-        <option>Nursing Research</option>
-        <option>Nursing Diagnosis</option>
-        <option>Pharmacology</option>
-        <option>Computer Science</option>
-        <option>Biostatistics</option>
-
-      </select>
-
-      <label for="title">
-        PDF Title
-      </label>
-
-      <input
-        type="text"
-        id="title"
-        placeholder="Example: Anatomy of the Heart"
-      >
-
-      <label for="description">
-        Description
-      </label>
-
-      <textarea
-        id="description"
-        placeholder="Brief description of this material"
-      ></textarea>
-
-      <label for="pdfFile">
-        Select PDF
-      </label>
-
-      <input
-        type="file"
-        id="pdfFile"
-        accept="application/pdf,.pdf"
-      >
-
-      <button
-        type="button"
-        id="pdfButton"
-        onclick="uploadPDF()"
-      >
-        ☁️ Upload PDF
-      </button>
-
-    </div>
-
-
-    <!-- VIDEO -->
-
-    <div class="box">
-
-      <h2>🎥 Upload Educational Video</h2>
-
-      <label for="videoFile">
-        Select Video
-      </label>
-
-      <input
-        type="file"
-        id="videoFile"
-        accept="video/*"
-      >
-
-      <button
-        type="button"
-        id="videoButton"
-        onclick="uploadVideo()"
-      >
-        ⬆️ Upload Video
-      </button>
-
-    </div>
-
-
-    <button
-      type="button"
-      class="logout"
-      onclick="logout()"
-    >
-      🚪 Logout
-    </button>
-
-  </div>
-
-
-  <div
-    id="status"
-    class="hidden"
-  ></div>
-
-
-  <a
-    href="index.html"
-    class="back"
+  <button
+    type="button"
+    id="updatePasswordButton"
+    onclick="updatePassword()"
   >
-    ← Back to Home
-  </a>
+    🔒 Update Password
+  </button>
+
+</div>
+
+  </div>  <!-- DASHBOARD -->  <div id="dashboardSection" class="hidden"><p>
+  ✅ You are logged in as administrator.
+</p>
+
+
+<!-- PDF UPLOAD -->
+
+<div class="box">
+
+  <h2>📚 Upload PDF Resource</h2>
+
+  <label for="subject">
+    Subject
+  </label>
+
+  <select id="subject">
+
+    <option value="">
+      -- Select Subject --
+    </option>
+
+    <option>Physics</option>
+    <option>Chemistry</option>
+    <option>Biology</option>
+    <option>Mathematics</option>
+    <option>Statistics</option>
+    <option>Microbiology</option>
+    <option>Parasitology</option>
+    <option>Histopathology</option>
+    <option>Medical Surgical Nursing</option>
+    <option>Community Health Nursing</option>
+    <option>Environmental Health</option>
+    <option>Sociology as Applied to Nursing</option>
+    <option>Maternal and Child Health</option>
+    <option>Anatomy</option>
+    <option>Biochemistry</option>
+    <option>Physiology</option>
+    <option>Epidemiology</option>
+    <option>Nursing Research</option>
+    <option>Nursing Diagnosis</option>
+    <option>Pharmacology</option>
+    <option>Computer Science</option>
+    <option>Biostatistics</option>
+
+  </select>
+
+  <label for="title">
+    PDF Title
+  </label>
+
+  <input
+    type="text"
+    id="title"
+    placeholder="Example: Anatomy of the Heart"
+  >
+
+  <label for="description">
+    Description
+  </label>
+
+  <textarea
+    id="description"
+    placeholder="Brief description of this material"
+  ></textarea>
+
+  <label for="pdfFile">
+    Select PDF
+  </label>
+
+  <input
+    type="file"
+    id="pdfFile"
+    accept="application/pdf,.pdf"
+  >
+
+  <button
+    type="button"
+    id="pdfButton"
+    onclick="uploadPDF()"
+  >
+    ☁️ Upload PDF
+  </button>
 
 </div>
 
 
-<script>
+<!-- VIDEO UPLOAD -->
+
+<div class="box">
+
+  <h2>🎥 Upload Educational Video</h2>
+
+  <label for="videoFile">
+    Select Video
+  </label>
+
+  <input
+    type="file"
+    id="videoFile"
+    accept="video/*"
+  >
+
+  <button
+    type="button"
+    id="videoButton"
+    onclick="uploadVideo()"
+  >
+    ⬆️ Upload Video
+  </button>
+
+  <p class="note">
+    The video will be uploaded to Cloudinary and its
+    information will automatically be saved to the
+    educational videos database.
+  </p>
+
+</div>
+
+
+<button
+  type="button"
+  class="logout"
+  onclick="logout()"
+>
+  🚪 Logout
+</button>
+
+  </div>  <div
+    id="status"
+    class="hidden"
+  ></div><a
+href="index.html"
+class="back"
+
+«»
+
+← Back to Home
+
+  </a></div><script>
 
 /* =========================
    SUPABASE
@@ -700,7 +650,7 @@ async function resetPassword() {
 
 
 /* =========================
-   PASSWORD RECOVERY EVENT
+   PASSWORD RECOVERY
 ========================= */
 
 supabaseClient.auth.onAuthStateChange(
@@ -715,19 +665,6 @@ supabaseClient.auth.onAuthStateChange(
         "info"
       );
 
-      return;
-    }
-
-    if (
-      event === "SIGNED_IN" &&
-      session &&
-      !document
-        .getElementById("passwordSection")
-        .classList
-        .contains("hidden")
-    ) {
-
-      return;
     }
 
   }
@@ -822,12 +759,6 @@ async function updatePassword() {
       return;
     }
 
-    /*
-      IMPORTANT:
-      Do NOT sign out automatically here.
-      Keep the recovery session alive.
-    */
-
     showStatus(
       "✅ Password updated successfully. Your new password is now active.",
       "success"
@@ -840,13 +771,6 @@ async function updatePassword() {
     document
       .getElementById("confirmPassword")
       .value = "";
-
-    button.textContent =
-      "✅ Password Updated";
-
-    /*
-      Give the user a safe way to continue.
-    */
 
     setTimeout(() => {
 
@@ -930,6 +854,14 @@ async function uploadToCloudinary(file) {
 
   }
 
+  if (!data.secure_url) {
+
+    throw new Error(
+      "Cloudinary did not return a video URL."
+    );
+
+  }
+
   return data.secure_url;
 
 }
@@ -937,6 +869,7 @@ async function uploadToCloudinary(file) {
 
 /* =========================
    UPLOAD PDF
+   EXISTING FUNCTION
 ========================= */
 
 async function uploadPDF() {
@@ -1089,6 +1022,7 @@ async function uploadPDF() {
 
 /* =========================
    UPLOAD VIDEO
+   FIXED
 ========================= */
 
 async function uploadVideo() {
@@ -1101,6 +1035,16 @@ async function uploadVideo() {
 
     showStatus(
       "Please select a video.",
+      "error"
+    );
+
+    return;
+  }
+
+  if (!file.type.startsWith("video/")) {
+
+    showStatus(
+      "Please select a valid video file.",
       "error"
     );
 
@@ -1132,12 +1076,45 @@ async function uploadVideo() {
 
   try {
 
+    /* STEP 1: Upload video to Cloudinary */
+
     const videoURL =
       await uploadToCloudinary(file);
 
+    /* STEP 2: Save video information in Supabase */
+
+    button.textContent =
+      "🗄️ Saving video information...";
+
+    const videoTitle =
+      file.name.replace(
+        /\.[^/.]+$/,
+        ""
+      );
+
+    const { error } =
+      await supabaseClient
+        .from("educational_videos")
+        .insert({
+          title: videoTitle,
+          description: "Educational video",
+          video_url: videoURL
+        });
+
+    if (error) {
+
+      throw new Error(
+        "Video uploaded to Cloudinary, but database save failed: " +
+        error.message
+      );
+
+    }
+
+    /* STEP 3: Success */
+
     showStatus(
-      "✅ Video uploaded successfully!\n" +
-      videoURL,
+      "✅ Video uploaded and saved successfully.\n\n" +
+      "It is now available on the Educational Videos page.",
       "success"
     );
 
@@ -1150,7 +1127,7 @@ async function uploadVideo() {
   catch (error) {
 
     showStatus(
-      "❌ Video upload failed: " +
+      "❌ Video upload failed:\n" +
       error.message,
       "error"
     );
@@ -1189,7 +1166,5 @@ async function logout() {
 
 }
 
-</script>
-
-</body>
-        </html>
+</script></body>
+</html>
