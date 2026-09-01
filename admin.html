@@ -45,7 +45,7 @@
 
     h2 {
       color: #0b5ed7;
-      margin: 25px 0 15px;
+      margin: 20px 0 15px;
     }
 
     label {
@@ -91,8 +91,12 @@
       background: #dc3545;
     }
 
+    .secondary {
+      background: #6c757d;
+    }
+
     .hidden {
-      display: none;
+      display: none !important;
     }
 
     #status {
@@ -101,6 +105,7 @@
       border-radius: 7px;
       text-align: center;
       line-height: 1.5;
+      white-space: pre-wrap;
     }
 
     .success {
@@ -125,6 +130,10 @@
       margin-top: 20px;
     }
 
+    .password-box {
+      background: #eef5ff;
+    }
+
     .back {
       display: block;
       text-align: center;
@@ -132,6 +141,13 @@
       color: #0b5ed7;
       text-decoration: none;
       font-weight: bold;
+    }
+
+    .note {
+      margin-top: 12px;
+      font-size: 14px;
+      color: #555;
+      line-height: 1.5;
     }
   </style>
 </head>
@@ -146,11 +162,16 @@
     G Nurse Research Hub Nigeria
   </p>
 
-  <!-- LOGIN -->
+
+  <!-- =========================
+       LOGIN SECTION
+  ========================== -->
 
   <div id="loginSection">
 
-    <label for="email">Admin Email</label>
+    <label for="email">
+      Admin Email
+    </label>
 
     <input
       type="email"
@@ -159,7 +180,9 @@
       autocomplete="email"
     >
 
-    <label for="password">Admin Password</label>
+    <label for="password">
+      Admin Password
+    </label>
 
     <input
       type="password"
@@ -168,24 +191,43 @@
       autocomplete="current-password"
     >
 
-    <button type="button" onclick="login()">
+    <button
+      type="button"
+      id="loginButton"
+      onclick="login()"
+    >
       🔐 Admin Login
     </button>
 
-    <button type="button" onclick="resetPassword()">
+    <button
+      type="button"
+      id="resetButton"
+      onclick="resetPassword()"
+      class="secondary"
+    >
       🔄 Forgot Password?
     </button>
 
   </div>
 
 
-  <!-- PASSWORD UPDATE -->
+  <!-- =========================
+       PASSWORD RESET SECTION
+  ========================== -->
 
-  <div id="passwordSection" class="hidden">
+  <div
+    id="passwordSection"
+    class="hidden"
+  >
 
-    <div class="box">
+    <div class="box password-box">
 
       <h2>🔑 Create New Password</h2>
+
+      <p class="note">
+        You are securely resetting your admin password.
+        Enter your new password below.
+      </p>
 
       <label for="newPassword">
         New Password
@@ -199,7 +241,7 @@
       >
 
       <label for="confirmPassword">
-        Confirm Password
+        Confirm New Password
       </label>
 
       <input
@@ -209,7 +251,11 @@
         autocomplete="new-password"
       >
 
-      <button type="button" onclick="updatePassword()">
+      <button
+        type="button"
+        id="updatePasswordButton"
+        onclick="updatePassword()"
+      >
         🔒 Update Password
       </button>
 
@@ -218,16 +264,21 @@
   </div>
 
 
-  <!-- ADMIN DASHBOARD -->
+  <!-- =========================
+       DASHBOARD SECTION
+  ========================== -->
 
-  <div id="dashboardSection" class="hidden">
+  <div
+    id="dashboardSection"
+    class="hidden"
+  >
 
     <p>
       ✅ You are logged in as administrator.
     </p>
 
 
-    <!-- PDF UPLOAD -->
+    <!-- PDF -->
 
     <div class="box">
 
@@ -268,7 +319,6 @@
 
       </select>
 
-
       <label for="title">
         PDF Title
       </label>
@@ -279,7 +329,6 @@
         placeholder="Example: Anatomy of the Heart"
       >
 
-
       <label for="description">
         Description
       </label>
@@ -288,7 +337,6 @@
         id="description"
         placeholder="Brief description of this material"
       ></textarea>
-
 
       <label for="pdfFile">
         Select PDF
@@ -299,7 +347,6 @@
         id="pdfFile"
         accept="application/pdf,.pdf"
       >
-
 
       <button
         type="button"
@@ -312,7 +359,7 @@
     </div>
 
 
-    <!-- VIDEO UPLOAD -->
+    <!-- VIDEO -->
 
     <div class="box">
 
@@ -350,10 +397,16 @@
   </div>
 
 
-  <div id="status" class="hidden"></div>
+  <div
+    id="status"
+    class="hidden"
+  ></div>
 
 
-  <a href="index.html" class="back">
+  <a
+    href="index.html"
+    class="back"
+  >
     ← Back to Home
   </a>
 
@@ -413,6 +466,69 @@ function showStatus(message, type) {
 
 
 /* =========================
+   SHOW LOGIN
+========================= */
+
+function showLogin() {
+
+  document
+    .getElementById("loginSection")
+    .classList.remove("hidden");
+
+  document
+    .getElementById("passwordSection")
+    .classList.add("hidden");
+
+  document
+    .getElementById("dashboardSection")
+    .classList.add("hidden");
+
+}
+
+
+/* =========================
+   SHOW PASSWORD RESET
+========================= */
+
+function showPasswordReset() {
+
+  document
+    .getElementById("loginSection")
+    .classList.add("hidden");
+
+  document
+    .getElementById("dashboardSection")
+    .classList.add("hidden");
+
+  document
+    .getElementById("passwordSection")
+    .classList.remove("hidden");
+
+}
+
+
+/* =========================
+   SHOW DASHBOARD
+========================= */
+
+function showDashboard() {
+
+  document
+    .getElementById("loginSection")
+    .classList.add("hidden");
+
+  document
+    .getElementById("passwordSection")
+    .classList.add("hidden");
+
+  document
+    .getElementById("dashboardSection")
+    .classList.remove("hidden");
+
+}
+
+
+/* =========================
    LOGIN
 ========================= */
 
@@ -437,20 +553,21 @@ async function login() {
     return;
   }
 
-  showStatus(
-    "Logging in...",
-    "info"
-  );
+  const button =
+    document.getElementById("loginButton");
+
+  button.disabled = true;
+
+  button.textContent =
+    "Logging in...";
 
   try {
 
     const { data, error } =
       await supabaseClient.auth
         .signInWithPassword({
-
           email: email,
           password: password
-
         });
 
     if (error) {
@@ -473,17 +590,7 @@ async function login() {
       return;
     }
 
-    document
-      .getElementById("loginSection")
-      .classList.add("hidden");
-
-    document
-      .getElementById("passwordSection")
-      .classList.add("hidden");
-
-    document
-      .getElementById("dashboardSection")
-      .classList.remove("hidden");
+    showDashboard();
 
     showStatus(
       "✅ Login successful.",
@@ -501,11 +608,20 @@ async function login() {
 
   }
 
+  finally {
+
+    button.disabled = false;
+
+    button.textContent =
+      "🔐 Admin Login";
+
+  }
+
 }
 
 
 /* =========================
-   PASSWORD RESET
+   SEND PASSWORD RESET
 ========================= */
 
 async function resetPassword() {
@@ -525,24 +641,24 @@ async function resetPassword() {
     return;
   }
 
-  showStatus(
-    "Sending password reset link...",
-    "info"
-  );
+  const button =
+    document.getElementById("resetButton");
+
+  button.disabled = true;
+
+  button.textContent =
+    "Sending reset link...";
 
   try {
 
     const { error } =
       await supabaseClient.auth
         .resetPasswordForEmail(
-
           email,
-
           {
             redirectTo:
               "https://gnurseresearchhub.name.ng/admin.html"
           }
-
         );
 
     if (error) {
@@ -556,7 +672,7 @@ async function resetPassword() {
     }
 
     showStatus(
-      "✅ Reset link sent. Check your email and Spam/Junk folder.",
+      "✅ Reset link sent. Open the newest email and follow the link.",
       "success"
     );
 
@@ -571,35 +687,47 @@ async function resetPassword() {
 
   }
 
+  finally {
+
+    button.disabled = false;
+
+    button.textContent =
+      "🔄 Forgot Password?";
+
+  }
+
 }
 
 
 /* =========================
-   PASSWORD RECOVERY
+   PASSWORD RECOVERY EVENT
 ========================= */
 
 supabaseClient.auth.onAuthStateChange(
-  async (event, session) => {
+  (event, session) => {
 
     if (event === "PASSWORD_RECOVERY") {
 
-      document
-        .getElementById("loginSection")
-        .classList.add("hidden");
-
-      document
-        .getElementById("dashboardSection")
-        .classList.add("hidden");
-
-      document
-        .getElementById("passwordSection")
-        .classList.remove("hidden");
+      showPasswordReset();
 
       showStatus(
-        "🔑 Enter your new password.",
+        "🔑 Enter your new password below.",
         "info"
       );
 
+      return;
+    }
+
+    if (
+      event === "SIGNED_IN" &&
+      session &&
+      !document
+        .getElementById("passwordSection")
+        .classList
+        .contains("hidden")
+    ) {
+
+      return;
     }
 
   }
@@ -650,14 +778,37 @@ async function updatePassword() {
     return;
   }
 
+  const button =
+    document.getElementById(
+      "updatePasswordButton"
+    );
+
+  button.disabled = true;
+
+  button.textContent =
+    "Updating password...";
+
   try {
+
+    const {
+      data: { session }
+    } =
+      await supabaseClient.auth.getSession();
+
+    if (!session) {
+
+      showStatus(
+        "Your password-reset session has expired. Please request a new reset link.",
+        "error"
+      );
+
+      return;
+    }
 
     const { error } =
       await supabaseClient.auth
         .updateUser({
-
           password: newPassword
-
         });
 
     if (error) {
@@ -671,23 +822,42 @@ async function updatePassword() {
       return;
     }
 
+    /*
+      IMPORTANT:
+      Do NOT sign out automatically here.
+      Keep the recovery session alive.
+    */
+
     showStatus(
-      "✅ Password updated successfully.",
+      "✅ Password updated successfully. Your new password is now active.",
       "success"
     );
 
-    await supabaseClient.auth.signOut();
+    document
+      .getElementById("newPassword")
+      .value = "";
 
     document
-      .getElementById("passwordSection")
-      .classList.add("hidden");
+      .getElementById("confirmPassword")
+      .value = "";
 
-    document
-      .getElementById("loginSection")
-      .classList.remove("hidden");
+    button.textContent =
+      "✅ Password Updated";
 
-    document.getElementById("newPassword").value = "";
-    document.getElementById("confirmPassword").value = "";
+    /*
+      Give the user a safe way to continue.
+    */
+
+    setTimeout(() => {
+
+      showDashboard();
+
+      showStatus(
+        "✅ Password updated. You are now logged in.",
+        "success"
+      );
+
+    }, 1200);
 
   }
 
@@ -698,6 +868,19 @@ async function updatePassword() {
       error.message,
       "error"
     );
+
+  }
+
+  finally {
+
+    setTimeout(() => {
+
+      button.disabled = false;
+
+      button.textContent =
+        "🔒 Update Password";
+
+    }, 1200);
 
   }
 
@@ -854,13 +1037,11 @@ async function uploadPDF() {
       await supabaseClient
         .from("resource_materials")
         .insert({
-
           title: title,
           subject: subject,
           description:
             description || null,
           file_url: fileURL
-
         });
 
     if (error) {
@@ -996,17 +1177,10 @@ async function logout() {
 
   await supabaseClient.auth.signOut();
 
-  document
-    .getElementById("dashboardSection")
-    .classList.add("hidden");
+  showLogin();
 
-  document
-    .getElementById("passwordSection")
-    .classList.add("hidden");
-
-  document
-    .getElementById("loginSection")
-    .classList.remove("hidden");
+  document.getElementById("email").value = "";
+  document.getElementById("password").value = "";
 
   showStatus(
     "You have been logged out.",
@@ -1018,4 +1192,4 @@ async function logout() {
 </script>
 
 </body>
-  </html>
+        </html>
