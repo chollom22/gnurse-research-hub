@@ -1,6 +1,14 @@
-<!DOCTYPE html><html lang="en">
-<head>  <meta charset="UTF-8">  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Educational Videos | G Nurse Research Hub Nigeria</title>  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>Educational Videos | G Nurse Research Hub Nigeria</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
     * {
       box-sizing: border-box;
       margin: 0;
@@ -39,8 +47,12 @@
       font-weight: bold;
     }
 
+    nav a:hover {
+      text-decoration: underline;
+    }
+
     .container {
-      max-width: 1000px;
+      max-width: 1100px;
       margin: auto;
       padding: 40px 20px;
     }
@@ -67,13 +79,20 @@
       background: white;
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .video-wrapper {
+      width: 100%;
+      background: #000;
     }
 
     video {
       width: 100%;
+      height: auto;
+      min-height: 180px;
       display: block;
-      background: black;
+      background: #000;
     }
 
     .video-info {
@@ -82,13 +101,21 @@
 
     .video-info h3 {
       color: #087f8c;
-      margin-bottom: 5px;
+      margin-bottom: 7px;
       word-break: break-word;
+      font-size: 18px;
     }
 
     .video-info p {
       color: #666;
       font-size: 14px;
+      word-break: break-word;
+    }
+
+    .date {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #888;
     }
 
     .message {
@@ -97,15 +124,21 @@
       background: white;
       border-radius: 10px;
       margin-top: 20px;
+      color: #555;
+    }
+
+    .error-message {
+      background: #f8d7da;
+      color: #842029;
     }
 
     .hidden {
-      display: none;
+      display: none !important;
     }
 
     .back-button {
       display: inline-block;
-      margin-top: 25px;
+      margin-top: 30px;
       background: #087f8c;
       color: white;
       padding: 12px 22px;
@@ -114,12 +147,20 @@
       font-weight: bold;
     }
 
+    .back-button:hover {
+      background: #05636e;
+    }
+
     footer {
       background: #05636e;
       color: white;
       text-align: center;
       padding: 20px;
       margin-top: 40px;
+    }
+
+    footer p {
+      margin: 5px 0;
     }
 
     @media (max-width: 600px) {
@@ -133,185 +174,357 @@
         margin: 5px;
       }
 
+      .container {
+        padding: 30px 15px;
+      }
+
+      .video-grid {
+        grid-template-columns: 1fr;
+      }
     }
+  </style>
+</head>
 
-  </style></head><body>  <header><h1>🎥 Educational Videos</h1>
+<body>
 
-<p>G Nurse Research Hub Nigeria</p>
+  <header>
+    <h1>🎥 Educational Videos</h1>
+    <p>G Nurse Research Hub Nigeria</p>
+  </header>
 
-  </header>  <nav><a href="index.html">Home</a>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="resources.html">📚 Resources</a>
+    <a href="videos.html">🎥 Videos</a>
+    <a href="index.html#contact">Contact</a>
+  </nav>
 
-<a href="resources.html">📚 Resources</a>
+  <main class="container">
 
-<a href="videos.html">🎥 Videos</a>
+    <h2>Educational Videos</h2>
 
-<a href="index.html#contact">Contact</a>
+    <p class="intro">
+      Watch nursing tutorials, presentations and other
+      educational materials from G Nurse Research Hub Nigeria.
+    </p>
 
-  </nav>  <main class="container"><h2>Educational Videos</h2>
+    <div id="videoGrid" class="video-grid"></div>
 
-<p class="intro">
-  Watch nursing tutorials, presentations and other
-  educational materials from G Nurse Research Hub Nigeria.
-</p>
+    <div id="message" class="message">
+      Loading educational videos...
+    </div>
 
-<div id="videoGrid" class="video-grid"></div>
+    <div style="text-align:center;">
+      <a class="back-button" href="index.html">
+        ← Back to Home
+      </a>
+    </div>
 
-<div id="message" class="message">
-  Loading videos...
-</div>
+  </main>
 
-<div style="text-align:center;">
-
-  <a class="back-button" href="index.html">
-    ← Back to Home
-  </a>
-
-</div>
-
-  </main>  <footer><p>© 2026 G Nurse Research Hub Nigeria</p>
-
-<p>All Rights Reserved.</p>
-
-  </footer><script>
-
-const SUPABASE_URL =
-  "https://bmiechymiyedubezhcqk.supabase.co";
-
-const SUPABASE_PUBLISHABLE_KEY =
-  "sb_publishable_9JL2ALhTGlZV57hUV0mTdQ_c2hdT8O8";
-
-
-const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
+  <footer>
+    <p>© 2026 G Nurse Research Hub Nigeria</p>
+    <p>All Rights Reserved.</p>
+  </footer>
 
 
-// LOAD VIDEOS
+  <script>
 
-async function loadVideos() {
+    /* =========================
+       SUPABASE CONNECTION
+    ========================= */
 
-  const videoGrid =
-    document.getElementById("videoGrid");
+    const SUPABASE_URL =
+      "https://bmiechymiyedubezhcqk.supabase.co";
 
-  const message =
-    document.getElementById("message");
+    const SUPABASE_PUBLISHABLE_KEY =
+      "sb_publishable_9JL2ALhTGlZV57hUV0mTdQ_c2hdT8O8";
 
-  try {
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+      );
 
-    const { data, error } =
-      await supabaseClient.storage
-        .from("videos")
-        .list("videos", {
-          limit: 100,
-          offset: 0,
-          sortBy: {
-            column: "name",
-            order: "desc"
+
+    /* =========================
+       LOAD EDUCATIONAL VIDEOS
+    ========================= */
+
+    async function loadVideos() {
+
+      const videoGrid =
+        document.getElementById("videoGrid");
+
+      const message =
+        document.getElementById("message");
+
+      videoGrid.innerHTML = "";
+
+      message.className = "message";
+
+      message.textContent =
+        "Loading educational videos...";
+
+
+      try {
+
+        /*
+          IMPORTANT:
+
+          We are NOT reading from a Supabase
+          Storage bucket.
+
+          The videos are stored on Cloudinary.
+
+          Supabase only stores:
+          - title
+          - description
+          - video_url
+          - created_at
+        */
+
+        const { data, error } =
+          await supabaseClient
+            .from("educational_videos")
+            .select(
+              "id, title, description, video_url, created_at"
+            )
+            .order(
+              "created_at",
+              {
+                ascending: false
+              }
+            );
+
+
+        /* =========================
+           CHECK DATABASE ERROR
+        ========================= */
+
+        if (error) {
+
+          console.error(
+            "Supabase error:",
+            error
+          );
+
+          message.className =
+            "message error-message";
+
+          message.textContent =
+            "Unable to load educational videos right now. " +
+            "Please try again later.";
+
+          return;
+        }
+
+
+        /* =========================
+           NO VIDEOS
+        ========================= */
+
+        if (
+          !data ||
+          data.length === 0
+        ) {
+
+          message.className =
+            "message";
+
+          message.textContent =
+            "No educational videos have been uploaded yet.";
+
+          return;
+        }
+
+
+        /* =========================
+           VIDEOS FOUND
+        ========================= */
+
+        message.classList.add(
+          "hidden"
+        );
+
+
+        data.forEach(function(videoData) {
+
+          /* =========================
+             VIDEO CARD
+          ========================= */
+
+          const card =
+            document.createElement("div");
+
+          card.className =
+            "video-card";
+
+
+          /* =========================
+             VIDEO
+          ========================= */
+
+          const videoWrapper =
+            document.createElement("div");
+
+          videoWrapper.className =
+            "video-wrapper";
+
+
+          const video =
+            document.createElement("video");
+
+          video.controls = true;
+
+          video.preload = "metadata";
+
+          video.playsInline = true;
+
+          video.src =
+            videoData.video_url;
+
+
+          /*
+            Helps the browser load the
+            Cloudinary video correctly.
+          */
+
+          video.addEventListener(
+            "error",
+            function() {
+
+              console.error(
+                "Video could not be loaded:",
+                videoData.video_url
+              );
+
+            }
+          );
+
+
+          videoWrapper.appendChild(
+            video
+          );
+
+
+          /* =========================
+             VIDEO INFORMATION
+          ========================= */
+
+          const info =
+            document.createElement("div");
+
+          info.className =
+            "video-info";
+
+
+          const title =
+            document.createElement("h3");
+
+          title.textContent =
+            videoData.title ||
+            "Educational Video";
+
+
+          const description =
+            document.createElement("p");
+
+          description.textContent =
+            videoData.description ||
+            "Educational video from G Nurse Research Hub Nigeria.";
+
+
+          /* =========================
+             DATE
+          ========================= */
+
+          const date =
+            document.createElement("div");
+
+          date.className =
+            "date";
+
+
+          if (videoData.created_at) {
+
+            const uploadDate =
+              new Date(
+                videoData.created_at
+              );
+
+            date.textContent =
+              "Uploaded: " +
+              uploadDate.toLocaleDateString(
+                "en-NG",
+                {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric"
+                }
+              );
+
           }
+
+
+          /* =========================
+             BUILD CARD
+          ========================= */
+
+          info.appendChild(
+            title
+          );
+
+          info.appendChild(
+            description
+          );
+
+          info.appendChild(
+            date
+          );
+
+          card.appendChild(
+            videoWrapper
+          );
+
+          card.appendChild(
+            info
+          );
+
+          videoGrid.appendChild(
+            card
+          );
+
         });
 
+      }
 
-    if (error) {
+      catch (error) {
 
-      message.textContent =
-        "Unable to load videos: " + error.message;
+        console.error(
+          "Unexpected error:",
+          error
+        );
 
-      return;
+        message.className =
+          "message error-message";
+
+        message.textContent =
+          "Unable to load educational videos right now. " +
+          "Please try again later.";
+
+      }
+
     }
 
 
-    if (!data || data.length === 0) {
+    /* =========================
+       START
+    ========================= */
 
-      message.textContent =
-        "No educational videos have been uploaded yet.";
+    loadVideos();
 
-      return;
-    }
+  </script>
 
-
-    message.classList.add("hidden");
-
-
-    data.forEach(function(file) {
-
-      const filePath =
-        "videos/" + file.name;
-
-
-      const { data: publicUrlData } =
-        supabaseClient.storage
-          .from("videos")
-          .getPublicUrl(filePath);
-
-
-      const videoUrl =
-        publicUrlData.publicUrl;
-
-
-      const card =
-        document.createElement("div");
-
-      card.className =
-        "video-card";
-
-
-      const video =
-        document.createElement("video");
-
-      video.controls = true;
-
-      video.preload = "metadata";
-
-      video.src = videoUrl;
-
-
-      const info =
-        document.createElement("div");
-
-      info.className =
-        "video-info";
-
-
-      const title =
-        document.createElement("h3");
-
-      title.textContent =
-        file.name;
-
-
-      const description =
-        document.createElement("p");
-
-      description.textContent =
-        "Educational video";
-
-
-      info.appendChild(title);
-
-      info.appendChild(description);
-
-      card.appendChild(video);
-
-      card.appendChild(info);
-
-      videoGrid.appendChild(card);
-
-    });
-
-  }
-
-  catch (error) {
-
-    message.textContent =
-      "Something went wrong: " + error.message;
-
-  }
-
-}
-
-
-loadVideos();
-
-</script></body></html>
+</body>
+   </html>
