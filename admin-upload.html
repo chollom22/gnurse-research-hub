@@ -1,14 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Admin Video Upload | G Nurse Research Hub Nigeria</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Admin Video Upload | G Nurse Research Hub Nigeria</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
 * {
   box-sizing: border-box;
   margin: 0;
@@ -124,133 +117,96 @@ button:disabled {
   line-height: 1.5;
   margin-bottom: 15px;
 }
-</style>
-</head>
-
-<body>
-
-<div class="container">
-
-<h1>🔐 Admin Video Upload</h1>
-
-<p class="subtitle">
+</style></head><body><div class="container"><h1>🔐 Admin Video Upload</h1><p class="subtitle">
 G Nurse Research Hub Nigeria
-</p>
-
-
-<!-- PASSWORD UPDATE -->
-
-<div id="passwordUpdateSection" class="hidden">
-
-<div class="password-box">
-
-<h2>🔑 Set New Password</h2>
-
-<p>
+</p><!-- PASSWORD UPDATE --><div id="passwordUpdateSection" class="hidden"><div class="password-box"><h2>🔑 Set New Password</h2><p>
 Enter a new password for your admin account.
-</p>
-
-<label for="newPassword">
+</p><label for="newPassword">
 New Password
-</label>
-
-<input
+</label><input
 type="password"
 id="newPassword"
 placeholder="Enter new password"
 autocomplete="new-password"
->
+
+«»
 
 <label for="confirmPassword">
 Confirm New Password
-</label>
-
-<input
+</label><input
 type="password"
 id="confirmPassword"
 placeholder="Confirm new password"
 autocomplete="new-password"
->
+
+«»
 
 <button
 type="button"
 id="updatePasswordButton"
 onclick="updatePassword()"
->
+
+«»
+
 🔒 Update Password
 </button>
 
-</div>
-
-</div>
-
-
-<!-- LOGIN -->
-
-<div id="loginSection">
-
-<label for="email">
+</div></div><!-- LOGIN --><div id="loginSection"><label for="email">
 Email
-</label>
-
-<input
+</label><input
 type="email"
 id="email"
 placeholder="Admin email"
 autocomplete="email"
->
+
+«»
 
 <label for="password">
 Password
-</label>
-
-<input
+</label><input
 type="password"
 id="password"
 placeholder="Admin password"
 autocomplete="current-password"
->
+
+«»
 
 <button
 type="button"
 onclick="login()"
->
+
+«»
+
 🔑 Admin Login
 </button>
 
 <button
 type="button"
 onclick="resetPassword()"
->
+
+«»
+
 🔄 Forgot Password?
 </button>
 
-</div>
-
-
-<!-- VIDEO UPLOAD -->
-
-<div id="uploadSection" class="hidden">
-
-<p>
+</div><!-- VIDEO UPLOAD --><div id="uploadSection" class="hidden"><p>
 You are logged in as admin.
-</p>
-
-<label for="videoFile">
+</p><label for="videoFile">
 Select Video
-</label>
-
-<input
+</label><input
 type="file"
 id="videoFile"
 accept="video/*"
->
+
+«»
 
 <button
 type="button"
 id="uploadButton"
 onclick="uploadVideo()"
->
+
+«»
+
 ⬆️ Upload Video
 </button>
 
@@ -258,21 +214,17 @@ onclick="uploadVideo()"
 type="button"
 class="logout"
 onclick="logout()"
->
+
+«»
+
 Logout
 </button>
 
-</div>
+</div><div id="status" class="hidden"></div></div><script>
 
-
-<div id="status" class="hidden"></div>
-
-</div>
-
-
-<script>
-
-/* SUPABASE */
+/* =========================
+   SUPABASE
+========================= */
 
 const SUPABASE_URL =
 "https://bmiechymiyedubezhcqk.supabase.co";
@@ -287,7 +239,9 @@ SUPABASE_ANON_KEY
 );
 
 
-/* STATUS */
+/* =========================
+   STATUS
+========================= */
 
 function showStatus(text, type) {
 
@@ -307,7 +261,108 @@ status.classList.add(type);
 }
 
 
-/* LOGIN */
+/* =========================
+   SHOW PASSWORD UPDATE
+========================= */
+
+function showPasswordUpdate() {
+
+document
+.getElementById("loginSection")
+.classList.add("hidden");
+
+document
+.getElementById("uploadSection")
+.classList.add("hidden");
+
+document
+.getElementById("passwordUpdateSection")
+.classList.remove("hidden");
+
+showStatus(
+"🔑 Enter your new password below.",
+"info"
+);
+
+}
+
+
+/* =========================
+   CHECK PASSWORD RECOVERY
+========================= */
+
+async function checkPasswordRecovery() {
+
+try {
+
+/*
+Supabase may place the recovery
+information in the URL hash.
+*/
+
+const hash =
+window.location.hash;
+
+const search =
+window.location.search;
+
+if (
+hash.includes("type=recovery") ||
+search.includes("type=recovery")
+) {
+
+showPasswordUpdate();
+
+return true;
+
+}
+
+/*
+Also check whether Supabase has
+already created a recovery session.
+*/
+
+const {
+data: { session }
+} =
+await supabaseClient.auth.getSession();
+
+if (session) {
+
+/*
+Do not automatically show the
+password screen for every normal
+login session.
+
+Only show it when the URL indicates
+a recovery flow.
+*/
+
+return false;
+
+}
+
+return false;
+
+}
+
+catch (error) {
+
+console.error(
+"Recovery check error:",
+error
+);
+
+return false;
+
+}
+
+}
+
+
+/* =========================
+   LOGIN
+========================= */
 
 async function login() {
 
@@ -329,7 +384,10 @@ showStatus(
 return;
 }
 
-showStatus("Logging in...", "info");
+showStatus(
+"Logging in...",
+"info"
+);
 
 try {
 
@@ -379,7 +437,9 @@ showStatus(
 }
 
 
-/* PASSWORD RESET EMAIL */
+/* =========================
+   PASSWORD RESET EMAIL
+========================= */
 
 async function resetPassword() {
 
@@ -446,29 +506,21 @@ showStatus(
 }
 
 
-/* PASSWORD RECOVERY */
+/* =========================
+   PASSWORD RECOVERY EVENT
+========================= */
 
 supabaseClient.auth.onAuthStateChange(
 async (event, session) => {
 
+console.log(
+"Supabase Auth Event:",
+event
+);
+
 if (event === "PASSWORD_RECOVERY") {
 
-document
-.getElementById("loginSection")
-.classList.add("hidden");
-
-document
-.getElementById("uploadSection")
-.classList.add("hidden");
-
-document
-.getElementById("passwordUpdateSection")
-.classList.remove("hidden");
-
-showStatus(
-"🔑 Enter your new password below.",
-"info"
-);
+showPasswordUpdate();
 
 }
 
@@ -476,7 +528,9 @@ showStatus(
 );
 
 
-/* UPDATE PASSWORD */
+/* =========================
+   UPDATE PASSWORD
+========================= */
 
 async function updatePassword() {
 
@@ -530,6 +584,30 @@ button.textContent =
 
 try {
 
+/*
+Make sure a recovery session exists.
+*/
+
+const {
+data: { session }
+} =
+await supabaseClient.auth.getSession();
+
+if (!session) {
+
+showStatus(
+"Password reset session has expired. Please request a new reset link.",
+"error"
+);
+
+return;
+}
+
+
+/*
+Update password.
+*/
+
 const { error } =
 await supabaseClient.auth
 .updateUser({
@@ -550,23 +628,23 @@ return;
 }
 
 showStatus(
-"✅ Password updated successfully. You can now log in.",
+"✅ Password updated successfully.",
 "success"
 );
 
+
+/*
+Sign out after successful password change.
+*/
+
+setTimeout(async () => {
+
 await supabaseClient.auth.signOut();
 
-document
-.getElementById("passwordUpdateSection")
-.classList.add("hidden");
+window.location.href =
+"https://gnurseresearchhub.name.ng/admin-upload.html";
 
-document
-.getElementById("loginSection")
-.classList.remove("hidden");
-
-document.getElementById("newPassword").value = "";
-
-document.getElementById("confirmPassword").value = "";
+}, 1500);
 
 }
 
@@ -592,7 +670,9 @@ button.textContent =
 }
 
 
-/* VIDEO UPLOAD */
+/* =========================
+   VIDEO UPLOAD
+========================= */
 
 async function uploadVideo() {
 
@@ -704,7 +784,9 @@ uploadButton.textContent =
 }
 
 
-/* LOGOUT */
+/* =========================
+   LOGOUT
+========================= */
 
 async function logout() {
 
@@ -729,7 +811,19 @@ showStatus(
 
 }
 
-</script>
 
-</body>
-  </html>
+/* =========================
+   START PAGE
+========================= */
+
+window.addEventListener(
+"load",
+async function() {
+
+await checkPasswordRecovery();
+
+}
+);
+
+</script></body>
+</html>
