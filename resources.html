@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Research Resources | G Nurse Research Hub Nigeria</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>Resource Materials | G Nurse Research Hub Nigeria</title>  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-  <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -31,7 +31,7 @@
     }
 
     .container {
-      max-width: 900px;
+      max-width: 1000px;
       margin: 30px auto;
       padding: 0 20px;
     }
@@ -40,38 +40,62 @@
       background: white;
       padding: 25px;
       border-radius: 12px;
-      margin-bottom: 25px;
+      margin-bottom: 30px;
       text-align: center;
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
-    .resource {
+    .intro h2 {
+      color: #0b5ed7;
+      margin-top: 0;
+    }
+
+    .intro p {
+      line-height: 1.6;
+      color: #555;
+    }
+
+    .subjects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 18px;
+    }
+
+    .subject {
       background: white;
       padding: 22px;
-      margin-bottom: 18px;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    .resource h2 {
-      margin-top: 0;
+    .subject:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.12);
+    }
+
+    .subject h3 {
+      margin: 0 0 15px;
       color: #0b5ed7;
-      font-size: 20px;
+      font-size: 18px;
     }
 
-    .resource p {
-      line-height: 1.6;
+    .subject-icon {
+      font-size: 32px;
+      margin-bottom: 10px;
     }
 
     .button {
       display: inline-block;
       background: #0b5ed7;
       color: white;
-      padding: 12px 20px;
+      padding: 10px 16px;
       border-radius: 7px;
       text-decoration: none;
       font-weight: bold;
-      margin-top: 8px;
+      border: none;
+      cursor: pointer;
     }
 
     .button:hover {
@@ -80,7 +104,7 @@
 
     .back {
       text-align: center;
-      margin: 30px 0;
+      margin: 35px 0;
     }
 
     footer {
@@ -90,86 +114,175 @@
       padding: 20px;
       margin-top: 40px;
     }
-  </style>
-</head>
 
-<body>
+    footer p {
+      margin: 5px 0;
+    }
 
-<header>
+    @media (max-width: 600px) {
+
+      header h1 {
+        font-size: 24px;
+      }
+
+      header p {
+        font-size: 14px;
+      }
+
+      .container {
+        padding: 0 15px;
+      }
+
+      .subject {
+        padding: 20px;
+      }
+    }
+  </style></head><body><header>
   <h1>G Nurse Research Hub Nigeria</h1>
   <p>Research Support • Nursing Education • Academic Resources</p>
-</header>
+</header><div class="container">  <div class="intro">
+    <h2>📚 Resource Materials</h2><p>
+  Welcome to our Resource Materials Centre. Select a subject below
+  to access educational materials, lecture notes, study guides,
+  past questions and other academic resources.
+</p>
 
-<div class="container">
-
-  <div class="intro">
-    <h2>📚 Research Resources</h2>
-    <p>
-      Welcome to our research resource centre. This page provides useful
-      educational and research materials for nursing and healthcare students
-      and researchers.
-    </p>
-  </div>
-
-  <div class="resource">
-  <h2>📊 Drugs for Bronchial Asthma</h2>
-
-  <p>
-    Drugs for Bronchial Asthma, Antitussives, Expectorants
-    and Mucolytic Agents.
-  </p>
-
-  <a class="button"
-     href="Drugs%20for%20Bronchial%20Asthma%2C%20Antitussives%2C%20Expectorants%2C%20Mucolytic%20Agents%20%281%29-1.ppt"
-     target="_blank">
-     📊 View / Download PowerPoint
-  </a>
-  </div>
-    <h2>📄 Nursing Research Guide</h2>
-    <p>
-      A helpful guide for students working on nursing research projects,
-      proposals and academic assignments.
-    </p>
-    <a href="#" class="button">Download PDF</a>
-  </div>
-
-  <div class="resource">
-    <h2>📄 Project Writing Guide</h2>
-    <p>
-      Guidance on choosing a research topic, developing objectives,
-      literature review, methodology and presenting your research work.
-    </p>
-    <a href="#" class="button">Download PDF</a>
-  </div>
-
-  <div class="resource">
-    <h2>📄 Nursing Past Questions</h2>
-    <p>
-      Practice questions and study materials to help nursing students
-      prepare for examinations.
-    </p>
-    <a href="#" class="button">Download PDF</a>
-  </div>
-
-  <div class="resource">
-    <h2>📄 Study Materials</h2>
-    <p>
-      Educational resources covering nursing, anatomy, physiology,
-      pharmacology and other healthcare subjects.
-    </p>
-    <a href="#" class="button">Download PDF</a>
-  </div>
-
-  <div class="back">
-    <a href="index.html" class="button">← Back to Home</a>
-  </div>
-
+  </div>  <div class="subjects"><div class="subject">
+  <div class="subject-icon">⚛️</div>
+  <h3>Physics</h3>
+  <a href="#" class="button">View Materials</a>
 </div>
 
-<footer>
+<div class="subject">
+  <div class="subject-icon">🧪</div>
+  <h3>Chemistry</h3>
+  <a href="#" class="button">View Materials</a>
+</div>
+
+<div class="subject">
+  <div class="subject-icon">🧬</div>
+  <h3>Biology</h3>
+  <a href="#" class="button">View Materials</a>
+</div>
+
+<div class="subject">
+  <div class="subject-icon">📐</div>
+  <h3>Mathematics</h3>
+  <a href="#" class="button">View Materials</a>
+</div>
+
+<div class="subject">
+  <div class="subject-icon">📊</div>
+  <h3>Statistics</h3>
+  <a href="#" class="button">View Materials</a>
+</div>
+
+<div class="subject">
+  <div class="subject-icon">🦠</div>
+  <h3>Microbiology</h3>
+  <a href="#" class="button">View Materials</a>
+</div>
+
+<div class="subject">
+  <div class="subject-icon">🔬</div>
+  <h3>Parasitology</h3>
+  <a href="#" class="button">View Materials</a>
+</div>
+
+<div class="subject">
+  <div class="subject-icon">🔬</div>
+  <h3>Histopathology</h3>
+  <a href="#" class="button">View Materials</a>
+</div>
+
+<div class="subject">
+  <div class="subject-icon">🩺</div>
+  <h3>Medical-Surgical Nursing</h3>
+  <a href="#" class="button">View Materials</a>
+</div>
+
+<div class="subject">
+  <div class="subject-icon">🏥</div>
+  <h3>Community Health Nursing</h3>
+  <a href="#" class="button">View Materials</a>
+</div>
+
+<div class="subject">
+  <div class="subject-icon">🌍</div>
+  <h3>Environmental Health</h3>
+  <a href="#" class="button">View Materials</a>
+</div>
+
+<div class="subject">
+  <div class="subject-icon">👥</div>
+  <h3>Sociology as Applied to Nursing</h3>
+  <a href="#" class="button">View Materials</a>
+</div>
+
+<div class="subject">
+  <div class="subject-icon">👶</div>
+  <h3>Maternal and Child Health</h3>
+  <a href="#" class="button">View Materials</a>
+</div>
+
+<div class="subject">
+  <div class="subject-icon">🫀</div>
+  <h3>Anatomy</h3>
+  <a href="#" class="button">View Materials</a>
+</div>
+
+<div class="subject">
+  <div class="subject-icon">⚗️</div>
+  <h3>Biochemistry</h3>
+  <a href="#" class="button">View Materials</a>
+</div>
+
+<div class="subject">
+  <div class="subject-icon">❤️</div>
+  <h3>Physiology</h3>
+  <a href="#" class="button">View Materials</a>
+</div>
+
+<div class="subject">
+  <div class="subject-icon">📈</div>
+  <h3>Epidemiology</h3>
+  <a href="#" class="button">View Materials</a>
+</div>
+
+<div class="subject">
+  <div class="subject-icon">📚</div>
+  <h3>Nursing Research</h3>
+  <a href="#" class="button">View Materials</a>
+</div>
+
+<div class="subject">
+  <div class="subject-icon">📝</div>
+  <h3>Nursing Diagnosis</h3>
+  <a href="#" class="button">View Materials</a>
+</div>
+
+<div class="subject">
+  <div class="subject-icon">💊</div>
+  <h3>Pharmacology</h3>
+  <a href="#" class="button">View Materials</a>
+</div>
+
+<div class="subject">
+  <div class="subject-icon">💻</div>
+  <h3>Computer Science</h3>
+  <a href="#" class="button">View Materials</a>
+</div>
+
+<div class="subject">
+  <div class="subject-icon">📊</div>
+  <h3>Biostatistics</h3>
+  <a href="#" class="button">View Materials</a>
+</div>
+
+  </div>  <div class="back">
+    <a href="index.html" class="button">← Back to Home</a>
+  </div></div><footer>
   <p>© 2026 G Nurse Research Hub Nigeria</p>
   <p>Professional Nursing Research & Academic Support</p>
-</footer>
-
-</body>
-  </html>
+</footer></body>
+</html>
