@@ -1,194 +1,735 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Admin Video Upload | G Nurse Research Hub Nigeria</title>
+<title>Admin Video Upload | G Nurse Research Hub Nigeria</title>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
 
-    body {
-      background: #f4f7fb;
-      min-height: 100vh;
-      padding: 20px;
-    }
+body {
+  background: #f4f7fb;
+  min-height: 100vh;
+  padding: 20px;
+}
 
-    .container {
-      max-width: 500px;
-      margin: 40px auto;
-      background: white;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-    }
+.container {
+  max-width: 500px;
+  margin: 40px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
 
-    h1 {
-      text-align: center;
-      color: #0b5ed7;
-      margin-bottom: 10px;
-    }
+h1 {
+  text-align: center;
+  color: #0b5ed7;
+  margin-bottom: 10px;
+}
 
-    .subtitle {
-      text-align: center;
-      color: #666;
-      margin-bottom: 25px;
-    }
+.subtitle {
+  text-align: center;
+  color: #666;
+  margin-bottom: 25px;
+}
 
-    label {
-      display: block;
-      margin: 15px 0 7px;
-      font-weight: bold;
-    }
+label {
+  display: block;
+  margin: 15px 0 7px;
+  font-weight: bold;
+}
 
-    input {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 7px;
-      font-size: 15px;
-    }
+input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  font-size: 15px;
+}
 
-    button {
-      width: 100%;
-      padding: 13px;
-      margin-top: 18px;
-      border: none;
-      border-radius: 7px;
-      background: #0b5ed7;
-      color: white;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+button {
+  width: 100%;
+  padding: 13px;
+  margin-top: 18px;
+  border: none;
+  border-radius: 7px;
+  background: #0b5ed7;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-    button:disabled {
-      background: #999;
-      cursor: not-allowed;
-    }
+button:disabled {
+  background: #999;
+}
 
-    .hidden {
-      display: none;
-    }
+.hidden {
+  display: none;
+}
 
-    #status {
-      margin-top: 20px;
-      padding: 12px;
-      border-radius: 7px;
-      text-align: center;
-      line-height: 1.5;
-    }
+#status {
+  margin-top: 20px;
+  padding: 12px;
+  border-radius: 7px;
+  text-align: center;
+  line-height: 1.5;
+}
 
-    .success {
-      background: #d1e7dd;
-      color: #0f5132;
-    }
+.success {
+  background: #d1e7dd;
+  color: #0f5132;
+}
 
-    .error {
-      background: #f8d7da;
-      color: #842029;
-    }
+.error {
+  background: #f8d7da;
+  color: #842029;
+}
 
-    .info {
-      background: #cff4fc;
-      color: #055160;
-    }
+.info {
+  background: #cff4fc;
+  color: #055160;
+}
 
-    .logout {
-      background: #dc3545;
-    }
+.logout {
+  background: #dc3545;
+}
 
-    .password-box {
-      background: #eef5ff;
-      padding: 18px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
+.password-box {
+  background: #eef5ff;
+  padding: 18px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
 
-    .password-box h2 {
-      color: #0b5ed7;
-      text-align: center;
-      margin-bottom: 10px;
-      font-size: 21px;
-    }
+.password-box h2 {
+  color: #0b5ed7;
+  text-align: center;
+  margin-bottom: 10px;
+}
 
-    .password-box p {
-      text-align: center;
-      color: #555;
-      line-height: 1.5;
-      margin-bottom: 15px;
-    }
-  </style>
+.password-box p {
+  text-align: center;
+  color: #555;
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+</style>
 </head>
 
 <body>
 
 <div class="container">
 
-  <h1>🔐 Admin Video Upload</h1>
+<h1>🔐 Admin Video Upload</h1>
 
-  <p class="subtitle">
-    G Nurse Research Hub Nigeria
-  </p>
-
-
-  <!-- ==============================
-       PASSWORD UPDATE SECTION
-  =============================== -->
-
-  <div id="passwordUpdateSection" class="hidden">
-
-    <div class="password-box">
-
-      <h2>🔑 Set New Password</h2>
-
-      <p>
-        Enter a new password for your admin account.
-      </p>
-
-      <label for="newPassword">
-        New Password
-      </label>
-
-      <input
-        type="password"
-        id="newPassword"
-        placeholder="Enter new password"
-        autocomplete="new-password"
-      >
-
-      <label for="confirmPassword">
-        Confirm New Password
-      </label>
-
-      <input
-        type="password"
-        id="confirmPassword"
-        placeholder="Confirm new password"
-        autocomplete="new-password"
-      >
-
-      <button
-        type="button"
-        id="updatePasswordButton"
-        onclick="updatePassword()"
-      >
-        🔒 Update Password
-      </button>
-
-    </div>
-
-  </div>
+<p class="subtitle">
+G Nurse Research Hub Nigeria
+</p>
 
 
-  <!-- ==============================
-       LOGIN SECTION
- 
+<!-- PASSWORD UPDATE -->
+
+<div id="passwordUpdateSection" class="hidden">
+
+<div class="password-box">
+
+<h2>🔑 Set New Password</h2>
+
+<p>
+Enter a new password for your admin account.
+</p>
+
+<label for="newPassword">
+New Password
+</label>
+
+<input
+type="password"
+id="newPassword"
+placeholder="Enter new password"
+autocomplete="new-password"
+>
+
+<label for="confirmPassword">
+Confirm New Password
+</label>
+
+<input
+type="password"
+id="confirmPassword"
+placeholder="Confirm new password"
+autocomplete="new-password"
+>
+
+<button
+type="button"
+id="updatePasswordButton"
+onclick="updatePassword()"
+>
+🔒 Update Password
+</button>
+
+</div>
+
+</div>
+
+
+<!-- LOGIN -->
+
+<div id="loginSection">
+
+<label for="email">
+Email
+</label>
+
+<input
+type="email"
+id="email"
+placeholder="Admin email"
+autocomplete="email"
+>
+
+<label for="password">
+Password
+</label>
+
+<input
+type="password"
+id="password"
+placeholder="Admin password"
+autocomplete="current-password"
+>
+
+<button
+type="button"
+onclick="login()"
+>
+🔑 Admin Login
+</button>
+
+<button
+type="button"
+onclick="resetPassword()"
+>
+🔄 Forgot Password?
+</button>
+
+</div>
+
+
+<!-- VIDEO UPLOAD -->
+
+<div id="uploadSection" class="hidden">
+
+<p>
+You are logged in as admin.
+</p>
+
+<label for="videoFile">
+Select Video
+</label>
+
+<input
+type="file"
+id="videoFile"
+accept="video/*"
+>
+
+<button
+type="button"
+id="uploadButton"
+onclick="uploadVideo()"
+>
+⬆️ Upload Video
+</button>
+
+<button
+type="button"
+class="logout"
+onclick="logout()"
+>
+Logout
+</button>
+
+</div>
+
+
+<div id="status" class="hidden"></div>
+
+</div>
+
+
+<script>
+
+/* SUPABASE */
+
+const SUPABASE_URL =
+"https://bmiechymiyedubezhcqk.supabase.co";
+
+const SUPABASE_ANON_KEY =
+"sb_publishable_9JL2ALhTGlZV57hUV0mTdQ_c2hdT8O8";
+
+const supabaseClient =
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_ANON_KEY
+);
+
+
+/* STATUS */
+
+function showStatus(text, type) {
+
+const status =
+document.getElementById("status");
+
+status.textContent = text;
+
+status.className = "";
+
+status.classList.remove("hidden");
+
+if (type) {
+status.classList.add(type);
+}
+
+}
+
+
+/* LOGIN */
+
+async function login() {
+
+const email =
+document.getElementById("email")
+.value.trim();
+
+const password =
+document.getElementById("password")
+.value;
+
+if (!email || !password) {
+
+showStatus(
+"Please enter your email and password.",
+"error"
+);
+
+return;
+}
+
+showStatus("Logging in...", "info");
+
+try {
+
+const { data, error } =
+await supabaseClient.auth
+.signInWithPassword({
+
+email: email,
+password: password
+
+});
+
+if (error) {
+
+showStatus(
+"Login failed: " + error.message,
+"error"
+);
+
+return;
+}
+
+document
+.getElementById("loginSection")
+.classList.add("hidden");
+
+document
+.getElementById("uploadSection")
+.classList.remove("hidden");
+
+showStatus(
+"✅ Login successful. You can now upload videos.",
+"success"
+);
+
+}
+
+catch (error) {
+
+showStatus(
+"Login error: " + error.message,
+"error"
+);
+
+}
+
+}
+
+
+/* PASSWORD RESET EMAIL */
+
+async function resetPassword() {
+
+const email =
+document.getElementById("email")
+.value.trim();
+
+if (!email) {
+
+showStatus(
+"Please enter your email address first.",
+"error"
+);
+
+return;
+}
+
+showStatus(
+"Sending password reset link...",
+"info"
+);
+
+try {
+
+const { error } =
+await supabaseClient.auth
+.resetPasswordForEmail(
+
+email,
+
+{
+redirectTo:
+"https://gnurseresearchhub.name.ng/admin-upload.html"
+}
+
+);
+
+if (error) {
+
+showStatus(
+"Reset failed: " + error.message,
+"error"
+);
+
+return;
+}
+
+showStatus(
+"✅ Reset link sent. Check your email inbox and Spam/Junk folder.",
+"success"
+);
+
+}
+
+catch (error) {
+
+showStatus(
+"Reset error: " + error.message,
+"error"
+);
+
+}
+
+}
+
+
+/* PASSWORD RECOVERY */
+
+supabaseClient.auth.onAuthStateChange(
+async (event, session) => {
+
+if (event === "PASSWORD_RECOVERY") {
+
+document
+.getElementById("loginSection")
+.classList.add("hidden");
+
+document
+.getElementById("uploadSection")
+.classList.add("hidden");
+
+document
+.getElementById("passwordUpdateSection")
+.classList.remove("hidden");
+
+showStatus(
+"🔑 Enter your new password below.",
+"info"
+);
+
+}
+
+}
+);
+
+
+/* UPDATE PASSWORD */
+
+async function updatePassword() {
+
+const newPassword =
+document.getElementById("newPassword")
+.value;
+
+const confirmPassword =
+document.getElementById("confirmPassword")
+.value;
+
+if (!newPassword || !confirmPassword) {
+
+showStatus(
+"Please enter and confirm your new password.",
+"error"
+);
+
+return;
+}
+
+if (newPassword.length < 6) {
+
+showStatus(
+"Password must contain at least 6 characters.",
+"error"
+);
+
+return;
+}
+
+if (newPassword !== confirmPassword) {
+
+showStatus(
+"Passwords do not match.",
+"error"
+);
+
+return;
+}
+
+const button =
+document.getElementById(
+"updatePasswordButton"
+);
+
+button.disabled = true;
+
+button.textContent =
+"Updating password...";
+
+try {
+
+const { error } =
+await supabaseClient.auth
+.updateUser({
+
+password: newPassword
+
+});
+
+if (error) {
+
+showStatus(
+"Password update failed: " +
+error.message,
+"error"
+);
+
+return;
+}
+
+showStatus(
+"✅ Password updated successfully. You can now log in.",
+"success"
+);
+
+await supabaseClient.auth.signOut();
+
+document
+.getElementById("passwordUpdateSection")
+.classList.add("hidden");
+
+document
+.getElementById("loginSection")
+.classList.remove("hidden");
+
+document.getElementById("newPassword").value = "";
+
+document.getElementById("confirmPassword").value = "";
+
+}
+
+catch (error) {
+
+showStatus(
+"Password update error: " +
+error.message,
+"error"
+);
+
+}
+
+finally {
+
+button.disabled = false;
+
+button.textContent =
+"🔒 Update Password";
+
+}
+
+}
+
+
+/* VIDEO UPLOAD */
+
+async function uploadVideo() {
+
+const file =
+document.getElementById("videoFile")
+.files[0];
+
+if (!file) {
+
+showStatus(
+"Please select a video first.",
+"error"
+);
+
+return;
+}
+
+const {
+data: { user }
+} =
+await supabaseClient.auth.getUser();
+
+if (!user) {
+
+showStatus(
+"You must be logged in.",
+"error"
+);
+
+return;
+}
+
+const uploadButton =
+document.getElementById(
+"uploadButton"
+);
+
+uploadButton.disabled = true;
+
+uploadButton.textContent =
+"Uploading...";
+
+const fileName =
+Date.now() + "-" +
+file.name.replace(/\s+/g, "-");
+
+const filePath =
+"videos/" + fileName;
+
+try {
+
+const { error } =
+await supabaseClient.storage
+.from("videos")
+.upload(
+
+filePath,
+
+file,
+
+{
+cacheControl: "3600",
+upsert: false
+}
+
+);
+
+if (error) {
+
+showStatus(
+"Upload failed: " +
+error.message,
+"error"
+);
+
+return;
+}
+
+showStatus(
+"✅ Video uploaded successfully!",
+"success"
+);
+
+document
+.getElementById("videoFile")
+.value = "";
+
+}
+
+catch (error) {
+
+showStatus(
+"Upload error: " +
+error.message,
+"error"
+);
+
+}
+
+finally {
+
+uploadButton.disabled = false;
+
+uploadButton.textContent =
+"⬆️ Upload Video";
+
+}
+
+}
+
+
+/* LOGOUT */
+
+async function logout() {
+
+await supabaseClient.auth.signOut();
+
+document
+.getElementById("uploadSection")
+.classList.add("hidden");
+
+document
+.getElementById("passwordUpdateSection")
+.classList.add("hidden");
+
+document
+.getElementById("loginSection")
+.classList.remove("hidden");
+
+showStatus(
+"You have been logged out.",
+"info"
+);
+
+}
+
+</script>
+
+</body>
+  </html>
