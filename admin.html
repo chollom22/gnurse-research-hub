@@ -1028,41 +1028,33 @@ async function uploadPDF() {
 async function uploadVideo() {
 
   const file =
-    document.getElementById("videoFile")
-      .files[0];
+    document.getElementById("videoFile").files[0];
 
   if (!file) {
-
     showStatus(
       "Please select a video.",
       "error"
     );
-
     return;
   }
 
   if (!file.type.startsWith("video/")) {
-
     showStatus(
       "Please select a valid video file.",
       "error"
     );
-
     return;
   }
 
   const {
     data: { user }
-  } =
-    await supabaseClient.auth.getUser();
+  } = await supabaseClient.auth.getUser();
 
   if (!user) {
-
     showStatus(
       "You must be logged in.",
       "error"
     );
-
     return;
   }
 
@@ -1070,18 +1062,64 @@ async function uploadVideo() {
     document.getElementById("videoButton");
 
   button.disabled = true;
-
   button.textContent =
     "☁️ Uploading video...";
 
   try {
 
-    /* STEP 1: Upload video to Cloudinary */
+    /* =========================
+       STEP 1
+       UPLOAD VIDEO TO CLOUDINARY
+    ========================= */
 
     const videoURL =
       await uploadToCloudinary(file);
 
-    /* STEP 2: Save video information in Supabase */
+
+    /* =========================
+       STEP 2
+       REFRESH SUPABASE SESSION
+       BEFORE DATABASE INSERT
+    ========================= */
+
+    button.textContent =
+      "🔄 Connecting to database...";
+
+    const { error: refreshError } =
+      await supabaseClient.auth.refreshSession();
+
+    if (refreshError) {
+      throw new Error(
+        "Session refresh failed: " +
+        refreshError.message
+      );
+    }
+
+
+    /* =========================
+       STEP 3
+       GET FRESH USER SESSION
+    ========================= */
+
+    const {
+      data: {
+        session
+      }
+    } =
+      await supabaseClient.auth.getSession();
+
+    if (!session) {
+      throw new Error(
+        "Your admin session has expired. Please log in again."
+      );
+    }
+
+
+    /* =========================
+       STEP 4
+       SAVE VIDEO INFORMATION
+       TO SUPABASE
+    ========================= */
 
     button.textContent =
       "🗄️ Saving video information...";
@@ -1092,7 +1130,13 @@ async function uploadVideo() {
         ""
       );
 
-    const { error } =
+
+    /* =========================
+       RETRY DATABASE INSERT
+       IF JWT CLOCK ERROR OCCURS
+    ========================= */
+
+    let insertResult =
       await supabaseClient
         .from("educational_videos")
         .insert({
@@ -1101,22 +1145,64 @@ async function uploadVideo() {
           video_url: videoURL
         });
 
-    if (error) {
+
+    /* =========================
+       RETRY ON JWT FUTURE ERROR
+    ========================= */
+
+    if (
+      insertResult.error &&
+      insertResult.error.message &&
+      insertResult.error.message
+        .toLowerCase()
+        .includes("jwt issued at future")
+    ) {
+
+      button.textContent =
+        "⏳ Retrying database connection...";
+
+      await new Promise(
+        resolve => setTimeout(resolve, 2000)
+      );
+
+
+      await supabaseClient.auth.refreshSession();
+
+
+      insertResult =
+        await supabaseClient
+          .from("educational_videos")
+          .insert({
+            title: videoTitle,
+            description: "Educational video",
+            video_url: videoURL
+          });
+    }
+
+
+    /* =========================
+       CHECK DATABASE RESULT
+    ========================= */
+
+    if (insertResult.error) {
 
       throw new Error(
         "Video uploaded to Cloudinary, but database save failed: " +
-        error.message
+        insertResult.error.message
       );
-
     }
 
-    /* STEP 3: Success */
+
+    /* =========================
+       SUCCESS
+    ========================= */
 
     showStatus(
-      "✅ Video uploaded and saved successfully.\n\n" +
-      "It is now available on the Educational Videos page.",
+      "✅ Video uploaded successfully!\n\n" +
+      "The video has been saved and will now appear on the Educational Videos page.",
       "success"
     );
+
 
     document
       .getElementById("videoFile")
@@ -1125,6 +1211,11 @@ async function uploadVideo() {
   }
 
   catch (error) {
+
+    console.error(
+      "Video upload error:",
+      error
+    );
 
     showStatus(
       "❌ Video upload failed:\n" +
