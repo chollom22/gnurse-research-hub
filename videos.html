@@ -164,7 +164,6 @@
     }
 
     @media (max-width: 600px) {
-
       header h1 {
         font-size: 23px;
       }
@@ -227,7 +226,6 @@
     <p>All Rights Reserved.</p>
   </footer>
 
-
   <script>
 
     /* =========================
@@ -248,7 +246,7 @@
 
 
     /* =========================
-       LOAD EDUCATIONAL VIDEOS
+       LOAD VIDEOS FROM DATABASE
     ========================= */
 
     async function loadVideos() {
@@ -266,23 +264,7 @@
       message.textContent =
         "Loading educational videos...";
 
-
       try {
-
-        /*
-          IMPORTANT:
-
-          We are NOT reading from a Supabase
-          Storage bucket.
-
-          The videos are stored on Cloudinary.
-
-          Supabase only stores:
-          - title
-          - description
-          - video_url
-          - created_at
-        */
 
         const { data, error } =
           await supabaseClient
@@ -299,13 +281,13 @@
 
 
         /* =========================
-           CHECK DATABASE ERROR
+           DATABASE ERROR
         ========================= */
 
         if (error) {
 
           console.error(
-            "Supabase error:",
+            "Database error:",
             error
           );
 
@@ -313,8 +295,8 @@
             "message error-message";
 
           message.textContent =
-            "Unable to load educational videos right now. " +
-            "Please try again later.";
+            "Unable to load educational videos. " +
+            error.message;
 
           return;
         }
@@ -324,10 +306,7 @@
            NO VIDEOS
         ========================= */
 
-        if (
-          !data ||
-          data.length === 0
-        ) {
+        if (!data || data.length === 0) {
 
           message.className =
             "message";
@@ -343,16 +322,10 @@
            VIDEOS FOUND
         ========================= */
 
-        message.classList.add(
-          "hidden"
-        );
+        message.classList.add("hidden");
 
 
         data.forEach(function(videoData) {
-
-          /* =========================
-             VIDEO CARD
-          ========================= */
 
           const card =
             document.createElement("div");
@@ -361,9 +334,7 @@
             "video-card";
 
 
-          /* =========================
-             VIDEO
-          ========================= */
+          /* VIDEO */
 
           const videoWrapper =
             document.createElement("div");
@@ -376,41 +347,17 @@
             document.createElement("video");
 
           video.controls = true;
-
           video.preload = "metadata";
-
           video.playsInline = true;
 
           video.src =
             videoData.video_url;
 
 
-          /*
-            Helps the browser load the
-            Cloudinary video correctly.
-          */
-
-          video.addEventListener(
-            "error",
-            function() {
-
-              console.error(
-                "Video could not be loaded:",
-                videoData.video_url
-              );
-
-            }
-          );
+          videoWrapper.appendChild(video);
 
 
-          videoWrapper.appendChild(
-            video
-          );
-
-
-          /* =========================
-             VIDEO INFORMATION
-          ========================= */
+          /* INFORMATION */
 
           const info =
             document.createElement("div");
@@ -435,16 +382,13 @@
             "Educational video from G Nurse Research Hub Nigeria.";
 
 
-          /* =========================
-             DATE
-          ========================= */
+          /* DATE */
 
           const date =
             document.createElement("div");
 
           date.className =
             "date";
-
 
           if (videoData.created_at) {
 
@@ -463,37 +407,22 @@
                   day: "numeric"
                 }
               );
-
           }
 
 
-          /* =========================
-             BUILD CARD
-          ========================= */
+          /* BUILD CARD */
 
-          info.appendChild(
-            title
-          );
+          info.appendChild(title);
 
-          info.appendChild(
-            description
-          );
+          info.appendChild(description);
 
-          info.appendChild(
-            date
-          );
+          info.appendChild(date);
 
-          card.appendChild(
-            videoWrapper
-          );
+          card.appendChild(videoWrapper);
 
-          card.appendChild(
-            info
-          );
+          card.appendChild(info);
 
-          videoGrid.appendChild(
-            card
-          );
+          videoGrid.appendChild(card);
 
         });
 
@@ -510,11 +439,9 @@
           "message error-message";
 
         message.textContent =
-          "Unable to load educational videos right now. " +
-          "Please try again later.";
-
+          "Unable to load educational videos. " +
+          error.message;
       }
-
     }
 
 
@@ -527,4 +454,4 @@
   </script>
 
 </body>
-   </html>
+</html>
