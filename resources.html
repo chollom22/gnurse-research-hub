@@ -486,11 +486,11 @@ async function loadMaterials(subject) {
   try {
 
     const { data, error } =
-      await supabaseClient
-        .from("resource_materials")
-        .select("id, title, description, file_url, subject")
-        .eq("subject", subject)
-        .order("id", { ascending: false });
+  await supabaseClient
+    .from("resource_materials")
+    .select("title, subject, file_url, file_name, created_at")
+    .eq("subject", subject)
+    .order("created_at", { ascending: false });
 
 
     if (error) {
