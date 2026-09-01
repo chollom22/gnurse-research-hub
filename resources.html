@@ -488,7 +488,7 @@ async function loadMaterials(subject) {
     const { data, error } =
   await supabaseClient
     .from("resource_materials")
-    .select("title, subject, file_url, file_name, created_at")
+    .select("title, subject, file_url, created_at")
     .eq("subject", subject)
     .order("created_at", { ascending: false });
 
@@ -550,18 +550,6 @@ async function loadMaterials(subject) {
 
       item.appendChild(heading);
 
-
-      if (material.file_name) {
-
-  const description =
-    document.createElement("p");
-
-  description.textContent =
-    material.file_name;
-
-  item.appendChild(description);
-
-      }
 
 
       if (material.file_url) {
