@@ -551,15 +551,15 @@ async function loadMaterials(subject) {
       item.appendChild(heading);
 
 
-      if (material.description) {
+      if (material.file_name) {
 
-        const description =
-          document.createElement("p");
+  const description =
+    document.createElement("p");
 
-        description.textContent =
-          material.description;
+  description.textContent =
+    material.file_name;
 
-        item.appendChild(description);
+  item.appendChild(description);
 
       }
 
