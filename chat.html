@@ -751,13 +751,15 @@ document
 ============================== */
 
 startChat();
-  // ===============================
-// VOICE NOTE RECORDING
+
+// ===============================
+// VOICE NOTE RECORDING + SUPABASE
 // ===============================
 
 let mediaRecorder;
 let audioChunks = [];
 let isRecording = false;
+let recordingStream = null;
 
 const voiceButton = document.getElementById("voiceButton");
 
@@ -769,13 +771,29 @@ voiceButton.addEventListener("click", async () => {
     return;
   }
 
-  // START RECORDING
+  // Make sure a friend is selected
+  if (!selectedFriend) {
+    alert("Please select a friend before recording a voice note.");
+    return;
+  }
+
   try {
+
+    const {
+      data: { user },
+      error: userError
+    } = await supabaseClient.auth.getUser();
+
+    if (userError || !user) {
+      alert("Please log in again.");
+      return;
+    }
 
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: true
     });
 
+    recordingStream = stream;
     audioChunks = [];
 
     let mimeType = "";
@@ -798,47 +816,182 @@ voiceButton.addEventListener("click", async () => {
     };
 
     mediaRecorder.onstart = () => {
+
       isRecording = true;
+
       voiceButton.textContent = "⏹️";
       voiceButton.title = "Stop recording";
+
     };
 
-    mediaRecorder.onstop = () => {
+    mediaRecorder.onstop = async () => {
 
       isRecording = false;
 
       voiceButton.textContent = "🎤";
       voiceButton.title = "Record voice note";
 
-      stream.getTracks().forEach(track => track.stop());
+      if (recordingStream) {
+        recordingStream
+          .getTracks()
+          .forEach(track => track.stop());
+
+        recordingStream = null;
+      }
 
       const audioBlob = new Blob(audioChunks, {
         type: mediaRecorder.mimeType
       });
 
-      const audioURL = URL.createObjectURL(audioBlob);
+      if (!audioBlob.size) {
+        alert("No voice recording was captured.");
+        return;
+      }
 
-      // Show recorded voice note for testing
-      const messagesBox = document.querySelector(".messages");
+      // Determine file extension
+      const extension =
+        audioBlob.type.includes("mp4") ? "mp4" : "webm";
 
-      const audioElement = document.createElement("audio");
+      // Create a unique file name
+      const fileName =
+        crypto.randomUUID() + "." + extension;
+
+      const filePath =
+        user.id + "/" + fileName;
+
+      // ===============================
+      // UPLOAD AUDIO
+      // ===============================
+
+      const {
+        error: uploadError
+      } = await supabaseClient.storage
+        .from("chat-voice-notes")
+        .upload(
+          filePath,
+          audioBlob,
+          {
+            contentType: audioBlob.type,
+            upsert: false
+          }
+        );
+
+      if (uploadError) {
+
+        console.error("Voice upload error:", uploadError);
+
+        alert(
+          "The voice note could not be uploaded. " +
+          uploadError.message
+        );
+
+        return;
+      }
+
+      // ===============================
+      // SAVE VOICE NOTE INFORMATION
+      // ===============================
+
+      const {
+        error: databaseError
+      } = await supabaseClient
+        .from("chat_voice_notes")
+        .insert({
+          sender_id: user.id,
+          receiver_id: selectedFriend.id,
+          audio_url: filePath
+        });
+
+      if (databaseError) {
+
+        console.error(
+          "Voice note database error:",
+          databaseError
+        );
+
+        alert(
+          "The voice note was uploaded but could not be saved."
+        );
+
+        return;
+      }
+
+      // ===============================
+      // CREATE TEMPORARY SIGNED URL
+      // ===============================
+
+      const {
+        data: signedData,
+        error: signedError
+      } = await supabaseClient.storage
+        .from("chat-voice-notes")
+        .createSignedUrl(
+          filePath,
+          3600
+        );
+
+      if (signedError) {
+
+        console.error(
+          "Signed URL error:",
+          signedError
+        );
+
+        alert(
+          "Voice note was saved, but it could not be played yet."
+        );
+
+        return;
+      }
+
+      // ===============================
+      // DISPLAY VOICE NOTE
+      // ===============================
+
+      const messagesBox =
+        document.querySelector(".messages");
+
+      const wrapper =
+        document.createElement("div");
+
+      wrapper.className = "message sent";
+
+      const audioElement =
+        document.createElement("audio");
+
       audioElement.controls = true;
-      audioElement.src = audioURL;
+      audioElement.src = signedData.signedUrl;
 
-      const wrapper = document.createElement("div");
-      wrapper.style.margin = "10px 0";
       wrapper.appendChild(audioElement);
 
       messagesBox.appendChild(wrapper);
 
       scrollToBottom();
+
+    };
+
+    mediaRecorder.onerror = (event) => {
+
+      console.error(
+        "MediaRecorder error:",
+        event.error
+      );
+
+      isRecording = false;
+
+      voiceButton.textContent = "🎤";
+      voiceButton.title = "Record voice note";
+
     };
 
     mediaRecorder.start();
 
   } catch (error) {
 
-    console.error("Microphone error:", error);
+    console.error(
+      "Microphone/recording error:",
+      error
+    );
 
     alert(
       "Microphone access was denied or is not available. " +
@@ -848,8 +1001,5 @@ voiceButton.addEventListener("click", async () => {
   }
 
 });
-
-</script>
-
 </body>
   </html>
