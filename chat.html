@@ -737,6 +737,103 @@ document
 ============================== */
 
 startChat();
+  // ===============================
+// VOICE NOTE RECORDING
+// ===============================
+
+let mediaRecorder;
+let audioChunks = [];
+let isRecording = false;
+
+const voiceButton = document.getElementById("voiceButton");
+
+voiceButton.addEventListener("click", async () => {
+
+  // STOP RECORDING
+  if (isRecording) {
+    mediaRecorder.stop();
+    return;
+  }
+
+  // START RECORDING
+  try {
+
+    const stream = await navigator.mediaDevices.getUserMedia({
+      audio: true
+    });
+
+    audioChunks = [];
+
+    let mimeType = "";
+
+    if (MediaRecorder.isTypeSupported("audio/webm")) {
+      mimeType = "audio/webm";
+    } else if (MediaRecorder.isTypeSupported("audio/mp4")) {
+      mimeType = "audio/mp4";
+    }
+
+    mediaRecorder = new MediaRecorder(
+      stream,
+      mimeType ? { mimeType } : undefined
+    );
+
+    mediaRecorder.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        audioChunks.push(event.data);
+      }
+    };
+
+    mediaRecorder.onstart = () => {
+      isRecording = true;
+      voiceButton.textContent = "⏹️";
+      voiceButton.title = "Stop recording";
+    };
+
+    mediaRecorder.onstop = () => {
+
+      isRecording = false;
+
+      voiceButton.textContent = "🎤";
+      voiceButton.title = "Record voice note";
+
+      stream.getTracks().forEach(track => track.stop());
+
+      const audioBlob = new Blob(audioChunks, {
+        type: mediaRecorder.mimeType
+      });
+
+      const audioURL = URL.createObjectURL(audioBlob);
+
+      // Show recorded voice note for testing
+      const messagesBox = document.querySelector(".messages");
+
+      const audioElement = document.createElement("audio");
+      audioElement.controls = true;
+      audioElement.src = audioURL;
+
+      const wrapper = document.createElement("div");
+      wrapper.style.margin = "10px 0";
+      wrapper.appendChild(audioElement);
+
+      messagesBox.appendChild(wrapper);
+
+      scrollToBottom();
+    };
+
+    mediaRecorder.start();
+
+  } catch (error) {
+
+    console.error("Microphone error:", error);
+
+    alert(
+      "Microphone access was denied or is not available. " +
+      "Please allow microphone permission for this website."
+    );
+
+  }
+
+});
 
 </script>
 
