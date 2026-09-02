@@ -318,24 +318,18 @@
             type="search"
             placeholder="Search friends..."
           >
-        </div>
+        </div
       </div>
 
-      <div class="friend-list">
+      <div class="friend-list" id="friendList">
 
-        <!-- Friends will be loaded here later -->
-
-        <div class="friend">
-          <div class="friend-name">
-            No friends yet
-          </div>
-
-          <div class="friend-status">
-            Friends will appear here
-          </div>
-        </div>
+  <div class="friend">
+    <div class="friend-name">Loading...</div>
+    <div class="friend-status">Please wait</div>
+  </div>
 
       </div>
+   </div>
 
     </aside>
 
@@ -432,6 +426,61 @@
 }
 
 checkUser();
+  async function loadFriends() {
+  const { data: { user } } = await supabaseClient.auth.getUser();
+
+  if (!user) return;
+
+  const { data, error } = await supabaseClient
+    .from("profiles")
+    .select("id, username, full_name")
+    .neq("id", user.id)
+    .order("username");
+
+  const friendList = document.getElementById("friendList");
+
+  if (error) {
+    console.error("Error loading friends:", error);
+    friendList.innerHTML = `
+      <div class="friend">
+        <div class="friend-name">Unable to load users</div>
+        <div class="friend-status">Please try again</div>
+      </div>
+    `;
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    friendList.innerHTML = `
+      <div class="friend">
+        <div class="friend-name">No other users yet</div>
+        <div class="friend-status">Invite someone to join</div>
+      </div>
+    `;
+    return;
+  }
+
+  friendList.innerHTML = "";
+
+  data.forEach(profile => {
+    const friend = document.createElement("div");
+    friend.className = "friend";
+
+    friend.innerHTML = `
+      <div class="friend-name">
+        ${profile.full_name || profile.username || "User"}
+      </div>
+
+      <div class="friend-status">
+        @${profile.username || "user"}
+      </div>
+    `;
+
+    friendList.appendChild(friend);
+  });
+}
+
+loadFriends();
     </script>
 
 </body>
