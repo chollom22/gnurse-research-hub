@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Create Account | G Nurse Research Hub Nigeria</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #087f8c, #05636e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .signup-box {
+      width: 100%;
+      max-width: 430px;
+      background: white;
+      padding: 30px 25px;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      text-align: center;
+      color: #087f8c;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #777;
+      font-size: 14px;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin: 14px 0 6px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ccc;
+      border-radius: 9px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #087f8c;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 22px;
+      padding: 14px;
+      border: none;
+      border-radius: 9px;
+      background: #087f8c;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #05636e;
+    }
+
+    #status {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .login-link a {
+      color: #087f8c;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .back {
+      display: block;
+      text-align: center;
+      margin-top: 18px;
+      color: #777;
+      text-decoration: none;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="signup-box">
+
+    <h1>👤 Create Account</h1>
+
+    <p class="subtitle">
+      Join G Nurse Research Hub Nigeria
+    </p>
+
+    <form id="signupForm">
+
+      <label for="fullName">Full Name</label>
+
+      <input
+        type="text"
+        id="fullName"
+        placeholder="Enter your full name"
+        required
+      >
+
+      <label for="username">Username</label>
+
+      <input
+        type="text"
+        id="username"
+        placeholder="Choose a username"
+        required
+      >
+
+      <label for="email">Email Address</label>
+
+      <input
+        type="email"
+        id="email"
+        placeholder="Enter your email"
+        required
+      >
+
+      <label for="password">Password</label>
+
+      <input
+        type="password"
+        id="password"
+        placeholder="Create a password"
+        minlength="6"
+        required
+      >
+
+      <button type="submit" id="signupButton">
+        Create Account
+      </button>
+
+    </form>
+
+    <div id="status"></div>
+
+    <div class="login-link">
+      Already have an account?
+      <a href="login.html">Login</a>
+    </div>
+
+    <a href="index.html" class="back">
+      ← Back to Home
+    </a>
+
+  </div>
+
+  <script>
+
+    const SUPABASE_URL = "https://bmiechymiyedubezhcqk.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY = "PASTE_YOUR_EXISTING_PUBLISHABLE_KEY_HERE";
+
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
+
+    const signupForm = document.getElementById("signupForm");
+    const statusBox = document.getElementById("status");
+    const signupButton = document.getElementById("signupButton");
+
+    signupForm.addEventListener("submit", async function(event) {
+
+      event.preventDefault();
+
+      const fullName =
+        document.getElementById("fullName").value.trim();
+
+      const username =
+        document.getElementById("username").value.trim();
+
+      const email =
+        document.getElementById("email").value.trim();
+
+      const password =
+        document.getElementById("password").value;
+
+      statusBox.textContent = "Creating your account...";
+      statusBox.style.color = "#087f8c";
+
+      signupButton.disabled = true;
+      signupButton.textContent = "Creating...";
+
+      try {
+
+        const {
+          data,
+          error
+        } = await supabaseClient.auth.signUp({
+          email: email,
+          password: password
+        });
+
+        if (error) {
+          throw error;
+        }
+
+        if (!data.user) {
+          throw new Error("Account could not be created.");
+        }
+
+        const {
+          error: profileError
+        } = await supabaseClient
+          .from("profiles")
+          .insert({
+            id: data.user.id,
+            username: username,
+            full_name: fullName
+          });
+
+        if (profileError) {
+          throw profileError;
+        }
+
+        statusBox.textContent =
+          "Account created successfully! You can now log in.";
+
+        statusBox.style.color = "green";
+
+        signupForm.reset();
+
+        setTimeout(function() {
+          window.location.href = "login.html";
+        }, 1500);
+
+      } catch (error) {
+
+        console.error(error);
+
+        statusBox.textContent =
+          error.message || "Something went wrong.";
+
+        statusBox.style.color = "red";
+
+      } finally {
+
+        signupButton.disabled = false;
+        signupButton.textContent = "Create Account";
+
+      }
+
+    });
+
+  </script>
+
+</body>
+  </html>
