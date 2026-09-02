@@ -399,8 +399,6 @@
   <a href="index.html" class="back">
     ← Back to Home
   </a>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <script>
 const SUPABASE_URL = "https://bmiechymiyedubezhcqk.supabase.co";
 
@@ -411,6 +409,14 @@ const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_PUBLISHABLE_KEY
 );
+
+let currentUser = null;
+let selectedFriend = null;
+
+
+/* ==============================
+   START CHAT
+============================== */
 
 async function startChat() {
 
@@ -424,8 +430,7 @@ async function startChat() {
     return;
   }
 
-  console.log("Logged-in user:", user.id);
-  alert("Supabase login detected");
+  currentUser = user;
 
   const friendList = document.getElementById("friendList");
 
@@ -436,14 +441,13 @@ async function startChat() {
     .order("username");
 
   if (error) {
+
     console.error("Friends error:", error);
 
     friendList.innerHTML = `
       <div class="friend">
         <div class="friend-name">Unable to load users</div>
-        <div class="friend-status">
-          ${error.message}
-        </div>
+        <div class="friend-status">${error.message}</div>
       </div>
     `;
 
@@ -455,9 +459,7 @@ async function startChat() {
     friendList.innerHTML = `
       <div class="friend">
         <div class="friend-name">No other users yet</div>
-        <div class="friend-status">
-          Invite someone to join
-        </div>
+        <div class="friend-status">Invite someone to join</div>
       </div>
     `;
 
@@ -482,13 +484,251 @@ async function startChat() {
       </div>
     `;
 
+    /* Make friend clickable */
+    friend.addEventListener("click", () => {
+      openChat(profile);
+    });
+
     friendList.appendChild(friend);
 
   });
-
 }
 
+
+/* ==============================
+   OPEN CHAT
+============================== */
+
+async function openChat(friend) {
+
+  selectedFriend = friend;
+
+  const chatHeader = document.querySelector(".chat-header");
+  const messages = document.querySelector(".messages");
+
+  chatHeader.innerHTML = `
+    <h2>💬 ${friend.full_name || friend.username || "User"}</h2>
+    <p>@${friend.username || "user"}</p>
+  `;
+
+  messages.innerHTML = `
+    <div class="welcome">
+      <div class="welcome-icon">💬</div>
+      <h2>Loading messages...</h2>
+    </div>
+  `;
+
+  await loadMessages();
+}
+
+
+/* ==============================
+   LOAD MESSAGES
+============================== */
+
+async function loadMessages() {
+
+  if (!currentUser || !selectedFriend) return;
+
+  const messagesContainer = document.querySelector(".messages");
+
+  const { data, error } = await supabaseClient
+    .from("chat_messages")
+    .select("id, sender_id, receiver_id, message, created_at")
+    .or(
+      `and(sender_id.eq.${currentUser.id},receiver_id.eq.${selectedFriend.id}),and(sender_id.eq.${selectedFriend.id},receiver_id.eq.${currentUser.id})`
+    )
+    .order("created_at", { ascending: true });
+
+  if (error) {
+
+    console.error("Messages error:", error);
+
+    messagesContainer.innerHTML = `
+      <div class="welcome">
+        <div class="welcome-icon">⚠️</div>
+        <h2>Unable to load messages</h2>
+        <p>${error.message}</p>
+      </div>
+    `;
+
+    return;
+  }
+
+  messagesContainer.innerHTML = "";
+
+  if (!data || data.length === 0) {
+
+    messagesContainer.innerHTML = `
+      <div class="welcome">
+        <div class="welcome-icon">👋</div>
+        <h2>Start the conversation</h2>
+        <p>Send your first message.</p>
+      </div>
+    `;
+
+    return;
+  }
+
+  data.forEach(message => {
+    displayMessage(message);
+  });
+
+  scrollToBottom();
+}
+
+
+/* ==============================
+   DISPLAY MESSAGE
+============================== */
+
+function displayMessage(message) {
+
+  const messagesContainer = document.querySelector(".messages");
+
+  const div = document.createElement("div");
+
+  const isSent = message.sender_id === currentUser.id;
+
+  div.className = `message ${isSent ? "sent" : "received"}`;
+
+  const time = new Date(message.created_at).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+
+  div.innerHTML = `
+    ${escapeHtml(message.message)}
+    <span class="message-time">${time}</span>
+  `;
+
+  messagesContainer.appendChild(div);
+}
+
+
+/* ==============================
+   SEND MESSAGE
+============================== */
+
+document.querySelector(".message-form").addEventListener("submit", async function(event) {
+
+  event.preventDefault();
+
+  if (!currentUser) return;
+
+  if (!selectedFriend) {
+
+    alert("Please select a friend first.");
+
+    return;
+  }
+
+  const input = this.querySelector("input");
+
+  const messageText = input.value.trim();
+
+  if (!messageText) return;
+
+  input.disabled = true;
+
+  const { data, error } = await supabaseClient
+    .from("chat_messages")
+    .insert({
+      sender_id: currentUser.id,
+      receiver_id: selectedFriend.id,
+      message: messageText
+    })
+    .select()
+    .single();
+
+  input.disabled = false;
+
+  if (error) {
+
+    console.error("Send message error:", error);
+
+    alert("Message could not be sent: " + error.message);
+
+    return;
+  }
+
+  input.value = "";
+
+  displayMessage(data);
+
+  scrollToBottom();
+
+});
+
+
+/* ==============================
+   SCROLL
+============================== */
+
+function scrollToBottom() {
+
+  const messagesContainer = document.querySelector(".messages");
+
+  messagesContainer.scrollTop =
+    messagesContainer.scrollHeight;
+}
+
+
+/* ==============================
+   SECURITY
+============================== */
+
+function escapeHtml(text) {
+
+  const div = document.createElement("div");
+
+  div.textContent = text;
+
+  return div.innerHTML;
+}
+
+
+/* ==============================
+   SEARCH FRIENDS
+============================== */
+
+document
+  .querySelector(".search input")
+  .addEventListener("input", function() {
+
+    const searchText = this.value.toLowerCase();
+
+    document
+      .querySelectorAll(".friend")
+      .forEach(friend => {
+
+        const name =
+          friend.querySelector(".friend-name")
+          ?.textContent
+          .toLowerCase() || "";
+
+        const username =
+          friend.querySelector(".friend-status")
+          ?.textContent
+          .toLowerCase() || "";
+
+        friend.style.display =
+          name.includes(searchText) ||
+          username.includes(searchText)
+            ? ""
+            : "none";
+
+      });
+
+  });
+
+
+/* ==============================
+   START
+============================== */
+
 startChat();
+
 </script>
 
 </body>
