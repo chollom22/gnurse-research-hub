@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Chat With Friends | G Nurse Research Hub Nigeria</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f9fb;
+      color: #222;
+      min-height: 100vh;
+    }
+
+    /* HEADER */
+    header {
+      background: linear-gradient(135deg, #087f8c, #05636e);
+      color: white;
+      padding: 22px 15px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 25px;
+      margin-bottom: 5px;
+    }
+
+    header p {
+      font-size: 14px;
+    }
+
+    /* MAIN */
+    .chat-container {
+      max-width: 1000px;
+      height: calc(100vh - 115px);
+      min-height: 550px;
+      margin: 20px auto;
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+      display: grid;
+      grid-template-columns: 280px 1fr;
+    }
+
+    /* FRIENDS */
+    .friends {
+      border-right: 1px solid #e5e5e5;
+      background: #f8fbfc;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .friends-header {
+      padding: 18px;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    .friends-header h2 {
+      color: #087f8c;
+      font-size: 20px;
+    }
+
+    .search {
+      margin-top: 12px;
+    }
+
+    .search input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      outline: none;
+    }
+
+    .friend-list {
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .friend {
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .friend:hover {
+      background: #eaf7f8;
+    }
+
+    .friend-name {
+      font-weight: bold;
+      color: #333;
+    }
+
+    .friend-status {
+      font-size: 12px;
+      color: #777;
+      margin-top: 3px;
+    }
+
+    /* CHAT AREA */
+    .chat-area {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .chat-header {
+      padding: 17px 20px;
+      border-bottom: 1px solid #e5e5e5;
+      background: white;
+    }
+
+    .chat-header h2 {
+      color: #087f8c;
+      font-size: 19px;
+    }
+
+    .chat-header p {
+      color: #777;
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    /* MESSAGES */
+    .messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: #f4f9fb;
+    }
+
+    .welcome {
+      text-align: center;
+      margin-top: 100px;
+      color: #777;
+    }
+
+    .welcome-icon {
+      font-size: 55px;
+      margin-bottom: 10px;
+    }
+
+    .message {
+      max-width: 75%;
+      margin-bottom: 12px;
+      padding: 11px 14px;
+      border-radius: 15px;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .message.received {
+      background: white;
+      margin-right: auto;
+      border-bottom-left-radius: 4px;
+    }
+
+    .message.sent {
+      background: #087f8c;
+      color: white;
+      margin-left: auto;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message-time {
+      display: block;
+      font-size: 10px;
+      margin-top: 4px;
+      opacity: 0.7;
+    }
+
+    /* INPUT */
+    .message-form {
+      display: flex;
+      gap: 10px;
+      padding: 14px;
+      border-top: 1px solid #e5e5e5;
+      background: white;
+    }
+
+    .message-form input {
+      flex: 1;
+      min-width: 0;
+      padding: 12px 15px;
+      border: 1px solid #ccc;
+      border-radius: 25px;
+      outline: none;
+      font-size: 15px;
+    }
+
+    .send-button {
+      border: none;
+      background: #087f8c;
+      color: white;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .send-button:hover {
+      background: #05636e;
+    }
+
+    /* BACK */
+    .back {
+      display: block;
+      width: fit-content;
+      margin: 15px auto 25px;
+      color: #087f8c;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    /* MOBILE */
+    @media (max-width: 700px) {
+
+      header {
+        padding: 18px 10px;
+      }
+
+      header h1 {
+        font-size: 21px;
+      }
+
+      .chat-container {
+        margin: 0;
+        height: calc(100vh - 92px);
+        min-height: 500px;
+        border-radius: 0;
+        grid-template-columns: 105px 1fr;
+      }
+
+      .friends-header {
+        padding: 12px 8px;
+      }
+
+      .friends-header h2 {
+        font-size: 14px;
+      }
+
+      .search input {
+        font-size: 11px;
+        padding: 8px;
+      }
+
+      .friend {
+        padding: 12px 8px;
+      }
+
+      .friend-name {
+        font-size: 13px;
+      }
+
+      .friend-status {
+        font-size: 10px;
+      }
+
+      .chat-header {
+        padding: 13px;
+      }
+
+      .chat-header h2 {
+        font-size: 16px;
+      }
+
+      .messages {
+        padding: 12px;
+      }
+
+      .message {
+        max-width: 85%;
+        font-size: 14px;
+      }
+
+      .message-form {
+        padding: 9px;
+      }
+
+      .message-form input {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <h1>💬 Chat With Friends</h1>
+    <p>G Nurse Research Hub Nigeria</p>
+  </header>
+
+  <!-- CHAT -->
+  <div class="chat-container">
+
+    <!-- FRIEND LIST -->
+    <aside class="friends">
+
+      <div class="friends-header">
+        <h2>👥 Friends</h2>
+
+        <div class="search">
+          <input
+            type="search"
+            placeholder="Search friends..."
+          >
+        </div>
+      </div>
+
+      <div class="friend-list">
+
+        <!-- Friends will be loaded here later -->
+
+        <div class="friend">
+          <div class="friend-name">
+            No friends yet
+          </div>
+
+          <div class="friend-status">
+            Friends will appear here
+          </div>
+        </div>
+
+      </div>
+
+    </aside>
+
+
+    <!-- CHAT AREA -->
+    <main class="chat-area">
+
+      <div class="chat-header">
+
+        <h2>
+          💬 Select a friend
+        </h2>
+
+        <p>
+          Choose someone from your friends list to start chatting.
+        </p>
+
+      </div>
+
+
+      <!-- MESSAGES -->
+      <div class="messages">
+
+        <div class="welcome">
+
+          <div class="welcome-icon">
+            💬
+          </div>
+
+          <h2>
+            Welcome to G Nurse Chat
+          </h2>
+
+          <p>
+            Your real-time messaging area will appear here.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- MESSAGE INPUT -->
+      <form class="message-form">
+
+        <input
+          type="text"
+          placeholder="Type a message..."
+          autocomplete="off"
+        >
+
+        <button
+          type="submit"
+          class="send-button"
+          title="Send message"
+        >
+          ➤
+        </button>
+
+      </form>
+
+    </main>
+
+  </div>
+
+
+  <a href="index.html" class="back">
+    ← Back to Home
+  </a>
+
+</body>
+  </html>
