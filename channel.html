@@ -1,1 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>G Nurse Channel | G Nurse Research Hub Nigeria</title>
+
+  <meta name="description"
+        content="G Nurse Channel - Live nursing broadcasts, tutorials, academic discussions and educational programs.">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f8fb;
+      color: #1f2937;
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, #00695c, #00897b);
+      color: white;
+      padding: 25px 20px;
+      text-align: center;
+    }
+
+    header .logo {
+      font-size: 42px;
+      margin-bottom: 8px;
+    }
+
+    header h1 {
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+
+    header p {
+      font-size: 15px;
+      opacity: 0.95;
+    }
+
+    nav {
+      background: white;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #00695c;
+      font-weight: bold;
+      padding: 9px 14px;
+      border-radius: 20px;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      background: #e0f2f1;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 45px 20px 30px;
+    }
+
+    .hero h2 {
+      font-size: 30px;
+      color: #00695c;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      max-width: 700px;
+      margin: auto;
+      color: #555;
+    }
+
+    .live-section {
+      max-width: 950px;
+      margin: 20px auto;
+      padding: 20px;
+    }
+
+    .live-card {
+      background: white;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.10);
+    }
+
+    .live-header {
+      background: #b71c1c;
+      color: white;
+      padding: 14px 18px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .video-screen {
+      background: #101010;
+      min-height: 330px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      padding: 30px;
+    }
+
+    .video-screen .camera {
+      font-size: 55px;
+      margin-bottom: 12px;
+    }
+
+    .video-screen h3 {
+      margin-bottom: 8px;
+      font-size: 22px;
+    }
+
+    .video-screen p {
+      color: #ccc;
+      max-width: 500px;
+      margin: auto;
+    }
+
+    .live-button {
+      display: inline-block;
+      margin-top: 20px;
+      background: #e53935;
+      color: white;
+      text-decoration: none;
+      padding: 12px 22px;
+      border-radius: 25px;
+      font-weight: bold;
+    }
+
+    .section {
+      max-width: 950px;
+      margin: 35px auto;
+      padding: 0 20px;
+    }
+
+    .section h2 {
+      color: #00695c;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: white;
+      padding: 25px 20px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+
+    .card .icon {
+      font-size: 38px;
+      margin-bottom: 10px;
+    }
+
+    .card h3 {
+      color: #00695c;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .back-button {
+      text-align: center;
+      margin: 35px 0;
+    }
+
+    .back-button a {
+      display: inline-block;
+      background: #00695c;
+      color: white;
+      text-decoration: none;
+      padding: 12px 25px;
+      border-radius: 25px;
+      font-weight: bold;
+    }
+
+    footer {
+      margin-top: 40px;
+      background: #004d40;
+      color: white;
+      text-align: center;
+      padding: 25px 15px;
+    }
+
+    footer p {
+      font-size: 14px;
+      margin: 5px 0;
+    }
+
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 23px;
+      }
+
+      .hero h2 {
+        font-size: 25px;
+      }
+
+      .video-screen {
+        min-height: 260px;
+      }
+
+      nav a {
+        font-size: 13px;
+        padding: 8px 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">📢</div>
+    <h1>G Nurse Channel</h1>
+    <p>G Nurse Research Hub Nigeria</p>
+  </header>
+
+  <nav>
+    <a href="index.html">🏠 Home</a>
+    <a href="resources.html">📚 Resources</a>
+    <a href="videos.html">🎥 Videos</a>
+    <a href="tests.html">📝 Tests</a>
+    <a href="channel.html">📢 Channel</a>
+  </nav>
+
+  <section class="hero">
+    <h2>📢 Welcome to G Nurse Channel</h2>
+    <p>
+      Watch live nursing broadcasts, educational tutorials, academic
+      discussions, announcements and other learning programs from
+      G Nurse Research Hub Nigeria.
+    </p>
+  </section>
+
+  <!-- LIVE BROADCAST AREA -->
+  <section class="live-section">
+
+    <div class="live-card">
+
+      <div class="live-header">
+        🔴 LIVE BROADCAST
+      </div>
+
+      <div class="video-screen">
+
+        <div>
+          <div class="camera">📹</div>
+
+          <h3>G Nurse Live Broadcast</h3>
+
+          <p>
+            When a live broadcast is active, your live video will appear
+            here for students and visitors to watch.
+          </p>
+
+          <a href="#" class="live-button">
+            🔴 Watch Live
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- CHANNEL FEATURES -->
+  <section class="section">
+
+    <h2>What You'll Find Here</h2>
+
+    <div class="cards">
+
+      <div class="card">
+        <div class="icon">🔴</div>
+        <h3>Live Classes</h3>
+        <p>
+          Join live nursing lessons, tutorials and academic teaching sessions.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="icon">🎤</div>
+        <h3>Live Discussions</h3>
+        <p>
+          Participate in educational discussions and professional conversations.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="icon">🎥</div>
+        <h3>Previous Broadcasts</h3>
+        <p>
+          Watch recordings of previous educational broadcasts.
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="icon">📢</div>
+        <h3>Announcements</h3>
+        <p>
+          Stay updated with important G Nurse Research Hub announcements.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <div class="back-button">
+    <a href="index.html">← Back to Homepage</a>
+  </div>
+
+  <footer>
+    <p><strong>G Nurse Research Hub Nigeria</strong></p>
+    <p>Nursing Research • Academic Support • Educational Resources</p>
+    <p>© 2026 G Nurse Research Hub Nigeria</p>
+  </footer>
+
+</body>
+                         </html>
