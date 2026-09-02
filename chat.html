@@ -402,34 +402,31 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  const SUPABASE_URL = "https://bmiechymiyedubezhcqk.supabase.co";
+const SUPABASE_URL = "https://bmiechymiyedubezhcqk.supabase.co";
 
-  const SUPABASE_PUBLISHABLE_KEY =
-    "sb_publishable_9JL2ALhTGlZV57hUV0mTdQ_c2hdT8O8";
+const SUPABASE_PUBLISHABLE_KEY =
+  "PASTE_YOUR_EXISTING_PUBLISHABLE_KEY_HERE";
 
-  const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
 
-  console.log("Supabase connected");
-  async function checkUser() {
-  const { data, error } = await supabaseClient.auth.getUser();
+async function startChat() {
 
-  if (error || !data.user) {
+  const {
+    data: { user },
+    error: userError
+  } = await supabaseClient.auth.getUser();
+
+  if (userError || !user) {
     window.location.href = "login.html";
     return;
   }
 
-  console.log("Logged-in user:", data.user.id);
-  console.log("Email:", data.user.email);
-}
+  console.log("Logged-in user:", user.id);
 
-checkUser();
-  async function loadFriends() {
-  const { data: { user } } = await supabaseClient.auth.getUser();
-
-  if (!user) return;
+  const friendList = document.getElementById("friendList");
 
   const { data, error } = await supabaseClient
     .from("profiles")
@@ -437,33 +434,41 @@ checkUser();
     .neq("id", user.id)
     .order("username");
 
-  const friendList = document.getElementById("friendList");
-
   if (error) {
-    console.error("Error loading friends:", error);
+    console.error("Friends error:", error);
+
     friendList.innerHTML = `
       <div class="friend">
         <div class="friend-name">Unable to load users</div>
-        <div class="friend-status">Please try again</div>
+        <div class="friend-status">
+          ${error.message}
+        </div>
       </div>
     `;
+
     return;
   }
 
   if (!data || data.length === 0) {
+
     friendList.innerHTML = `
       <div class="friend">
         <div class="friend-name">No other users yet</div>
-        <div class="friend-status">Invite someone to join</div>
+        <div class="friend-status">
+          Invite someone to join
+        </div>
       </div>
     `;
+
     return;
   }
 
   friendList.innerHTML = "";
 
   data.forEach(profile => {
+
     const friend = document.createElement("div");
+
     friend.className = "friend";
 
     friend.innerHTML = `
@@ -477,11 +482,13 @@ checkUser();
     `;
 
     friendList.appendChild(friend);
+
   });
+
 }
 
-loadFriends();
-    </script>
+startChat();
+</script>
 
 </body>
   </html>
