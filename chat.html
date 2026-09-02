@@ -419,6 +419,19 @@
   );
 
   console.log("Supabase connected");
+  async function checkUser() {
+  const { data, error } = await supabaseClient.auth.getUser();
+
+  if (error || !data.user) {
+    window.location.href = "login.html";
+    return;
+  }
+
+  console.log("Logged-in user:", data.user.id);
+  console.log("Email:", data.user.email);
+}
+
+checkUser();
     </script>
 
 </body>
