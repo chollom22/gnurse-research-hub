@@ -1052,6 +1052,103 @@ async function handleIncomingVoiceCall(offer, callerId) {
 
   }
         } 
+  // ==============================
+// LISTEN FOR INCOMING VOICE CALL
+// ==============================
+
+async function setupVoiceCallListener() {
+
+  if (!currentUser || !selectedFriend) {
+    return;
+  }
+
+  const topic = getCallChannelTopic();
+
+  if (!topic) {
+    return;
+  }
+
+  if (callChannel) {
+    await supabaseClient.removeChannel(callChannel);
+  }
+
+  callChannel = supabaseClient.channel(topic);
+
+  callChannel.on(
+    "broadcast",
+    { event: "offer" },
+    async ({ payload }) => {
+
+      if (!payload || !payload.offer) {
+        return;
+      }
+
+      if (payload.callerId === currentUser.id) {
+        return;
+      }
+
+      await handleIncomingVoiceCall(
+        payload.offer,
+        payload.callerId
+      );
+
+    }
+  );
+
+  callChannel.on(
+    "broadcast",
+    { event: "answer" },
+    async ({ payload }) => {
+
+      if (!payload || !payload.answer) {
+        return;
+      }
+
+      if (!callPeerConnection) {
+        return;
+      }
+
+      await callPeerConnection.setRemoteDescription(
+        new RTCSessionDescription(payload.answer)
+      );
+
+    }
+  );
+
+  callChannel.on(
+    "broadcast",
+    { event: "ice-candidate" },
+    async ({ payload }) => {
+
+      if (
+        !payload ||
+        !payload.candidate ||
+        !callPeerConnection
+      ) {
+        return;
+      }
+
+      try {
+
+        await callPeerConnection.addIceCandidate(
+          new RTCIceCandidate(payload.candidate)
+        );
+
+      } catch (error) {
+
+        console.error(
+          "ICE candidate error:",
+          error
+        );
+
+      }
+
+    }
+  );
+
+  await callChannel.subscribe();
+
+  }
 let mediaRecorder;
 let audioChunks = [];
 let isRecording = false;
