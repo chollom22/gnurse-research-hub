@@ -1157,6 +1157,39 @@ async function setupVoiceCallListener() {
 
     }
   );
+  callChannel.on(
+  "broadcast",
+  { event: "hangup" },
+  () => {
+
+    if (localCallStream) {
+
+      localCallStream
+        .getTracks()
+        .forEach(track => track.stop());
+
+      localCallStream = null;
+    }
+
+    if (callPeerConnection) {
+
+      callPeerConnection.close();
+      callPeerConnection = null;
+    }
+
+    if (remoteAudio) {
+
+      remoteAudio.srcObject = null;
+      remoteAudio.remove();
+      remoteAudio = null;
+    }
+
+    isInCall = false;
+
+    alert("The other person ended the call.");
+
+  }
+);
 
   await callChannel.subscribe();
 
