@@ -982,6 +982,76 @@ let isInCall = false;
 
   }
   }
+ // ==============================
+// HANDLE INCOMING VOICE CALL
+// ==============================
+
+async function handleIncomingVoiceCall(offer, callerId) {
+
+  if (!selectedFriend || callerId !== selectedFriend.id) {
+    return;
+  }
+
+  const acceptCall = confirm(
+    "📞 Incoming voice call!\n\nAccept call?"
+  );
+
+  if (!acceptCall) {
+    return;
+  }
+
+  try {
+
+    localCallStream =
+      await navigator.mediaDevices.getUserMedia({
+        audio: true
+      });
+
+    await createVoicePeerConnection();
+
+    localCallStream.getTracks().forEach(track => {
+      callPeerConnection.addTrack(
+        track,
+        localCallStream
+      );
+    });
+
+    await callPeerConnection.setRemoteDescription(
+      new RTCSessionDescription(offer)
+    );
+
+    const answer =
+      await callPeerConnection.createAnswer();
+
+    await callPeerConnection.setLocalDescription(
+      answer
+    );
+
+    await callChannel.send({
+      type: "broadcast",
+      event: "answer",
+      payload: {
+        answer: answer,
+        receiverId: currentUser.id
+      }
+    });
+
+    isInCall = true;
+
+  } catch (error) {
+
+    console.error(
+      "Incoming call error:",
+      error
+    );
+
+    alert(
+      "Unable to answer the call. " +
+      error.message
+    );
+
+  }
+        } 
 let mediaRecorder;
 let audioChunks = [];
 let isRecording = false;
