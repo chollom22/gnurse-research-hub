@@ -1,0 +1,11 @@
+{
+  "name": "G Nurse Research Hub Nigeria",
+  "short_name": "G Nurse",
+  "description": "Nursing education, resources, videos, tests, MCQs and student communication.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#087f8c",
+  "orientation": "portrait",
+  "icons": []
+}
