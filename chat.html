@@ -884,6 +884,13 @@ let callChannel = null;
 let localCallStream = null;
 let remoteAudio = null;
 let isInCall = false;
+  function getCallChannelTopic() {
+  if (!currentUser || !selectedFriend) return null;
+
+  const ids = [currentUser.id, selectedFriend.id].sort();
+
+  return `voice-call-${ids[0]}-${ids[1]}`;
+  }
 let mediaRecorder;
 let audioChunks = [];
 let isRecording = false;
