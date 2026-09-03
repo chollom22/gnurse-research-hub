@@ -532,8 +532,18 @@ async function openChat(friend) {
   const messages = document.querySelector(".messages");
 
   chatHeader.innerHTML = `
-    <h2>💬 ${friend.full_name || friend.username || "User"}</h2>
-    <p>@${friend.username || "user"}</p>
+    <div>
+      <h2>💬 ${friend.full_name || friend.username || "User"}</h2>
+      <p>@${friend.username || "user"}</p>
+    </div>
+
+    <button
+      id="voiceCallButton"
+      class="voice-call-button"
+      title="Voice call"
+    >
+      📞
+    </button>
   `;
 
   messages.innerHTML = `
