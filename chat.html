@@ -538,8 +538,7 @@ async function startChat() {
 /* ==============================
    OPEN CHAT
 ============================== */
-
-async function openChat(friend) {
+  async function openChat(friend) {
 
   selectedFriend = friend;
 
@@ -547,19 +546,6 @@ async function openChat(friend) {
   const messages = document.querySelector(".messages");
 
   chatHeader.innerHTML = `
-    <div>
-      <h2>💬 ${friend.full_name || friend.username || "User"}</h2>
-      <p>@${friend.username || "user"}</p>
-    </div>
-
-    <button
-      id="voiceCallButton"
-      class="voice-call-button"
-      title="Voice call"
-    >
-      📞
-    </button>
-    chatHeader.innerHTML = `
     <div>
       <h2>💬 ${friend.full_name || friend.username || "User"}</h2>
       <p>@${friend.username || "user"}</p>
@@ -588,11 +574,12 @@ async function openChat(friend) {
       <h2>Loading messages...</h2>
     </div>
   `;
+
   await setupVoiceCallListener();
 
   await loadMessages();
-await loadVoiceNotes();
-}
+  await loadVoiceNotes();
+  }
   // ==============================
 // VOICE CALL BUTTON
 // ==============================
