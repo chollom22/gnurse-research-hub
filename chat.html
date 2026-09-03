@@ -962,11 +962,13 @@ let isInCall = false;
 
   try {
 
-    const topic = getCallChannelTopic();
+        if (!callChannel) {
+      const topic = getCallChannelTopic();
 
-    callChannel = supabaseClient.channel(topic);
+      callChannel = supabaseClient.channel(topic);
 
-    await callChannel.subscribe();
+      await callChannel.subscribe();
+    }
 
     localCallStream =
       await navigator.mediaDevices.getUserMedia({
