@@ -567,6 +567,7 @@ async function openChat(friend) {
       <h2>Loading messages...</h2>
     </div>
   `;
+  await setupVoiceCallListener();
 
   await loadMessages();
 await loadVoiceNotes();
