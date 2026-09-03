@@ -559,15 +559,28 @@ async function openChat(friend) {
     >
       📞
     </button>
+    chatHeader.innerHTML = `
+    <div>
+      <h2>💬 ${friend.full_name || friend.username || "User"}</h2>
+      <p>@${friend.username || "user"}</p>
+    </div>
+
+    <button
+      id="voiceCallButton"
+      class="voice-call-button"
+      title="Voice call"
+    >
+      📞
+    </button>
+
+    <button
+      id="endCallButton"
+      class="end-call-button"
+      title="End call"
+    >
+      📵
+    </button>
   `;
-  <button
-  id="endCallButton"
-  class="end-call-button"
-  title="End call"
->
-  📵
-</button>
-    `;
 
   messages.innerHTML = `
     <div class="welcome">
