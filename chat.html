@@ -875,7 +875,15 @@ startChat();
 // ===============================
 // VOICE NOTE RECORDING + SUPABASE
 // ===============================
-
+  
+// ==============================
+// VOICE CALL SYSTEM
+// ==============================
+  let callPeerConnection = null;
+let callChannel = null;
+let localCallStream = null;
+let remoteAudio = null;
+let isInCall = false;
 let mediaRecorder;
 let audioChunks = [];
 let isRecording = false;
