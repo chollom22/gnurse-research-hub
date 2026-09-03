@@ -891,6 +891,51 @@ let isInCall = false;
 
   return `voice-call-${ids[0]}-${ids[1]}`;
   }
+  async function createVoicePeerConnection() {
+
+  callPeerConnection = new RTCPeerConnection({
+    iceServers: [
+      {
+        urls: "stun:stun.l.google.com:19302"
+      }
+    ]
+  });
+
+  callPeerConnection.onicecandidate = (event) => {
+
+    if (event.candidate && callChannel) {
+
+      callChannel.send({
+        type: "broadcast",
+        event: "ice-candidate",
+        payload: {
+          candidate: event.candidate
+        }
+      });
+
+    }
+
+  };
+
+  callPeerConnection.ontrack = (event) => {
+
+    if (!remoteAudio) {
+
+      remoteAudio = document.createElement("audio");
+
+      remoteAudio.autoplay = true;
+      remoteAudio.playsInline = true;
+
+      document.body.appendChild(remoteAudio);
+
+    }
+
+    remoteAudio.srcObject = event.streams[0];
+
+  };
+
+  return callPeerConnection;
+    }
 let mediaRecorder;
 let audioChunks = [];
 let isRecording = false;
