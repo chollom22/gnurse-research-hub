@@ -571,6 +571,26 @@ async function openChat(friend) {
   await loadMessages();
 await loadVoiceNotes();
 }
+  // ==============================
+// VOICE CALL BUTTON
+// ==============================
+
+document.addEventListener("click", function (event) {
+
+  if (event.target.id === "voiceCallButton") {
+
+    if (!selectedFriend) {
+      alert("Please select a friend first.");
+      return;
+    }
+
+    alert(
+      "Voice calling is being connected. 📞"
+    );
+
+  }
+
+});
   /* ==============================
    LOAD VOICE NOTES
 ============================== */
