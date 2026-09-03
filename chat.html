@@ -1157,6 +1157,50 @@ async function setupVoiceCallListener() {
   await callChannel.subscribe();
 
   }
+  // ==============================
+// END VOICE CALL
+// ==============================
+
+async function endVoiceCall() {
+
+  if (callChannel) {
+
+    await callChannel.send({
+      type: "broadcast",
+      event: "hangup",
+      payload: {
+        userId: currentUser.id
+      }
+    });
+
+  }
+
+  if (localCallStream) {
+
+    localCallStream
+      .getTracks()
+      .forEach(track => track.stop());
+
+    localCallStream = null;
+  }
+
+  if (callPeerConnection) {
+
+    callPeerConnection.close();
+    callPeerConnection = null;
+  }
+
+  if (remoteAudio) {
+
+    remoteAudio.srcObject = null;
+    remoteAudio.remove();
+    remoteAudio = null;
+  }
+
+  isInCall = false;
+
+  alert("Call ended.");
+  }
 let mediaRecorder;
 let audioChunks = [];
 let isRecording = false;
