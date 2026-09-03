@@ -936,6 +936,61 @@ let isInCall = false;
 
   return callPeerConnection;
     }
+  async function startVoiceCall() {
+
+  if (!currentUser || !selectedFriend) {
+    alert("Please select a friend first.");
+    return;
+  }
+
+  try {
+
+    const topic = getCallChannelTopic();
+
+    callChannel = supabaseClient.channel(topic);
+
+    await callChannel.subscribe();
+
+    localCallStream =
+      await navigator.mediaDevices.getUserMedia({
+        audio: true
+      });
+
+    await createVoicePeerConnection();
+
+    localCallStream.getTracks().forEach(track => {
+      callPeerConnection.addTrack(track, localCallStream);
+    });
+
+    const offer =
+      await callPeerConnection.createOffer();
+
+    await callPeerConnection.setLocalDescription(offer);
+
+    await callChannel.send({
+      type: "broadcast",
+      event: "offer",
+      payload: {
+        offer: offer,
+        callerId: currentUser.id
+      }
+    });
+
+    isInCall = true;
+
+    alert("Calling... 📞");
+
+  } catch (error) {
+
+    console.error("Voice call error:", error);
+
+    alert(
+      "Unable to start the voice call. " +
+      error.message
+    );
+
+  }
+  }
 let mediaRecorder;
 let audioChunks = [];
 let isRecording = false;
