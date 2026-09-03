@@ -546,6 +546,78 @@ async function openChat(friend) {
   await loadMessages();
 await loadVoiceNotes();
 }
+  /* ==============================
+   LOAD VOICE NOTES
+============================== */
+
+async function loadVoiceNotes() {
+
+  if (!currentUser || !selectedFriend) return;
+
+  const messagesContainer =
+    document.querySelector(".messages");
+
+  const { data, error } = await supabaseClient
+    .from("chat_voice_notes")
+    .select("id, sender_id, receiver_id, audio_url, created_at")
+    .or(
+      `and(sender_id.eq.${currentUser.id},receiver_id.eq.${selectedFriend.id}),and(sender_id.eq.${selectedFriend.id},receiver_id.eq.${currentUser.id})`
+    )
+    .order("created_at", { ascending: true });
+
+  if (error) {
+
+    console.error("Voice notes error:", error);
+
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    return;
+  }
+
+  for (const voiceNote of data) {
+
+    const { data: signedData, error: signedError } =
+      await supabaseClient.storage
+        .from("chat-voice-notes")
+        .createSignedUrl(
+          voiceNote.audio_url,
+          3600
+        );
+
+    if (signedError) {
+
+      console.error(
+        "Voice note URL error:",
+        signedError
+      );
+
+      continue;
+    }
+
+    const wrapper =
+      document.createElement("div");
+
+    const isSent =
+      voiceNote.sender_id === currentUser.id;
+
+    wrapper.className =
+      `message ${isSent ? "sent" : "received"}`;
+
+    const audioElement =
+      document.createElement("audio");
+
+    audioElement.controls = true;
+    audioElement.src = signedData.signedUrl;
+
+    wrapper.appendChild(audioElement);
+
+    messagesContainer.appendChild(wrapper);
+  }
+
+  scrollToBottom();
+  }
 
 
 /* ==============================
