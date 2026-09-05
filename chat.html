@@ -811,6 +811,58 @@ document.querySelector(".message-form").addEventListener("submit", async functio
 /* ==============================
    SCROLL
 ============================== */
+  // ==============================
+// REAL-TIME MESSAGE NOTIFICATIONS
+// ==============================
+
+let messageChannel = null;
+
+function setupMessageListener() {
+  if (!currentUser) return;
+
+  // Remove previous listener if one exists
+  if (messageChannel) {
+    supabaseClient.removeChannel(messageChannel);
+  }
+
+  messageChannel = supabaseClient
+    .channel(`chat-messages-${currentUser.id}`)
+    .on(
+      "postgres_changes",
+      {
+        event: "INSERT",
+        schema: "public",
+        table: "chat_messages",
+        filter: `receiver_id=eq.${currentUser.id}`
+      },
+      (payload) => {
+        const message = payload.new;
+
+        // Display the message immediately if
+        // you are currently chatting with the sender
+        if (
+          selectedFriend &&
+          message.sender_id === selectedFriend.id
+        ) {
+          displayMessage(message);
+          scrollToBottom();
+        }
+
+        // Show notification
+        if (
+          "Notification" in window &&
+          Notification.permission === "granted"
+        ) {
+          new Notification("New message 💬", {
+            body: message.message || "You received a new message."
+          });
+        }
+      }
+    )
+    .subscribe();
+
+  console.log("Real-time message listener started.");
+}
 
 function scrollToBottom() {
 
