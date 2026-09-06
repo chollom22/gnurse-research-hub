@@ -1626,6 +1626,64 @@ if ("Notification" in window) {
     console.log("Notification permission:", permission);
   });
 }
+    // ===============================
+// CHAT FILE / PHOTO ATTACHMENT
+// ===============================
+
+const attachButton = document.getElementById("attachButton");
+const fileInput = document.getElementById("fileInput");
+
+if (attachButton && fileInput) {
+
+  // Open phone file/photo picker
+  attachButton.addEventListener("click", function () {
+    fileInput.click();
+  });
+
+  // When a file or photo is selected
+  fileInput.addEventListener("change", function () {
+
+    const file = fileInput.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    console.log("Selected file:", file.name);
+
+    // Show a simple preview/name
+    let preview = document.getElementById("filePreview");
+
+    if (!preview) {
+      preview = document.createElement("div");
+      preview.id = "filePreview";
+      preview.className = "file-preview";
+
+      const messageForm = document.querySelector(".message-form");
+
+      if (messageForm) {
+        messageForm.parentNode.insertBefore(preview, messageForm);
+      }
+    }
+
+    if (file.type.startsWith("image/")) {
+
+      const imageURL = URL.createObjectURL(file);
+
+      preview.innerHTML = `
+        <img src="${imageURL}" alt="Selected image">
+        <div>${escapeHtml(file.name)}</div>
+      `;
+
+    } else {
+
+      preview.innerHTML = `
+        📎 <strong>${escapeHtml(file.name)}</strong>
+      `;
+    }
+
+  });
+}
   </script>
 
 </body>
