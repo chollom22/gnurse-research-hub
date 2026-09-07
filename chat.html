@@ -1769,70 +1769,298 @@ if (fileInput) {
     await uploadAttachment();
   });
 }
-  // VOICE NOTE
+  // ==================== VOICE NOTE ====================
+
 const voiceButton = document.getElementById("voiceButton");
 
-let mediaRecorder;
+let mediaRecorder = null;
 let audioChunks = [];
+let voiceFile = null;
+let voicePreviewUrl = null;
 
-if (voiceButton) {
-  voiceButton.addEventListener("click", async () => {
-   if (mediaRecorder && mediaRecorder.state === "recording") {
-  mediaRecorder.stop();
-  voiceButton.textContent = "🎤";
-  voiceButton.title = "Record voice note";
-  return;
-   }
+// Remove voice preview
+function clearVoicePreview() {
+  const box = document.getElementById("voicePreview");
+
+  if (box) {
+    box.remove();
+  }
+
+  if (voicePreviewUrl) {
+    URL.revokeObjectURL(voicePreviewUrl);
+    voicePreviewUrl = null;
+  }
+
+  voiceFile = null;
+}
+
+// Show recorded voice note before sending
+function showVoicePreview() {
+  let box = document.getElementById("voicePreview");
+
+  if (!box) {
+    box = document.createElement("div");
+    box.id = "voicePreview";
+
+    box.style.cssText = `
+      display:flex;
+      align-items:center;
+      gap:8px;
+      padding:10px;
+      margin-bottom:8px;
+      background:#f1f3f5;
+      border-radius:10px;
+    `;
+
+    messageForm.parentNode.insertBefore(box, messageForm);
+  }
+
+  box.innerHTML = `
+    <audio
+      controls
+      src="${voicePreviewUrl}"
+      style="flex:1; max-width:100%;">
+    </audio>
+
+    <button
+      type="button"
+      id="sendVoiceButton"
+      style="
+        border:none;
+        background:#128c7e;
+        color:white;
+        padding:8px 12px;
+        border-radius:8px;
+        cursor:pointer;
+      ">
+      Send
+    </button>
+
+    <button
+      type="button"
+      id="cancelVoiceButton"
+      style="
+        border:none;
+        background:#dc3545;
+        color:white;
+        padding:8px 10px;
+        border-radius:8px;
+        cursor:pointer;
+      ">
+      ✕
+    </button>
+  `;
+
+  // SEND VOICE NOTE
+  document.getElementById("sendVoiceButton").onclick = async () => {
+
+    if (!voiceFile) {
+      return;
+    }
+
     if (!selectedFriend) {
       alert("Please select a friend first.");
       return;
     }
 
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: true
-      });
 
-      mediaRecorder = new MediaRecorder(stream);
-      audioChunks = [];
+      const dataTransfer = new DataTransfer();
 
-      mediaRecorder.ondataavailable = event => {
-        audioChunks.push(event.data);
-      };
+      dataTransfer.items.add(voiceFile);
 
-      mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunks, {
-          type: "audio/webm"
-        });
+      fileInput.files = dataTransfer.files;
 
-        stream.getTracks().forEach(track => track.stop());
+      // Use the existing upload system
+      await uploadAttachment();
 
-        const audioFile = new File(
-          [audioBlob],
-          `voice_${Date.now()}.webm`,
-          { type: "audio/webm" }
-        );
+      fileInput.value = "";
 
-        const originalFile = fileInput.files[0];
-
-        const dataTransfer = new DataTransfer();
-        dataTransfer.items.add(audioFile);
-        fileInput.files = dataTransfer.files;
-
-        await uploadAttachment();
-
-        fileInput.value = "";
-      };
-
-      mediaRecorder.start();
-      voiceButton.textContent = "⏹️";
-      voiceButton.title = "Stop recording";
+      clearVoicePreview();
 
     } catch (error) {
-      console.error("Voice recording error:", error);
-      alert("Microphone access is required for voice notes.");
+
+      console.error("Voice note send error:", error);
+
+      alert("Failed to send voice note.");
+
     }
+  };
+
+
+  // CANCEL VOICE NOTE
+  document.getElementById("cancelVoiceButton").onclick = () => {
+
+    clearVoicePreview();
+
+  };
+}
+
+
+// RECORD / STOP BUTTON
+if (voiceButton) {
+
+  voiceButton.addEventListener("click", async () => {
+
+    // If already recording, STOP it
+    if (
+      mediaRecorder &&
+      mediaRecorder.state === "recording"
+    ) {
+
+      mediaRecorder.stop();
+
+      return;
+    }
+
+
+    // A friend must be selected
+    if (!selectedFriend) {
+
+      alert("Please select a friend first.");
+
+      return;
+    }
+
+
+    try {
+
+      // Ask for microphone permission
+      const stream =
+        await navigator.mediaDevices.getUserMedia({
+          audio: true
+        });
+
+
+      // Choose supported recording format
+      let mimeType = "audio/webm";
+
+      if (
+        MediaRecorder.isTypeSupported(
+          "audio/webm;codecs=opus"
+        )
+      ) {
+
+        mimeType = "audio/webm;codecs=opus";
+
+      }
+
+
+      mediaRecorder =
+        new MediaRecorder(
+          stream,
+          { mimeType }
+        );
+
+
+      audioChunks = [];
+
+
+      // Collect recorded audio
+      mediaRecorder.ondataavailable = (event) => {
+
+        if (
+          event.data &&
+          event.data.size > 0
+        ) {
+
+          audioChunks.push(event.data);
+
+        }
+
+      };
+
+
+      // When recording stops
+      mediaRecorder.onstop = () => {
+
+        // Stop microphone
+        stream
+          .getTracks()
+          .forEach(track => track.stop());
+
+
+        const audioBlob =
+          new Blob(
+            audioChunks,
+            {
+              type:
+                mediaRecorder.mimeType ||
+                "audio/webm"
+            }
+          );
+
+
+        // Create voice file
+        voiceFile =
+          new File(
+            [audioBlob],
+            `voice_${Date.now()}.webm`,
+            {
+              type: audioBlob.type
+            }
+          );
+
+
+        // Create local preview URL
+        if (voicePreviewUrl) {
+
+          URL.revokeObjectURL(
+            voicePreviewUrl
+          );
+
+        }
+
+
+        voicePreviewUrl =
+          URL.createObjectURL(
+            voiceFile
+          );
+
+
+        // Show player + Send + Cancel
+        showVoicePreview();
+
+
+        // Reset recording variables
+        mediaRecorder = null;
+
+        audioChunks = [];
+
+
+        // Reset microphone button
+        voiceButton.textContent = "🎤";
+
+        voiceButton.title =
+          "Record voice note";
+
+      };
+
+
+      // START RECORDING
+      mediaRecorder.start();
+
+
+      voiceButton.textContent = "⏹️";
+
+      voiceButton.title =
+        "Stop recording";
+
+    } catch (error) {
+
+      console.error(
+        "Voice recording error:",
+        error
+      );
+
+      alert(
+        "Microphone access is required for voice notes."
+      );
+
+    }
+
   });
+
 }
 
 // ==============================
