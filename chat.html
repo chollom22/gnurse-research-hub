@@ -1769,6 +1769,65 @@ if (fileInput) {
     await uploadAttachment();
   });
 }
+  // VOICE NOTE
+const voiceButton = document.getElementById("voiceButton");
+
+let mediaRecorder;
+let audioChunks = [];
+
+if (voiceButton) {
+  voiceButton.addEventListener("click", async () => {
+    if (!selectedFriend) {
+      alert("Please select a friend first.");
+      return;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true
+      });
+
+      mediaRecorder = new MediaRecorder(stream);
+      audioChunks = [];
+
+      mediaRecorder.ondataavailable = event => {
+        audioChunks.push(event.data);
+      };
+
+      mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunks, {
+          type: "audio/webm"
+        });
+
+        stream.getTracks().forEach(track => track.stop());
+
+        const audioFile = new File(
+          [audioBlob],
+          `voice_${Date.now()}.webm`,
+          { type: "audio/webm" }
+        );
+
+        const originalFile = fileInput.files[0];
+
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(audioFile);
+        fileInput.files = dataTransfer.files;
+
+        await uploadAttachment();
+
+        fileInput.value = "";
+      };
+
+      mediaRecorder.start();
+      voiceButton.textContent = "⏹️";
+      voiceButton.title = "Stop recording";
+
+    } catch (error) {
+      console.error("Voice recording error:", error);
+      alert("Microphone access is required for voice notes.");
+    }
+  });
+}
 
 // ==============================
 // DELETE OPTIONS
