@@ -1004,51 +1004,8 @@ async function displayMessage(message) {
 
   scrollToBottom();
   }
-  // ===============================
-  // DISPLAY PHOTO
-  // ===============================
-  if (
-    message.file_type &&
-    message.file_type.startsWith("image/")
-  ) {
 
-    const { data: imageData } = supabaseClient.storage
-      .from("chat-files")
-      .getPublicUrl(message.file_path);
-
-    messageContent = `
-      <img
-        src="${imageData.publicUrl}"
-        alt="${escapeHtml(message.file_name || "Photo")}"
-        class="chat-photo"
-        onclick="window.open('${imageData.publicUrl}', '_blank')"
-      >
-    `;
-
-  }
-
-  // ===============================
-  // DISPLAY OTHER FILE
-  // ===============================
-  else if (message.file_path) {
-
-    const { data: fileData } = supabaseClient.storage
-      .from("chat-files")
-      .createSignedUrl(message.file_path, 3600);
-
-    messageContent = `
-      <a
-        href="${fileData?.signedUrl || '#'}"
-        target="_blank"
-        class="file-link"
-        download
-      >
-        📎 ${escapeHtml(message.file_name || "Download file")}
-      </a>
-    `;
-
-  }
-
+  
   // ===============================
   // NORMAL TEXT MESSAGE
   // ===============================
