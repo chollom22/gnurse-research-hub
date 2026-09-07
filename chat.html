@@ -833,13 +833,12 @@ async function loadMessages() {
 /* ==============================
    DISPLAY MASSAGE 
 ============================== */
-function displayMessage(message) {
+async function displayMessage(message) {
 
   const messagesContainer = document.querySelector(".messages");
 
   const isSent = message.sender_id === currentUser.id;
 
-  // Delete for me
   if (
     (isSent && message.deleted_for_sender) ||
     (!isSent && message.deleted_for_receiver)
@@ -848,7 +847,6 @@ function displayMessage(message) {
   }
 
   const div = document.createElement("div");
-
   div.className = `message ${isSent ? "sent" : "received"}`;
 
   const time = new Date(message.created_at).toLocaleTimeString([], {
@@ -856,7 +854,6 @@ function displayMessage(message) {
     minute: "2-digit"
   });
 
-  // Deleted for everyone
   if (message.deleted_for_everyone) {
 
     div.innerHTML = `
@@ -873,9 +870,44 @@ function displayMessage(message) {
     return;
   }
 
-  // Normal text message
-    let messageContent = "";
+  let messageContent = escapeHtml(message.message || "");
 
+  div.innerHTML = `
+    <div class="message-content">
+      ${messageContent}
+    </div>
+
+    <div class="message-footer">
+
+      <span class="message-time">${time}</span>
+
+      ${
+        isSent
+          ? `
+            <button
+              class="delete-message-btn"
+              onclick="showDeleteOptions('${message.id}', this)"
+              title="Delete message"
+            >
+              🗑️
+            </button>
+          `
+          : `
+            <button
+              class="delete-message-btn"
+              onclick="deleteForMe('${message.id}', this)"
+              title="Delete for me"
+            >
+              🗑️
+            </button>
+          `
+      }
+
+    </div>
+  `;
+
+  messagesContainer.appendChild(div);
+}
   // ===============================
   // DISPLAY PHOTO
   // ===============================
