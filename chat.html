@@ -1362,6 +1362,29 @@ async function displayAttachment(file) {
     formatTime(file.created_at);
 
   let content = "";
+  // PLAY VOICE NOTES
+const isAudio =
+  (file.file_type || "").startsWith("audio/") ||
+  /\.(webm|ogg|mp3|m4a|wav)$/i.test(
+    file.file_name || ""
+  );
+
+if (isAudio) {
+
+  const audio = document.createElement("audio");
+
+  audio.controls = true;
+
+  audio.preload = "metadata";
+
+  audio.src = signedUrl;
+
+  audio.style.maxWidth = "260px";
+
+  container.appendChild(audio);
+
+  return;
+}
 
   // PHOTO
   if (
