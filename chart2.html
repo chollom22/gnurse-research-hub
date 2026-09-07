@@ -1941,149 +1941,104 @@ function endCall(){
 /* =========================================
    SEARCH USERS
 ========================================= */
+async function searchUsers(value) {
+    const results = document.getElementById("searchResults");
 
-function searchUsers(value){
+    if (!results) return;
 
-    const results =
-        document.getElementById("searchResults");
+    if (!currentUser) {
+        results.innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">🔒</div>
+                <h3>Please log in</h3>
+                <p>You need to log in to search for users.</p>
+            </div>
+        `;
+        return;
+    }
 
-    value = value.trim();
+    const searchTerm = value.trim();
 
-    if(!value){
+    if (searchTerm.length < 2) {
+        results.innerHTML = "";
+        return;
+    }
+
+    const { data: users, error } = await supabaseClient
+        .from("profiles")
+        .select("id, username, full_name")
+        .neq("id", currentUser.id)
+        .or(
+            `username.ilike.%${searchTerm}%,full_name.ilike.%${searchTerm}%`
+        )
+        .limit(20);
+
+    if (error) {
+        console.error("User search error:", error);
 
         results.innerHTML = `
-
             <div class="empty">
-
-                <div class="empty-icon">
-                    🔍
-                </div>
-
-                <h3>Find People</h3>
-
-                <p>
-                    Search for another G Nurse user
-                    to send a friend request.
-                </p>
-
+                <div class="empty-icon">⚠️</div>
+                <h3>Unable to search users</h3>
+                <p>Please try again.</p>
             </div>
-
         `;
 
         return;
     }
 
-
-    /*
-      TEMPORARY SEARCH RESULT.
-
-      THIS WILL BE REPLACED BY A REAL
-      SUPABASE PROFILE SEARCH.
-    */
-
-    const firstLetter =
-        value.charAt(0).toUpperCase();
-
-    results.innerHTML = `
-
-        <div class="user-item">
-
-            <div class="avatar">
-                ${escapeHTML(firstLetter)}
+    if (!users || users.length === 0) {
+        results.innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">🔍</div>
+                <h3>No users found</h3>
+                <p>Try another username or name.</p>
             </div>
+        `;
 
-            <div class="user-info">
+        return;
+    }
 
-                <div class="user-name">
-                    ${escapeHTML(value)}
+    results.innerHTML = users.map(user => {
+
+        const name =
+            user.full_name ||
+            user.username ||
+            "G Nurse User";
+
+        const letter =
+            name.charAt(0).toUpperCase();
+
+        return `
+            <div class="user-item">
+
+                <div class="avatar">
+                    ${escapeHTML(letter)}
                 </div>
 
-                <div class="user-status">
-                    G Nurse user
+                <div class="user-info">
+
+                    <div class="user-name">
+                        ${escapeHTML(name)}
+                    </div>
+
+                    <div class="user-status">
+                        @${escapeHTML(user.username || "")}
+                    </div>
+
                 </div>
 
+                <button
+                    class="action-btn accept"
+                    onclick="sendFriendRequest('${user.id}')"
+                >
+                    Add Friend
+                </button>
+
             </div>
+        `;
 
-            <button
-                class="action-btn"
-                onclick="sendFriendRequest('${escapeJS(value)}')"
-            >
-                Add Friend
-            </button>
-
-        </div>
-
-    `;
-}
-
-
-/* =========================================
-   SEND FRIEND REQUEST
-========================================= */
-
-function sendFriendRequest(name){
-    async function loadFriendRequests() {
-  if (!currentUser) return;
-
-  const { data: requests, error } = await supabaseClient
-    .from("friend_requests")
-    .select("id, sender_id, created_at")
-    .eq("receiver_id", currentUser.id)
-    .eq("status", "pending")
-    .order("created_at", { ascending: false });
-
-  const list = document.getElementById("requestsList");
-
-  if (!list) return;
-
-  if (error) {
-    console.error("Friend requests error:", error);
-    list.innerHTML = "<div class='empty'><h3>Unable to load requests</h3></div>";
-    return;
-  }
-
-  if (!requests || requests.length === 0) {
-    list.innerHTML = `
-      <div class="empty">
-        <div class="empty-icon">👤</div>
-        <h3>No Friend Requests</h3>
-        <p>New friend requests will appear here.</p>
-      </div>
-    `;
-    return;
-  }
-
-  const senderIds = requests.map(r => r.sender_id);
-
-  const { data: profiles } = await supabaseClient
-    .from("profiles")
-    .select("id, username, full_name")
-    .in("id", senderIds);
-
-  list.innerHTML = requests.map(request => {
-    const person = (profiles || []).find(p => p.id === request.sender_id);
-
-    const name =
-      person?.full_name ||
-      person?.username ||
-      "User";
-
-    return `
-      <div class="request-card">
-        <strong>${name}</strong>
-
-        <div style="margin-top:10px;">
-          <button onclick="acceptFriendRequest('${request.id}')">
-            Accept
-          </button>
-
-          <button onclick="rejectFriendRequest('${request.id}')">
-            Reject
-          </button>
-        </div>
-      </div>
-    `;
-  }).join("");
+    }).join("");
 }
 
 
@@ -2103,75 +2058,6 @@ async function acceptFriendRequest(requestId) {
   await loadFriends();
 
   alert("Friend request accepted!");
-}
-
-
-async function rejectFriendRequest(requestId) {
-  const { error } = await supabaseClient
-    .from("friend_requests")
-    .delete()
-    .eq("id", requestId);
-
-  if (error) {
-    console.error(error);
-    alert("Unable to reject request.");
-    return;
-  }
-
-  await loadFriendRequests();
-
-  alert("Friend request rejected.");
-}
-
-    alert(
-        "Friend request sent to " + name
-    );
-
-    /*
-      REAL SUPABASE FRIEND REQUEST
-      WILL BE CONNECTED HERE.
-
-      It will create a record containing:
-
-      sender_id
-      receiver_id
-      status
-      created_at
-    */
-}
-
-
-/* =========================================
-   ACCEPT FRIEND REQUEST
-========================================= */
-
-function acceptFriendRequest(userId){
-
-    alert(
-        "Friend request accepted."
-    );
-
-    /*
-      SUPABASE WILL UPDATE THE REQUEST
-      STATUS TO:
-
-      accepted
-
-      Then the two users become friends.
-    */
-}
-
-
-/* =========================================
-   DECLINE FRIEND REQUEST
-========================================= */
-
-function declineFriendRequest(userId){
-
-    alert(
-        "Friend request declined."
-    );
-
 }
 
 
