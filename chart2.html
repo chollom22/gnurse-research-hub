@@ -1146,6 +1146,52 @@ body{
 /* =========================================
    BASIC STATE
 ========================================= */
+    async function sendFriendRequest(receiverId) {
+  if (!currentUser) {
+    alert("Please log in first.");
+    return;
+  }
+
+  if (receiverId === currentUser.id) {
+    alert("You cannot send a friend request to yourself.");
+    return;
+  }
+
+  const { data: existing, error: checkError } = await supabaseClient
+    .from("friend_requests")
+    .select("id, status")
+    .or(
+      `and(sender_id.eq.${currentUser.id},receiver_id.eq.${receiverId}),and(sender_id.eq.${receiverId},receiver_id.eq.${currentUser.id})`
+    )
+    .limit(1);
+
+  if (checkError) {
+    console.error(checkError);
+    alert("Unable to check friend request.");
+    return;
+  }
+
+  if (existing && existing.length > 0) {
+    alert("A friend request already exists.");
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("friend_requests")
+    .insert({
+      sender_id: currentUser.id,
+      receiver_id: receiverId,
+      status: "pending"
+    });
+
+  if (error) {
+    console.error(error);
+    alert("Friend request failed.");
+    return;
+  }
+
+alert("Friend request sent!");
+    }
 
 let currentChatUser = "G Nurse Friend";
 
@@ -1811,6 +1857,106 @@ function searchUsers(value){
 ========================================= */
 
 function sendFriendRequest(name){
+    async function loadFriendRequests() {
+  if (!currentUser) return;
+
+  const { data: requests, error } = await supabaseClient
+    .from("friend_requests")
+    .select("id, sender_id, created_at")
+    .eq("receiver_id", currentUser.id)
+    .eq("status", "pending")
+    .order("created_at", { ascending: false });
+
+  const list = document.getElementById("requestsList");
+
+  if (!list) return;
+
+  if (error) {
+    console.error("Friend requests error:", error);
+    list.innerHTML = "<div class='empty'><h3>Unable to load requests</h3></div>";
+    return;
+  }
+
+  if (!requests || requests.length === 0) {
+    list.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">👤</div>
+        <h3>No Friend Requests</h3>
+        <p>New friend requests will appear here.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const senderIds = requests.map(r => r.sender_id);
+
+  const { data: profiles } = await supabaseClient
+    .from("profiles")
+    .select("id, username, full_name")
+    .in("id", senderIds);
+
+  list.innerHTML = requests.map(request => {
+    const person = (profiles || []).find(p => p.id === request.sender_id);
+
+    const name =
+      person?.full_name ||
+      person?.username ||
+      "User";
+
+    return `
+      <div class="request-card">
+        <strong>${name}</strong>
+
+        <div style="margin-top:10px;">
+          <button onclick="acceptFriendRequest('${request.id}')">
+            Accept
+          </button>
+
+          <button onclick="rejectFriendRequest('${request.id}')">
+            Reject
+          </button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+
+async function acceptFriendRequest(requestId) {
+  const { error } = await supabaseClient
+    .from("friend_requests")
+    .update({ status: "accepted" })
+    .eq("id", requestId);
+
+  if (error) {
+    console.error(error);
+    alert("Unable to accept request.");
+    return;
+  }
+
+  await loadFriendRequests();
+  await loadFriends();
+
+  alert("Friend request accepted!");
+}
+
+
+async function rejectFriendRequest(requestId) {
+  const { error } = await supabaseClient
+    .from("friend_requests")
+    .delete()
+    .eq("id", requestId);
+
+  if (error) {
+    console.error(error);
+    alert("Unable to reject request.");
+    return;
+  }
+
+  await loadFriendRequests();
+
+  alert("Friend request rejected.");
+}
 
     alert(
         "Friend request sent to " + name
