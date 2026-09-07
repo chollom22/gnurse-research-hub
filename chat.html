@@ -771,7 +771,7 @@ async function loadMessages() {
 
   const { data, error } = await supabaseClient
     .from("chat_messages")
-    .select("id, sender_id, receiver_id, message, created_at")
+    .select("id, sender_id, receiver_id, message, created_at, deleted_for_sender, deleted_for_receiver, deleted_for_everyone")
     .or(
       `and(sender_id.eq.${currentUser.id},receiver_id.eq.${selectedFriend.id}),and(sender_id.eq.${selectedFriend.id},receiver_id.eq.${currentUser.id})`
     )
@@ -821,9 +821,17 @@ function displayMessage(message) {
 
   const messagesContainer = document.querySelector(".messages");
 
-  const div = document.createElement("div");
-
   const isSent = message.sender_id === currentUser.id;
+
+  // Delete for me
+  if (
+    (isSent && message.deleted_for_sender) ||
+    (!isSent && message.deleted_for_receiver)
+  ) {
+    return;
+  }
+
+  const div = document.createElement("div");
 
   div.className = `message ${isSent ? "sent" : "received"}`;
 
@@ -832,60 +840,58 @@ function displayMessage(message) {
     minute: "2-digit"
   });
 
+  // Deleted for everyone
+  if (message.deleted_for_everyone) {
+
+    div.innerHTML = `
+      <div class="message-content deleted-message">
+        🚫 This message was deleted
+      </div>
+
+      <div class="message-footer">
+        <span class="message-time">${time}</span>
+      </div>
+    `;
+
+    messagesContainer.appendChild(div);
+    return;
+  }
+
   div.innerHTML = `
     <div class="message-content">
       ${escapeHtml(message.message)}
     </div>
 
     <div class="message-footer">
+
       <span class="message-time">${time}</span>
 
       ${
         isSent
-          ? `<button
-                class="delete-message-btn"
-                onclick="deleteMessage('${message.id}', this)"
-                title="Delete message"
-             >
-                🗑️
-             </button>`
-          : ""
+          ? `
+            <button
+              class="delete-message-btn"
+              onclick="showDeleteOptions('${message.id}', this)"
+              title="Delete message"
+            >
+              🗑️
+            </button>
+          `
+          : `
+            <button
+              class="delete-message-btn"
+              onclick="deleteForMe('${message.id}', this)"
+              title="Delete for me"
+            >
+              🗑️
+            </button>
+          `
       }
+
     </div>
   `;
 
   messagesContainer.appendChild(div);
-}
-async function deleteMessage(messageId, button) {
-
-  const confirmed = confirm("Delete this message?");
-
-  if (!confirmed) return;
-
-  button.disabled = true;
-
-  const { error } = await supabaseClient
-    .from("chat_messages")
-    .delete()
-    .eq("id", messageId)
-    .eq("sender_id", currentUser.id);
-
-  if (error) {
-
-    console.error("Delete message error:", error);
-
-    alert("Unable to delete message.");
-
-    button.disabled = false;
-
-    return;
-  }
-
-  const messageElement = button.closest(".message");
-
-  if (messageElement) {
-    messageElement.remove();
-  }
 }
 
 /* ==============================
