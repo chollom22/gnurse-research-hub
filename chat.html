@@ -1119,4 +1119,1013 @@
     ] = await Promise.all([
 
       supabaseClient
-  
+        .from("chat_messages")
+      .select(`
+        id,
+        sender_id,
+        receiver_id,
+        message,
+        created_at,
+        deleted_for_sender,
+        deleted_for_receiver,
+        deleted_for_everyone
+      `)
+      .or(
+        `and(sender_id.eq.${currentUser.id},receiver_id.eq.${selectedFriend.id}),and(sender_id.eq.${selectedFriend.id},receiver_id.eq.${currentUser.id})`
+      )
+      .order("created_at", { ascending: true }),
+
+      supabaseClient
+        .from("chat_attachments")
+        .select(`
+          id,
+          sender_id,
+          receiver_id,
+          file_name,
+          file_path,
+          file_type,
+          file_size,
+          created_at
+        `)
+        .or(
+          `and(sender_id.eq.${currentUser.id},receiver_id.eq.${selectedFriend.id}),and(sender_id.eq.${selectedFriend.id},receiver_id.eq.${currentUser.id})`
+        )
+        .order("created_at", { ascending: true })
+
+    ]);
+
+    const { data: messages, error: messagesError } = messagesResult;
+    const { data: attachments, error: attachmentsError } = attachmentsResult;
+
+    if (messagesError) {
+      console.error("Messages error:", messagesError);
+      messagesContainer.innerHTML = `
+        <div class="welcome">
+          <div class="welcome-icon">⚠️</div>
+          <h2>Unable to load messages</h2>
+          <p>${escapeHtml(messagesError.message)}</p>
+        </div>
+      `;
+      return;
+    }
+
+    if (attachmentsError) {
+      console.error("Attachments error:", attachmentsError);
+    }
+
+    messagesContainer.innerHTML = "";
+
+    const allItems = [
+      ...(messages || []).map(item => ({
+        ...item,
+        itemType: "message"
+      })),
+
+      ...(attachments || []).map(item => ({
+        ...item,
+        itemType: "attachment"
+      }))
+    ];
+
+    allItems.sort(
+      (a, b) =>
+        new Date(a.created_at) - new Date(b.created_at)
+    );
+
+    if (allItems.length === 0) {
+      messagesContainer.innerHTML = `
+        <div class="welcome">
+          <div class="welcome-icon">👋</div>
+          <h2>Start the conversation</h2>
+          <p>Send your first message.</p>
+        </div>
+      `;
+      return;
+    }
+
+    for (const item of allItems) {
+
+      if (item.itemType === "message") {
+        await displayMessage(item);
+      }
+
+      if (item.itemType === "attachment") {
+        await displayAttachment(item);
+      }
+    }
+
+    scrollToBottom();
+  }
+  <script>
+
+// ==============================
+// DISPLAY TEXT MESSAGE
+// ==============================
+
+async function displayMessage(message) {
+
+  const messagesContainer =
+    document.querySelector(".messages");
+
+  if (!messagesContainer || !currentUser) return;
+
+  const isSent =
+    message.sender_id === currentUser.id;
+
+  // Hide messages deleted only for this user
+  if (
+    (isSent && message.deleted_for_sender) ||
+    (!isSent && message.deleted_for_receiver)
+  ) {
+    return;
+  }
+
+  const div =
+    document.createElement("div");
+
+  div.className =
+    `message ${isSent ? "sent" : "received"}`;
+
+  const time =
+    formatTime(message.created_at);
+
+  // Message deleted for everyone
+  if (message.deleted_for_everyone) {
+
+    div.innerHTML = `
+      <div class="message-content deleted-message">
+        🚫 This message was deleted
+      </div>
+
+      <div class="message-footer">
+        <span class="message-time">
+          ${time}
+        </span>
+      </div>
+    `;
+
+    messagesContainer.appendChild(div);
+
+    return;
+  }
+
+  div.innerHTML = `
+    <div class="message-content">
+      ${escapeHtml(message.message || "")}
+    </div>
+
+    <div class="message-footer">
+
+      <span class="message-time">
+        ${time}
+      </span>
+
+      ${
+        isSent
+        ? `
+          <button
+            class="delete-message-btn"
+            onclick="showDeleteOptions('${message.id}', this)"
+            title="Delete message"
+          >
+            🗑️
+          </button>
+        `
+        : `
+          <button
+            class="delete-message-btn"
+            onclick="deleteForMe('${message.id}', this)"
+            title="Delete for me"
+          >
+            🗑️
+          </button>
+        `
+      }
+
+    </div>
+  `;
+
+  messagesContainer.appendChild(div);
+}
+
+
+// ==============================
+// DISPLAY ATTACHMENT
+// ==============================
+
+async function displayAttachment(file) {
+
+  const messagesContainer =
+    document.querySelector(".messages");
+
+  if (!messagesContainer || !currentUser) return;
+
+  const isSent =
+    file.sender_id === currentUser.id;
+
+  const {
+    data: signedData,
+    error: signedError
+  } = await supabaseClient.storage
+    .from("chat-files")
+    .createSignedUrl(
+      file.file_path,
+      3600
+    );
+
+  if (signedError) {
+
+    console.error(
+      "File URL error:",
+      signedError
+    );
+
+    return;
+  }
+
+  if (!signedData?.signedUrl) return;
+
+  const div =
+    document.createElement("div");
+
+  div.className =
+    `message ${isSent ? "sent" : "received"}`;
+
+  const time =
+    formatTime(file.created_at);
+
+  let content = "";
+
+  // PHOTO
+  if (
+    file.file_type &&
+    file.file_type.startsWith("image/")
+  ) {
+
+    content = `
+      <img
+        src="${signedData.signedUrl}"
+        alt="${escapeHtml(file.file_name)}"
+        class="chat-photo"
+        onclick="window.open('${signedData.signedUrl}', '_blank')"
+      >
+    `;
+
+  }
+
+  // OTHER FILE
+  else {
+
+    content = `
+      <a
+        href="${signedData.signedUrl}"
+        target="_blank"
+        download
+        class="file-link"
+      >
+        📎 ${escapeHtml(file.file_name)}
+      </a>
+    `;
+  }
+
+  div.innerHTML = `
+    <div class="message-content">
+      ${content}
+    </div>
+
+    <div class="message-footer">
+
+      <span class="message-time">
+        ${time}
+      </span>
+
+    </div>
+  `;
+
+  messagesContainer.appendChild(div);
+}
+
+
+// ==============================
+// SEND TEXT MESSAGE
+// ==============================
+
+const messageForm =
+  document.querySelector(".message-form");
+
+const messageInput =
+  document.getElementById("messageInput");
+
+if (messageForm && messageInput) {
+
+  messageForm.addEventListener(
+    "submit",
+    async function(event) {
+
+      event.preventDefault();
+
+      if (!currentUser || !selectedFriend) {
+
+        alert("Please select a friend first.");
+
+        return;
+      }
+
+      const text =
+        messageInput.value.trim();
+
+      if (!text) return;
+
+      const {
+        error
+      } = await supabaseClient
+        .from("chat_messages")
+        .insert({
+          sender_id: currentUser.id,
+          receiver_id: selectedFriend.id,
+          message: text
+        });
+
+      if (error) {
+
+        console.error(
+          "Send message error:",
+          error
+        );
+
+        alert(
+          "Unable to send message."
+        );
+
+        return;
+      }
+
+      messageInput.value = "";
+    }
+  );
+}
+
+
+// ==============================
+// ENTER KEY TO SEND
+// ==============================
+
+if (messageInput) {
+
+  messageInput.addEventListener(
+    "keydown",
+    function(event) {
+
+      if (
+        event.key === "Enter" &&
+        !event.shiftKey
+      ) {
+
+        event.preventDefault();
+
+        if (messageForm) {
+          messageForm.requestSubmit();
+        }
+      }
+
+    }
+  );
+}
+
+
+// ==============================
+// ATTACHMENT BUTTON
+// ==============================
+
+const attachButton =
+  document.getElementById("attachButton");
+
+const fileInput =
+  document.getElementById("fileInput");
+
+if (attachButton && fileInput) {
+
+  attachButton.addEventListener(
+    "click",
+    function() {
+
+      fileInput.click();
+
+    }
+  );
+
+  fileInput.addEventListener(
+    "change",
+    function() {
+
+      const file =
+        fileInput.files[0];
+
+      if (!file) return;
+
+      createFilePreview(file);
+
+    }
+  );
+}
+
+
+// ==============================
+// FILE PREVIEW
+// ==============================
+
+function createFilePreview(file) {
+
+  let preview =
+    document.getElementById(
+      "filePreview"
+    );
+
+  if (!preview) {
+
+    preview =
+      document.createElement("div");
+
+    preview.id =
+      "filePreview";
+
+    preview.className =
+      "file-preview";
+
+    const form =
+      document.querySelector(
+        ".message-form"
+      );
+
+    if (form) {
+
+      form.parentNode.insertBefore(
+        preview,
+        form
+      );
+
+    }
+  }
+
+  if (
+    file.type &&
+    file.type.startsWith("image/")
+  ) {
+
+    const imageURL =
+      URL.createObjectURL(file);
+
+    preview.innerHTML = `
+      <img
+        src="${imageURL}"
+        alt="Selected photo"
+      >
+
+      <div class="preview-name">
+        📷 ${escapeHtml(file.name)}
+      </div>
+
+      <button
+        type="button"
+        onclick="clearFileSelection()"
+      >
+        ✕
+      </button>
+    `;
+
+  }
+
+  else {
+
+    preview.innerHTML = `
+      <div class="preview-file">
+        📎
+        <strong>
+          ${escapeHtml(file.name)}
+        </strong>
+      </div>
+
+      <button
+        type="button"
+        onclick="clearFileSelection()"
+      >
+        ✕
+      </button>
+    `;
+  }
+}
+
+
+// ==============================
+// CLEAR FILE SELECTION
+// ==============================
+
+function clearFileSelection() {
+
+  if (fileInput) {
+
+    fileInput.value = "";
+
+  }
+
+  const preview =
+    document.getElementById(
+      "filePreview"
+    );
+
+  if (preview) {
+
+    preview.remove();
+
+  }
+}
+
+
+// ==============================
+// UPLOAD ATTACHMENT
+// ==============================
+
+async function uploadAttachment() {
+
+  if (!currentUser || !selectedFriend) {
+
+    alert("Please select a friend first.");
+
+    return;
+  }
+
+  const file =
+    fileInput?.files?.[0];
+
+  if (!file) {
+
+    alert("Please select a file.");
+
+    return;
+  }
+
+  // 20 MB limit
+  if (file.size > 20 * 1024 * 1024) {
+
+    alert(
+      "File is too large. Maximum size is 20 MB."
+    );
+
+    return;
+  }
+
+  showUploadStatus(
+    "Uploading file..."
+  );
+
+  const safeName =
+    file.name.replace(
+      /[^a-zA-Z0-9._-]/g,
+      "_"
+    );
+
+  const filePath =
+    `${currentUser.id}/${Date.now()}_${safeName}`;
+
+  // Upload to Supabase Storage
+  const {
+    data: uploadData,
+    error: uploadError
+  } = await supabaseClient.storage
+    .from("chat-files")
+    .upload(
+      filePath,
+      file
+    );
+
+  if (uploadError) {
+
+    console.error(
+      "Upload error:",
+      uploadError
+    );
+
+    hideUploadStatus();
+
+    alert(
+      "Unable to upload file."
+    );
+
+    return;
+  }
+
+  // Save file information in database
+  const {
+    error: insertError
+  } = await supabaseClient
+    .from("chat_attachments")
+    .insert({
+
+      sender_id:
+        currentUser.id,
+
+      receiver_id:
+        selectedFriend.id,
+
+      file_name:
+        file.name,
+
+      file_path:
+        uploadData.path,
+
+      file_type:
+        file.type,
+
+      file_size:
+        file.size
+    });
+
+  if (insertError) {
+
+    console.error(
+      "Attachment database error:",
+      insertError
+    );
+
+    hideUploadStatus();
+
+    alert(
+      "File uploaded but could not be saved."
+    );
+
+    return;
+  }
+
+  clearFileSelection();
+
+  hideUploadStatus();
+
+}
+
+
+// ==============================
+// SEND FILE WHEN FILE IS SELECTED
+// ==============================
+
+if (fileInput) {
+
+  fileInput.addEventListener(
+    "change",
+    async function() {
+
+      const file =
+        fileInput.files[0];
+
+      if (!file) return;
+
+      createFilePreview(file);
+
+      await uploadAttachment();
+
+    }
+  );
+}
+
+
+// ==============================
+// DELETE OPTIONS
+// ==============================
+
+function showDeleteOptions(
+  messageId,
+  button
+) {
+
+  const choice =
+    confirm(
+      "Delete this message?\n\n" +
+      "OK = Delete for everyone\n" +
+      "Cancel = Delete for me"
+    );
+
+  if (choice) {
+
+    deleteForEveryone(
+      messageId,
+      button
+    );
+
+  }
+
+  else {
+
+    deleteForMe(
+      messageId,
+      button
+    );
+
+  }
+}
+
+
+// ==============================
+// DELETE FOR ME
+// ==============================
+
+async function deleteForMe(
+  messageId,
+  button
+) {
+
+  const {
+    data: message,
+    error: fetchError
+  } = await supabaseClient
+    .from("chat_messages")
+    .select(
+      "sender_id, receiver_id"
+    )
+    .eq("id", messageId)
+    .single();
+
+  if (
+    fetchError ||
+    !message
+  ) {
+
+    alert(
+      "Unable to find this message."
+    );
+
+    return;
+  }
+
+  const column =
+    message.sender_id === currentUser.id
+      ? "deleted_for_sender"
+      : "deleted_for_receiver";
+
+  const {
+    error
+  } = await supabaseClient
+    .from("chat_messages")
+    .update({
+      [column]: true
+    })
+    .eq("id", messageId);
+
+  if (error) {
+
+    console.error(
+      "Delete for me error:",
+      error
+    );
+
+    alert(
+      "Unable to delete message."
+    );
+
+    return;
+  }
+
+  const messageElement =
+    button?.closest(".message");
+
+  if (messageElement) {
+
+    messageElement.remove();
+
+  }
+}
+
+
+// ==============================
+// DELETE FOR EVERYONE
+// ==============================
+
+async function deleteForEveryone(
+  messageId,
+  button
+) {
+
+  if (
+    !confirm(
+      "Delete this message for everyone?"
+    )
+  ) {
+
+    return;
+
+  }
+
+  const {
+    error
+  } = await supabaseClient
+    .from("chat_messages")
+    .update({
+      deleted_for_everyone: true
+    })
+    .eq("id", messageId)
+    .eq(
+      "sender_id",
+      currentUser.id
+    );
+
+  if (error) {
+
+    console.error(
+      "Delete for everyone error:",
+      error
+    );
+
+    alert(
+      "Unable to delete message for everyone."
+    );
+
+    return;
+  }
+
+  const messageElement =
+    button?.closest(".message");
+
+  if (messageElement) {
+
+    const content =
+      messageElement.querySelector(
+        ".message-content"
+      );
+
+    if (content) {
+
+      content.innerHTML =
+        "🚫 This message was deleted";
+
+      content.classList.add(
+        "deleted-message"
+      );
+    }
+
+    if (button) {
+
+      button.remove();
+
+    }
+  }
+}
+
+
+// ==============================
+// REALTIME TEXT MESSAGES
+// ==============================
+
+function setupMessageListener() {
+
+  if (!currentUser) return;
+
+  supabaseClient
+    .channel(
+      "chat-messages-" +
+      currentUser.id
+    )
+    .on(
+      "postgres_changes",
+      {
+        event: "INSERT",
+        schema: "public",
+        table: "chat_messages"
+      },
+      async function(payload) {
+
+        const message =
+          payload.new;
+
+        if (
+          message.sender_id !== currentUser.id &&
+          message.receiver_id !== currentUser.id
+        ) {
+
+          return;
+
+        }
+
+        if (!selectedFriend) return;
+
+        const isForCurrentChat =
+          (
+            message.sender_id === currentUser.id &&
+            message.receiver_id === selectedFriend.id
+          )
+          ||
+          (
+            message.sender_id === selectedFriend.id &&
+            message.receiver_id === currentUser.id
+          );
+
+        if (!isForCurrentChat) return;
+
+        // Prevent duplicate own message
+        if (
+          message.sender_id === currentUser.id
+        ) {
+
+          return;
+
+        }
+
+        await displayMessage(
+          message
+        );
+
+        scrollToBottom();
+
+      }
+    )
+    .subscribe();
+
+}
+
+
+// ==============================
+// REALTIME ATTACHMENTS
+// ==============================
+
+function setupAttachmentListener() {
+
+  if (!currentUser) return;
+
+  supabaseClient
+    .channel("chat-attachments-realtime")
+    .on(
+      "postgres_changes",
+      {
+        event: "INSERT",
+        schema: "public",
+        table: "chat_attachments"
+      },
+      async (payload) => {
+
+        const attachment = payload.new;
+
+        // Only show attachments belonging to the current conversation
+        if (
+          !selectedFriend ||
+          !(
+            (
+              attachment.sender_id === currentUser.id &&
+              attachment.receiver_id === selectedFriend.id
+            ) ||
+            (
+              attachment.sender_id === selectedFriend.id &&
+              attachment.receiver_id === currentUser.id
+            )
+          )
+        ) {
+          return;
+        }
+
+        // Do not display our own attachment twice
+        if (attachment.sender_id === currentUser.id) {
+          return;
+        }
+
+        await displayAttachment(attachment);
+        scrollToBottom();
+      }
+    )
+    .subscribe((status) => {
+
+      console.log(
+        "Attachment realtime status:",
+        status
+      );
+
+    });
+}
+
+
+// ==============================
+// SCROLL TO BOTTOM
+// ==============================
+
+function scrollToBottom() {
+
+  const messagesContainer =
+    document.querySelector(".messages");
+
+  if (!messagesContainer) return;
+
+  messagesContainer.scrollTop =
+    messagesContainer.scrollHeight;
+}
+
+
+// ==============================
+// START CHAT WHEN PAGE LOADS
+// ==============================
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+    startChat();
+  }
+);
+
+</script>
+
+</body>
+</html>
