@@ -1192,6 +1192,171 @@ body{
 
 alert("Friend request sent!");
     }
+    /* =========================================
+   FRIEND REQUEST SYSTEM
+========================================= */
+
+async function loadFriendRequests() {
+    if (!currentUser) return;
+
+    const list = document.getElementById("requestsList");
+
+    if (!list) return;
+
+    const { data: requests, error } = await supabaseClient
+        .from("friend_requests")
+        .select("id, sender_id, created_at")
+        .eq("receiver_id", currentUser.id)
+        .eq("status", "pending")
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error("Friend requests error:", error);
+
+        list.innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">⚠️</div>
+                <h3>Unable to load requests</h3>
+                <p>Please try again.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    if (!requests || requests.length === 0) {
+        list.innerHTML = `
+            <div class="empty">
+                <div class="empty-icon">👤</div>
+                <h3>No Friend Requests</h3>
+                <p>New friend requests will appear here.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+    const senderIds = requests.map(request => request.sender_id);
+
+    const { data: profiles, error: profileError } =
+        await supabaseClient
+            .from("profiles")
+            .select("id, username, full_name")
+            .in("id", senderIds);
+
+    if (profileError) {
+        console.error("Profile error:", profileError);
+    }
+
+    list.innerHTML = requests.map(request => {
+
+        const person = (profiles || []).find(
+            profile => profile.id === request.sender_id
+        );
+
+        const name =
+            person?.full_name ||
+            person?.username ||
+            "G Nurse User";
+
+        const letter =
+            name.charAt(0).toUpperCase();
+
+        return `
+            <div class="user-item">
+
+                <div class="avatar">
+                    ${escapeHTML(letter)}
+                </div>
+
+                <div class="user-info">
+
+                    <div class="user-name">
+                        ${escapeHTML(name)}
+                    </div>
+
+                    <div class="user-status">
+                        Wants to be your friend
+                    </div>
+
+                </div>
+
+                <button
+                    class="action-btn accept"
+                    onclick="acceptFriendRequest('${request.id}')"
+                >
+                    Accept
+                </button>
+
+                <button
+                    class="action-btn decline"
+                    onclick="rejectFriendRequest('${request.id}')"
+                >
+                    Reject
+                </button>
+
+            </div>
+        `;
+
+    }).join("");
+}
+
+
+/* =========================================
+   ACCEPT FRIEND REQUEST
+========================================= */
+
+async function acceptFriendRequest(requestId) {
+
+    if (!currentUser) return;
+
+    const { error } = await supabaseClient
+        .from("friend_requests")
+        .update({
+            status: "accepted"
+        })
+        .eq("id", requestId)
+        .eq("receiver_id", currentUser.id);
+
+    if (error) {
+        console.error("Accept request error:", error);
+        alert("Unable to accept request.");
+        return;
+    }
+
+    await loadFriendRequests();
+    await loadFriends();
+
+    alert("Friend request accepted!");
+}
+
+
+/* =========================================
+   REJECT FRIEND REQUEST
+========================================= */
+
+async function rejectFriendRequest(requestId) {
+
+    if (!currentUser) return;
+
+    const { error } = await supabaseClient
+        .from("friend_requests")
+        .update({
+            status: "rejected"
+        })
+        .eq("id", requestId)
+        .eq("receiver_id", currentUser.id);
+
+    if (error) {
+        console.error("Reject request error:", error);
+        alert("Unable to reject request.");
+        return;
+    }
+
+    await loadFriendRequests();
+
+    alert("Friend request rejected!");
+}
 
 let currentChatUser = "G Nurse Friend";
 
