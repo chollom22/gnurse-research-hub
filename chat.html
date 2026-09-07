@@ -374,6 +374,25 @@
         font-size: 13px;
       }
     }
+    .message-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+}
+
+.delete-message-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 2px 4px;
+  opacity: 0.7;
+}
+
+.delete-message-btn:hover {
+  opacity: 1;
+}
   </style>
 </head>
 
@@ -794,10 +813,8 @@ async function loadMessages() {
 
   scrollToBottom();
 }
-
-
 /* ==============================
-   DISPLAY MESSAGE
+   DISPLAY MASSAGE 
 ============================== */
 
 function displayMessage(message) {
@@ -816,13 +833,60 @@ function displayMessage(message) {
   });
 
   div.innerHTML = `
-    ${escapeHtml(message.message)}
-    <span class="message-time">${time}</span>
+    <div class="message-content">
+      ${escapeHtml(message.message)}
+    </div>
+
+    <div class="message-footer">
+      <span class="message-time">${time}</span>
+
+      ${
+        isSent
+          ? `<button
+                class="delete-message-btn"
+                onclick="deleteMessage('${message.id}', this)"
+                title="Delete message"
+             >
+                🗑️
+             </button>`
+          : ""
+      }
+    </div>
   `;
 
   messagesContainer.appendChild(div);
 }
+async function deleteMessage(messageId, button) {
 
+  const confirmed = confirm("Delete this message?");
+
+  if (!confirmed) return;
+
+  button.disabled = true;
+
+  const { error } = await supabaseClient
+    .from("chat_messages")
+    .delete()
+    .eq("id", messageId)
+    .eq("sender_id", currentUser.id);
+
+  if (error) {
+
+    console.error("Delete message error:", error);
+
+    alert("Unable to delete message.");
+
+    button.disabled = false;
+
+    return;
+  }
+
+  const messageElement = button.closest(".message");
+
+  if (messageElement) {
+    messageElement.remove();
+  }
+}
 
 /* ==============================
    SEND MESSAGE
