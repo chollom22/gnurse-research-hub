@@ -2,357 +2,475 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Chat With Friends | G Nurse Research Hub Nigeria</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Chat | G Nurse Research Hub Nigeria</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
       font-family: Arial, sans-serif;
+      background: #f4f7fb;
+      color: #222;
     }
-    .attach-button {
-  border: none;
-  background: #e8f7f8;
-  color: #087f8c;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 20px;
-  flex-shrink: 0;
-}
-
-.attach-button:hover {
-  background: #d5eff1;
-}
-
-.file-preview {
-  margin-top: 6px;
-  padding: 8px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.15);
-}
-    .chat-photo {
-  max-width: 250px;
-  max-height: 300px;
-  width: auto;
-  height: auto;
-  display: block;
-  border-radius: 12px;
-  cursor: pointer;
-  object-fit: cover;
-    }
-
-.file-preview img {
-  max-width: 220px;
-  max-height: 220px;
-  border-radius: 10px;
-  display: block;
-}
-
-.file-link {
-  color: inherit;
-  text-decoration: underline;
-  font-weight: bold;
-}
 
     body {
-  background: #f4f9fb;
-  color: #222;
-  min-height: 100vh;
-  overflow: auto;
-    }
-
-    /* HEADER */
-    header {
-      background: linear-gradient(135deg, #087f8c, #05636e);
-      color: white;
-      padding: 22px 15px;
-      text-align: center;
-    }
-
-    header h1 {
-      font-size: 25px;
-      margin-bottom: 5px;
-    }
-
-    header p {
-      font-size: 14px;
-    }
-
-    /* MAIN */
-    .chat-container {
-      max-width: 1000px;
-      height: calc(100vh - 115px);
-      min-height: 550px;
-      margin: 20px auto;
-      background: white;
-      border-radius: 15px;
-      overflow: hidden;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-      display: grid;
-      grid-template-columns: 280px 1fr;
-    }
-
-    /* FRIENDS */
-    .friends {
-      border-right: 1px solid #e5e5e5;
-      background: #f8fbfc;
       display: flex;
       flex-direction: column;
     }
 
-    .friends-header {
-      padding: 18px;
-      border-bottom: 1px solid #e5e5e5;
+    /* ==============================
+       HEADER
+    ============================== */
+
+    header {
+      height: 64px;
+      flex-shrink: 0;
+      background: #0b6b3a;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      z-index: 10;
     }
 
-    .friends-header h2 {
-      color: #087f8c;
+    header h1 {
+      font-size: 21px;
+      font-weight: 700;
+    }
+
+    .back-button {
+      border: none;
+      background: rgba(255,255,255,0.15);
+      color: white;
+      padding: 9px 13px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .back-button:hover {
+      background: rgba(255,255,255,0.25);
+    }
+
+    /* ==============================
+       MAIN CHAT LAYOUT
+    ============================== */
+
+    .chat-container {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* ==============================
+       FRIENDS SIDEBAR
+    ============================== */
+
+    .friends-panel {
+      width: 300px;
+      flex-shrink: 0;
+      background: white;
+      border-right: 1px solid #ddd;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .friends-title {
+      padding: 18px 16px 10px;
       font-size: 20px;
+      font-weight: bold;
     }
 
-    .search {
-      margin-top: 12px;
+    .search-box {
+      margin: 0 12px 12px;
     }
 
-    .search input {
+    .search-box input {
       width: 100%;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 20px;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 9px;
       outline: none;
+      font-size: 14px;
+    }
+
+    .search-box input:focus {
+      border-color: #0b6b3a;
     }
 
     .friend-list {
       flex: 1;
+      min-height: 0;
       overflow-y: auto;
+      padding-bottom: 10px;
     }
 
     .friend {
-      padding: 15px;
+      padding: 14px 16px;
       border-bottom: 1px solid #eee;
       cursor: pointer;
-      transition: 0.2s;
+      transition: background 0.2s;
     }
 
     .friend:hover {
-      background: #eaf7f8;
+      background: #f1f8f4;
+    }
+
+    .friend.active {
+      background: #e6f4ec;
     }
 
     .friend-name {
       font-weight: bold;
-      color: #333;
+      font-size: 15px;
+      margin-bottom: 4px;
     }
 
     .friend-status {
-      font-size: 12px;
       color: #777;
-      margin-top: 3px;
+      font-size: 13px;
     }
 
-    /* CHAT AREA */
+    /* ==============================
+       CHAT AREA
+    ============================== */
+
     .chat-area {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  min-height: 0;
+      flex: 1;
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      background: #eef3f7;
     }
 
     .chat-header {
-      padding: 17px 20px;
-      border-bottom: 1px solid #e5e5e5;
+      height: 68px;
+      flex-shrink: 0;
       background: white;
+      border-bottom: 1px solid #ddd;
+      display: flex;
+      align-items: center;
+      padding: 0 18px;
     }
 
     .chat-header h2 {
-      color: #087f8c;
-      font-size: 19px;
+      font-size: 18px;
+      margin-bottom: 3px;
     }
 
     .chat-header p {
+      font-size: 13px;
       color: #777;
-      font-size: 12px;
-      margin-top: 3px;
     }
 
-    /* MESSAGES */
+    /* ==============================
+       MESSAGES
+    ============================== */
+
     .messages {
-  flex: 1;
-  min-height: 0;
-  padding: 20px;
-  overflow-y: auto;
-  overflow-x: hidden;
-  background: #f4f9fb;
-  -webkit-overflow-scrolling: touch;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
     }
 
     .welcome {
+      margin: auto;
       text-align: center;
-      margin-top: 100px;
       color: #777;
+      padding: 30px;
     }
 
     .welcome-icon {
-      font-size: 55px;
+      font-size: 45px;
       margin-bottom: 10px;
+    }
+
+    .welcome h2 {
+      color: #333;
+      margin-bottom: 8px;
+      font-size: 20px;
     }
 
     .message {
       max-width: 75%;
-      margin-bottom: 12px;
-      padding: 11px 14px;
-      border-radius: 15px;
-      line-height: 1.4;
-      word-break: break-word;
-    }
-
-    .message.received {
-      background: white;
-      margin-right: auto;
-      border-bottom-left-radius: 4px;
+      display: flex;
+      flex-direction: column;
     }
 
     .message.sent {
-      background: #087f8c;
-      color: white;
-      margin-left: auto;
-      border-bottom-right-radius: 4px;
+      align-self: flex-end;
+      align-items: flex-end;
+    }
+
+    .message.received {
+      align-self: flex-start;
+      align-items: flex-start;
+    }
+
+    .message-content {
+      padding: 10px 13px;
+      border-radius: 13px;
+      background: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      word-wrap: break-word;
+      overflow-wrap: anywhere;
+    }
+
+    .message.sent .message-content {
+      background: #d9f5e5;
+    }
+
+    .message-footer {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-top: 3px;
+      padding: 0 4px;
     }
 
     .message-time {
-      display: block;
       font-size: 10px;
-      margin-top: 4px;
-      opacity: 0.7;
+      color: #888;
     }
 
-    /* INPUT */
-    .message-form {
-      display: flex;
-      gap: 10px;
-      padding: 14px;
-      border-top: 1px solid #e5e5e5;
+    .delete-message-btn {
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 13px;
+      padding: 2px;
+      opacity: 0.65;
+    }
+
+    .delete-message-btn:hover {
+      opacity: 1;
+    }
+
+    .deleted-message {
+      color: #888;
+      font-style: italic;
+    }
+
+    /* ==============================
+       PHOTOS
+    ============================== */
+
+    .chat-photo {
+      display: block;
+      max-width: 260px;
+      max-height: 320px;
+      width: auto;
+      height: auto;
+      border-radius: 10px;
+      cursor: pointer;
+      object-fit: cover;
+    }
+
+    /* ==============================
+       FILE LINKS
+    ============================== */
+
+    .file-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #075e54;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 3px;
+    }
+
+    .file-link:hover {
+      text-decoration: underline;
+    }
+
+    /* ==============================
+       FILE PREVIEW
+    ============================== */
+
+    .file-preview {
       background: white;
+      border-top: 1px solid #ddd;
+      padding: 9px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      max-height: 95px;
     }
 
-    .message-form input {
+    .file-preview img {
+      width: 65px;
+      height: 65px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .file-preview-name {
       flex: 1;
       min-width: 0;
-      padding: 12px 15px;
-      border: 1px solid #ccc;
-      border-radius: 25px;
-      outline: none;
+      font-size: 13px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .remove-preview {
+      border: none;
+      background: #eee;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      cursor: pointer;
       font-size: 15px;
     }
-    .voice-button {
-  border: none;
-  background: #e8f7f8;
-  color: #087f8c;
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 20px;
-}
 
-.voice-button:hover {
-  background: #d5eff1;
-}
-    .voice-call-button {
-  border: none;
-  background: #e8f7f8;
-  color: #087f8c;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 20px;
-  margin-left: auto;
-}
+    /* ==============================
+       MESSAGE FORM
+    ============================== */
 
-.voice-call-button:hover {
-  background: #d5eff1;
-}
+    .message-form {
+      flex-shrink: 0;
+      background: white;
+      border-top: 1px solid #ddd;
+      padding: 10px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
 
+    .message-input {
+      flex: 1;
+      min-width: 0;
+      border: 1px solid #ddd;
+      border-radius: 22px;
+      padding: 11px 15px;
+      outline: none;
+      font-size: 14px;
+    }
+
+    .message-input:focus {
+      border-color: #0b6b3a;
+    }
+
+    .attach-button,
     .send-button {
       border: none;
-      background: #087f8c;
-      color: white;
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
       cursor: pointer;
+      border-radius: 50%;
+      width: 43px;
+      height: 43px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .attach-button {
+      background: #eee;
       font-size: 20px;
     }
 
+    .send-button {
+      background: #0b6b3a;
+      color: white;
+      font-size: 18px;
+    }
+
+    .attach-button:hover {
+      background: #ddd;
+    }
+
     .send-button:hover {
-      background: #05636e;
+      background: #07562f;
     }
 
-    /* BACK */
-    .back {
-      display: block;
-      width: fit-content;
-      margin: 15px auto 25px;
-      color: #087f8c;
-      text-decoration: none;
-      font-weight: bold;
+    .send-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
-    /* MOBILE */
+    /* ==============================
+       UPLOAD STATUS
+    ============================== */
+
+    .upload-status {
+      position: fixed;
+      left: 50%;
+      bottom: 85px;
+      transform: translateX(-50%);
+      background: #222;
+      color: white;
+      padding: 9px 15px;
+      border-radius: 8px;
+      font-size: 13px;
+      display: none;
+      z-index: 100;
+    }
+
+    /* ==============================
+       MOBILE
+    ============================== */
+
     @media (max-width: 700px) {
 
       header {
-        padding: 18px 10px;
+        height: 56px;
+        padding: 0 10px;
       }
 
       header h1 {
-        font-size: 21px;
-        .chat-area {
-  height: 100%;
-  min-height: 0;
-}
-
-.messages {
-  height: 0;
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: scroll;
-}
+        font-size: 17px;
       }
 
-      .chat-container {
-  margin: 0;
-  height: calc(100vh - 92px);
-  min-height: 0;
-  border-radius: 0;
-  grid-template-columns: 105px 1fr;
-  overflow: hidden;
+      .friends-panel {
+        width: 115px;
       }
 
-      .friends-header {
-        padding: 12px 8px;
+      .friends-title {
+        font-size: 15px;
+        padding: 14px 9px 8px;
       }
 
-      .friends-header h2 {
-        font-size: 14px;
+      .search-box {
+        margin: 0 7px 8px;
       }
 
-      .search input {
-        font-size: 11px;
+      .search-box input {
         padding: 8px;
+        font-size: 11px;
       }
 
       .friend {
-        padding: 12px 8px;
+        padding: 11px 8px;
       }
 
       .friend-name {
-        font-size: 13px;
+        font-size: 12px;
       }
 
       .friend-status {
@@ -360,108 +478,125 @@
       }
 
       .chat-header {
-        padding: 13px;
+        height: 60px;
+        padding: 0 11px;
       }
 
       .chat-header h2 {
-        font-size: 16px;
+        font-size: 15px;
+      }
+
+      .chat-header p {
+        font-size: 11px;
       }
 
       .messages {
-        padding: 12px;
+        padding: 10px;
       }
 
       .message {
         max-width: 85%;
-        font-size: 14px;
+      }
+
+      .chat-photo {
+        max-width: 210px;
+        max-height: 270px;
       }
 
       .message-form {
-        padding: 9px;
+        padding: 7px;
       }
 
-      .message-form input {
-        font-size: 13px;
+      .message-input {
+        padding: 10px 12px;
+      }
+
+      .attach-button,
+      .send-button {
+        width: 39px;
+        height: 39px;
       }
     }
-    .message-footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 6px;
-}
-
-.delete-message-btn {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-size: 13px;
-  padding: 2px 4px;
-  opacity: 0.7;
-}
-
-.delete-message-btn:hover {
-  opacity: 1;
-}
   </style>
 </head>
 
 <body>
 
-  <!-- HEADER -->
+  <!-- ==============================
+       HEADER
+  ============================== -->
+
   <header>
-    <h1>💬 Chat With Friends</h1>
-    <p>G Nurse Research Hub Nigeria</p>
+    <h1>💬 G Nurse Chat</h1>
+
+    <button
+      class="back-button"
+      onclick="window.location.href='index.html'"
+    >
+      ← Back
+    </button>
   </header>
 
-  <!-- CHAT -->
+
+  <!-- ==============================
+       CHAT CONTAINER
+  ============================== -->
+
   <div class="chat-container">
 
-    <!-- FRIEND LIST -->
-    <aside class="friends">
+    <!-- FRIENDS -->
 
-      <div class="friends-header">
-        <h2>👥 Friends</h2>
+    <aside class="friends-panel">
 
-        <div class="search">
-          <input
-            type="search"
-            placeholder="Search friends..."
-          >
-        </div>
+      <div class="friends-title">
+        Friends
       </div>
 
-      <div class="friend-list" id="friendList">
+      <div class="search-box">
+        <input
+          type="text"
+          id="friendSearch"
+          placeholder="Search friends..."
+          autocomplete="off"
+        >
+      </div>
 
-  <div class="friend">
-    <div class="friend-name">Loading...</div>
-    <div class="friend-status">Please wait</div>
-  </div>
+      <div
+        class="friend-list"
+        id="friendList"
+      >
+        <div class="friend">
+          <div class="friend-name">
+            Loading...
+          </div>
 
-      
-   </div>
+          <div class="friend-status">
+            Please wait
+          </div>
+        </div>
+      </div>
 
     </aside>
 
 
-    <!-- CHAT AREA -->
+    <!-- CHAT -->
+
     <main class="chat-area">
 
       <div class="chat-header">
 
-        <h2>
-          💬 Select a friend
-        </h2>
-
-        <p>
-          Choose someone from your friends list to start chatting.
-        </p>
+        <div>
+          <h2>Welcome to G Nurse Chat</h2>
+          <p>Select a friend to start chatting</p>
+        </div>
 
       </div>
 
 
-      <!-- MESSAGES -->
-      <div class="messages">
+      <div
+        class="messages"
+        id="messages"
+      >
 
         <div class="welcome">
 
@@ -470,11 +605,11 @@
           </div>
 
           <h2>
-            Welcome to G Nurse Chat
+            Select a friend
           </h2>
 
           <p>
-            Your real-time messaging area will appear here.
+            Choose someone from your friends list to start a conversation.
           </p>
 
         </div>
@@ -482,1591 +617,506 @@
       </div>
 
 
-      <!-- MESSAGE INPUT -->
-    <form class="message-form">
+      <!-- FILE PREVIEW WILL APPEAR HERE -->
 
-  <button
-    type="button"
-    class="voice-button"
-    id="voiceButton"
-    title="Record voice note"
-  >
-    🎤
-  </button>
 
-  <!-- ATTACHMENT BUTTON -->
-  <button
-    type="button"
-    class="attach-button"
-    id="attachButton"
-    title="Send photo or file"
-  >
-    📎
-  </button>
+      <form
+        class="message-form"
+        id="messageForm"
+      >
 
-  <!-- HIDDEN FILE INPUT -->
-  <input
-    type="file"
-    id="fileInput"
-    accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip"
-    hidden
-  >
+        <button
+          type="button"
+          class="attach-button"
+          id="attachButton"
+          title="Send photo or file"
+        >
+          📎
+        </button>
 
-  <input
-    type="text"
-    placeholder="Type a message..."
-    autocomplete="off"
-  >
+        <input
+          type="file"
+          id="fileInput"
+          accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip"
+          hidden
+        >
 
-  <button
-    type="submit"
-    class="send-button"
-    title="Send message"
-  >
-    ➤
-  </button>
+        <input
+          type="text"
+          id="messageInput"
+          class="message-input"
+          placeholder="Type a message..."
+          autocomplete="off"
+        >
+
+        <button
+          type="submit"
+          class="send-button"
+          id="sendButton"
+          title="Send"
+        >
+          ➤
+        </button>
 
       </form>
 
     </main>
 
-        <a href="index.html" class="back">
-      ← Back to Home
-    </a>
-
   </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <div
+    id="uploadStatus"
+    class="upload-status"
+  >
+    Uploading...
+  </div>
+
 
 <script>
-const SUPABASE_URL = "https://bmiechymiyedubezhcqk.supabase.co";
 
-const SUPABASE_PUBLISHABLE_KEY =
-  "sb_publishable_9JL2ALhTGlZV57hUV0mTdQ_c2hdT8O8";
+  /* =====================================================
+     SUPABASE
+  ===================================================== */
 
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
-);
+  const SUPABASE_URL =
+    "https://bmiechymiyedubezhcqk.supabase.co";
 
-let currentUser = null;
-let selectedFriend = null;
+  const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_9JL2ALhTGlZV57hUV0mTdQ_c2hdT8O8";
 
-
-/* ==============================
-   START CHAT
-============================== */
-
-async function startChat() {
-
-  const {
-    data: { user },
-    error: userError
-  } = await supabaseClient.auth.getUser();
-
-  if (userError || !user) {
-    window.location.href = "login.html";
-    return;
-  }
-
-  currentUser = user;
-  setupMessageListener();
-
-  const friendList = document.getElementById("friendList");
-
-  const { data, error } = await supabaseClient
-    .from("profiles")
-    .select("id, username, full_name")
-    .neq("id", user.id)
-    .order("username");
-
-  if (error) {
-
-    console.error("Friends error:", error);
-
-    friendList.innerHTML = `
-      <div class="friend">
-        <div class="friend-name">Unable to load users</div>
-        <div class="friend-status">${error.message}</div>
-      </div>
-    `;
-
-    return;
-  }
-
-  if (!data || data.length === 0) {
-
-    friendList.innerHTML = `
-      <div class="friend">
-        <div class="friend-name">No other users yet</div>
-        <div class="friend-status">Invite someone to join</div>
-      </div>
-    `;
-
-    return;
-  }
-
-  friendList.innerHTML = "";
-
-  data.forEach(profile => {
-
-    const friend = document.createElement("div");
-
-    friend.className = "friend";
-
-    friend.innerHTML = `
-      <div class="friend-name">
-        ${profile.full_name || profile.username || "User"}
-      </div>
-
-      <div class="friend-status">
-        @${profile.username || "user"}
-      </div>
-    `;
-
-    /* Make friend clickable */
-    friend.addEventListener("click", () => {
-      openChat(profile);
-    });
-
-    friendList.appendChild(friend);
-
-  });
-}
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLISHABLE_KEY
+    );
 
 
-/* ==============================
-   OPEN CHAT
-============================== */
-  async function openChat(friend) {
+  /* =====================================================
+     GLOBAL VARIABLES
+  ===================================================== */
 
-  selectedFriend = friend;
+  let currentUser = null;
+  let selectedFriend = null;
+  let allFriends = [];
 
-  const chatHeader = document.querySelector(".chat-header");
-  const messages = document.querySelector(".messages");
+  let messageChannel = null;
+  let attachmentChannel = null;
 
-  chatHeader.innerHTML = `
-    <div>
-      <h2>💬 ${friend.full_name || friend.username || "User"}</h2>
-      <p>@${friend.username || "user"}</p>
-    </div>
 
-    <button
-      id="voiceCallButton"
-      class="voice-call-button"
-      title="Voice call"
-    >
-      📞
-    </button>
+  /* =====================================================
+     ELEMENTS
+  ===================================================== */
 
-    <button
-      id="endCallButton"
-      class="end-call-button"
-      title="End call"
-    >
-      📵
-    </button>
-  `;
+  const friendList =
+    document.getElementById("friendList");
 
-  messages.innerHTML = `
-    <div class="welcome">
-      <div class="welcome-icon">💬</div>
-      <h2>Loading messages...</h2>
-    </div>
-  `;
+  const friendSearch =
+    document.getElementById("friendSearch");
 
-  await setupVoiceCallListener();
+  const messageForm =
+    document.getElementById("messageForm");
 
-  await loadMessages();
-await loadChatAttachments();
-await loadVoiceNotes();
-  }
-  // ==============================
-// VOICE CALL BUTTON
-// ==============================
+  const messageInput =
+    document.getElementById("messageInput");
 
-document.addEventListener("click", function (event) {
+  const sendButton =
+    document.getElementById("sendButton");
 
-  if (event.target.id === "voiceCallButton") {
-    startVoiceCall();
-  }
+  const attachButton =
+    document.getElementById("attachButton");
 
-  if (event.target.id === "endCallButton") {
-    endVoiceCall();
-  }
-
-});
-  /* ==============================
-   LOAD VOICE NOTES
-============================== */
-
-async function loadVoiceNotes() {
-
-  if (!currentUser || !selectedFriend) return;
+  const fileInput =
+    document.getElementById("fileInput");
 
   const messagesContainer =
-    document.querySelector(".messages");
+    document.getElementById("messages");
 
-  const { data, error } = await supabaseClient
-    .from("chat_voice_notes")
-    .select("id, sender_id, receiver_id, audio_url, created_at")
-    .or(
-      `and(sender_id.eq.${currentUser.id},receiver_id.eq.${selectedFriend.id}),and(sender_id.eq.${selectedFriend.id},receiver_id.eq.${currentUser.id})`
-    )
-    .order("created_at", { ascending: true });
+  const uploadStatus =
+    document.getElementById("uploadStatus");
 
-  if (error) {
 
-    console.error("Voice notes error:", error);
+  /* =====================================================
+     ESCAPE HTML
+  ===================================================== */
 
-    return;
-  }
+  function escapeHtml(value) {
 
-  if (!data || data.length === 0) {
-    return;
-  }
-
-  for (const voiceNote of data) {
-
-    const { data: signedData, error: signedError } =
-      await supabaseClient.storage
-        .from("chat-voice-notes")
-        .createSignedUrl(
-          voiceNote.audio_url,
-          3600
-        );
-
-    if (signedError) {
-
-      console.error(
-        "Voice note URL error:",
-        signedError
-      );
-
-      continue;
+    if (value === null || value === undefined) {
+      return "";
     }
 
-    const wrapper =
-      document.createElement("div");
-
-    const isSent =
-      voiceNote.sender_id === currentUser.id;
-
-    wrapper.className =
-      `message ${isSent ? "sent" : "received"}`;
-
-    const audioElement =
-      document.createElement("audio");
-
-    audioElement.controls = true;
-    audioElement.src = signedData.signedUrl;
-
-    wrapper.appendChild(audioElement);
-
-    messagesContainer.appendChild(wrapper);
-  }
-
-  scrollToBottom();
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
   }
 
 
-/* ==============================
-   LOAD MESSAGES
-============================== */
+  /* =====================================================
+     FORMAT TIME
+  ===================================================== */
 
-async function loadMessages() {
+  function formatTime(dateString) {
 
-  if (!currentUser || !selectedFriend) return;
-
-  const messagesContainer = document.querySelector(".messages");
-
-  const { data, error } = await supabaseClient
-    .from("chat_messages")
-    .select(`
-      id,
-      sender_id,
-      receiver_id,
-      message,
-      created_at,
-      deleted_for_sender,
-      deleted_for_receiver,
-      deleted_for_everyone
-    `)
-    .or(
-      `and(sender_id.eq.${currentUser.id},receiver_id.eq.${selectedFriend.id}),and(sender_id.eq.${selectedFriend.id},receiver_id.eq.${currentUser.id})`
-    )
-    .order("created_at", { ascending: true });
-
-  if (error) {
-    console.error("Messages error:", error);
-
-    messagesContainer.innerHTML = `
-      <div class="welcome">
-        <div class="welcome-icon">⚠️</div>
-        <h2>Unable to load messages</h2>
-        <p>${escapeHtml(error.message)}</p>
-      </div>
-    `;
-
-    return;
-  }
-
-  messagesContainer.innerHTML = "";
-
-  if (!data || data.length === 0) {
-    messagesContainer.innerHTML = `
-      <div class="welcome">
-        <div class="welcome-icon">👋</div>
-        <h2>Start the conversation</h2>
-        <p>Send your first message.</p>
-      </div>
-    `;
-
-    return;
-  }
-
-  data.forEach(message => {
-    displayMessage(message);
-  });
-
-  scrollToBottom();
-}
-/* ==============================
-   DISPLAY MASSAGE 
-============================== */
-async function displayMessage(message) {
-
-  const messagesContainer = document.querySelector(".messages");
-
-  const isSent = message.sender_id === currentUser.id;
-
-  if (
-    (isSent && message.deleted_for_sender) ||
-    (!isSent && message.deleted_for_receiver)
-  ) {
-    return;
-  }
-
-  const div = document.createElement("div");
-  div.className = `message ${isSent ? "sent" : "received"}`;
-
-  const time = new Date(message.created_at).toLocaleTimeString([], {
-    hour: "2-digit",
-    minute: "2-digit"
-  });
-
-  if (message.deleted_for_everyone) {
-
-    div.innerHTML = `
-      <div class="message-content deleted-message">
-        🚫 This message was deleted
-      </div>
-
-      <div class="message-footer">
-        <span class="message-time">${time}</span>
-      </div>
-    `;
-
-    messagesContainer.appendChild(div);
-    return;
-  }
-
-  let messageContent = escapeHtml(message.message || "");
-
-  div.innerHTML = `
-    <div class="message-content">
-      ${messageContent}
-    </div>
-
-    <div class="message-footer">
-
-      <span class="message-time">${time}</span>
-
-      ${
-        isSent
-          ? `
-            <button
-              class="delete-message-btn"
-              onclick="showDeleteOptions('${message.id}', this)"
-              title="Delete message"
-            >
-              🗑️
-            </button>
-          `
-          : `
-            <button
-              class="delete-message-btn"
-              onclick="deleteForMe('${message.id}', this)"
-              title="Delete for me"
-            >
-              🗑️
-            </button>
-          `
-      }
-
-    </div>
-  `;
-
-  messagesContainer.appendChild(div);
-}
-  async function loadChatAttachments() {
-
-  if (!currentUser || !selectedFriend) return;
-
-  const messagesContainer = document.querySelector(".messages");
-
-  const { data, error } = await supabaseClient
-    .from("chat_attachments")
-    .select(`
-      id,
-      sender_id,
-      receiver_id,
-      file_name,
-      file_path,
-      file_type,
-      file_size,
-      created_at
-    `)
-    .or(
-      `and(sender_id.eq.${currentUser.id},receiver_id.eq.${selectedFriend.id}),and(sender_id.eq.${selectedFriend.id},receiver_id.eq.${currentUser.id})`
-    )
-    .order("created_at", { ascending: true });
-
-  if (error) {
-    console.error("Attachments error:", error);
-    return;
-  }
-
-  if (!data) return;
-
-  for (const file of data) {
-
-    const isSent = file.sender_id === currentUser.id;
-
-    const { data: signedData, error: signedError } =
-      await supabaseClient.storage
-        .from("chat-files")
-        .createSignedUrl(file.file_path, 3600);
-
-    if (signedError) {
-      console.error("File URL error:", signedError);
-      continue;
+    if (!dateString) {
+      return "";
     }
 
-    const div = document.createElement("div");
-
-    div.className = `message ${isSent ? "sent" : "received"}`;
-
-    let content = "";
-
-    if (file.file_type && file.file_type.startsWith("image/")) {
-
-      content = `
-        <img
-          src="${signedData.signedUrl}"
-          alt="${escapeHtml(file.file_name)}"
-          class="chat-photo"
-          onclick="window.open('${signedData.signedUrl}', '_blank')"
-        >
-      `;
-
-    } else {
-
-      content = `
-        <a
-          href="${signedData.signedUrl}"
-          target="_blank"
-          class="file-link"
-          download
-        >
-          📎 ${escapeHtml(file.file_name)}
-        </a>
-      `;
-    }
-
-    const time = new Date(file.created_at).toLocaleTimeString([], {
+    return new Date(dateString).toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit"
     });
-
-    div.innerHTML = `
-      <div class="message-content">
-        ${content}
-      </div>
-
-      <div class="message-footer">
-        <span class="message-time">${time}</span>
-      </div>
-    `;
-
-    messagesContainer.appendChild(div);
   }
 
-  scrollToBottom();
+
+  /* =====================================================
+     SHOW UPLOAD STATUS
+  ===================================================== */
+
+  function showUploadStatus(text) {
+
+    uploadStatus.textContent = text;
+    uploadStatus.style.display = "block";
   }
 
-  
-  // ===============================
-  // NORMAL TEXT MESSAGE
-  // ===============================
-  else {
 
-    messageContent = `
-      ${escapeHtml(message.message || "")}
-    `;
+  function hideUploadStatus() {
+
+    uploadStatus.style.display = "none";
   }
 
-  div.innerHTML = `
-    <div class="message-content">
-      ${messageContent}
-    </div>
 
-    <div class="message-footer">
+  /* =====================================================
+     START CHAT
+  ===================================================== */
 
-      <span class="message-time">${time}</span>
+  async function startChat() {
 
-      ${
-        isSent
-          ? `
-            <button
-              class="delete-message-btn"
-              onclick="showDeleteOptions('${message.id}', this)"
-              title="Delete message"
-            >
-              🗑️
-            </button>
-          `
-          : `
-            <button
-              class="delete-message-btn"
-              onclick="deleteForMe('${message.id}', this)"
-              title="Delete for me"
-            >
-              🗑️
-            </button>
-          `
-      }
-
-    </div>
-  `;
-}
-
-  function showDeleteOptions(messageId, button) {
-
-  const choice = confirm(
-    "Delete this message?\n\n" +
-    "OK = Delete for everyone\n" +
-    "Cancel = Delete for me"
-  );
-
-  if (choice) {
-    deleteForEveryone(messageId, button);
-  } else {
-    deleteForMe(messageId, button);
-  }
-}
-
-
-async function deleteForMe(messageId, button) {
-
-  const { data: message, error: fetchError } = await supabaseClient
-    .from("chat_messages")
-    .select("sender_id, receiver_id")
-    .eq("id", messageId)
-    .single();
-
-  if (fetchError || !message) {
-    alert("Unable to find this message.");
-    return;
-  }
-
-  const column =
-    message.sender_id === currentUser.id
-      ? "deleted_for_sender"
-      : "deleted_for_receiver";
-
-  const { error } = await supabaseClient
-    .from("chat_messages")
-    .update({ [column]: true })
-    .eq("id", messageId);
-
-  if (error) {
-    console.error("Delete for me error:", error);
-    alert("Unable to delete message.");
-    return;
-  }
-
-  const messageElement = button.closest(".message");
-
-  if (messageElement) {
-    messageElement.remove();
-  }
-}
-
-
-async function deleteForEveryone(messageId, button) {
-
-  if (!confirm("Delete this message for everyone?")) {
-    return;
-  }
-
-  const { error } = await supabaseClient
-    .from("chat_messages")
-    .update({
-      deleted_for_everyone: true
-    })
-    .eq("id", messageId)
-    .eq("sender_id", currentUser.id);
-
-  if (error) {
-    console.error("Delete for everyone error:", error);
-    alert("Unable to delete message for everyone.");
-    return;
-  }
-
-  // Change the message immediately on your screen
-  const messageElement = button.closest(".message");
-
-  if (messageElement) {
-
-    const content = messageElement.querySelector(".message-content");
-
-    if (content) {
-      content.innerHTML = "🚫 This message was deleted";
-      content.classList.add("deleted-message");
-    }
-
-    button.remove();
-  }
-  }
-
-/* ==============================
-   SEND MESSAGE
-============================== */
-
-document.querySelector(".message-form").addEventListener("submit", async function(event) {
-
-  event.preventDefault();
-
-  if (!currentUser) return;
-
-  if (!selectedFriend) {
-
-    alert("Please select a friend first.");
-
-    return;
-  }
-
-  const input = this.querySelector('input[type="text"]');
-
-  const messageText = input.value.trim();
-
-  if (!messageText) return;
-
-  input.disabled = true;
-
-  const { data, error } = await supabaseClient
-    .from("chat_messages")
-    .insert({
-      sender_id: currentUser.id,
-      receiver_id: selectedFriend.id,
-      message: messageText
-    })
-    .select()
-    .single();
-
-  input.disabled = false;
-
-  if (error) {
-
-    console.error("Send message error:", error);
-
-    alert("Message could not be sent: " + error.message);
-
-    return;
-  }
-
-  input.value = "";
-
-  displayMessage(data);
-
-  scrollToBottom();
-
-});
-
-
-/* ==============================
-   SCROLL
-============================== */
-  // ==============================
-// REAL-TIME MESSAGE NOTIFICATIONS
-// ==============================
-
-let messageChannel = null;
-
-function setupMessageListener() {
-  if (!currentUser) return;
-
-  // Remove previous listener if one exists
-  if (messageChannel) {
-    supabaseClient.removeChannel(messageChannel);
-  }
-
-  messageChannel = supabaseClient
-    .channel(`chat-messages-${currentUser.id}`)
-    .on(
-      "postgres_changes",
-      {
-        event: "INSERT",
-        schema: "public",
-        table: "chat_messages",
-        filter: `receiver_id=eq.${currentUser.id}`
-      },
-      (payload) => {
-        const message = payload.new;
-
-        // Display the message immediately if
-        // you are currently chatting with the sender
-        if (
-          selectedFriend &&
-          message.sender_id === selectedFriend.id
-        ) {
-          displayMessage(message);
-          scrollToBottom();
-        }
-
-        // Show notification
-        if (
-          "Notification" in window &&
-          Notification.permission === "granted"
-        ) {
-          new Notification("New message 💬", {
-            body: message.message || "You received a new message."
-          });
-        }
-      }
-    )
-    .subscribe();
-
-  console.log("Real-time message listener started.");
-}
-
-function scrollToBottom() {
-
-  const messagesContainer = document.querySelector(".messages");
-
-  messagesContainer.scrollTop =
-    messagesContainer.scrollHeight;
-}
-
-
-/* ==============================
-   SECURITY
-============================== */
-
-function escapeHtml(text) {
-
-  const div = document.createElement("div");
-
-  div.textContent = text;
-
-  return div.innerHTML;
-}
-
-
-/* ==============================
-   SEARCH FRIENDS
-============================== */
-
-document
-  .querySelector(".search input")
-  .addEventListener("input", function() {
-
-    const searchText = this.value.toLowerCase();
-
-    document
-      .querySelectorAll(".friend")
-      .forEach(friend => {
-
-        const name =
-          friend.querySelector(".friend-name")
-          ?.textContent
-          .toLowerCase() || "";
-
-        const username =
-          friend.querySelector(".friend-status")
-          ?.textContent
-          .toLowerCase() || "";
-
-        friend.style.display =
-          name.includes(searchText) ||
-          username.includes(searchText)
-            ? ""
-            : "none";
-
-      });
-
-  });
-
-
-/* ==============================
-   START
-============================== */
-
-startChat();
-
-// ===============================
-// VOICE NOTE RECORDING + SUPABASE
-// ===============================
-  
-// ==============================
-// VOICE CALL SYSTEM
-// ==============================
-  let callPeerConnection = null;
-let callChannel = null;
-let localCallStream = null;
-let remoteAudio = null;
-let isInCall = false;
-  function getCallChannelTopic() {
-  if (!currentUser || !selectedFriend) return null;
-
-  const ids = [currentUser.id, selectedFriend.id].sort();
-
-  return `voice-call-${ids[0]}-${ids[1]}`;
-  }
-  async function createVoicePeerConnection() {
-
-  callPeerConnection = new RTCPeerConnection({
-    iceServers: [
-      {
-        urls: "stun:stun.l.google.com:19302"
-      }
-    ]
-  });
-
-  callPeerConnection.onicecandidate = (event) => {
-
-    if (event.candidate && callChannel) {
-
-      callChannel.send({
-        type: "broadcast",
-        event: "ice-candidate",
-        payload: {
-          candidate: event.candidate
-        }
-      });
-
-    }
-
-  };
-
-  callPeerConnection.ontrack = (event) => {
-
-    if (!remoteAudio) {
-
-      remoteAudio = document.createElement("audio");
-
-      remoteAudio.autoplay = true;
-      remoteAudio.playsInline = true;
-
-      document.body.appendChild(remoteAudio);
-
-    }
-
-    remoteAudio.srcObject = event.streams[0];
-
-  };
-
-  return callPeerConnection;
-    }
-  async function startVoiceCall() {
-
-  if (!currentUser || !selectedFriend) {
-    alert("Please select a friend first.");
-    return;
-  }
-
-  try {
-
-        if (!callChannel) {
-      const topic = getCallChannelTopic();
-
-      callChannel = supabaseClient.channel(topic);
-
-      await callChannel.subscribe();
-    }
-
-    localCallStream =
-      await navigator.mediaDevices.getUserMedia({
-        audio: true
-      });
-
-    await createVoicePeerConnection();
-
-    localCallStream.getTracks().forEach(track => {
-      callPeerConnection.addTrack(track, localCallStream);
-    });
-
-    const offer =
-      await callPeerConnection.createOffer();
-
-    await callPeerConnection.setLocalDescription(offer);
-
-    await callChannel.send({
-      type: "broadcast",
-      event: "offer",
-      payload: {
-        offer: offer,
-        callerId: currentUser.id
-      }
-    });
-
-    isInCall = true;
-
-    alert("Calling... 📞");
-
-  } catch (error) {
-
-    console.error("Voice call error:", error);
-
-    alert(
-      "Unable to start the voice call. " +
-      error.message
-    );
-
-  }
-  }
- // ==============================
-// HANDLE INCOMING VOICE CALL
-// ==============================
-
-async function handleIncomingVoiceCall(offer, callerId) {
-
-  if (!selectedFriend || callerId !== selectedFriend.id) {
-    return;
-  }
-
-  const acceptCall = confirm(
-    "📞 Incoming voice call!\n\nAccept call?"
-  );
-
-  if (!acceptCall) {
-    return;
-  }
-
-  try {
-
-    localCallStream =
-      await navigator.mediaDevices.getUserMedia({
-        audio: true
-      });
-
-    await createVoicePeerConnection();
-
-    localCallStream.getTracks().forEach(track => {
-      callPeerConnection.addTrack(
-        track,
-        localCallStream
-      );
-    });
-
-    await callPeerConnection.setRemoteDescription(
-      new RTCSessionDescription(offer)
-    );
-
-    const answer =
-      await callPeerConnection.createAnswer();
-
-    await callPeerConnection.setLocalDescription(
-      answer
-    );
-
-    await callChannel.send({
-      type: "broadcast",
-      event: "answer",
-      payload: {
-        answer: answer,
-        receiverId: currentUser.id
-      }
-    });
-
-    isInCall = true;
-
-  } catch (error) {
-
-    console.error(
-      "Incoming call error:",
-      error
-    );
-
-    alert(
-      "Unable to answer the call. " +
-      error.message
-    );
-
-  }
-        } 
-  // ==============================
-// LISTEN FOR INCOMING VOICE CALL
-// ==============================
-
-async function setupVoiceCallListener() {
-
-  if (!currentUser || !selectedFriend) {
-    return;
-  }
-
-  const topic = getCallChannelTopic();
-
-  if (!topic) {
-    return;
-  }
-
-  if (callChannel) {
-    await supabaseClient.removeChannel(callChannel);
-  }
-
-  callChannel = supabaseClient.channel(topic);
-
-  callChannel.on(
-    "broadcast",
-    { event: "offer" },
-    async ({ payload }) => {
-
-      if (!payload || !payload.offer) {
-        return;
-      }
-
-      if (payload.callerId === currentUser.id) {
-        return;
-      }
-
-      await handleIncomingVoiceCall(
-        payload.offer,
-        payload.callerId
-      );
-
-    }
-  );
-
-  callChannel.on(
-    "broadcast",
-    { event: "answer" },
-    async ({ payload }) => {
-
-      if (!payload || !payload.answer) {
-        return;
-      }
-
-      if (!callPeerConnection) {
-        return;
-      }
-
-      await callPeerConnection.setRemoteDescription(
-        new RTCSessionDescription(payload.answer)
-      );
-
-    }
-  );
-
-  callChannel.on(
-    "broadcast",
-    { event: "ice-candidate" },
-    async ({ payload }) => {
-
-      if (
-        !payload ||
-        !payload.candidate ||
-        !callPeerConnection
-      ) {
-        return;
-      }
-
-      try {
-
-        await callPeerConnection.addIceCandidate(
-          new RTCIceCandidate(payload.candidate)
-        );
-
-      } catch (error) {
-
-        console.error(
-          "ICE candidate error:",
-          error
-        );
-
-      }
-
-    }
-  );
-  callChannel.on(
-  "broadcast",
-  { event: "hangup" },
-  () => {
-
-    if (localCallStream) {
-
-      localCallStream
-        .getTracks()
-        .forEach(track => track.stop());
-
-      localCallStream = null;
-    }
-
-    if (callPeerConnection) {
-
-      callPeerConnection.close();
-      callPeerConnection = null;
-    }
-
-    if (remoteAudio) {
-
-      remoteAudio.srcObject = null;
-      remoteAudio.remove();
-      remoteAudio = null;
-    }
-
-    isInCall = false;
-
-    alert("The other person ended the call.");
-
-  }
-);
-
-  await callChannel.subscribe();
-
-  }
-  // ==============================
-// END VOICE CALL
-// ==============================
-
-async function endVoiceCall() {
-
-  if (callChannel) {
-
-    await callChannel.send({
-      type: "broadcast",
-      event: "hangup",
-      payload: {
-        userId: currentUser.id
-      }
-    });
-
-  }
-
-  if (localCallStream) {
-
-    localCallStream
-      .getTracks()
-      .forEach(track => track.stop());
-
-    localCallStream = null;
-  }
-
-  if (callPeerConnection) {
-
-    callPeerConnection.close();
-    callPeerConnection = null;
-  }
-
-  if (remoteAudio) {
-
-    remoteAudio.srcObject = null;
-    remoteAudio.remove();
-    remoteAudio = null;
-  }
-
-  isInCall = false;
-
-  alert("Call ended.");
-  }
-let mediaRecorder;
-let audioChunks = [];
-let isRecording = false;
-let recordingStream = null;
-
-const voiceButton = document.getElementById("voiceButton");
-
-voiceButton.addEventListener("click", async () => {
-
-  // STOP RECORDING
-  if (isRecording) {
-    mediaRecorder.stop();
-    return;
-  }
-
-  // Make sure a friend is selected
-  if (!selectedFriend) {
-    alert("Please select a friend before recording a voice note.");
-    return;
-  }
-
-  try {
-
-    const {
-      data: { user },
-      error: userError
-    } = await supabaseClient.auth.getUser();
-
-    if (userError || !user) {
-      alert("Please log in again.");
-      return;
-    }
-
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: true
-    });
-
-    recordingStream = stream;
-    audioChunks = [];
-
-    let mimeType = "";
-
-    if (MediaRecorder.isTypeSupported("audio/webm")) {
-      mimeType = "audio/webm";
-    } else if (MediaRecorder.isTypeSupported("audio/mp4")) {
-      mimeType = "audio/mp4";
-    }
-
-    mediaRecorder = new MediaRecorder(
-      stream,
-      mimeType ? { mimeType } : undefined
-    );
-
-    mediaRecorder.ondataavailable = (event) => {
-      if (event.data.size > 0) {
-        audioChunks.push(event.data);
-      }
-    };
-
-    mediaRecorder.onstart = () => {
-
-      isRecording = true;
-
-      voiceButton.textContent = "⏹️";
-      voiceButton.title = "Stop recording";
-
-    };
-
-    mediaRecorder.onstop = async () => {
-
-      isRecording = false;
-
-      voiceButton.textContent = "🎤";
-      voiceButton.title = "Record voice note";
-
-      if (recordingStream) {
-        recordingStream
-          .getTracks()
-          .forEach(track => track.stop());
-
-        recordingStream = null;
-      }
-
-      const audioBlob = new Blob(audioChunks, {
-        type: mediaRecorder.mimeType
-      });
-
-      if (!audioBlob.size) {
-        alert("No voice recording was captured.");
-        return;
-      }
-
-      // Determine file extension
-      const extension =
-        audioBlob.type.includes("mp4") ? "mp4" : "webm";
-
-      // Create a unique file name
-      const fileName =
-        crypto.randomUUID() + "." + extension;
-
-      const filePath =
-        user.id + "/" + fileName;
-
-      // ===============================
-      // UPLOAD AUDIO
-      // ===============================
+    try {
 
       const {
-        error: uploadError
-      } = await supabaseClient.storage
-        .from("chat-voice-notes")
-        .upload(
-          filePath,
-          audioBlob,
-          {
-            contentType: audioBlob.type,
-            upsert: false
-          }
-        );
+        data: {
+          user
+        },
+        error: userError
+      } = await supabaseClient.auth.getUser();
 
-      if (uploadError) {
 
-        console.error("Voice upload error:", uploadError);
-
-        alert(
-          "The voice note could not be uploaded. " +
-          uploadError.message
-        );
-
-        return;
-      }
-
-      // ===============================
-      // SAVE VOICE NOTE INFORMATION
-      // ===============================
-
-      const {
-        error: databaseError
-      } = await supabaseClient
-        .from("chat_voice_notes")
-        .insert({
-          sender_id: user.id,
-          receiver_id: selectedFriend.id,
-          audio_url: filePath
-        });
-
-      if (databaseError) {
+      if (userError || !user) {
 
         console.error(
-          "Voice note database error:",
-          databaseError
+          "Authentication error:",
+          userError
         );
 
-        alert(
-          "The voice note was uploaded but could not be saved."
-        );
-
+        window.location.href = "login.html";
         return;
       }
 
-      // ===============================
-      // CREATE TEMPORARY SIGNED URL
-      // ===============================
 
-      const {
-        data: signedData,
-        error: signedError
-      } = await supabaseClient.storage
-        .from("chat-voice-notes")
-        .createSignedUrl(
-          filePath,
-          3600
-        );
+      currentUser = user;
 
-      if (signedError) {
 
-        console.error(
-          "Signed URL error:",
-          signedError
-        );
+      await loadFriends();
 
-        alert(
-          "Voice note was saved, but it could not be played yet."
-        );
 
-        return;
-      }
+      setupMessageListener();
 
-      // ===============================
-      // DISPLAY VOICE NOTE
-      // ===============================
+      setupAttachmentListener();
 
-      const messagesBox =
-        document.querySelector(".messages");
 
-      const wrapper =
-        document.createElement("div");
-
-      wrapper.className = "message sent";
-
-      const audioElement =
-        document.createElement("audio");
-
-      audioElement.controls = true;
-      audioElement.src = signedData.signedUrl;
-
-      wrapper.appendChild(audioElement);
-
-      messagesBox.appendChild(wrapper);
-
-      scrollToBottom();
-
-    };
-
-    mediaRecorder.onerror = (event) => {
+    } catch (error) {
 
       console.error(
-        "MediaRecorder error:",
-        event.error
+        "Chat startup error:",
+        error
       );
 
-      isRecording = false;
+      friendList.innerHTML = `
+        <div class="friend">
+          <div class="friend-name">
+            Unable to load chat
+          </div>
 
-      voiceButton.textContent = "🎤";
-      voiceButton.title = "Record voice note";
-
-    };
-
-    mediaRecorder.start();
-
-  } catch (error) {
-
-    console.error(
-      "Microphone/recording error:",
-      error
-    );
-
-    alert(
-      "Microphone access was denied or is not available. " +
-      "Please allow microphone permission for this website."
-    );
-
+          <div class="friend-status">
+            ${escapeHtml(error.message)}
+          </div>
+        </div>
+      `;
     }
+  }
 
-});
-</script>
-  <script>
-if ("Notification" in window) {
-  Notification.requestPermission().then(permission => {
-    console.log("Notification permission:", permission);
-  });
-}
-    // ===============================
-// CHAT FILE / PHOTO ATTACHMENT
-// ===============================
 
-const attachButton = document.getElementById("attachButton");
-const fileInput = document.getElementById("fileInput");
+  /* =====================================================
+     LOAD FRIENDS
+  ===================================================== */
 
-if (attachButton && fileInput) {
+  async function loadFriends() {
 
-  attachButton.addEventListener("click", function () {
-    fileInput.click();
-  });
+    friendList.innerHTML = `
+      <div class="friend">
+        <div class="friend-name">
+          Loading...
+        </div>
 
-  fileInput.addEventListener("change", async function () {
-
-    const file = fileInput.files[0];
-
-    if (!file) {
-      return;
-    }
-
-    if (!currentUser) {
-      alert("Please log in first.");
-      return;
-    }
-
-    if (!selectedFriend) {
-      alert("Please select a friend first.");
-      fileInput.value = "";
-      return;
-    }
-
-    console.log("Selected file:", file.name);
-
-    // Create a unique file path
-    const filePath =
-      currentUser.id +
-      "/" +
-      Date.now() +
-      "_" +
-      file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-
-    // Show preview
-    let preview = document.getElementById("filePreview");
-
-    if (!preview) {
-      preview = document.createElement("div");
-      preview.id = "filePreview";
-      preview.className = "file-preview";
-
-      const messageForm = document.querySelector(".message-form");
-
-      if (messageForm) {
-        messageForm.parentNode.insertBefore(preview, messageForm);
-      }
-    }
-
-    preview.innerHTML = `
-      📤 Uploading <strong>${escapeHtml(file.name)}</strong>...
+        <div class="friend-status">
+          Please wait
+        </div>
+      </div>
     `;
 
-    // Upload file to Supabase Storage
-    const { data: uploadData, error: uploadError } =
-      await supabaseClient.storage
-        .from("chat-files")
-        .upload(filePath, file, {
-          cacheControl: "3600",
-          upsert: false,
-          contentType: file.type || "application/octet-stream"
+
+    const {
+      data,
+      error
+    } = await supabaseClient
+      .from("profiles")
+      .select("id, username, full_name")
+      .neq("id", currentUser.id)
+      .order("username");
+
+
+    if (error) {
+
+      console.error(
+        "Friends error:",
+        error
+      );
+
+      friendList.innerHTML = `
+        <div class="friend">
+          <div class="friend-name">
+            Unable to load users
+          </div>
+
+          <div class="friend-status">
+            ${escapeHtml(error.message)}
+          </div>
+        </div>
+      `;
+
+      return;
+    }
+
+
+    allFriends = data || [];
+
+
+    renderFriends(allFriends);
+  }
+
+
+  /* =====================================================
+     RENDER FRIENDS
+  ===================================================== */
+
+  function renderFriends(friends) {
+
+    friendList.innerHTML = "";
+
+
+    if (!friends.length) {
+
+      friendList.innerHTML = `
+        <div class="friend">
+          <div class="friend-name">
+            No other users yet
+          </div>
+
+          <div class="friend-status">
+            Invite someone to join
+          </div>
+        </div>
+      `;
+
+      return;
+    }
+
+
+    friends.forEach(profile => {
+
+      const friend =
+        document.createElement("div");
+
+      friend.className = "friend";
+
+
+      if (
+        selectedFriend &&
+        selectedFriend.id === profile.id
+      ) {
+        friend.classList.add("active");
+      }
+
+
+      const name =
+        profile.full_name ||
+        profile.username ||
+        "User";
+
+
+      const username =
+        profile.username ||
+        "user";
+
+
+      friend.innerHTML = `
+        <div class="friend-name">
+          ${escapeHtml(name)}
+        </div>
+
+        <div class="friend-status">
+          @${escapeHtml(username)}
+        </div>
+      `;
+
+
+      friend.addEventListener(
+        "click",
+        () => {
+
+          document
+            .querySelectorAll(".friend")
+            .forEach(item => {
+              item.classList.remove("active");
+            });
+
+          friend.classList.add("active");
+
+          openChat(profile);
+        }
+      );
+
+
+      friendList.appendChild(friend);
+
+    });
+  }
+
+
+  /* =====================================================
+     SEARCH FRIENDS
+  ===================================================== */
+
+  friendSearch.addEventListener(
+    "input",
+    () => {
+
+      const search =
+        friendSearch.value
+          .trim()
+          .toLowerCase();
+
+
+      if (!search) {
+
+        renderFriends(allFriends);
+        return;
+      }
+
+
+      const filtered =
+        allFriends.filter(profile => {
+
+          const name =
+            (
+              profile.full_name ||
+              ""
+            ).toLowerCase();
+
+          const username =
+            (
+              profile.username ||
+              ""
+            ).toLowerCase();
+
+
+          return (
+            name.includes(search) ||
+            username.includes(search)
+          );
         });
 
-    if (uploadError) {
-      console.error("Upload error:", uploadError);
 
-      preview.innerHTML = `
-        ❌ Upload failed: ${escapeHtml(uploadError.message)}
-      `;
+      renderFriends(filtered);
+    }
+  );
 
-      fileInput.value = "";
+
+  /* =====================================================
+     OPEN CHAT
+  ===================================================== */
+
+  async function openChat(friend) {
+
+    selectedFriend = friend;
+
+
+    const chatHeader =
+      document.querySelector(".chat-header");
+
+
+    chatHeader.innerHTML = `
+      <div>
+        <h2>
+          💬 ${escapeHtml(
+            friend.full_name ||
+            friend.username ||
+            "User"
+          )}
+        </h2>
+
+        <p>
+          @${escapeHtml(
+            friend.username ||
+            "user"
+          )}
+        </p>
+      </div>
+    `;
+
+
+    messagesContainer.innerHTML = `
+      <div class="welcome">
+
+        <div class="welcome-icon">
+          ⏳
+        </div>
+
+        <h2>
+          Loading messages...
+        </h2>
+
+      </div>
+    `;
+
+
+    await loadConversation();
+  }
+
+
+  /* =====================================================
+     LOAD CONVERSATION
+     MESSAGES + ATTACHMENTS
+     ===================================================== */
+
+  async function loadConversation() {
+
+    if (
+      !currentUser ||
+      !selectedFriend
+    ) {
       return;
     }
 
-    console.log("Upload successful:", uploadData);
 
-    // Save attachment information in database
-    const { error: dbError } = await supabaseClient
-      .from("chat_attachments")
-      .insert({
-        sender_id: currentUser.id,
-        receiver_id: selectedFriend.id,
-        file_name: file.name,
-        file_path: filePath,
-        file_type: file.type || "application/octet-stream",
-        file_size: file.size
-      });
+    const [
+      messagesResult,
+      attachmentsResult
+    ] = await Promise.all([
 
-    if (dbError) {
-      console.error("Database error:", dbError);
-
-      preview.innerHTML = `
-        ❌ File uploaded, but attachment information could not be saved.
-      `;
-
-      fileInput.value = "";
-      return;
-    }
-
-    // Successful
-    if (file.type.startsWith("image/")) {
-
-      const imageURL = URL.createObjectURL(file);
-
-      preview.innerHTML = `
-        <img src="${imageURL}" alt="Selected image">
-        <div>✅ ${escapeHtml(file.name)}</div>
-      `;
-
-    } else {
-
-      preview.innerHTML = `
-        📎 <strong>${escapeHtml(file.name)}</strong>
-        <div>✅ File sent successfully</div>
-      `;
-    }
-
-    fileInput.value = "";
-
-    console.log("Attachment saved successfully.");
-  });
-}
-    window.showDeleteOptions = showDeleteOptions;
-window.deleteForMe = deleteForMe;
-window.deleteForEveryone = deleteForEveryone;
-    startChat();
-  </script>
-
-</body>
-</html>
+      supabaseClient
+  
