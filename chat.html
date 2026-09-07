@@ -908,6 +908,101 @@ async function displayMessage(message) {
 
   messagesContainer.appendChild(div);
 }
+  async function loadChatAttachments() {
+
+  if (!currentUser || !selectedFriend) return;
+
+  const messagesContainer = document.querySelector(".messages");
+
+  const { data, error } = await supabaseClient
+    .from("chat_attachments")
+    .select(`
+      id,
+      sender_id,
+      receiver_id,
+      file_name,
+      file_path,
+      file_type,
+      file_size,
+      created_at
+    `)
+    .or(
+      `and(sender_id.eq.${currentUser.id},receiver_id.eq.${selectedFriend.id}),and(sender_id.eq.${selectedFriend.id},receiver_id.eq.${currentUser.id})`
+    )
+    .order("created_at", { ascending: true });
+
+  if (error) {
+    console.error("Attachments error:", error);
+    return;
+  }
+
+  if (!data) return;
+
+  for (const file of data) {
+
+    const isSent = file.sender_id === currentUser.id;
+
+    const { data: signedData, error: signedError } =
+      await supabaseClient.storage
+        .from("chat-files")
+        .createSignedUrl(file.file_path, 3600);
+
+    if (signedError) {
+      console.error("File URL error:", signedError);
+      continue;
+    }
+
+    const div = document.createElement("div");
+
+    div.className = `message ${isSent ? "sent" : "received"}`;
+
+    let content = "";
+
+    if (file.file_type && file.file_type.startsWith("image/")) {
+
+      content = `
+        <img
+          src="${signedData.signedUrl}"
+          alt="${escapeHtml(file.file_name)}"
+          class="chat-photo"
+          onclick="window.open('${signedData.signedUrl}', '_blank')"
+        >
+      `;
+
+    } else {
+
+      content = `
+        <a
+          href="${signedData.signedUrl}"
+          target="_blank"
+          class="file-link"
+          download
+        >
+          📎 ${escapeHtml(file.file_name)}
+        </a>
+      `;
+    }
+
+    const time = new Date(file.created_at).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+
+    div.innerHTML = `
+      <div class="message-content">
+        ${content}
+      </div>
+
+      <div class="message-footer">
+        <span class="message-time">${time}</span>
+      </div>
+    `;
+
+    messagesContainer.appendChild(div);
+  }
+
+  scrollToBottom();
+  }
   // ===============================
   // DISPLAY PHOTO
   // ===============================
