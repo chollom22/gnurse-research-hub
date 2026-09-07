@@ -678,7 +678,8 @@ async function startChat() {
   await setupVoiceCallListener();
 
   await loadMessages();
-  await loadVoiceNotes();
+await loadChatAttachments();
+await loadVoiceNotes();
   }
   // ==============================
 // VOICE CALL BUTTON
