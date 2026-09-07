@@ -35,6 +35,16 @@
   border-radius: 10px;
   background: rgba(255,255,255,0.15);
 }
+    .chat-photo {
+  max-width: 250px;
+  max-height: 300px;
+  width: auto;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  cursor: pointer;
+  object-fit: cover;
+    }
 
 .file-preview img {
   max-width: 220px;
@@ -771,7 +781,7 @@ async function loadMessages() {
 
   const { data, error } = await supabaseClient
     .from("chat_messages")
-    .select("id, sender_id, receiver_id, message, created_at, deleted_for_sender, deleted_for_receiver, deleted_for_everyone")
+    .select("id, sender_id, receiver_id, message, created_at, deleted_for_sender, deleted_for_receiver, deleted_for_everyone, chat_attachments(*)")
     .or(
       `and(sender_id.eq.${currentUser.id},receiver_id.eq.${selectedFriend.id}),and(sender_id.eq.${selectedFriend.id},receiver_id.eq.${currentUser.id})`
     )
@@ -857,9 +867,66 @@ function displayMessage(message) {
   }
 
   // Normal text message
+    let messageContent = "";
+
+  // ===============================
+  // DISPLAY PHOTO
+  // ===============================
+  if (
+    message.file_type &&
+    message.file_type.startsWith("image/")
+  ) {
+
+    const { data: imageData } = supabaseClient.storage
+      .from("chat-files")
+      .getPublicUrl(message.file_path);
+
+    messageContent = `
+      <img
+        src="${imageData.publicUrl}"
+        alt="${escapeHtml(message.file_name || "Photo")}"
+        class="chat-photo"
+        onclick="window.open('${imageData.publicUrl}', '_blank')"
+      >
+    `;
+
+  }
+
+  // ===============================
+  // DISPLAY OTHER FILE
+  // ===============================
+  else if (message.file_path) {
+
+    const { data: fileData } = supabaseClient.storage
+      .from("chat-files")
+      .createSignedUrl(message.file_path, 3600);
+
+    messageContent = `
+      <a
+        href="${fileData?.signedUrl || '#'}"
+        target="_blank"
+        class="file-link"
+        download
+      >
+        📎 ${escapeHtml(message.file_name || "Download file")}
+      </a>
+    `;
+
+  }
+
+  // ===============================
+  // NORMAL TEXT MESSAGE
+  // ===============================
+  else {
+
+    messageContent = `
+      ${escapeHtml(message.message || "")}
+    `;
+  }
+
   div.innerHTML = `
     <div class="message-content">
-      ${escapeHtml(message.message || "")}
+      ${messageContent}
     </div>
 
     <div class="message-footer">
@@ -890,8 +957,6 @@ function displayMessage(message) {
 
     </div>
   `;
-
-  messagesContainer.appendChild(div);
 }
 
   function showDeleteOptions(messageId, button) {
