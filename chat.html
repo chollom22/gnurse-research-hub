@@ -1777,6 +1777,12 @@ let audioChunks = [];
 
 if (voiceButton) {
   voiceButton.addEventListener("click", async () => {
+   if (mediaRecorder && mediaRecorder.state === "recording") {
+  mediaRecorder.stop();
+  voiceButton.textContent = "🎤";
+  voiceButton.title = "Record voice note";
+  return;
+   }
     if (!selectedFriend) {
       alert("Please select a friend first.");
       return;
