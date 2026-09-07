@@ -781,9 +781,8 @@ async function loadMessages() {
 
   const { data, error } = await supabaseClient
     .from("chat_messages")
-    .select("id, sender_id, receiver_id, message, created_at, deleted_for_sender, deleted_for_receiver, deleted_for_everyone, chat_attachments(*)")
-    .or(
-      `and(sender_id.eq.${currentUser.id},receiver_id.eq.${selectedFriend.id}),and(sender_id.eq.${selectedFriend.id},receiver_id.eq.${currentUser.id})`
+    .select("id, sender_id, receiver_id, message, created_at, deleted_for_sender, deleted_for_receiver, deleted_for_everyone")    
+    .or(`and(sender_id.eq.${currentUser.id},receiver_id.eq.${selectedFriend.id}),and(sender_id.eq.${selectedFriend.id},receiver_id.eq.${currentUser.id})`
     )
     .order("created_at", { ascending: true });
 
