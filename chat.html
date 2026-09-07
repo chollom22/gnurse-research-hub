@@ -893,6 +893,94 @@ function displayMessage(message) {
 
   messagesContainer.appendChild(div);
 }
+  function showDeleteOptions(messageId, button) {
+
+  const choice = confirm(
+    "Delete this message?\n\n" +
+    "OK = Delete for everyone\n" +
+    "Cancel = Delete for me"
+  );
+
+  if (choice) {
+    deleteForEveryone(messageId, button);
+  } else {
+    deleteForMe(messageId, button);
+  }
+}
+
+
+async function deleteForMe(messageId, button) {
+
+  const { data: message, error: fetchError } = await supabaseClient
+    .from("chat_messages")
+    .select("sender_id, receiver_id")
+    .eq("id", messageId)
+    .single();
+
+  if (fetchError || !message) {
+    alert("Unable to find this message.");
+    return;
+  }
+
+  const column =
+    message.sender_id === currentUser.id
+      ? "deleted_for_sender"
+      : "deleted_for_receiver";
+
+  const { error } = await supabaseClient
+    .from("chat_messages")
+    .update({ [column]: true })
+    .eq("id", messageId);
+
+  if (error) {
+    console.error("Delete for me error:", error);
+    alert("Unable to delete message.");
+    return;
+  }
+
+  const messageElement = button.closest(".message");
+
+  if (messageElement) {
+    messageElement.remove();
+  }
+}
+
+
+async function deleteForEveryone(messageId, button) {
+
+  if (!confirm("Delete this message for everyone?")) {
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("chat_messages")
+    .update({
+      deleted_for_everyone: true
+    })
+    .eq("id", messageId)
+    .eq("sender_id", currentUser.id);
+
+  if (error) {
+    console.error("Delete for everyone error:", error);
+    alert("Unable to delete message for everyone.");
+    return;
+  }
+
+  // Change the message immediately on your screen
+  const messageElement = button.closest(".message");
+
+  if (messageElement) {
+
+    const content = messageElement.querySelector(".message-content");
+
+    if (content) {
+      content.innerHTML = "🚫 This message was deleted";
+      content.classList.add("deleted-message");
+    }
+
+    button.remove();
+  }
+  }
 
 /* ==============================
    SEND MESSAGE
