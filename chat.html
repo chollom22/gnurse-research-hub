@@ -863,58 +863,62 @@
   ===================================================== */
 
   async function loadFriends() {
-
-    friendList.innerHTML = `
-      <div class="friend">
-        <div class="friend-name">
-          Loading...
-        </div>
-
-        <div class="friend-status">
-          Please wait
-        </div>
-      </div>
-    `;
-
-
-    const {
-      data,
-      error
-    } = await supabaseClient
-      .from("profiles")
-      .select("id, username, full_name")
-      .neq("id", currentUser.id)
-      .order("username");
-
-
-    if (error) {
-
-      console.error(
-        "Friends error:",
-        error
+  try {
+    // Get accepted friend requests involving the current user
+    const { data: requests, error: requestError } = await supabaseClient
+      .from("friend_requests")
+      .select("sender_id, receiver_id")
+      .eq("status", "accepted")
+      .or(
+        `sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`
       );
 
-      friendList.innerHTML = `
-        <div class="friend">
-          <div class="friend-name">
-            Unable to load users
-          </div>
-
-          <div class="friend-status">
-            ${escapeHtml(error.message)}
-          </div>
-        </div>
-      `;
-
+    if (requestError) {
+      console.error("Friend request error:", requestError);
+      allFriends = [];
+      renderFriends([]);
       return;
     }
 
+    // Get the other person's ID from each accepted request
+    const friendIds = (requests || []).map(request =>
+      request.sender_id === currentUser.id
+        ? request.receiver_id
+        : request.sender_id
+    );
+
+    // Remove duplicates
+    const uniqueFriendIds = [...new Set(friendIds)];
+
+    if (uniqueFriendIds.length === 0) {
+      allFriends = [];
+      renderFriends([]);
+      return;
+    }
+
+    // Load only accepted friends' profiles
+    const { data, error } = await supabaseClient
+      .from("profiles")
+      .select("id, username, full_name")
+      .in("id", uniqueFriendIds)
+      .order("username");
+
+    if (error) {
+      console.error("Profile loading error:", error);
+      allFriends = [];
+      renderFriends([]);
+      return;
+    }
 
     allFriends = data || [];
-
-
     renderFriends(allFriends);
+
+  } catch (error) {
+    console.error("loadFriends error:", error);
+    allFriends = [];
+    renderFriends([]);
   }
+    }
 
 
   /* =====================================================
