@@ -1409,12 +1409,6 @@ async function displayAttachment(file) {
 // SEND TEXT MESSAGE
 // ==============================
 
-const messageForm =
-  document.querySelector(".message-form");
-
-const messageInput =
-  document.getElementById("messageInput");
-
 if (messageForm && messageInput) {
 
   messageForm.addEventListener(
@@ -1496,11 +1490,6 @@ if (messageInput) {
 // ATTACHMENT BUTTON
 // ==============================
 
-const attachButton =
-  document.getElementById("attachButton");
-
-const fileInput =
-  document.getElementById("fileInput");
 
 if (attachButton && fileInput) {
 
@@ -1760,31 +1749,18 @@ async function uploadAttachment() {
   hideUploadStatus();
 
 }
-
-
-// ==============================
-// SEND FILE WHEN FILE IS SELECTED
-// ==============================
-
+  // SEND FILE WHEN FILE IS SELECTED
 if (fileInput) {
+  fileInput.addEventListener("change", async function() {
+    const file = fileInput.files[0];
 
-  fileInput.addEventListener(
-    "change",
-    async function() {
+    if (!file) return;
 
-      const file =
-        fileInput.files[0];
+    createFilePreview(file);
 
-      if (!file) return;
-
-      createFilePreview(file);
-
-      await uploadAttachment();
-
-    }
-  );
+    await uploadAttachment();
+  });
 }
-
 
 // ==============================
 // DELETE OPTIONS
