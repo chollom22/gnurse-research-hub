@@ -707,6 +707,52 @@
   let currentUser = null;
   let selectedFriend = null;
   let allFriends = [];
+  async function sendFriendRequest(receiverId) {
+  if (!currentUser) {
+    alert("Please log in first.");
+    return;
+  }
+
+  if (receiverId === currentUser.id) {
+    alert("You cannot send a friend request to yourself.");
+    return;
+  }
+
+  const { data: existing, error: checkError } = await supabaseClient
+    .from("friend_requests")
+    .select("id, status")
+    .or(
+      `and(sender_id.eq.${currentUser.id},receiver_id.eq.${receiverId}),and(sender_id.eq.${receiverId},receiver_id.eq.${currentUser.id})`
+    )
+    .limit(1);
+
+  if (checkError) {
+    console.error(checkError);
+    alert("Unable to check friend request.");
+    return;
+  }
+
+  if (existing && existing.length > 0) {
+    alert("A friend request already exists.");
+    return;
+  }
+
+  const { error } = await supabaseClient
+    .from("friend_requests")
+    .insert({
+      sender_id: currentUser.id,
+      receiver_id: receiverId,
+      status: "pending"
+    });
+
+  if (error) {
+    console.error(error);
+    alert("Friend request failed.");
+    return;
+  }
+
+  alert("Friend request sent!");
+  }
 
   let messageChannel = null;
   let attachmentChannel = null;
