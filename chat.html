@@ -816,7 +816,6 @@ async function loadMessages() {
 /* ==============================
    DISPLAY MASSAGE 
 ============================== */
-
 function displayMessage(message) {
 
   const messagesContainer = document.querySelector(".messages");
@@ -857,9 +856,10 @@ function displayMessage(message) {
     return;
   }
 
+  // Normal text message
   div.innerHTML = `
     <div class="message-content">
-      ${escapeHtml(message.message)}
+      ${escapeHtml(message.message || "")}
     </div>
 
     <div class="message-footer">
@@ -893,6 +893,7 @@ function displayMessage(message) {
 
   messagesContainer.appendChild(div);
 }
+
   function showDeleteOptions(messageId, button) {
 
   const choice = confirm(
