@@ -723,27 +723,39 @@ body{
 
         <div id="chats" class="page active">
 
-    <div class="user-info">
-        <div class="user-name" id="myProfileName">
-            My Profile
+    <div class="user-item" onclick="openMyProfile()">
+
+        <div class="avatar" id="myProfileAvatar">
+            G
         </div>
 
-        <div class="user-status" id="myProfileStatus">
-            Online
-        </div>
-    </div>
+        <div class="user-info">
 
-    <div style="font-size:22px;">
-        📷
-    </div>
-
+            <div class="user-name" id="myProfileName">
+                My Profile
             </div>
-            <input
-    type="file"
-    id="profilePhotoInput"
-    accept="image/*"
-    hidden
-    onchange="changeProfilePhoto(event)"
+
+            <div class="user-status" id="myProfileStatus">
+                Online
+            </div>
+
+        </div>
+
+        <div style="font-size:22px;">
+            📷
+        </div>
+
+    </div>
+
+    <input
+        type="file"
+        id="profilePhotoInput"
+        accept="image/*"
+        hidden
+        onchange="changeProfilePhoto(event)"
+    >
+
+    <div class="search-box">
 >
 
             <div class="search-box">
@@ -2346,19 +2358,9 @@ async function loadMyProfile() {
         await supabaseClient.auth.getUser();
 
     if (error || !data.user) {
-        console.error("Unable to get logged-in user:", error);
-        return;
-    }
 
-    let currentUser = null;
-
-async function loadMyProfile() {
-
-    const { data, error } =
-        await supabaseClient.auth.getUser();
-
-    if (error || !data.user) {
         console.log("No user logged in");
+
         return;
     }
 
@@ -2370,13 +2372,28 @@ async function loadMyProfile() {
         currentUser.email?.split("@")[0] ||
         "G Nurse User";
 
-    document.getElementById("myProfileName").textContent = name;
+    const nameElement =
+        document.getElementById("myProfileName");
 
-    document.getElementById("myProfileEmail").textContent =
-        currentUser.email || "";
+    const statusElement =
+        document.getElementById("myProfileStatus");
 
-    document.getElementById("myProfileAvatar").textContent =
-        name.charAt(0).toUpperCase();
+    const avatarElement =
+        document.getElementById("myProfileAvatar");
+
+    if (nameElement) {
+        nameElement.textContent = name;
+    }
+
+    if (statusElement) {
+        statusElement.textContent =
+            currentUser.email || "Online";
+    }
+
+    if (avatarElement) {
+        avatarElement.textContent =
+            name.charAt(0).toUpperCase();
+    }
 
     await loadFriendRequests();
     await loadFriends();
@@ -2387,4 +2404,4 @@ loadMyProfile();
 </script>
 
 </body>
-</html>
+    </html>
