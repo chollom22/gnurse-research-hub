@@ -1392,23 +1392,32 @@ function openPage(pageId, button){
 /* =========================================
    OPEN CHAT
 ========================================= */
+function openChat(userId, name) {
 
-function openChat(name){
-
+    currentChatUserId = userId;
     currentChatUser = name;
 
-    document.getElementById("chatUserName")
-        .textContent = name;
+    const nameElement =
+        document.getElementById("chatUserName");
 
-    document.getElementById("chatRoom")
-        .classList.add("active");
+    if (nameElement) {
+        nameElement.textContent = name;
+    }
+
+    const chatRoom =
+        document.getElementById("chatRoom");
+
+    if (chatRoom) {
+        chatRoom.classList.add("active");
+    }
 
     const messages =
         document.getElementById("messages");
 
-    messages.scrollTop = messages.scrollHeight;
-}
-
+    if (messages) {
+        messages.scrollTop = messages.scrollHeight;
+    }
+    }
 
 /* =========================================
    CLOSE CHAT
