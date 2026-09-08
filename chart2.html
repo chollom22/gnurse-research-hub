@@ -2290,6 +2290,23 @@ const supabaseClient =
     );
 
 let currentUser = null;
+    supabaseClient.auth.getUser().then(({ data, error }) => {
+
+    if (error) {
+        console.error("Auth error:", error);
+        return;
+    }
+
+    currentUser = data.user;
+
+    console.log("Logged in user:", currentUser);
+
+    if (currentUser) {
+        loadFriendRequests();
+        loadFriends();
+    }
+
+});
 
 </script>
 
