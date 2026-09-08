@@ -2350,6 +2350,18 @@ async function loadMyProfile() {
         return;
     }
 
+    let currentUser = null;
+
+async function loadMyProfile() {
+
+    const { data, error } =
+        await supabaseClient.auth.getUser();
+
+    if (error || !data.user) {
+        console.log("No user logged in");
+        return;
+    }
+
     currentUser = data.user;
 
     const name =
@@ -2362,6 +2374,9 @@ async function loadMyProfile() {
 
     document.getElementById("myProfileEmail").textContent =
         currentUser.email || "";
+
+    document.getElementById("myProfileAvatar").textContent =
+        name.charAt(0).toUpperCase();
 
     await loadFriendRequests();
     await loadFriends();
