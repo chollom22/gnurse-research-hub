@@ -2233,9 +2233,7 @@ function escapeJS(value){
         .replace(/'/g,"\\'");
 
 }
-
-
-/* =========================================
+    /* =========================================
    CLOSE MENUS WHEN CLICKING OUTSIDE
 ========================================= */
 
@@ -2249,33 +2247,33 @@ document.addEventListener(
         const emoji =
             document.getElementById("emojiPanel");
 
-
         if(
+            attach &&
             !event.target.closest(".attach-menu") &&
             !event.target.closest(
                 '[onclick="toggleAttach()"]'
             )
         ){
-
             attach.classList.remove("active");
-
         }
 
-
         if(
+            emoji &&
             !event.target.closest(".emoji-panel") &&
             !event.target.closest(
                 '[onclick="toggleEmoji()"]'
             )
         ){
-
             emoji.classList.remove("active");
-
         }
 
     }
 );
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
@@ -2294,9 +2292,6 @@ const supabaseClient =
 let currentUser = null;
 
 </script>
-
-</body>
-</html>
 
 </body>
 </html>
