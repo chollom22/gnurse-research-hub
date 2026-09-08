@@ -2266,6 +2266,19 @@ document.addEventListener(
 
     }
 );
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    const SUPABASE_URL = "https://bmiechymiyedubezhcqk.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_9JL2ALhTGlZV57hUV0mTdQ_c2hdT8O8";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
+
+let currentUser = null;
 
 </script>
 
