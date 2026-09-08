@@ -1,1 +1,2772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>G Nurse Chat</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: #e9edef;
+
+    color: #111b21;
+
+    overflow: hidden;
+}
+
+/* ================================
+   MAIN CHAT APPLICATION
+================================ */
+
+.chat-app {
+    width: 100%;
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #ffffff;
+}
+
+/* ================================
+   TOP HEADER
+================================ */
+
+.top-header {
+    height: 64px;
+
+    background: #075e54;
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 0 14px;
+
+    flex-shrink: 0;
+
+    position: relative;
+
+    z-index: 20;
+}
+
+.header-left {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    min-width: 0;
+}
+
+.header-profile {
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+
+    background: #25d366;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    overflow: hidden;
+
+    flex-shrink: 0;
+}
+
+.header-profile img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+.header-user {
+    min-width: 0;
+}
+
+.header-name {
+    font-size: 17px;
+
+    font-weight: 600;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.header-status {
+    font-size: 12px;
+
+    opacity: 0.85;
+
+    margin-top: 2px;
+}
+
+.header-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 4px;
+}
+
+.header-btn {
+    width: 40px;
+    height: 40px;
+
+    border: none;
+
+    background: transparent;
+
+    color: white;
+
+    border-radius: 50%;
+
+    font-size: 21px;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+.header-btn:hover {
+    background: rgba(255,255,255,0.12);
+}
+
+/* ================================
+   MAIN CONTENT
+================================ */
+
+.main-content {
+    flex: 1;
+
+    min-height: 0;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+/* ================================
+   PAGES
+================================ */
+
+.page {
+    width: 100%;
+    height: 100%;
+
+    display: none;
+
+    flex-direction: column;
+
+    background: #f7f9fa;
+
+    overflow: hidden;
+}
+
+.page.active {
+    display: flex;
+}
+
+/* ================================
+   SEARCH AREA
+================================ */
+
+.search-container {
+    padding: 10px 12px;
+
+    background: #ffffff;
+
+    border-bottom: 1px solid #e5e7e9;
+
+    flex-shrink: 0;
+}
+
+.search-box {
+    height: 42px;
+
+    background: #f0f2f5;
+
+    border-radius: 22px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 0 14px;
+
+    gap: 10px;
+}
+
+.search-icon {
+    font-size: 18px;
+
+    color: #667781;
+}
+
+.search-input {
+    flex: 1;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    font-size: 14px;
+
+    color: #111b21;
+}
+
+.search-input::placeholder {
+    color: #667781;
+}
+
+/* ================================
+   FRIEND / USER LIST
+================================ */
+
+.user-list {
+    flex: 1;
+
+    overflow-y: auto;
+
+    background: #ffffff;
+}
+
+.user-item {
+    min-height: 72px;
+
+    display: flex;
+
+    align-items: center;
+
+    padding: 10px 14px;
+
+    gap: 12px;
+
+    background: #ffffff;
+
+    border-bottom: 1px solid #edf0f2;
+
+    cursor: pointer;
+
+    transition: background 0.15s ease;
+}
+
+.user-item:hover {
+    background: #f5f6f6;
+}
+
+.user-item:active {
+    background: #e9edef;
+}
+
+/* ================================
+   AVATAR
+================================ */
+
+.avatar {
+    width: 52px;
+    height: 52px;
+
+    border-radius: 50%;
+
+    background: #128c7e;
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 20px;
+
+    font-weight: 600;
+
+    overflow: hidden;
+
+    flex-shrink: 0;
+
+    position: relative;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+/* ================================
+   USER INFORMATION
+================================ */
+
+.user-info {
+    flex: 1;
+
+    min-width: 0;
+}
+
+.user-name {
+    font-size: 16px;
+
+    font-weight: 500;
+
+    color: #111b21;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.user-status {
+    font-size: 13px;
+
+    color: #667781;
+
+    margin-top: 4px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+/* ================================
+   ONLINE INDICATOR
+================================ */
+
+.online-dot {
+    width: 10px;
+    height: 10px;
+
+    background: #25d366;
+
+    border: 2px solid white;
+
+    border-radius: 50%;
+
+    position: absolute;
+
+    right: 1px;
+
+    bottom: 3px;
+}
+
+/* ================================
+   EMPTY STATE
+================================ */
+
+.empty-state {
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 30px;
+
+    color: #667781;
+}
+
+.empty-icon {
+    font-size: 52px;
+
+    margin-bottom: 15px;
+
+    opacity: 0.7;
+}
+
+.empty-title {
+    font-size: 18px;
+
+    font-weight: 600;
+
+    color: #3b4a54;
+
+    margin-bottom: 7px;
+}
+
+.empty-text {
+    font-size: 14px;
+
+    line-height: 1.5;
+
+    max-width: 300px;
+}
+
+/* ================================
+   BOTTOM NAVIGATION
+================================ */
+
+.bottom-nav {
+    height: 62px;
+
+    background: #ffffff;
+
+    border-top: 1px solid #e1e5e8;
+
+    display: flex;
+
+    align-items: stretch;
+
+    justify-content: space-around;
+
+    flex-shrink: 0;
+
+    z-index: 20;
+}
+
+.nav-btn {
+    flex: 1;
+
+    max-width: 110px;
+
+    border: none;
+
+    background: transparent;
+
+    color: #667781;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 3px;
+
+    cursor: pointer;
+
+    position: relative;
+}
+
+.nav-btn-icon {
+    font-size: 21px;
+
+    line-height: 1;
+}
+
+.nav-btn-text {
+    font-size: 11px;
+}
+
+.nav-btn.active {
+    color: #075e54;
+
+    font-weight: 600;
+}
+
+.nav-badge {
+    position: absolute;
+
+    top: 5px;
+
+    margin-left: 28px;
+
+    min-width: 18px;
+
+    height: 18px;
+
+    padding: 0 5px;
+
+    border-radius: 10px;
+
+    background: #25d366;
+
+    color: white;
+
+    font-size: 10px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-weight: bold;
+}
+
+/* ================================
+   SCROLLBAR
+================================ */
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c5c9cc;
+
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #aeb4b8;
+}
+
+/* ================================
+   RESPONSIVE DESIGN
+================================ */
+
+@media (min-width: 700px) {
+
+    .chat-app {
+        max-width: 520px;
+
+        margin: 0 auto;
+
+        box-shadow:
+            0 0 20px rgba(0,0,0,0.12);
+    }
+
+}
+
+@media (max-width: 420px) {
+
+    .top-header {
+        padding: 0 10px;
+    }
+
+    .header-name {
+        font-size: 16px;
+    }
+
+    .header-profile {
+        width: 40px;
+        height: 40px;
+    }
+
+    .user-item {
+        padding-left: 11px;
+        padding-right: 11px;
+    }
+
+    .avatar {
+        width: 50px;
+        height: 50px;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="chat-app">
+
+    <!-- TOP HEADER -->
+
+    <header class="top-header">
+
+        <div class="header-left">
+
+            <div
+                class="header-profile"
+                id="headerProfile"
+            >
+                G
+            </div>
+
+            <div class="header-user">
+
+                <div
+                    class="header-name"
+                    id="headerName"
+                >
+                    G Nurse Chat
+                </div>
+
+                <div
+                    class="header-status"
+                    id="headerStatus"
+                >
+                    Connecting...
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="header-actions">
+
+            <button
+                class="header-btn"
+                type="button"
+                onclick="startGlobalSearch()"
+                aria-label="Search"
+            >
+                🔍
+            </button>
+
+            <button
+                class="header-btn"
+                type="button"
+                onclick="openHeaderMenu()"
+                aria-label="Menu"
+            >
+                ⋮
+            </button>
+
+        </div>
+
+    </header>
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <!-- CHATS PAGE -->
+
+        <section
+            id="chats"
+            class="page active"
+        >
+
+            <div class="search-container">
+
+                <div class="search-box">
+
+                    <span class="search-icon">
+                        🔍
+                    </span>
+
+                    <input
+                        type="text"
+                        id="chatSearchInput"
+                        class="search-input"
+                        placeholder="Search chats"
+                        autocomplete="off"
+                    >
+
+                </div>
+
+            </div>
+
+            <div
+                id="chatUserList"
+                class="user-list"
+            >
+
+                <!-- Friends will appear here -->
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        💬
+                    </div>
+
+                    <div class="empty-title">
+                        No chats yet
+                    </div>
+
+                    <div class="empty-text">
+                        Add friends and start chatting with people on G Nurse Research Hub.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- FRIENDS PAGE -->
+
+        <section
+            id="friends"
+            class="page"
+        >
+
+            <div class="search-container">
+
+                <div class="search-box">
+
+                    <span class="search-icon">
+                        🔍
+                    </span>
+
+                    <input
+                        type="text"
+                        id="friendSearchInput"
+                        class="search-input"
+                        placeholder="Search people"
+                        autocomplete="off"
+                    >
+
+                </div>
+
+            </div>
+
+            <div
+                id="friendsList"
+                class="user-list"
+            >
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        👥
+                    </div>
+
+                    <div class="empty-title">
+                        Your friends
+                    </div>
+
+                    <div class="empty-text">
+                        Your accepted friends will appear here.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- REQUESTS PAGE -->
+
+        <section
+            id="requests"
+            class="page"
+        >
+
+            <div class="search-container">
+
+                <div
+                    style="
+                        font-size:18px;
+                        font-weight:600;
+                        color:#075e54;
+                        padding:4px 2px;
+                    "
+                >
+                    Friend Requests
+                </div>
+
+            </div>
+
+            <div
+                id="friendRequestsList"
+                class="user-list"
+            >
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        🤝
+                    </div>
+
+                    <div class="empty-title">
+                        No friend requests
+                    </div>
+
+                    <div class="empty-text">
+                        New friend requests will appear here.
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- BOTTOM NAVIGATION -->
+
+    <nav class="bottom-nav">
+
+        <button
+            class="nav-btn active"
+            type="button"
+            onclick="showPage('chats', this)"
+        >
+
+            <span class="nav-btn-icon">
+                💬
+            </span>
+
+            <span class="nav-btn-text">
+                Chats
+            </span>
+
+        </button>
+
+        <button
+            class="nav-btn"
+            type="button"
+            onclick="showPage('friends', this)"
+        >
+
+            <span class="nav-btn-icon">
+                👥
+            </span>
+
+            <span class="nav-btn-text">
+                Friends
+            </span>
+
+        </button>
+
+        <button
+            class="nav-btn"
+            type="button"
+            onclick="showPage('requests', this)"
+        >
+
+            <span class="nav-btn-icon">
+                🤝
+            </span>
+
+            <span class="nav-btn-text">
+                Requests
+            </span>
+
+            <span
+                id="requestBadge"
+                class="nav-badge"
+                style="display:none;"
+            >
+                0
+            </span>
+
+        </button>
+
+    </nav>
+
+  </div>
+  <!-- ================================
+     PROFILE PAGE
+================================ -->
+
+<section
+    id="profile"
+    class="page"
+>
+
+    <div
+        style="
+            background:#075e54;
+            color:white;
+            padding:20px;
+            text-align:center;
+        "
+    >
+
+        <div
+            id="profilePageAvatar"
+            class="avatar"
+            style="
+                width:90px;
+                height:90px;
+                margin:0 auto 12px;
+                font-size:32px;
+                background:#25d366;
+            "
+        >
+            G
+        </div>
+
+        <div
+            id="profilePageName"
+            style="
+                font-size:21px;
+                font-weight:600;
+            "
+        >
+            G Nurse User
+        </div>
+
+        <div
+            id="profilePageEmail"
+            style="
+                font-size:13px;
+                opacity:.85;
+                margin-top:5px;
+            "
+        >
+            Not logged in
+        </div>
+
+    </div>
+
+    <div
+        style="
+            padding:18px;
+            overflow-y:auto;
+        "
+    >
+
+        <button
+            type="button"
+            onclick="changeProfilePhoto()"
+            style="
+                width:100%;
+                padding:14px;
+                border:none;
+                border-radius:10px;
+                background:#075e54;
+                color:white;
+                font-size:15px;
+                font-weight:600;
+                cursor:pointer;
+                margin-bottom:10px;
+            "
+        >
+            📷 Change Profile Photo
+        </button>
+
+        <button
+            type="button"
+            onclick="openLoginBox()"
+            id="profileLoginButton"
+            style="
+                width:100%;
+                padding:14px;
+                border:none;
+                border-radius:10px;
+                background:#25d366;
+                color:white;
+                font-size:15px;
+                font-weight:600;
+                cursor:pointer;
+            "
+        >
+            🔐 Login
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- ================================
+     LOGIN BOX
+================================ -->
+
+<div
+    id="loginOverlay"
+    style="
+        display:none;
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.55);
+        z-index:100;
+        align-items:center;
+        justify-content:center;
+        padding:20px;
+    "
+>
+
+    <div
+        style="
+            width:100%;
+            max-width:390px;
+            background:white;
+            border-radius:16px;
+            padding:22px;
+            box-shadow:0 10px 40px rgba(0,0,0,.25);
+        "
+    >
+
+        <div
+            style="
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                margin-bottom:18px;
+            "
+        >
+
+            <h2
+                style="
+                    color:#075e54;
+                    font-size:22px;
+                "
+            >
+                Login
+            </h2>
+
+            <button
+                type="button"
+                onclick="closeLoginBox()"
+                style="
+                    border:none;
+                    background:transparent;
+                    font-size:24px;
+                    cursor:pointer;
+                    color:#667781;
+                "
+            >
+                ×
+            </button>
+
+        </div>
+
+        <input
+            type="email"
+            id="loginEmail"
+            placeholder="Email address"
+            autocomplete="email"
+            style="
+                width:100%;
+                padding:13px;
+                border:1px solid #d1d7db;
+                border-radius:9px;
+                outline:none;
+                margin-bottom:10px;
+                font-size:14px;
+            "
+        >
+
+        <input
+            type="password"
+            id="loginPassword"
+            placeholder="Password"
+            autocomplete="current-password"
+            style="
+                width:100%;
+                padding:13px;
+                border:1px solid #d1d7db;
+                border-radius:9px;
+                outline:none;
+                margin-bottom:12px;
+                font-size:14px;
+            "
+        >
+
+        <button
+            type="button"
+            onclick="loginUser()"
+            style="
+                width:100%;
+                padding:14px;
+                border:none;
+                border-radius:9px;
+                background:#075e54;
+                color:white;
+                font-size:15px;
+                font-weight:600;
+                cursor:pointer;
+            "
+        >
+            Login
+        </button>
+
+        <button
+            type="button"
+            onclick="openSignupBox()"
+            style="
+                width:100%;
+                padding:12px;
+                border:none;
+                background:transparent;
+                color:#075e54;
+                font-size:14px;
+                cursor:pointer;
+                margin-top:8px;
+            "
+        >
+            Create an account
+        </button>
+
+        <button
+            type="button"
+            onclick="resetPassword()"
+            style="
+                width:100%;
+                padding:8px;
+                border:none;
+                background:transparent;
+                color:#667781;
+                font-size:13px;
+                cursor:pointer;
+            "
+        >
+            Forgot password?
+        </button>
+
+        <div
+            id="loginMessage"
+            style="
+                text-align:center;
+                font-size:13px;
+                margin-top:10px;
+                min-height:18px;
+            "
+        ></div>
+
+    </div>
+
+</div>
+
+
+<!-- ================================
+     SIGN UP BOX
+================================ -->
+
+<div
+    id="signupOverlay"
+    style="
+        display:none;
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.55);
+        z-index:101;
+        align-items:center;
+        justify-content:center;
+        padding:20px;
+    "
+>
+
+    <div
+        style="
+            width:100%;
+            max-width:390px;
+            background:white;
+            border-radius:16px;
+            padding:22px;
+            box-shadow:0 10px 40px rgba(0,0,0,.25);
+        "
+    >
+
+        <div
+            style="
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                margin-bottom:18px;
+    "
+>
+
+    <h2
+        style="
+            color:#075e54;
+            font-size:22px;
+        "
+    >
+        Create Account
+    </h2>
+
+    <button
+        type="button"
+        onclick="closeSignupBox()"
+        style="
+            border:none;
+            background:transparent;
+            font-size:24px;
+            cursor:pointer;
+            color:#667781;
+        "
+    >
+        ×
+    </button>
+
+</div>
+
+<input
+    type="email"
+    id="signupEmail"
+    placeholder="Email address"
+    autocomplete="email"
+    style="
+        width:100%;
+        padding:13px;
+        border:1px solid #d1d7db;
+        border-radius:9px;
+        outline:none;
+        margin-bottom:10px;
+        font-size:14px;
+    "
+>
+
+<input
+    type="password"
+    id="signupPassword"
+    placeholder="Password"
+    autocomplete="new-password"
+    style="
+        width:100%;
+        padding:13px;
+        border:1px solid #d1d7db;
+        border-radius:9px;
+        outline:none;
+        margin-bottom:12px;
+        font-size:14px;
+    "
+>
+
+<button
+    type="button"
+    onclick="signupUser()"
+    style="
+        width:100%;
+        padding:14px;
+        border:none;
+        border-radius:9px;
+        background:#25d366;
+        color:white;
+        font-size:15px;
+        font-weight:600;
+        cursor:pointer;
+    "
+>
+    Create Account
+</button>
+
+<div
+    id="signupMessage"
+    style="
+        text-align:center;
+        font-size:13px;
+        margin-top:10px;
+        min-height:18px;
+    "
+></div>
+
+</div>
+
+</div>
+
+
+<!-- ================================
+     HIDDEN PROFILE PHOTO INPUT
+================================ -->
+
+<input
+    type="file"
+    id="profilePhotoInput"
+    accept="image/*"
+    hidden
+>
+
+
+<!-- ================================
+     GLOBAL MENU
+================================ -->
+
+<div
+    id="globalMenu"
+    style="
+        display:none;
+        position:fixed;
+        top:58px;
+        right:10px;
+        width:190px;
+        background:white;
+        border-radius:10px;
+        box-shadow:0 5px 25px rgba(0,0,0,.2);
+        overflow:hidden;
+        z-index:90;
+    "
+>
+
+    <button
+        type="button"
+        onclick="openMyProfile()"
+        style="
+            width:100%;
+            border:none;
+            background:white;
+            padding:14px;
+            text-align:left;
+            cursor:pointer;
+            font-size:14px;
+        "
+    >
+        👤 My Profile
+    </button>
+
+    <button
+        type="button"
+        onclick="logoutUser()"
+        style="
+            width:100%;
+            border:none;
+            background:white;
+            padding:14px;
+            text-align:left;
+            cursor:pointer;
+            font-size:14px;
+            color:#d32f2f;
+        "
+    >
+        🚪 Logout
+    </button>
+
+</div>
+
+
+<script>
+
+/* =================================
+   SUPABASE CONNECTION
+================================= */
+
+const SUPABASE_URL =
+    "https://bmiechymiyedubezhcq.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_9JL2ALhTGlZV57hUV0mTdQ_c2hdT8O8";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =================================
+   GLOBAL VARIABLES
+================================= */
+
+let currentUser = null;
+
+let currentChatUser = null;
+
+let currentChatUserId = null;
+
+let allFriends = [];
+
+
+/* =================================
+   PAGE NAVIGATION
+================================= */
+
+function showPage(
+    pageId,
+    button
+) {
+
+    document
+        .querySelectorAll(".page")
+        .forEach(function(page) {
+
+            page.classList.remove("active");
+
+        });
+
+    const selectedPage =
+        document.getElementById(pageId);
+
+    if (selectedPage) {
+
+        selectedPage.classList.add("active");
+
+    }
+
+    document
+        .querySelectorAll(".nav-btn")
+        .forEach(function(navButton) {
+
+            navButton.classList.remove("active");
+
+        });
+
+    if (button) {
+
+        button.classList.add("active");
+
+    }
+
+  }
+          // Open global menu
+        function openHeaderMenu() {
+            const menu = document.getElementById("globalMenu");
+
+            if (menu.style.display === "block") {
+                menu.style.display = "none";
+            } else {
+                menu.style.display = "block";
+            }
+        }
+
+
+        // Close menu when clicking outside it
+        document.addEventListener("click", function(event) {
+
+            const menu = document.getElementById("globalMenu");
+            const menuButton = document.querySelector(".header-actions");
+
+            if (
+                menu &&
+                menu.style.display === "block" &&
+                !menu.contains(event.target) &&
+                !menuButton.contains(event.target)
+            ) {
+                menu.style.display = "none";
+            }
+
+        });
+
+
+        // Open login box
+        function openLoginBox() {
+
+            document.getElementById("loginOverlay").style.display = "flex";
+
+            document.getElementById("signupOverlay").style.display = "none";
+
+        }
+
+
+        // Close login box
+        function closeLoginBox() {
+
+            document.getElementById("loginOverlay").style.display = "none";
+
+        }
+
+
+        // Open signup box
+        function openSignupBox() {
+
+            document.getElementById("signupOverlay").style.display = "flex";
+
+            document.getElementById("loginOverlay").style.display = "none";
+
+        }
+
+
+        // Close signup box
+        function closeSignupBox() {
+
+            document.getElementById("signupOverlay").style.display = "none";
+
+        }
+
+
+        // Switch to signup
+        function switchToSignup() {
+
+            closeLoginBox();
+
+            openSignupBox();
+
+        }
+
+
+        // Switch to login
+        function switchToLogin() {
+
+            closeSignupBox();
+
+            openLoginBox();
+
+        }
+
+
+        // Login user
+        async function loginUser() {
+
+            const email =
+                document.getElementById("loginEmail").value.trim();
+
+            const password =
+                document.getElementById("loginPassword").value;
+
+            const message =
+                document.getElementById("loginMessage");
+
+
+            if (!email || !password) {
+
+                message.textContent =
+                    "Please enter your email and password.";
+
+                return;
+
+            }
+
+
+            message.textContent = "Logging in...";
+
+
+            const { data, error } =
+                await supabaseClient.auth.signInWithPassword({
+                    email: email,
+                    password: password
+                });
+
+
+            if (error) {
+
+                message.textContent = error.message;
+
+                return;
+
+            }
+
+
+            currentUser = data.user;
+
+            message.textContent = "Login successful.";
+
+            closeLoginBox();
+
+            await loadMyProfile();
+
+            await loadFriends();
+
+        }
+
+
+        // Create account
+        async function createAccount() {
+
+            const name =
+                document.getElementById("signupName").value.trim();
+
+            const email =
+                document.getElementById("signupEmail").value.trim();
+
+            const password =
+                document.getElementById("signupPassword").value;
+
+            const message =
+                document.getElementById("signupMessage");
+
+
+            if (!name || !email || !password) {
+
+                message.textContent =
+                    "Please fill all fields.";
+
+                return;
+
+            }
+
+
+            if (password.length < 6) {
+
+                message.textContent =
+                    "Password must be at least 6 characters.";
+
+                return;
+
+            }
+
+
+            message.textContent = "Creating account...";
+
+
+            const { data, error } =
+                await supabaseClient.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            full_name: name
+                        }
+                    }
+                });
+
+
+            if (error) {
+
+                message.textContent = error.message;
+
+                return;
+
+            }
+
+
+            if (data.user) {
+
+                currentUser = data.user;
+
+                message.textContent =
+                    "Account created successfully.";
+
+                closeSignupBox();
+
+                await loadMyProfile();
+
+                await loadFriends();
+
+            }
+
+        }
+
+
+        // Forgot password
+        async function resetPassword() {
+
+            const email =
+                document.getElementById("loginEmail").value.trim();
+
+
+            if (!email) {
+
+                document.getElementById("loginMessage").textContent =
+                    "Enter your email first.";
+
+                return;
+
+            }
+
+
+            const { error } =
+                await supabaseClient.auth.resetPasswordForEmail(
+                    email,
+                    {
+                        redirectTo:
+                            window.location.origin +
+                            window.location.pathname
+                    }
+                );
+
+
+            if (error) {
+
+                document.getElementById("loginMessage").textContent =
+                    error.message;
+
+                return;
+
+            }
+
+
+            document.getElementById("loginMessage").textContent =
+                "Password reset link sent to your email.";
+
+        }
+
+
+        // Logout
+        async function logoutUser() {
+
+            await supabaseClient.auth.signOut();
+
+            currentUser = null;
+
+            currentChatUser = null;
+
+            currentChatUserId = null;
+
+            allFriends = [];
+
+
+            document.getElementById("headerName").textContent =
+                "G Nurse Chat";
+
+            document.getElementById("headerStatus").textContent =
+                "Not logged in";
+
+
+            document.getElementById("profilePageName").textContent =
+                "Not logged in";
+
+            document.getElementById("profilePageEmail").textContent =
+                "";
+
+
+            document.getElementById("chatUserList").innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">💬</div>
+                    <div class="empty-title">Login to start chatting</div>
+                    <div class="empty-text">
+                        Login to see your friends and messages.
+                    </div>
+                </div>
+            `;
+
+
+            document.getElementById("friendsList").innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">👥</div>
+                    <div class="empty-title">No friends yet</div>
+                    <div class="empty-text">
+                        Login and add friends to start chatting.
+                    </div>
+                </div>
+            `;
+
+
+            document.getElementById("friendRequestsList").innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">📨</div>
+                    <div class="empty-title">No friend requests</div>
+                    <div class="empty-text">
+                        New friend requests will appear here.
+                    </div>
+                </div>
+            `;
+
+
+            showPage("chats");
+
+        }
+
+
+        // Load current user's profile
+        async function loadMyProfile() {
+
+            if (!currentUser) return;
+
+
+            const { data, error } =
+                await supabaseClient
+                    .from("profiles")
+                    .select("*")
+                    .eq("id", currentUser.id)
+                    .maybeSingle();
+
+
+            if (error) {
+
+                console.error(
+                    "Profile loading error:",
+                    error
+                );
+
+                return;
+
+            }
+
+
+            const name =
+                data?.full_name ||
+                currentUser.user_metadata?.full_name ||
+                currentUser.email?.split("@")[0] ||
+                "User";
+
+
+            document.getElementById("headerName").textContent =
+                name;
+
+            document.getElementById("profilePageName").textContent =
+                name;
+
+            document.getElementById("profilePageEmail").textContent =
+                currentUser.email || "";
+
+
+            if (data?.avatar_url) {
+
+                document.getElementById("headerProfile").src =
+                    data.avatar_url;
+
+                document.getElementById("profilePageAvatar").src =
+                    data.avatar_url;
+
+            }
+
+        }
+
+
+        // Load friends
+        async function loadFriends() {
+
+            if (!currentUser) return;
+
+            // Friend loading will be connected to the
+            // database relationships in the next part.
+
+  }
+          // Load friend requests
+        async function loadFriendRequests() {
+
+            if (!currentUser) return;
+
+            const list =
+                document.getElementById("friendRequestsList");
+
+            list.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">⏳</div>
+                    <div class="empty-title">Loading requests...</div>
+                </div>
+            `;
+
+
+            const { data, error } =
+                await supabaseClient
+                    .from("friend_requests")
+                    .select("*")
+                    .eq("receiver_id", currentUser.id)
+                    .eq("status", "pending")
+                    .order("created_at", {
+                        ascending: false
+                    });
+
+
+            if (error) {
+
+                console.error(
+                    "Friend requests error:",
+                    error
+                );
+
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">⚠️</div>
+                        <div class="empty-title">
+                            Unable to load requests
+                        </div>
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            if (!data || data.length === 0) {
+
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📨</div>
+                        <div class="empty-title">
+                            No friend requests
+                        </div>
+                        <div class="empty-text">
+                            New friend requests will appear here.
+                        </div>
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            list.innerHTML = "";
+
+
+            for (const request of data) {
+
+                const item =
+                    document.createElement("div");
+
+                item.className = "user-item";
+
+                item.innerHTML = `
+                    <div class="avatar">
+                        👤
+                    </div>
+
+                    <div class="user-info">
+
+                        <div class="user-name">
+                            New friend request
+                        </div>
+
+                        <div class="user-status">
+                            Wants to connect with you
+                        </div>
+
+                        <div style="
+                            display:flex;
+                            gap:8px;
+                            margin-top:8px;
+                        ">
+
+                            <button
+                                onclick="acceptFriendRequest('${request.id}')"
+                                style="
+                                    border:none;
+                                    background:#075e54;
+                                    color:white;
+                                    padding:7px 14px;
+                                    border-radius:8px;
+                                    cursor:pointer;
+                                "
+                            >
+                                Accept
+                            </button>
+
+                            <button
+                                onclick="rejectFriendRequest('${request.id}')"
+                                style="
+                                    border:none;
+                                    background:#eee;
+                                    color:#333;
+                                    padding:7px 14px;
+                                    border-radius:8px;
+                                    cursor:pointer;
+                                "
+                            >
+                                Decline
+                            </button>
+
+                        </div>
+
+                    </div>
+                `;
+
+                list.appendChild(item);
+
+            }
+
+        }
+
+
+        // Accept friend request
+        async function acceptFriendRequest(requestId) {
+
+            if (!currentUser) return;
+
+
+            const { data, error } =
+                await supabaseClient
+                    .from("friend_requests")
+                    .update({
+                        status: "accepted"
+                    })
+                    .eq("id", requestId)
+                    .eq("receiver_id", currentUser.id)
+                    .select()
+                    .single();
+
+
+            if (error) {
+
+                alert(
+                    "Unable to accept request: " +
+                    error.message
+                );
+
+                return;
+            }
+
+
+            await loadFriendRequests();
+
+            await loadFriends();
+
+        }
+
+
+        // Reject friend request
+        async function rejectFriendRequest(requestId) {
+
+            if (!currentUser) return;
+
+
+            const { error } =
+                await supabaseClient
+                    .from("friend_requests")
+                    .update({
+                        status: "rejected"
+                    })
+                    .eq("id", requestId)
+                    .eq("receiver_id", currentUser.id);
+
+
+            if (error) {
+
+                alert(
+                    "Unable to decline request: " +
+                    error.message
+                );
+
+                return;
+            }
+
+
+            await loadFriendRequests();
+
+        }
+
+
+        // Search friends
+        function searchFriends() {
+
+            const input =
+                document.getElementById(
+                    "friendSearchInput"
+                );
+
+            const search =
+                input.value.trim().toLowerCase();
+
+
+            const items =
+                document.querySelectorAll(
+                    "#friendsList .user-item"
+                );
+
+
+            items.forEach(function(item) {
+
+                const name =
+                    item
+                        .querySelector(".user-name")
+                        ?.textContent
+                        .toLowerCase() || "";
+
+
+                if (name.includes(search)) {
+
+                    item.style.display = "flex";
+
+                } else {
+
+                    item.style.display = "none";
+
+                }
+
+            });
+
+        }
+
+
+        // Search chats
+        function searchChats() {
+
+            const input =
+                document.getElementById(
+                    "chatSearchInput"
+                );
+
+            const search =
+                input.value.trim().toLowerCase();
+
+
+            const items =
+                document.querySelectorAll(
+                    "#chatUserList .user-item"
+                );
+
+
+            items.forEach(function(item) {
+
+                const name =
+                    item
+                        .querySelector(".user-name")
+                        ?.textContent
+                        .toLowerCase() || "";
+
+
+                if (name.includes(search)) {
+
+                    item.style.display = "flex";
+
+                } else {
+
+                    item.style.display = "none";
+
+                }
+
+            });
+
+  }
+          // Open a friend's chat
+        function openChat(user) {
+
+            currentChatUser = user;
+            currentChatUserId = user.id;
+
+            const chatName =
+                user.full_name ||
+                user.email?.split("@")[0] ||
+                "User";
+
+            document.getElementById("headerName").textContent =
+                chatName;
+
+            document.getElementById("headerStatus").textContent =
+                "Chat";
+
+            showPage("chats");
+
+            loadMessages();
+
+        }
+
+
+        // Load messages
+        async function loadMessages() {
+
+            if (!currentUser || !currentChatUserId) return;
+
+            console.log(
+                "Loading messages with:",
+                currentChatUserId
+            );
+
+            // Message display will be added in the next part.
+
+        }
+
+
+        // Start global user search
+        async function startGlobalSearch() {
+
+            if (!currentUser) {
+
+                openLoginBox();
+
+                return;
+
+            }
+
+            const search =
+                prompt("Search for a user by name or email:");
+
+            if (!search || !search.trim()) return;
+
+            const searchText =
+                search.trim();
+
+
+            const { data, error } =
+                await supabaseClient
+                    .from("profiles")
+                    .select("*")
+                    .or(
+                        `full_name.ilike.%${searchText}%,email.ilike.%${searchText}%`
+                    )
+                    .neq("id", currentUser.id)
+                    .limit(20);
+
+
+            if (error) {
+
+                alert(
+                    "Search failed: " +
+                    error.message
+                );
+
+                return;
+
+            }
+
+
+            if (!data || data.length === 0) {
+
+                alert("No users found.");
+
+                return;
+
+            }
+
+
+            showSearchResults(data);
+
+        }
+
+
+        // Display search results
+        function showSearchResults(users) {
+
+            const list =
+                document.getElementById("friendsList");
+
+            list.innerHTML = "";
+
+            showPage("friends");
+
+
+            users.forEach(function(user) {
+
+                const item =
+                    document.createElement("div");
+
+                item.className = "user-item";
+
+
+                const name =
+                    user.full_name ||
+                    user.email?.split("@")[0] ||
+                    "User";
+
+
+                item.innerHTML = `
+
+                    <div class="avatar">
+                        👤
+                    </div>
+
+                    <div class="user-info">
+
+                        <div class="user-name">
+                            ${escapeHtml(name)}
+                        </div>
+
+                        <div class="user-status">
+                            ${escapeHtml(user.email || "")}
+                        </div>
+
+                        <button
+                            onclick="sendFriendRequest('${user.id}')"
+                            style="
+                                margin-top:8px;
+                                border:none;
+                                background:#075e54;
+                                color:white;
+                                padding:8px 14px;
+                                border-radius:8px;
+                                cursor:pointer;
+                            "
+                        >
+                            Add Friend
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                list.appendChild(item);
+
+            });
+
+        }
+
+
+        // Send friend request
+        async function sendFriendRequest(receiverId) {
+
+            if (!currentUser) {
+
+                openLoginBox();
+
+                return;
+
+            }
+
+
+            if (receiverId === currentUser.id) {
+
+                alert("You cannot add yourself.");
+
+                return;
+
+            }
+
+
+            const { data: existing } =
+                await supabaseClient
+                    .from("friend_requests")
+                    .select("id,status")
+                    .or(
+                        `and(sender_id.eq.${currentUser.id},receiver_id.eq.${receiverId}),and(sender_id.eq.${receiverId},receiver_id.eq.${currentUser.id})`
+                    )
+                    .limit(1);
+
+
+            if (existing && existing.length > 0) {
+
+                alert(
+                    "A friend request already exists."
+                );
+
+                return;
+
+            }
+
+
+            const { error } =
+                await supabaseClient
+                    .from("friend_requests")
+                    .insert({
+                        sender_id: currentUser.id,
+                        receiver_id: receiverId,
+                        status: "pending"
+                    });
+
+
+            if (error) {
+
+                alert(
+                    "Unable to send friend request: " +
+                    error.message
+                );
+
+                return;
+
+            }
+
+
+            alert("Friend request sent successfully.");
+
+        }
+
+
+        // Escape HTML
+        function escapeHtml(value) {
+
+            if (value === null || value === undefined) {
+                return "";
+            }
+
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+  }
+          // Load accepted friends
+        async function loadAcceptedFriends() {
+
+            if (!currentUser) return;
+
+            const list =
+                document.getElementById("friendsList");
+
+            list.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">⏳</div>
+                    <div class="empty-title">Loading friends...</div>
+                </div>
+            `;
+
+
+            const { data: requests, error } =
+                await supabaseClient
+                    .from("friend_requests")
+                    .select("*")
+                    .or(
+                        `sender_id.eq.${currentUser.id},receiver_id.eq.${currentUser.id}`
+                    )
+                    .eq("status", "accepted");
+
+
+            if (error) {
+
+                console.error(
+                    "Friends loading error:",
+                    error
+                );
+
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">⚠️</div>
+                        <div class="empty-title">
+                            Unable to load friends
+                        </div>
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            if (!requests || requests.length === 0) {
+
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">👥</div>
+                        <div class="empty-title">
+                            No friends yet
+                        </div>
+                        <div class="empty-text">
+                            Search for users and add friends.
+                        </div>
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            const friendIds = requests.map(function(request) {
+
+                if (request.sender_id === currentUser.id) {
+                    return request.receiver_id;
+                }
+
+                return request.sender_id;
+
+            });
+
+
+            const { data: profiles, error: profileError } =
+                await supabaseClient
+                    .from("profiles")
+                    .select("*")
+                    .in("id", friendIds);
+
+
+            if (profileError) {
+
+                console.error(
+                    "Friend profiles error:",
+                    profileError
+                );
+
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">⚠️</div>
+                        <div class="empty-title">
+                            Unable to load friend profiles
+                        </div>
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            list.innerHTML = "";
+
+
+            allFriends = profiles || [];
+
+
+            allFriends.forEach(function(friend) {
+
+                const item =
+                    document.createElement("div");
+
+                item.className = "user-item";
+
+
+                const name =
+                    friend.full_name ||
+                    friend.email?.split("@")[0] ||
+                    "User";
+
+
+                const avatar =
+                    friend.avatar_url ||
+                    "";
+
+
+                item.innerHTML = `
+
+                    <div class="avatar">
+
+                        ${
+                            avatar
+                            ? `<img
+                                src="${escapeHtml(avatar)}"
+                                style="
+                                    width:100%;
+                                    height:100%;
+                                    object-fit:cover;
+                                    border-radius:50%;
+                                "
+                              >`
+                            : "👤"
+                        }
+
+                    </div>
+
+
+                    <div
+                        class="user-info"
+                        onclick='openChat(${JSON.stringify(friend)})'
+                    >
+
+                        <div class="user-name">
+                            ${escapeHtml(name)}
+                        </div>
+
+                        <div class="user-status">
+                            Tap to chat
+                        </div>
+
+                    </div>
+
+                `;
+
+
+                list.appendChild(item);
+
+            });
+
+        }
+
+
+        // Update the friend list loader
+        async function refreshFriends() {
+
+            if (!currentUser) {
+
+                openLoginBox();
+
+                return;
+
+            }
+
+            await loadAcceptedFriends();
+
+        }
+
+
+        // Refresh requests and friends when page opens
+        async function refreshChatData() {
+
+            if (!currentUser) return;
+
+            await loadAcceptedFriends();
+
+            await loadFriendRequests();
+
+  }
+          // Open the profile page
+        function openProfile() {
+
+            if (!currentUser) {
+
+                openLoginBox();
+
+                return;
+
+            }
+
+            loadMyProfile();
+
+            showPage("profile");
+
+        }
+
+
+        // Open profile photo selector
+        function changeProfilePhoto() {
+
+            if (!currentUser) {
+
+                openLoginBox();
+
+                return;
+
+            }
+
+            document
+                .getElementById("profilePhotoInput")
+                .click();
+
+        }
+
+
+        // Handle selected profile photo
+        document
+            .getElementById("profilePhotoInput")
+            .addEventListener("change", async function(event) {
+
+                const file = event.target.files[0];
+
+                if (!file || !currentUser) return;
+
+
+                if (!file.type.startsWith("image/")) {
+
+                    alert("Please select an image.");
+
+                    return;
+
+                }
+
+
+                if (file.size > 5 * 1024 * 1024) {
+
+                    alert("Image must be less than 5MB.");
+
+                    return;
+
+                }
+
+
+                const extension =
+                    file.name.split(".").pop();
+
+                const filePath =
+                    currentUser.id +
+                    "/profile." +
+                    extension;
+
+
+                const { error: uploadError } =
+                    await supabaseClient
+                        .storage
+                        .from("profile-photos")
+                        .upload(
+                            filePath,
+                            file,
+                            {
+                                upsert: true,
+                                contentType: file.type
+                            }
+                        );
+
+
+                if (uploadError) {
+
+                    alert(
+                        "Photo upload failed: " +
+                        uploadError.message
+                    );
+
+                    return;
+
+                }
+
+
+                const { data: urlData } =
+                    supabaseClient
+                        .storage
+                        .from("profile-photos")
+                        .getPublicUrl(filePath);
+
+
+                const avatarUrl =
+                    urlData.publicUrl;
+
+
+                const { error: updateError } =
+                    await supabaseClient
+                        .from("profiles")
+                        .update({
+                            avatar_url: avatarUrl
+                        })
+                        .eq("id", currentUser.id);
+
+
+                if (updateError) {
+
+                    alert(
+                        "Unable to save profile photo: " +
+                        updateError.message
+                    );
+
+                    return;
+
+                }
+
+
+                document.getElementById("headerProfile").src =
+                    avatarUrl;
+
+                document.getElementById("profilePageAvatar").src =
+                    avatarUrl;
+
+
+                alert("Profile photo updated successfully.");
+
+            });
+
+
+        // Initialize page
+        async function initializeChat() {
+
+            const { data } =
+                await supabaseClient.auth.getSession();
+
+
+            if (data && data.session) {
+
+                currentUser = data.session.user;
+
+                await loadMyProfile();
+
+                await loadAcceptedFriends();
+
+                await loadFriendRequests();
+
+            } else {
+
+                currentUser = null;
+
+                document.getElementById("headerName").textContent =
+                    "G Nurse Chat";
+
+                document.getElementById("headerStatus").textContent =
+                    "Not logged in";
+
+            }
+
+        }
+
+
+        // Watch login/logout changes
+        supabaseClient.auth.onAuthStateChange(
+            async function(event, session) {
+
+                if (session) {
+
+                    currentUser = session.user;
+
+                    await loadMyProfile();
+
+                    await loadAcceptedFriends();
+
+                    await loadFriendRequests();
+
+                } else {
+
+                    currentUser = null;
+
+                }
+
+            }
+        );
+
+
+        // Start the chat page
+        initializeChat();
+
+    </script>
+
+</body>
+</html>
+  
+          
