@@ -1379,6 +1379,25 @@ const supabaseClient =
         SUPABASE_URL,
         SUPABASE_KEY
     );
+    async function testSupabaseConnection() {
+    try {
+        const { data, error } = await supabaseClient.auth.getSession();
+
+        if (error) {
+            console.error("SUPABASE ERROR:", error);
+            alert("Supabase error: " + error.message);
+            return;
+        }
+
+        console.log("SUPABASE CONNECTION WORKING:", data);
+        alert("Supabase connection is working!");
+    } catch (error) {
+        console.error("FETCH ERROR:", error);
+        alert("FETCH ERROR: " + error.message);
+    }
+}
+
+testSupabaseConnection();
 
 
 /* =================================
