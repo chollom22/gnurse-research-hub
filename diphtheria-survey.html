@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Diphtheria Outbreak Survey | G Nurse Research Hub Nigeria</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f3f7f5;
+    color:#222;
+    line-height:1.5;
+}
+
+.header{
+    background:#0b6b3a;
+    color:white;
+    padding:25px 15px;
+    text-align:center;
+}
+
+.header h1{
+    margin:0 0 8px;
+    font-size:25px;
+}
+
+.header p{
+    margin:0;
+    font-size:14px;
+}
+
+.container{
+    max-width:850px;
+    margin:25px auto;
+    padding:0 15px;
+}
+
+.card{
+    background:white;
+    padding:22px;
+    margin-bottom:18px;
+    border-radius:12px;
+    box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
+
+.card h2{
+    margin-top:0;
+    color:#0b6b3a;
+    font-size:20px;
+    border-bottom:2px solid #e5eee9;
+    padding-bottom:8px;
+}
+
+.question{
+    margin-bottom:22px;
+}
+
+.question label.title{
+    display:block;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+label.option{
+    display:block;
+    margin:8px 0;
+    padding:7px;
+}
+
+input[type="radio"],
+input[type="checkbox"]{
+    margin-right:8px;
+}
+
+select,
+textarea{
+    width:100%;
+    padding:11px;
+    border:1px solid #ccc;
+    border-radius:7px;
+    font-size:15px;
+    background:white;
+}
+
+textarea{
+    min-height:100px;
+    resize:vertical;
+}
+
+.required{
+    color:#d00000;
+}
+
+.notice{
+    background:#eef8f1;
+    border-left:5px solid #0b6b3a;
+    padding:14px;
+    border-radius:6px;
+    margin-top:15px;
+}
+
+.warning{
+    background:#fff7e6;
+    border-left:5px solid #e59b00;
+    padding:14px;
+    border-radius:6px;
+    margin-top:15px;
+}
+
+button{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:8px;
+    background:#0b6b3a;
+    color:white;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#07562f;
+}
+
+button:disabled{
+    background:#999;
+    cursor:not-allowed;
+}
+
+.success{
+    display:none;
+    background:#e8f8ed;
+    border:1px solid #8dcc9e;
+    color:#145c2d;
+    padding:25px;
+    border-radius:10px;
+    text-align:center;
+    margin-top:20px;
+}
+
+.error{
+    display:none;
+    background:#ffeaea;
+    border:1px solid #dd8888;
+    color:#8b0000;
+    padding:15px;
+    border-radius:8px;
+    margin-top:15px;
+}
+
+.footer{
+    text-align:center;
+    padding:25px;
+    color:#666;
+    font-size:13px;
+}
+
+.small{
+    font-size:13px;
+    color:#666;
+}
+
+@media(max-width:600px){
+    .header h1{
+        font-size:21px;
+    }
+
+    .card{
+        padding:16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>🩺 Diphtheria Outbreak Survey</h1>
+    <p>G Nurse Research Hub Nigeria</p>
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<h2>Research Information</h2>
+
+<p>
+<strong>Research Title:</strong><br>
+Assessment of the Diphtheria Outbreak in Plateau State, Nigeria:
+Knowledge, Risk Factors, Vaccination Status, Health Effects and Prevention Practices
+</p>
+
+<p>
+This questionnaire is being used to collect information about people's
+knowledge, awareness, vaccination practices, possible risk factors and
+perceptions concerning the reported diphtheria outbreak in Plateau State.
+</p>
+
+<div class="notice">
+<strong>Privacy:</strong>
+This questionnaire does not ask for your name, phone number, password or
+other direct personal identifiers. Your responses will be used for research
+and statistical analysis.
+</div>
+
+<div class="warning">
+<strong>Important:</strong>
+This questionnaire does not diagnose diphtheria. If you have symptoms or
+have been exposed to a suspected case, seek medical attention from an
+appropriate healthcare facility.
+</div>
+
+<p>
+Estimated completion time: <strong>5–8 minutes</strong>.
+</p>
+
+</div>
+
+
+<form id="surveyForm">
+
+<!-- CONSENT -->
+
+<div class="card">
+
+<h2>Consent</h2>
+
+<div class="question">
+
+<label class="title">
+Are you 18 years of age or older? <span class="required">*</span>
+</label>
+
+<label class="option">
+<input type="radio" name="age_eligibility" value="yes" required>
+Yes
+</label>
+
+<label class="option">
+<input type="radio" name="age_eligibility" value="no">
+No
+</label>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+Do you voluntarily agree to participate in this research survey?
+<span class="required">*</span>
+</label>
+
+<label class="option">
+<input type="radio" name="consent" value="yes" required>
+Yes, I agree
+</label>
+
+<label class="option">
+<input type="radio" name="consent" value="no">
+No, I do not agree
+</label>
+
+</div>
+
+</div>
+
+
+<!-- SECTION A -->
+
+<div class="card">
+
+<h2>Section A — Demographic Information</h2>
+
+<div class="question">
+
+<label class="title">1. Age group <span class="required">*</span></label>
+
+<select name="age_group" required>
+<option value="">Select age group</option>
+<option>18–24</option>
+<option>25–34</option>
+<option>35–44</option>
+<option>45–54</option>
+<option>55–64</option>
+<option>65 years and above</option>
+</select>
+
+</div>
+
+<div class="question">
+
+<label class="title">2. Sex <span class="required">*</span></label>
+
+<label class="option">
+<input type="radio" name="sex" value="Male" required> Male
+</label>
+
+<label class="option">
+<input type="radio" name="sex" value="Female"> Female
+</label>
+
+<label class="option">
+<input type="radio" name="sex" value="Prefer not to say"> Prefer not to say
+</label>
+
+</div>
+
+<div class="question">
+
+<label class="title">3. State of residence <span class="required">*</span></label>
+
+<select name="state" required>
+
+<option value="">Select state</option>
+
+<option>Plateau</option>
+<option>Kaduna</option>
+<option>Kano</option>
+<option>Bauchi</option>
+<option>Nasarawa</option>
+<option>Benue</option>
+<option>Abuja (FCT)</option>
+<option>Other Nigerian state</option>
+<option>Outside Nigeria</option>
+
+</select>
+
+</div>
+
+<div class="question">
+
+<label class="title">4. Local Government Area</label>
+
+<input
+type="text"
+name="lga"
+placeholder="Enter your LGA"
+style="width:100%;padding:11px;border:1px solid #ccc;border-radius:7px;"
+>
+
+</div>
+
+<div class="question">
+
+<label class="title">5. Highest level of education</label>
+
+<select name="education">
+
+<option value="">Select</option>
+<option>No formal education</option>
+<option>Primary education</option>
+<option>Secondary education</option>
+<option>OND/NCE</option>
+<option>HND/Bachelor's degree</option>
+<option>Postgraduate</option>
+<option>Other</option>
+
+</select>
+
+</div>
+
+<div class="question">
+
+<label class="title">6. Occupation</label>
+
+<input
+type="text"
+name="occupation"
+placeholder="Enter occupation"
+style="width:100%;padding:11px;border:1px solid #ccc;border-radius:7px;"
+>
+
+</div>
+
+</div>
+
+
+<!-- SECTION B -->
+
+<div class="card">
+
+<h2>Section B — Knowledge of Diphtheria</h2>
+
+<div class="question">
+
+<label class="title">
+7. Have you heard of diphtheria before?
+<span class="required">*</span>
+</label>
+
+<label class="option">
+<input type="radio" name="heard_of_diphtheria" value="Yes" required> Yes
+</label>
+
+<label class="option">
+<input type="radio" name="heard_of_diphtheria" value="No"> No
+</label>
+
+</div>
+
+<div class="question">
+
+<label class="title">8. Where did you first hear about diphtheria?</label>
+
+<select name="information_source">
+
+<option value="">Select</option>
+<option>Health worker</option>
+<option>Television</option>
+<option>Radio</option>
+<option>Facebook</option>
+<option>WhatsApp</option>
+<option>TikTok</option>
+<option>Other social media</option>
+<option>Family or friends</option>
+<option>School</option>
+<option>Church/mosque/community group</option>
+<option>Other</option>
+
+</select>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+9. Is diphtheria an infectious disease?
+</label>
+
+<label class="option">
+<input type="radio" name="infectious_disease" value="Yes"> Yes
+</label>
+
+<label class="option">
+<input type="radio" name="infectious_disease" value="No"> No
+</label>
+
+<label class="option">
+<input type="radio" name="infectious_disease" value="Don't know"> Don't know
+</label>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+10. How can diphtheria spread? Select all that you believe apply.
+</label>
+
+<label class="option">
+<input type="checkbox" name="transmission_methods" value="Coughing or sneezing">
+Coughing or sneezing
+</label>
+
+<label class="option">
+<input type="checkbox" name="transmission_methods" value="Close contact">
+Close contact with an infected person
+</label>
+
+<label class="option">
+<input type="checkbox" name="transmission_methods" value="Respiratory droplets">
+Respiratory droplets
+</label>
+
+<label class="option">
+<input type="checkbox" name="transmission_methods" value="Contaminated objects">
+Contaminated objects
+</label>
+
+<label class="option">
+<input type="checkbox" name="transmission_methods" value="I don't know">
+I don't know
+</label>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+11. Which factors do you think increase the risk of diphtheria?
+</label>
+
+<label class="option">
+<input type="checkbox" name="risk_factors" value="Low vaccination coverage">
+Low vaccination coverage
+</label>
+
+<label class="option">
+<input type="checkbox" name="risk_factors" value="Overcrowding">
+Overcrowded living conditions
+</label>
+
+<label class="option">
+<input type="checkbox" name="risk_factors" value="Close contact">
+Close contact with infected people
+</label>
+
+<label class="option">
+<input type="checkbox" name="risk_factors" value="Poor awareness">
+Poor public awareness
+</label>
+
+<label class="option">
+<input type="checkbox" name="risk_factors" value="Poor access to healthcare">
+Poor access to healthcare
+</label>
+
+<label class="option">
+<input type="checkbox" name="risk_factors" value="Don't know">
+Don't know
+</label>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+12. Which symptoms do you associate with diphtheria?
+</label>
+
+<label class="option">
+<input type="checkbox" name="symptoms" value="Sore throat">
+Sore throat
+</label>
+
+<label class="option">
+<input type="checkbox" name="symptoms" value="Difficulty breathing">
+Difficulty breathing
+</label>
+
+<label class="option">
+<input type="checkbox" name="symptoms" value="Fever">
+Fever
+</label>
+
+<label class="option">
+<input type="checkbox" name="symptoms" value="Swollen neck">
+Swollen neck
+</label>
+
+<label class="option">
+<input type="checkbox" name="symptoms" value="Gray or white throat membrane">
+Gray or white membrane in the throat
+</label>
+
+<label class="option">
+<input type="checkbox" name="symptoms" value="Don't know">
+Don't know
+</label>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+13. Can diphtheria cause severe complications or death?
+</label>
+
+<label class="option">
+<input type="radio" name="severe_complications" value="Yes"> Yes
+</label>
+
+<label class="option">
+<input type="radio" name="severe_complications" value="No"> No
+</label>
+
+<label class="option">
+<input type="radio" name="severe_complications" value="Don't know"> Don't know
+</label>
+
+</div>
+
+</div>
+
+
+<!-- SECTION C -->
+
+<div class="card">
+
+<h2>Section C — Awareness of the Current Outbreak</h2>
+
+<div class="question">
+
+<label class="title">
+14. Before this questionnaire, were you aware of the reported diphtheria outbreak in Plateau State?
+<span class="required">*</span>
+</label>
+
+<label class="option">
+<input type="radio" name="aware_of_current_outbreak" value="Yes" required> Yes
+</label>
+
+<label class="option">
+<input type="radio" name="aware_of_current_outbreak" value="No"> No
+</label>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+15. Where did you hear about the current outbreak?
+</label>
+
+<label class="option">
+<input type="checkbox" name="outbreak_information_source" value="Facebook">
+Facebook
+</label>
+
+<label class="option">
+<input type="checkbox" name="outbreak_information_source" value="WhatsApp">
+WhatsApp
+</label>
+
+<label class="option">
+<input type="checkbox" name="outbreak_information_source" value="Television">
+Television
+</label>
+
+<label class="option">
+<input type="checkbox" name="outbreak_information_source" value="Radio">
+Radio
+</label>
+
+<label class="option">
+<input type="checkbox" name="outbreak_information_source" value="Health workers">
+Health workers
+</label>
+
+<label class="option">
+<input type="checkbox" name="outbreak_information_source" value="Family/friends">
+Family or friends
+</label>
+
+<label class="option">
+<input type="checkbox" name="outbreak_information_source" value="Other">
+Other
+</label>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+16. How concerned are you about the outbreak?
+</label>
+
+<select name="level_of_concern">
+
+<option value="">Select</option>
+<option>Not concerned</option>
+<option>Slightly concerned</option>
+<option>Moderately concerned</option>
+<option>Very concerned</option>
+<option>Extremely concerned</option>
+
+</select>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+17. Do you think people in your community are receiving enough information about diphtheria?
+</label>
+
+<label class="option">
+<input type="radio" name="community_information_adequate" value="Yes"> Yes
+</label>
+
+<label class="option">
+<input type="radio" name="community_information_adequate" value="No"> No
+</label>
+
+<label class="option">
+<input type="radio" name="community_information_adequate" value="Not sure"> Not sure
+</label>
+
+</div>
+
+</div>
+
+
+<!-- SECTION D -->
+
+<div class="card">
+
+<h2>Section D — Vaccination</h2>
+
+<div class="question">
+
+<label class="title">
+18. Have you ever received routine childhood vaccination?
+</label>
+
+<label class="option">
+<input type="radio" name="vaccinated" value="Yes"> Yes
+</label>
+
+<label class="option">
+<input type="radio" name="vaccinated" value="No"> No
+</label>
+
+<label class="option">
+<input type="radio" name="vaccinated" value="Don't know"> Don't know
+</label>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+19. If you have children, are they vaccinated according to the recommended schedule?
+</label>
+
+<label class="option">
+<input type="radio" name="children_vaccinated" value="Yes"> Yes
+</label>
+
+<label class="option">
+<input type="radio" name="children_vaccinated" value="No"> No
+</label>
+
+<label class="option">
+<input type="radio" name="children_vaccinated" value="Some are"> Some are
+</label>
+
+<label class="option">
+<input type="radio" name="children_vaccinated" value="Not applicable"> Not applicable
+</label>
+
+<label class="option">
+<input type="radio" name="children_vaccinated" value="Don't know"> Don't know
+</label>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+20. What is the vaccination status of your children?
+</label>
+
+<select name="vaccination_status">
+
+<option value="">Select</option>
+<option>Fully vaccinated</option>
+<option>Partially vaccinated</option>
+<option>Not vaccinated</option>
+<option>Not applicable</option>
+<option>Don't know</option>
+
+</select>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+21. If vaccination was incomplete or not received, what were the reasons?
+</label>
+
+<label class="option">
+<input type="checkbox" name="non_vaccination_reason" value="Lack of information">
+Lack of information
+</label>
+
+<label class="option">
+<input type="checkbox" name="non_vaccination_reason" value="Fear of side effects">
+Fear of side effects
+</label>
+
+<label class="option">
+<input type="checkbox" name="non_vaccination_reason" value="Distance">
+Distance to health facility
+</label>
+
+<label class="option">
+<input type="checkbox" name="non_vaccination_reason" value="Cost">
+Cost
+</label>
+
+<label class="option">
+<input type="checkbox" name="non_vaccination_reason" value="Vaccine unavailable">
+Vaccine was unavailable
+</label>
+
+<label class="option">
+<input type="checkbox" name="non_vaccination_reason" value="Forgot">
+Forgot/missed appointment
+</label>
+
+<label class="option">
+<input type="checkbox" name="non_vaccination_reason" value="Other">
+Other
+</label>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+22. Would you be willing to receive a recommended diphtheria-containing vaccine if advised by health authorities?
+</label>
+
+<label class="option">
+<input type="radio" name="willing_to_vaccinate" value="Yes"> Yes
+</label>
+
+<label class="option">
+<input type="radio" name="willing_to_vaccinate" value="No"> No
+</label>
+
+<label class="option">
+<input type="radio" name="willing_to_vaccinate" value="Not sure"> Not sure
+</label>
+
+</div>
+
+</div>
+
+
+<!-- SECTION E -->
+
+<div class="card">
+
+<h2>Section E — Possible Risk and Exposure</h2>
+
+<div class="question">
+
+<label class="title">
+23. Have you recently been in close contact with someone suspected or confirmed to have diphtheria?
+</label>
+
+<label class="option">
+<input type="radio" name="close_contact" value="Yes"> Yes
+</label>
+
+<label class="option">
+<input type="radio" name="close_contact" value="No"> No
+</label>
+
+<label class="option">
+<input type="radio" name="close_contact" value="Don't know"> Don't know
+</label>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+24. Do you currently live or work in an overcrowded environment?
+</label>
+
+<label class="option">
+<input type="radio" name="overcrowded_environment" value="Yes"> Yes
+</label>
+
+<label class="option">
+<input type="radio" name="overcrowded_environment" value="No"> No
+</label>
+
+<label class="option">
+<input type="radio" name="overcrowded_environment" value="Not sure"> Not sure
+</label>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+25. Have you recently attended a large or crowded gathering?
+</label>
+
+<label class="option">
+<input type="radio" name="crowded_gathering" value="Yes"> Yes
+</label>
+
+<label class="option">
+<input type="radio" name="crowded_gathering" value="No"> No
+</label>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+26. Have you recently experienced any of the following symptoms?
+</label>
+
+<label class="option">
+<input type="checkbox" name="recent_symptoms" value="Sore throat">
+Sore throat
+</label>
+
+<label class="option">
+<input type="checkbox" name="recent_symptoms" value="Fever">
+Fever
+</label>
+
+<label class="option">
+<input type="checkbox" name="recent_symptoms" value="Difficulty breathing">
+Difficulty breathing
+</label>
+
+<label class="option">
+<input type="checkbox" name="recent_symptoms" value="Swollen neck">
+Swollen neck
+</label>
+
+<label class="option">
+<input type="checkbox" name="recent_symptoms" value="None">
+None of these
+</label>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+27. If you developed symptoms that concerned you, where would you first seek help?
+</label>
+
+<select name="first_place_for_care">
+
+<option value="">Select</option>
+<option>Primary Health Centre</option>
+<option>Government hospital</option>
+<option>Private hospital/clinic</option>
+<option>Pharmacy</option>
+<option>Traditional healer</option>
+<option>Self-medication</option>
+<option>Ask family/friends</option>
+<option>Other</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<!-- SECTION F -->
+
+<div class="card">
+
+<h2>Section F — Prevention and Control</h2>
+
+<div class="question">
+
+<label class="title">
+28. Which measures do you believe can help control diphtheria?
+</label>
+
+<label class="option">
+<input type="checkbox" name="prevention_measures" value="Vaccination">
+Vaccination
+</label>
+
+<label class="option">
+<input type="checkbox" name="prevention_measures" value="Early treatment">
+Early medical treatment
+</label>
+
+<label class="option">
+<input type="checkbox" name="prevention_measures" value="Contact tracing">
+Contact tracing
+</label>
+
+<label class="option">
+<input type="checkbox" name="prevention_measures" value="Isolation">
+Isolation of suspected/confirmed cases
+</label>
+
+<label class="option">
+<input type="checkbox" name="prevention_measures" value="Public education">
+Public education
+</label>
+
+<label class="option">
+<input type="checkbox" name="prevention_measures" value="School surveillance">
+School/community surveillance
+</label>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+29. Have you seen or heard about any vaccination campaign related to the outbreak?
+</label>
+
+<label class="option">
+<input t
