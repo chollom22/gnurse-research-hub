@@ -1750,45 +1750,39 @@ Maximum frequency: ${max}
 container.appendChild(axis);
 
 }
-
-
-/* =========================
+    /* =========================
    UPDATE DASHBOARD
 ========================= */
 
 function updateDashboard(){
 
-const total =
-filteredData.length;
+    const total =
+        filteredData.length;
 
 
-document
-.getElementById(
-"totalResponses"
-)
-.textContent =
-total;
+    document
+        .getElementById(
+            "totalResponses"
+        )
+        .textContent =
+        total;
 
 
-/* AWARE */
+    /* =========================
+       AWARE OF CURRENT OUTBREAK
+    ========================= */
 
-const aware =
-filteredData.filter(
-row =>
-String(
-row.aware_of_current_outbreak
-).toLowerCase()
-=== "yes"
-).length;
+    const aware =
+        filteredData.filter(
+            row =>
+                String(
+                    row.aware_of_current_outbreak || ""
+                )
+                .toLowerCase() === "yes"
+        ).length;
 
 
-document
-.getElementById(
-"awareCount"
-)
-.textContent =
-formatPercentage(
-        document
+    document
         .getElementById(
             "awareCount"
         )
@@ -1799,7 +1793,9 @@ formatPercentage(
         );
 
 
-    /* VACCINATED */
+    /* =========================
+       VACCINATED
+    ========================= */
 
     const vaccinated =
         filteredData.filter(
@@ -1837,7 +1833,9 @@ formatPercentage(
         );
 
 
-    /* HIGHLY CONCERNED */
+    /* =========================
+       HIGHLY CONCERNED
+    ========================= */
 
     const concerned =
         filteredData.filter(
@@ -1861,7 +1859,9 @@ formatPercentage(
         );
 
 
-    /* HEARD OF DIPHTHERIA */
+    /* =========================
+       HEARD OF DIPHTHERIA
+    ========================= */
 
     const heard =
         filteredData.filter(
@@ -1884,7 +1884,9 @@ formatPercentage(
         );
 
 
-    /* WILLING TO VACCINATE */
+    /* =========================
+       WILLING TO VACCINATE
+    ========================= */
 
     const willing =
         filteredData.filter(
@@ -1907,7 +1909,9 @@ formatPercentage(
         );
 
 
-    /* FILTER RESULT */
+    /* =========================
+       FILTER RESULT
+    ========================= */
 
     document
         .getElementById(
@@ -1919,6 +1923,176 @@ formatPercentage(
         " of " +
         surveyData.length +
         " responses";
+
+
+    /* =========================
+       DRAW MAIN CHARTS
+    ========================= */
+
+    drawVaccinationBarChart();
+
+    drawAgeHistogram();
+
+
+    drawBars(
+        "ageChart",
+        countValues(
+            filteredData,
+            "age_group"
+        )
+    );
+
+
+    drawBars(
+        "sexChart",
+        countValues(
+            filteredData,
+            "sex"
+        )
+    );
+
+
+    drawBars(
+        "educationChart",
+        countValues(
+            filteredData,
+            "education"
+        )
+    );
+
+
+    drawBars(
+        "stateChart",
+        countValues(
+            filteredData,
+            "state"
+        )
+    );
+
+
+    drawBars(
+        "lgaChart",
+        countValues(
+            filteredData,
+            "lga"
+        )
+    );
+
+
+    drawBars(
+        "occupationChart",
+        countValues(
+            filteredData,
+            "occupation"
+        )
+    );
+
+
+    drawBars(
+        "heardChart",
+        countValues(
+            filteredData,
+            "heard_of_diphtheria"
+        )
+    );
+
+
+    drawBars(
+        "infectiousChart",
+        countValues(
+            filteredData,
+            "infectious_disease"
+        )
+    );
+
+
+    drawBars(
+        "transmissionChart",
+        countValues(
+            filteredData,
+            "transmission_methods"
+        )
+    );
+
+
+    drawBars(
+        "symptomsChart",
+        countValues(
+            filteredData,
+            "symptoms"
+        )
+    );
+
+
+    drawBars(
+        "riskFactorsChart",
+        countValues(
+            filteredData,
+            "risk_factors"
+        )
+    );
+
+
+    drawBars(
+        "complicationsChart",
+        countValues(
+            filteredData,
+            "severe_complications"
+        )
+    );
+
+
+    drawBars(
+        "outbreakChart",
+        countValues(
+            filteredData,
+            "aware_of_current_outbreak"
+        )
+    );
+
+
+    drawBars(
+        "concernChart",
+        countValues(
+            filteredData,
+            "level_of_concern"
+        )
+    );
+
+
+    drawBars(
+        "socialChart",
+        countValues(
+            filteredData,
+            "social_media_exposure"
+        )
+    );
+
+
+    drawBars(
+        "confidenceChart",
+        countValues(
+            filteredData,
+            "confidence_in_prevention"
+        )
+    );
+
+
+    /* =========================
+       RESEARCH SUMMARY
+    ========================= */
+
+    generateResearchSummary();
+
+
+    /* =========================
+       RESPONSE TABLE
+    ========================= */
+
+    renderResponses();
+
+}
+
 
 
     /* =========================
