@@ -1002,4 +1002,668 @@ School/community surveillance
 </label>
 
 <label class="option">
-<input t
+<input type="radio" name="vaccination_campaign_seen" value="Yes">
+Yes
+</label>
+
+<label class="option">
+<input type="radio" name="vaccination_campaign_seen" value="No">
+No
+</label>
+
+<label class="option">
+<input type="radio" name="vaccination_campaign_seen" value="Not sure">
+Not sure
+</label>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+30. Have you received health information about diphtheria from your school,
+workplace or community?
+</label>
+
+<label class="option">
+<input type="radio" name="school_health_information" value="Yes">
+Yes
+</label>
+
+<label class="option">
+<input type="radio" name="school_health_information" value="No">
+No
+</label>
+
+<label class="option">
+<input type="radio" name="school_health_information" value="Not applicable">
+Not applicable
+</label>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+31. How confident are you that diphtheria can be prevented?
+</label>
+
+<select name="confidence_in_prevention">
+
+<option value="">Select</option>
+<option>Not confident</option>
+<option>Slightly confident</option>
+<option>Moderately confident</option>
+<option>Very confident</option>
+<option>Extremely confident</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<!-- SECTION G -->
+
+<div class="card">
+
+<h2>Section G — Information and Social Media</h2>
+
+<div class="question">
+
+<label class="title">
+32. Which sources do you trust most for health information?
+</label>
+
+<label class="option">
+<input type="checkbox" name="trusted_information_source" value="Doctors">
+Doctors
+</label>
+
+<label class="option">
+<input type="checkbox" name="trusted_information_source" value="Nurses">
+Nurses
+</label>
+
+<label class="option">
+<input type="checkbox" name="trusted_information_source" value="Government health authorities">
+Government health authorities
+</label>
+
+<label class="option">
+<input type="checkbox" name="trusted_information_source" value="Radio">
+Radio
+</label>
+
+<label class="option">
+<input type="checkbox" name="trusted_information_source" value="Television">
+Television
+</label>
+
+<label class="option">
+<input type="checkbox" name="trusted_information_source" value="Social media">
+Social media
+</label>
+
+<label class="option">
+<input type="checkbox" name="trusted_information_source" value="Family/friends">
+Family/friends
+</label>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+33. Have you seen information about diphtheria on social media?
+</label>
+
+<label class="option">
+<input type="radio" name="social_media_exposure" value="Yes">
+Yes
+</label>
+
+<label class="option">
+<input type="radio" name="social_media_exposure" value="No">
+No
+</label>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+34. How useful do you think social media is for educating people about outbreaks?
+</label>
+
+<select name="social_media_usefulness">
+
+<option value="">Select</option>
+<option>Not useful</option>
+<option>Slightly useful</option>
+<option>Moderately useful</option>
+<option>Very useful</option>
+<option>Extremely useful</option>
+
+</select>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+35. What do you think is the biggest challenge in controlling the outbreak?
+</label>
+
+<select name="biggest_control_challenge">
+
+<option value="">Select</option>
+<option>Low vaccination coverage</option>
+<option>Lack of public awareness</option>
+<option>Late presentation to hospitals</option>
+<option>Limited healthcare resources</option>
+<option>Limited laboratory testing</option>
+<option>Shortage of medicines/treatment supplies</option>
+<option>Overcrowding</option>
+<option>Misinformation</option>
+<option>Other</option>
+
+</select>
+
+</div>
+
+</div>
+
+
+<!-- SECTION H -->
+
+<div class="card">
+
+<h2>Section H — Your Opinion</h2>
+
+<div class="question">
+
+<label class="title">
+36. What do you think should be done to control diphtheria in Plateau State?
+</label>
+
+<textarea
+name="recommended_actions"
+placeholder="Write your answer here..."
+></textarea>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+37. What information about diphtheria would you like health authorities to provide?
+</label>
+
+<textarea
+name="information_needed"
+placeholder="Write your answer here..."
+></textarea>
+
+</div>
+
+<div class="question">
+
+<label class="title">
+38. Additional comments
+</label>
+
+<textarea
+name="additional_comments"
+placeholder="Optional"
+></textarea>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<button type="submit" id="submitButton">
+SUBMIT QUESTIONNAIRE
+</button>
+
+<div class="error" id="errorMessage"></div>
+
+<div class="success" id="successMessage">
+
+<h2>✅ Thank You!</h2>
+
+<p>
+Your questionnaire has been submitted successfully.
+</p>
+
+<p>
+Your response will contribute to the research on the reported
+diphtheria outbreak in Plateau State, Nigeria.
+</p>
+
+<button
+type="button"
+onclick="location.reload()"
+style="margin-top:15px;"
+>
+Submit Another Response
+</button>
+
+</div>
+
+</div>
+
+</form>
+
+</div>
+
+<div class="footer">
+© 2026 G Nurse Research Hub Nigeria
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+"https://bmiechymiyedubezhcqk.supabase.co";
+
+const SUPABASE_KEY =
+"PASTE_YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY_HERE";
+
+const supabaseClient =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+// ===============================
+// HELPER FUNCTIONS
+// ===============================
+
+function getRadio(name){
+
+    const item =
+        document.querySelector(
+            `input[name="${name}"]:checked`
+        );
+
+    return item ? item.value : null;
+}
+
+
+function getSelect(name){
+
+    const item =
+        document.querySelector(
+            `[name="${name}"]`
+        );
+
+    return item
+        ? item.value || null
+        : null;
+}
+
+
+function getText(name){
+
+    const item =
+        document.querySelector(
+            `[name="${name}"]`
+        );
+
+    return item
+        ? item.value.trim() || null
+        : null;
+}
+
+
+function getCheckboxes(name){
+
+    return Array.from(
+        document.querySelectorAll(
+            `input[name="${name}"]:checked`
+        )
+    ).map(item => item.value);
+
+}
+
+
+// ===============================
+// FORM SUBMISSION
+// ===============================
+
+const surveyForm =
+    document.getElementById("surveyForm");
+
+const submitButton =
+    document.getElementById("submitButton");
+
+const successMessage =
+    document.getElementById("successMessage");
+
+const errorMessage =
+    document.getElementById("errorMessage");
+
+
+surveyForm.addEventListener(
+    "submit",
+    async function(event){
+
+        event.preventDefault();
+
+
+        // Clear previous messages
+
+        successMessage.style.display = "none";
+
+        errorMessage.style.display = "none";
+
+
+        // ===============================
+        // AGE ELIGIBILITY
+        // ===============================
+
+        const ageEligibility =
+            getRadio("age_eligibility");
+
+        if(ageEligibility !== "yes"){
+
+            errorMessage.textContent =
+                "You must confirm that you are eligible to participate before submitting.";
+
+            errorMessage.style.display =
+                "block";
+
+            return;
+        }
+
+
+        // ===============================
+        // CONSENT
+        // ===============================
+
+        const consent =
+            getRadio("consent");
+
+        if(consent !== "yes"){
+
+            errorMessage.textContent =
+                "Please provide your consent before submitting the questionnaire.";
+
+            errorMessage.style.display =
+                "block";
+
+            return;
+        }
+
+
+        // ===============================
+        // PREPARE RESPONSE
+        // ===============================
+
+        const response = {
+
+            age_group:
+                getRadio("age_group"),
+
+            sex:
+                getRadio("sex"),
+
+            state:
+                getText("state"),
+
+            lga:
+                getText("lga"),
+
+            education:
+                getRadio("education"),
+
+            occupation:
+                getText("occupation"),
+
+
+            heard_of_diphtheria:
+                getRadio("heard_of_diphtheria"),
+
+            information_source:
+                getCheckboxes("information_source"),
+
+
+            infectious_disease:
+                getRadio("infectious_disease"),
+
+            transmission_methods:
+                getCheckboxes("transmission_methods"),
+
+
+            risk_factors:
+                getCheckboxes("risk_factors"),
+
+
+            symptoms:
+                getCheckboxes("symptoms"),
+
+
+            severe_complications:
+                getRadio("severe_complications"),
+
+
+            aware_of_current_outbreak:
+                getRadio("aware_of_current_outbreak"),
+
+
+            outbreak_information_source:
+                getCheckboxes(
+                    "outbreak_information_source"
+                ),
+
+
+            level_of_concern:
+                getRadio("level_of_concern"),
+
+
+            community_information_adequate:
+                getRadio(
+                    "community_information_adequate"
+                ),
+
+
+            vaccinated:
+                getRadio("vaccinated"),
+
+
+            children_vaccinated:
+                getRadio("children_vaccinated"),
+
+
+            vaccination_status:
+                getRadio("vaccination_status"),
+
+
+            non_vaccination_reason:
+                getCheckboxes(
+                    "non_vaccination_reason"
+                ),
+
+
+            willing_to_vaccinate:
+                getRadio("willing_to_vaccinate"),
+
+
+            close_contact:
+                getRadio("close_contact"),
+
+
+            overcrowded_environment:
+                getRadio(
+                    "overcrowded_environment"
+                ),
+
+
+            crowded_gathering:
+                getRadio("crowded_gathering"),
+
+
+            recent_symptoms:
+                getCheckboxes("recent_symptoms"),
+
+
+            first_place_for_care:
+                getRadio("first_place_for_care"),
+
+
+            prevention_measures:
+                getCheckboxes(
+                    "prevention_measures"
+                ),
+
+
+            vaccination_campaign_seen:
+                getRadio(
+                    "vaccination_campaign_seen"
+                ),
+
+
+            school_health_information:
+                getRadio(
+                    "school_health_information"
+                ),
+
+
+            confidence_in_prevention:
+                getRadio(
+                    "confidence_in_prevention"
+                ),
+
+
+            trusted_information_source:
+                getCheckboxes(
+                    "trusted_information_source"
+                ),
+
+
+            social_media_exposure:
+                getRadio(
+                    "social_media_exposure"
+                ),
+
+
+            social_media_usefulness:
+                getRadio(
+                    "social_media_usefulness"
+                ),
+
+
+            biggest_control_challenge:
+                getRadio(
+                    "biggest_control_challenge"
+                ),
+
+
+            recommended_actions:
+                getText("recommended_actions"),
+
+
+            information_needed:
+                getText("information_needed"),
+
+
+            additional_comments:
+                getText("additional_comments"),
+
+
+            consent: true
+
+        };
+
+
+        // ===============================
+        // DISABLE BUTTON
+        // ===============================
+
+        submitButton.disabled = true;
+
+        submitButton.textContent =
+            "Submitting...";
+
+
+        try{
+
+            const { error } =
+                await supabaseClient
+                    .from(
+                        "diphtheria_survey_responses"
+                    )
+                    .insert(response);
+
+
+            if(error){
+
+                console.error(
+                    "Supabase error:",
+                    error
+                );
+
+                throw error;
+            }
+
+
+            // ===============================
+            // SUCCESS
+            // ===============================
+
+            surveyForm.reset();
+
+
+            successMessage.textContent =
+                "Thank you. Your questionnaire has been submitted successfully.";
+
+            successMessage.style.display =
+                "block";
+
+
+            submitButton.textContent =
+                "Submit Another Response";
+
+
+            submitButton.disabled = false;
+
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+
+        }catch(error){
+
+            console.error(error);
+
+
+            errorMessage.textContent =
+                "Unable to submit your response. Please check your internet connection and try again.";
+
+            errorMessage.style.display =
+                "block";
+
+
+            submitButton.textContent =
+                "Submit Response";
+
+
+            submitButton.disabled = false;
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+    </html>
