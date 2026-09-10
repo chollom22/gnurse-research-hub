@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Diphtheria Survey Admin | G Nurse Research Hub Nigeria</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f4f7f6;
+    color:#1f2937;
+}
+
+header{
+    background:#0b6b3a;
+    color:white;
+    padding:18px;
+    text-align:center;
+}
+
+header h1{
+    margin:0;
+    font-size:22px;
+}
+
+header p{
+    margin:6px 0 0;
+    opacity:.9;
+}
+
+.container{
+    width:95%;
+    max-width:1200px;
+    margin:25px auto;
+}
+
+.card{
+    background:white;
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:20px;
+    box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
+
+.login-box{
+    max-width:420px;
+    margin:60px auto;
+}
+
+input{
+    width:100%;
+    padding:13px;
+    margin:8px 0 14px;
+    border:1px solid #ccc;
+    border-radius:7px;
+}
+
+button{
+    border:0;
+    padding:12px 18px;
+    border-radius:7px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.login-btn{
+    width:100%;
+    background:#0b6b3a;
+    color:white;
+}
+
+.logout-btn{
+    background:#b42318;
+    color:white;
+    float:right;
+}
+
+.download-btn{
+    background:#0b6b3a;
+    color:white;
+    margin-right:8px;
+}
+
+.refresh-btn{
+    background:#e5e7eb;
+    color:#111827;
+}
+
+.message{
+    padding:12px;
+    border-radius:7px;
+    margin-top:10px;
+    display:none;
+}
+
+.error{
+    background:#fee4e2;
+    color:#b42318;
+}
+
+.success{
+    background:#dcfae6;
+    color:#087443;
+}
+
+.dashboard{
+    display:none;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+}
+
+.stat{
+    background:white;
+    border-radius:12px;
+    padding:20px;
+    text-align:center;
+    box-shadow:0 3px 10px rgba(0,0,0,.06);
+}
+
+.stat h2{
+    margin:0;
+    font-size:30px;
+    color:#0b6b3a;
+}
+
+.stat p{
+    margin:8px 0 0;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:20px;
+}
+
+.chart-title{
+    font-size:18px;
+    font-weight:bold;
+    margin-bottom:12px;
+}
+
+.bar{
+    margin:10px 0;
+}
+
+.bar-label{
+    display:flex;
+    justify-content:space-between;
+    font-size:14px;
+    margin-bottom:4px;
+}
+
+.bar-background{
+    height:10px;
+    background:#e5e7eb;
+    border-radius:10px;
+    overflow:hidden;
+}
+
+.bar-fill{
+    height:100%;
+    background:#0b6b3a;
+}
+
+.table-wrapper{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:900px;
+}
+
+th,td{
+    border-bottom:1px solid #ddd;
+    padding:10px;
+    text-align:left;
+    vertical-align:top;
+}
+
+th{
+    background:#f0f4f2;
+}
+
+.small{
+    color:#6b7280;
+    font-size:13px;
+}
+
+.hidden{
+    display:none!important;
+}
+
+@media(max-width:600px){
+    .container{
+        width:96%;
+    }
+
+    .logout-btn{
+        float:none;
+        margin-top:12px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🦠 Diphtheria Survey Admin Dashboard</h1>
+    <p>G Nurse Research Hub Nigeria</p>
+</header>
+
+
+<!-- LOGIN -->
+<div id="loginSection" class="container">
+
+    <div class="card login-box">
+
+        <h2>🔐 Administrator Login</h2>
+
+        <p class="small">
+            Sign in with the administrator account already created
+            in Supabase Authentication.
+        </p>
+
+        <label>Email</label>
+        <input
+            type="email"
+            id="email"
+            placeholder="Admin email"
+        >
+
+        <label>Password</label>
+        <input
+            type="password"
+            id="password"
+            placeholder="Password"
+        >
+
+        <button
+            class="login-btn"
+            id="loginButton"
+        >
+            Login
+        </button>
+
+        <div
+            id="loginError"
+            class="message error"
+        ></div>
+
+    </div>
+
+</div>
+
+
+<!-- DASHBOARD -->
+<div id="dashboardSection" class="dashboard">
+
+    <div class="container">
+
+        <div class="card">
+
+            <button
+                class="logout-btn"
+                id="logoutButton"
+            >
+                Logout
+            </button>
+
+            <h2>📊 Survey Dashboard</h2>
+
+            <p class="small">
+                Diphtheria outbreak assessment responses
+            </p>
+
+            <button
+                class="download-btn"
+                id="downloadCsvButton"
+            >
+                📥 Download CSV
+            </button>
+
+            <button
+                class="refresh-btn"
+                id="refreshButton"
+            >
+                🔄 Refresh
+            </button>
+
+        </div>
+
+
+        <!-- STATISTICS -->
+        <div class="stats">
+
+            <div class="stat">
+                <h2 id="totalResponses">0</h2>
+                <p>Total Responses</p>
+            </div>
+
+            <div class="stat">
+                <h2 id="awareCount">0</h2>
+                <p>Aware of Current Outbreak</p>
+            </div>
+
+            <div class="stat">
+                <h2 id="vaccinatedCount">0</h2>
+                <p>Vaccinated Respondents</p>
+            </div>
+
+            <div class="stat">
+                <h2 id="concernedCount">0</h2>
+                <p>Highly Concerned</p>
+            </div>
+
+        </div>
+
+
+        <br>
+
+
+        <!-- CHARTS -->
+        <div class="grid">
+
+            <div class="card">
+                <div class="chart-title">
+                    Age Distribution
+                </div>
+
+                <div id="ageChart"></div>
+            </div>
+
+
+            <div class="card">
+                <div class="chart-title">
+                    Sex Distribution
+                </div>
+
+                <div id="sexChart"></div>
+            </div>
+
+
+            <div class="card">
+                <div class="chart-title">
+                    Education Level
+                </div>
+
+                <div id="educationChart"></div>
+            </div>
+
+
+            <div class="card">
+                <div class="chart-title">
+                    Vaccination Status
+                </div>
+
+                <div id="vaccinationChart"></div>
+            </div>
+
+
+            <div class="card">
+                <div class="chart-title">
+                    Awareness of Current Outbreak
+                </div>
+
+                <div id="outbreakChart"></div>
+            </div>
+
+
+            <div class="card">
+                <div class="chart-title">
+                    Level of Concern
+                </div>
+
+                <div id="concernChart"></div>
+            </div>
+
+
+            <div class="card">
+                <div class="chart-title">
+                    Social Media Exposure
+                </div>
+
+                <div id="socialChart"></div>
+            </div>
+
+
+            <div class="card">
+                <div class="chart-title">
+                    Confidence in Prevention
+                </div>
+
+                <div id="confidenceChart"></div>
+            </div>
+
+        </div>
+
+
+        <!-- RESPONSES TABLE -->
+        <div class="card">
+
+            <h2>📋 Submitted Responses</h2>
+
+            <p class="small">
+                Latest survey responses
+            </p>
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Age</th>
+                            <th>Sex</th>
+                            <th>LGA</th>
+                            <th>Education</th>
+                            <th>Vaccination</th>
+                            <th>Outbreak Awareness</th>
+                            <th>Concern</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="responsesTable">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const SUPABASE_URL =
+"https://bmiechymiyedubezhcqk.supabase.co";
+
+const SUPABASE_KEY =
+"PASTE_YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY_HERE";
+
+const supabaseClient =
+supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+
+let surveyData = [];
+
+
+/* =========================
+   LOGIN
+========================= */
+
+document
+.getElementById("loginButton")
+.addEventListener("click", async function(){
+
+    const email =
+        document
+        .getElementById("email")
+        .value
+        .trim();
+
+    const password =
+        document
+        .getElementById("password")
+        .value;
+
+    const errorBox =
+        document
+        .getElementById("loginError");
+
+    errorBox.style.display = "none";
+
+    if(!email || !password){
+
+        errorBox.textContent =
+            "Please enter your email and password.";
+
+        errorBox.style.display = "block";
+
+        return;
+    }
+
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient.auth.signInWithPassword({
+        email: email,
+        password: password
+    });
+
+
+    if(error){
+
+        errorBox.textContent =
+            error.message;
+
+        errorBox.style.display = "block";
+
+        return;
+    }
+
+
+    if(data.user){
+
+        showDashboard();
+
+    }
+
+});
+
+
+/* =========================
+   CHECK LOGIN
+========================= */
+
+async function checkLogin(){
+
+    const {
+        data
+    } =
+    await supabaseClient
+        .auth
+        .getSession();
+
+    if(data.session){
+
+        showDashboard();
+
+    }
+
+}
+
+
+/* =========================
+   SHOW DASHBOARD
+========================= */
+
+function showDashboard(){
+
+    document
+        .getElementById("loginSection")
+        .style.display = "none";
+
+    document
+        .getElementById("dashboardSection")
+        .style.display = "block";
+
+    loadSurveyData();
+
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+document
+.getElementById("logoutButton")
+.addEventListener("click", async function(){
+
+    await supabaseClient.auth.signOut();
+
+    location.reload();
+
+});
+
+
+/* =========================
+   LOAD SURVEY DATA
+========================= */
+
+async function loadSurveyData(){
+
+    const {
+        data,
+        error
+    } =
+    await supabaseClient
+        .from("diphtheria_survey_responses")
+        .select("*")
+        .order(
+            "submitted_at",
+            {
+                ascending:false
+            }
+        );
+
+
+    if(error){
+
+        alert(
+            "Unable to load survey responses: " +
+            error.message
+        );
+
+        console.error(error);
+
+        return;
+    }
+
+
+    surveyData = data || [];
+
+    updateDashboard();
+
+}
+
+
+/* =========================
+   REFRESH
+========================= */
+
+document
+.getElementById("refreshButton")
+.addEventListener("click", function(){
+
+    loadSurveyData();
+
+});
+
+
+/* =========================
+   COUNT VALUES
+========================= */
+
+function countValues(array, key){
+
+    const counts = {};
+
+    array.forEach(row => {
+
+        let value = row[key];
+
+        if(
+            value === null ||
+            value === undefined ||
+            value === ""
+        ){
+
+            value = "Not answered";
+
+        }
+
+        if(
+            Array.isArray(value)
+        ){
+
+            value.forEach(item => {
+
+                if(!counts[item]){
+                    counts[item] = 0;
+                }
+
+                counts[item]++;
+
+            });
+
+        }else{
+
+            if(!counts[value]){
+                counts[value] = 0;
+            }
+
+            counts[value]++;
+
+        }
+
+    });
+
+    return counts;
+
+}
+
+
+/* =========================
+   DRAW BARS
+========================= */
+
+function drawBars(elementId, counts){
+
+    const container =
+        document.getElementById(elementId);
+
+    container.innerHTML = "";
+
+    const entries =
+        Object.entries(counts)
+        .sort((a,b) => b[1] - a[1]);
+
+    const total =
+        surveyData.length || 1;
+
+
+    entries.forEach(([label,count]) => {
+
+        const percentage =
+            (count / total) * 100;
+
+
+        const bar =
+        document.createElement("div");
+
+        bar.className = "bar";
+
+
+        bar.innerHTML = `
+            <div class="bar-label">
+                <span>${escapeHtml(label)}</span>
+                <span>${count} (${percentage.toFixed(1)}%)</span>
+            </div>
+
+            <div class="bar-background">
+                <div
+                    class="bar-fill"
+                    style="width:${percentage}%"
+                ></div>
+            </div>
+        `;
+
+
+        container.appendChild(bar);
+
+    });
+
+}
+
+
+/* =========================
+   UPDATE DASHBOARD
+========================= */
+
+function updateDashboard(){
+
+    const total =
+        surveyData.length;
+
+
+    document
+        .getElementById("totalResponses")
+        .textContent = total;
+
+
+    const aware =
+        surveyData.filter(row =>
+            String(
+                row.aware_of_current_outbreak
+            ).toLowerCase() === "yes"
+        ).length;
+
+
+    document
+        .getElementById("awareCount")
+        .textContent = aware;
+
+
+    const vaccinated =
+        surveyData.filter(row =>
+            String(
+                row.vaccinated
+            ).toLowerCase() === "yes"
+        ).length;
+
+
+    document
+        .getElementById("vaccinatedCount")
+        .textContent = vaccinated;
+
+
+    const concerned =
+        surveyData.filter(row =>
+            String(
+                row.level_of_concern
+            ).toLowerCase()
+            .includes("very")
+        ).length;
+
+
+    document
+        .getElementById("concernedCount")
+        .textContent = concerned;
+
+
+    drawBars(
+        "ageChart",
+        countValues(
+            surveyData,
+            "age_group"
+        )
+    );
+
+
+    drawBars(
+        "sexChart",
+        countValues(
+            surveyData,
+            "sex"
+        )
+    );
+
+
+    drawBars(
+        "educationChart",
+        countValues(
+            surveyData,
+            "education"
+        )
+    );
+
+
+    drawBars(
+        "vaccinationChart",
+        countValues(
+            surveyData,
+            "vaccination_status"
+        )
+    );
+
+
+    drawBars(
+        "outbreakChart",
+        countValues(
+            surveyData,
+            "aware_of_current_outbreak"
+        )
+    );
+
+
+    drawBars(
+        "concernChart",
+        countValues(
+            surveyData,
+            "level_of_concern"
+        )
+    );
+
+
+    drawBars(
+        "socialChart",
+        countValues(
+            surveyData,
+            "social_media_exposure"
+        )
+    );
+
+
+    drawBars(
+        "confidenceChart",
+        countValues(
+            surveyData,
+            "confidence_in_prevention"
+        )
+    );
+
+
+    renderResponses();
+
+}
+
+
+/* =========================
+   RESPONSE TABLE
+========================= */
+
+function renderResponses(){
+
+    const table =
+        document
+        .getElementById("responsesTable");
+
+    table.innerHTML = "";
+
+
+    surveyData.forEach(row => {
+
+        const tr =
+            document.createElement("tr");
+
+
+        const date =
+            row.submitted_at
+            ? new Date(
+                row.submitted_at
+              ).toLocaleString()
+            : "";
+
+
+        tr.innerHTML = `
+
+            <td>
+                ${escapeHtml(date)}
+            </td>
+
+            <td>
+                ${escapeHtml(
+                    row.age_group || ""
+                )}
+            </td>
+
+            <td>
+                ${escapeHtml(
+                    row.sex || ""
+                )}
+            </td>
+
+            <td>
+                ${escapeHtml(
+                    row.lga || ""
+                )}
+            </td>
+
+            <td>
+                ${escapeHtml(
+                    row.education || ""
+                )}
+            </td>
+
+            <td>
+                ${escapeHtml(
+                    row.vaccination_status || ""
+                )}
+            </td>
+
+            <td>
+                ${escapeHtml(
+                    row.aware_of_current_outbreak || ""
+                )}
+            </td>
+
+            <td>
+                ${escapeHtml(
+                    row.level_of_concern || ""
+                )}
+            </td>
+
+        `;
+
+
+        table.appendChild(tr);
+
+    });
+
+}
+
+
+/* =========================
+   CSV EXPORT
+========================= */
+
+document
+.getElementById("downloadCsvButton")
+.addEventListener("click", function(){
+
+    if(!surveyData.length){
+
+        alert(
+            "There are no survey responses to download."
+        );
+
+        return;
+    }
+
+
+    const columns =
+        Object.keys(
+            surveyData[0]
+        );
+
+
+    const rows = [
+        columns,
+        ...surveyData.map(row =>
+            columns.map(column =>
+                csvValue(row[column])
+            )
+        )
+    ];
+
+
+    const csv =
+        rows
+        .map(row =>
+            row.join(",")
+        )
+        .join("\n");
+
+
+    const blob =
+        new Blob(
+            [csv],
+            {
+                type:"text/csv;charset=utf-8;"
+            }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const link =
+        document.createElement("a");
+
+
+    link.href = url;
+
+    link.download =
+        "diphtheria_survey_responses.csv";
+
+
+    document
+        .body
+        .appendChild(link);
+
+    link.click();
+
+    link.remove();
+
+    URL.revokeObjectURL(url);
+
+});
+
+
+/* =========================
+   CSV VALUE
+========================= */
+
+function csvValue(value){
+
+    if(
+        value === null ||
+        value === undefined
+    ){
+
+        return '""';
+
+    }
+
+
+    if(Array.isArray(value)){
+
+        value =
+            value.join(" | ");
+
+    }
+
+
+    value =
+        String(value)
+        .replace(/"/g,'""');
+
+
+    return `"${value}"`;
+
+}
+
+
+/* =========================
+   SECURITY ESCAPE
+========================= */
+
+function escapeHtml(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+checkLogin();
+
+</script>
+
+</body>
+  </html>
