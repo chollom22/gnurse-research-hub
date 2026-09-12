@@ -652,191 +652,59 @@ async function loadMaterials(subject) {
   }
 
 }
+  async function startPayment(resourceId) {
+    try {
+        const {
+            data: { session }
+        } = await supabaseClient.auth.getSession();
 
-
-/* =========================================
-   START PAYSTACK PAYMENT
-========================================= */
-
-async function startPayment(
-  resourceId,
-  button,
-  status
-) {
-
-  button.disabled = true;
-
-  button.textContent =
-    "⏳ Starting payment...";
-
-
-  try {
-
-    const {
-      data: {
-        session
-      },
-      error: sessionError
-    } =
-      await supabaseClient.auth.getSession();
-
-
-    if (
-      sessionError ||
-      !session ||
-      !session.access_token
-    ) {
-
-      alert(
-        "Please log in before purchasing a resource."
-      );
-
-      window.location.href =
-        "login.html";
-
-      return;
-
-    }
-
-
-    status.style.display =
-      "block";
-
-    status.className =
-      "message info";
-
-    status.textContent =
-      "Connecting to Paystack...";
-
-
-    const response =
-      await fetch(
-        SUPABASE_URL +
-        "/functions/v1/initialize-payment",
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type":
-              "application/json",
-
-            "Authorization":
-              "Bearer " +
-              session.access_token,
-
-            "apikey":
-              SUPABASE_ANON_KEY
-          },
-
-          body: JSON.stringify({
-            resource_id:
-              resourceId
-          })
+        if (!session) {
+            alert("Please log in before purchasing.");
+            window.location.href = "login.html";
+            return;
         }
-      );
 
+        const response = await fetch(
+            SUPABASE_URL + "/functions/v1/initialize-payment",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": "Bearer " + session.access_token,
+                    "apikey": SUPABASE_ANON_KEY
+                },
+                body: JSON.stringify({
+                    resource_id: resourceId
+                })
+            }
+        );
 
-    const result =
-      await response.json();
+        const result = await response.json();
 
+        if (!response.ok) {
+            console.error("Payment error:", result);
+            alert(result.error || "Payment initialization failed.");
+            return;
+        }
 
-    console.log(
-      "Payment response:",
-      result
-    );
+        if (result.already_paid) {
+            alert("You have already purchased this resource.");
+            return;
+        }
 
+        if (!result.authorization_url) {
+            console.error("No Paystack URL:", result);
+            alert("Paystack payment link was not created.");
+            return;
+        }
 
-    if (!response.ok) {
+        window.location.href = result.authorization_url;
 
-      throw new Error(
-        result.error ||
-        "Unable to start payment."
-      );
-
+    } catch (error) {
+        console.error("Payment request failed:", error);
+        alert("Payment connection failed: " + error.message);
     }
-
-
-    if (result.already_paid) {
-
-      status.className =
-        "message success";
-
-      status.textContent =
-        "✅ You have already purchased this resource.";
-
-      button.disabled =
-        false;
-
-      button.textContent =
-        "📖 Refresh materials";
-
-      return;
-
-    }
-
-
-    if (
-      result.success &&
-      result.authorization_url
-    ) {
-
-      status.className =
-        "message success";
-
-      status.textContent =
-        "Redirecting to secure Paystack payment...";
-
-
-      /*
-        Open the real Paystack checkout page.
-      */
-
-      window.location.href =
-        result.authorization_url;
-
-      return;
-
-    }
-
-
-    throw new Error(
-      "Paystack did not return a payment link."
-    );
-
   }
-
-  catch (error) {
-
-    console.error(
-      "Payment error:",
-      error
-    );
-
-
-    status.style.display =
-      "block";
-
-    status.className =
-      "message error";
-
-    status.textContent =
-      "❌ " +
-      (
-        error.message ||
-        "Payment could not be started."
-      );
-
-
-    button.disabled =
-      false;
-
-    button.textContent =
-      "💳 Try Payment Again";
-
-  }
-
-}
-
 
 /* =========================================
    SECURITY HELPER
