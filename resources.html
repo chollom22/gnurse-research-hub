@@ -665,7 +665,7 @@ async function loadMaterials(subject) {
         }
 
         const response = await fetch(
-            SUPABASE_URL + "/functions/v1/initialize-payment",
+            SUPABASE_URL + "/functions/v1/swift-action",
             {
                 method: "POST",
                 headers: {
