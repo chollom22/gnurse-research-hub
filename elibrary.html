@@ -11,13 +11,17 @@ content="width=device-width, initial-scale=1.0">
 <meta name="description"
 content="G Nurse E-Library - Nursing, medical, anatomy, pharmacology, research books and educational resources.">
 
-<title>G Nurse E-Library | G Nurse Research Hub Nigeria</title>
+<title>
+G Nurse E-Library | G Nurse Research Hub Nigeria
+</title>
+
 
 <style>
 
-/* =========================
-   GENERAL
-========================= */
+/* ==================================================
+   G NURSE E-LIBRARY
+   PROFESSIONAL DESIGN
+================================================== */
 
 *{
     box-sizing:border-box;
@@ -25,638 +29,1346 @@ content="G Nurse E-Library - Nursing, medical, anatomy, pharmacology, research b
     padding:0;
 }
 
+html{
+    scroll-behavior:smooth;
+}
+
 body{
-    font-family:Arial,Helvetica,sans-serif;
-    background:#f4f7f6;
-    color:#222;
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background:#f5f8f7;
+
+    color:#17352d;
+
     line-height:1.6;
-}
 
-button,
-input{
-    font-family:inherit;
-}
-
-button{
-    cursor:pointer;
+    min-height:100vh;
 }
 
 
-/* =========================
+/* ==================================================
    HEADER
-========================= */
+================================================== */
 
 header{
-    background:#0b6b3a;
+
+    background:
+        linear-gradient(
+            135deg,
+            #087f5b,
+            #075c43
+        );
+
     color:white;
-    padding:18px 15px;
-    text-align:center;
+
+    padding:18px 15px 14px;
+
     position:sticky;
+
     top:0;
+
     z-index:1000;
-    box-shadow:0 3px 10px rgba(0,0,0,.18);
+
+    box-shadow:
+        0 3px 15px
+        rgba(0,0,0,.15);
 }
+
+
+.header-inner{
+
+    max-width:1200px;
+
+    margin:auto;
+
+    text-align:center;
+}
+
 
 header h1{
+
     font-size:25px;
-    margin-bottom:5px;
+
+    font-weight:800;
+
+    letter-spacing:.2px;
+
+    margin-bottom:3px;
 }
+
 
 header p{
-    font-size:14px;
-    opacity:.95;
+
+    font-size:13px;
+
+    opacity:.9;
+
+    margin-bottom:14px;
 }
 
 
-/* =========================
+/* ==================================================
    TOP NAVIGATION
-========================= */
+================================================== */
 
 .top-nav{
+
     display:flex;
+
     justify-content:center;
+
+    align-items:center;
+
     gap:8px;
+
     flex-wrap:wrap;
-    margin-top:14px;
 }
+
 
 .top-nav button{
+
     border:none;
-    background:white;
-    color:#0b6b3a;
-    padding:10px 14px;
-    border-radius:8px;
-    font-weight:bold;
-    font-size:14px;
-    transition:.2s;
+
+    background:
+        rgba(255,255,255,.12);
+
+    color:white;
+
+    padding:9px 14px;
+
+    border-radius:9px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:
+        .2s ease;
 }
+
 
 .top-nav button:hover{
-    background:#dff4e8;
-    transform:translateY(-1px);
+
+    background:
+        rgba(255,255,255,.22);
+
+    transform:
+        translateY(-1px);
 }
+
 
 .top-nav button.active{
-    background:#ffd54f;
-    color:#222;
+
+    background:white;
+
+    color:#075c43;
+
+    box-shadow:
+        0 2px 8px
+        rgba(0,0,0,.12);
 }
 
 
-/* =========================
-   PAGE SECTIONS
-========================= */
+/* ==================================================
+   MAIN CONTAINER
+================================================== */
+
+main{
+
+    width:100%;
+
+    max-width:1200px;
+
+    margin:auto;
+
+    padding:25px 15px 45px;
+}
+
 
 .page-section{
+
     display:none;
-    max-width:1100px;
-    margin:auto;
-    padding:25px 15px 50px;
+
+    animation:
+        sectionIn .3s ease;
 }
+
 
 .page-section.active{
+
     display:block;
 }
 
 
-/* =========================
+@keyframes sectionIn{
+
+    from{
+        opacity:0;
+        transform:translateY(8px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+
+/* ==================================================
    HERO
-========================= */
+================================================== */
 
 .hero{
-    background:linear-gradient(
-        135deg,
-        #0b6b3a,
-        #159957
-    );
+
+    background:
+        linear-gradient(
+            135deg,
+            #e7f7f0,
+            #ffffff
+        );
+
+    border:
+        1px solid #d5ebe2;
+
+    border-radius:18px;
+
+    padding:32px 22px;
+
+    text-align:center;
+
+    margin-bottom:22px;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0,0,0,.05);
+}
+
+
+.hero-icon{
+
+    width:70px;
+
+    height:70px;
+
+    margin:0 auto 13px;
+
+    border-radius:20px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    background:#087f5b;
 
     color:white;
-    border-radius:16px;
-    padding:35px 20px;
-    text-align:center;
-    margin-bottom:25px;
+
+    font-size:35px;
+
+    box-shadow:
+        0 8px 20px
+        rgba(8,127,91,.22);
 }
+
 
 .hero h2{
-    font-size:30px;
-    margin-bottom:10px;
+
+    font-size:28px;
+
+    color:#075c43;
+
+    margin-bottom:8px;
 }
+
 
 .hero p{
-    max-width:700px;
+
+    max-width:750px;
+
     margin:auto;
-    font-size:16px;
+
+    color:#557069;
+
+    font-size:15px;
 }
 
 
-/* =========================
+/* ==================================================
    SEARCH
-========================= */
+================================================== */
 
 .search-box{
+
     background:white;
-    padding:18px;
-    border-radius:14px;
-    box-shadow:0 3px 12px rgba(0,0,0,.08);
-    margin-bottom:25px;
-}
 
-.search-row{
+    border:1px solid #e0e9e5;
+
+    border-radius:15px;
+
+    padding:12px;
+
     display:flex;
-    gap:10px;
+
+    gap:8px;
+
+    margin-bottom:25px;
+
+    box-shadow:
+        0 4px 15px
+        rgba(0,0,0,.05);
 }
 
-.search-row input{
+
+.search-box input{
+
     flex:1;
-    border:1px solid #ccc;
-    padding:13px;
-    border-radius:8px;
-    font-size:16px;
-    outline:none;
-}
 
-.search-row input:focus{
-    border-color:#0b6b3a;
-}
+    min-width:0;
 
-.search-row button{
     border:none;
-    background:#0b6b3a;
-    color:white;
-    padding:0 18px;
-    border-radius:8px;
-    font-weight:bold;
+
+    outline:none;
+
+    padding:12px 13px;
+
+    font-size:15px;
+
+    background:#f7faf9;
+
+    border-radius:10px;
+
+    color:#17352d;
 }
 
 
-/* =========================
+.search-box button,
+.primary-button{
+
+    border:none;
+
+    background:#087f5b;
+
+    color:white;
+
+    padding:11px 18px;
+
+    border-radius:10px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.2s ease;
+}
+
+
+.search-box button:hover,
+.primary-button:hover{
+
+    background:#075c43;
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* ==================================================
    SECTION TITLE
-========================= */
+================================================== */
 
 .section-title{
-    margin:25px 0 15px;
-    color:#0b6b3a;
+
+    margin:28px 0 15px;
 }
+
 
 .section-title h2{
-    font-size:23px;
+
+    color:#075c43;
+
+    font-size:22px;
+
+    margin-bottom:3px;
 }
+
 
 .section-title p{
-    color:#666;
-    font-size:14px;
+
+    color:#71817b;
+
+    font-size:13px;
 }
 
 
-/* =========================
+/* ==================================================
    CATEGORY GRID
-========================= */
+================================================== */
 
 .category-grid{
+
     display:grid;
+
     grid-template-columns:
-        repeat(auto-fit,minmax(140px,1fr));
+        repeat(6,1fr);
 
     gap:12px;
+
+    margin-bottom:28px;
 }
+
 
 .category-card{
+
     background:white;
-    padding:20px 10px;
-    border-radius:12px;
+
+    border:1px solid #e1ebe7;
+
+    border-radius:13px;
+
+    padding:17px 8px;
+
     text-align:center;
-    box-shadow:0 3px 10px rgba(0,0,0,.07);
-    border:1px solid #e5e5e5;
+
     cursor:pointer;
-    transition:.2s;
+
+    transition:.2s ease;
+
+    box-shadow:
+        0 3px 12px
+        rgba(0,0,0,.04);
 }
+
 
 .category-card:hover{
-    transform:translateY(-3px);
-    border-color:#0b6b3a;
+
+    transform:
+        translateY(-3px);
+
+    border-color:#a9d7c6;
+
+    box-shadow:
+        0 7px 18px
+        rgba(0,0,0,.08);
 }
 
-.category-card .icon{
-    font-size:30px;
-    display:block;
-    margin-bottom:7px;
+
+.category-icon{
+
+    font-size:27px;
+
+    margin-bottom:6px;
 }
+
 
 .category-card strong{
-    font-size:14px;
+
+    display:block;
+
+    font-size:12px;
+
+    color:#24483d;
 }
 
 
-/* =========================
+/* ==================================================
    BOOK GRID
-========================= */
+================================================== */
 
 .book-grid{
+
     display:grid;
+
     grid-template-columns:
-        repeat(auto-fit,minmax(210px,1fr));
+        repeat(3,1fr);
 
     gap:18px;
 }
 
+
 .book-card{
+
     background:white;
-    border-radius:14px;
+
+    border:1px solid #e0e9e5;
+
+    border-radius:16px;
+
     overflow:hidden;
-    box-shadow:0 3px 12px rgba(0,0,0,.08);
-    border:1px solid #e7e7e7;
+
+    box-shadow:
+        0 5px 17px
+        rgba(0,0,0,.055);
+
+    transition:
+        .25s ease;
+
+    display:flex;
+
+    flex-direction:column;
 }
 
+
+.book-card:hover{
+
+    transform:
+        translateY(-4px);
+
+    box-shadow:
+        0 10px 25px
+        rgba(0,0,0,.10);
+}
+
+
+/* ==================================================
+   BOOK COVER
+================================================== */
+
 .book-cover{
-    height:180px;
+
+    min-height:175px;
+
+    padding:20px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-align:center;
+
     background:
         linear-gradient(
-            135deg,
-            #0b6b3a,
-            #32a852
+            145deg,
+            #087f5b,
+            #064c39
         );
 
     color:white;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
-    padding:15px;
-    font-size:20px;
-    font-weight:bold;
+
+    font-size:25px;
+
+    font-weight:800;
+
+    line-height:1.3;
 }
+
 
 .book-info{
-    padding:15px;
+
+    padding:17px;
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
 }
+
 
 .book-info h3{
-    color:#0b6b3a;
+
+    color:#174b3d;
+
     font-size:17px;
-    margin-bottom:5px;
-}
 
-.book-info p{
-    font-size:13px;
-    color:#666;
-    margin-bottom:10px;
-}
-
-.book-buttons{
-    display:flex;
-    gap:7px;
-    flex-wrap:wrap;
-}
-
-.book-buttons button,
-.book-buttons a{
-    border:none;
-    background:#0b6b3a;
-    color:white;
-    padding:9px 12px;
-    border-radius:7px;
-    text-decoration:none;
-    font-size:13px;
-    font-weight:bold;
-}
-
-.book-buttons .secondary{
-    background:#e9f5ee;
-    color:#0b6b3a;
+    margin-bottom:6px;
 }
 
 
-/* =========================
-   MY LIBRARY
-========================= */
+.book-author{
 
-.library-notice{
-    background:#fff8df;
-    border-left:5px solid #e0a800;
-    padding:15px;
-    border-radius:8px;
-    margin-bottom:20px;
-}
+    color:#087f5b;
 
-.library-notice strong{
-    color:#8a6500;
-}
+    font-size:12px;
 
+    font-weight:700;
 
-/* =========================
-   RELATED LIBRARIES
-========================= */
-
-.related-search{
-    background:white;
-    padding:20px;
-    border-radius:14px;
-    box-shadow:0 3px 12px rgba(0,0,0,.08);
-    margin-bottom:20px;
-}
-
-.related-search h3{
-    color:#0b6b3a;
     margin-bottom:8px;
 }
 
+
+.book-description{
+
+    color:#697a74;
+
+    font-size:13px;
+
+    margin-bottom:15px;
+
+    flex:1;
+}
+
+
+.book-buttons{
+
+    display:flex;
+
+    gap:8px;
+}
+
+
+.book-buttons button{
+
+    width:100%;
+
+    border:none;
+
+    background:#087f5b;
+
+    color:white;
+
+    padding:10px;
+
+    border-radius:9px;
+
+    cursor:pointer;
+
+    font-weight:700;
+
+    font-size:13px;
+}
+
+
+.book-buttons button:hover{
+
+    background:#075c43;
+}
+
+
+/* ==================================================
+   BADGE
+================================================== */
+
+.book-badge{
+
+    display:inline-block;
+
+    width:max-content;
+
+    background:#e6f5ef;
+
+    color:#087f5b;
+
+    padding:4px 8px;
+
+    border-radius:20px;
+
+    font-size:10px;
+
+    font-weight:700;
+
+    margin-bottom:8px;
+}
+
+
+/* ==================================================
+   MY LIBRARY NOTICE
+================================================== */
+
+.library-notice{
+
+    background:
+        linear-gradient(
+            135deg,
+            #effaf5,
+            #ffffff
+        );
+
+    border:
+        1px solid #cfe8dd;
+
+    border-left:
+        5px solid #087f5b;
+
+    border-radius:12px;
+
+    padding:15px 17px;
+
+    margin-bottom:22px;
+}
+
+
+.library-notice strong{
+
+    color:#075c43;
+
+    font-size:15px;
+}
+
+
+.library-notice p{
+
+    color:#687872;
+
+    font-size:13px;
+
+    margin-top:5px;
+}
+
+
+/* ==================================================
+   RELATED LIBRARIES
+================================================== */
+
+.related-search{
+
+    background:white;
+
+    border:1px solid #e0e9e5;
+
+    border-radius:16px;
+
+    padding:20px;
+
+    margin-bottom:20px;
+
+    box-shadow:
+        0 4px 15px
+        rgba(0,0,0,.05);
+}
+
+
+.related-search h3{
+
+    color:#075c43;
+
+    margin-bottom:5px;
+}
+
+
 .related-search p{
-    font-size:14px;
-    color:#666;
+
+    color:#71817b;
+
+    font-size:13px;
+
     margin-bottom:15px;
 }
 
+
+.search-row{
+
+    display:flex;
+
+    gap:8px;
+}
+
+
+.search-row input{
+
+    flex:1;
+
+    min-width:0;
+
+    padding:12px;
+
+    border:
+        1px solid #d8e4df;
+
+    border-radius:9px;
+
+    outline:none;
+
+    font-size:14px;
+}
+
+
+.search-row button{
+
+    border:none;
+
+    background:#087f5b;
+
+    color:white;
+
+    padding:10px 17px;
+
+    border-radius:9px;
+
+    font-weight:700;
+
+    cursor:pointer;
+}
+
+
+/* ==================================================
+   EXTERNAL RESULTS
+================================================== */
+
 .related-results{
+
     display:grid;
+
     grid-template-columns:
-        repeat(auto-fit,minmax(220px,1fr));
+        repeat(4,1fr);
 
     gap:15px;
 }
 
+
 .external-book{
+
     background:white;
-    border:1px solid #ddd;
-    border-radius:12px;
-    padding:15px;
-    box-shadow:0 2px 8px rgba(0,0,0,.06);
+
+    border:1px solid #e1e9e5;
+
+    border-radius:14px;
+
+    padding:12px;
+
+    box-shadow:
+        0 4px 14px
+        rgba(0,0,0,.045);
 }
+
 
 .external-book img{
+
     width:100%;
-    height:170px;
-    object-fit:contain;
-    background:#f4f4f4;
-    border-radius:8px;
-    margin-bottom:10px;
+
+    height:190px;
+
+    object-fit:cover;
+
+    border-radius:9px;
+
+    background:#eef2f0;
 }
+
 
 .external-book h3{
-    font-size:16px;
-    color:#0b6b3a;
-    margin-bottom:5px;
+
+    font-size:14px;
+
+    color:#234b3e;
+
+    margin:
+        10px 0 5px;
 }
+
 
 .external-book p{
-    font-size:13px;
-    color:#666;
+
+    font-size:12px;
+
+    color:#71817b;
+
+    margin:3px 0;
 }
+
 
 .external-book .source{
-    font-size:12px;
-    color:#777;
-    margin:8px 0;
+
+    font-size:10px;
+
+    color:#087f5b;
+
+    margin:
+        8px 0 10px;
 }
+
 
 .external-book button{
+
+    width:100%;
+
     border:none;
-    background:#0b6b3a;
+
+    background:#087f5b;
+
     color:white;
-    padding:9px 12px;
-    border-radius:7px;
-    font-weight:bold;
+
+    padding:9px;
+
+    border-radius:8px;
+
+    font-size:11px;
+
+    font-weight:700;
+
+    cursor:pointer;
+}
+
+
+/* ==================================================
+   EMPTY / LOADING
+================================================== */
+
+.empty,
+.loading{
+
+    background:white;
+
+    border:1px dashed #cbdad4;
+
+    border-radius:13px;
+
+    padding:28px;
+
+    text-align:center;
+
+    color:#75847e;
+
     font-size:13px;
+
+    grid-column:1/-1;
 }
 
 
-/* =========================
-   LIBRARY INFORMATION
-========================= */
+/* ==================================================
+   INVISIBLE AD CONTAINER
+================================================== */
 
-.library-info{
-    background:#eef8f2;
-    border-radius:12px;
-    padding:18px;
-    margin-top:20px;
-}
+.ad-space{
 
-.library-info h3{
-    color:#0b6b3a;
-    margin-bottom:8px;
-}
+    display:none;
 
-.library-info p{
-    font-size:14px;
-    color:#555;
-    margin-bottom:8px;
 }
 
 
-/* =========================
+/* ==================================================
    READER
-========================= */
+================================================== */
 
 .reader{
+
     display:none;
+
     position:fixed;
+
     inset:0;
-    background:rgba(0,0,0,.75);
+
     z-index:5000;
-    overflow:auto;
-    padding:15px;
+
+    background:
+        rgba(0,0,0,.72);
+
+    align-items:center;
+
+    justify-content:center;
+
+    padding:12px;
 }
 
-.reader.active{
-    display:block;
+
+.reader.open{
+
+    display:flex;
 }
+
 
 .reader-box{
-    max-width:850px;
-    margin:20px auto;
+
+    width:100%;
+
+    max-width:900px;
+
+    height:
+        min(94vh,900px);
+
     background:white;
-    min-height:90vh;
-    border-radius:12px;
+
+    border-radius:16px;
+
     overflow:hidden;
+
+    display:flex;
+
+    flex-direction:column;
+
+    box-shadow:
+        0 20px 60px
+        rgba(0,0,0,.3);
 }
+
 
 .reader-header{
-    background:#0b6b3a;
+
+    background:#075c43;
+
     color:white;
-    padding:15px;
-    position:sticky;
-    top:0;
-    z-index:5;
-}
 
-.reader-header h2{
-    margin-bottom:10px;
-}
+    padding:12px;
 
-.reader-controls{
     display:flex;
-    gap:7px;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:10px;
+
     flex-wrap:wrap;
 }
 
-.reader-controls button{
-    border:none;
-    padding:8px 11px;
-    border-radius:6px;
-    background:white;
-    color:#0b6b3a;
-    font-weight:bold;
+
+.reader-header h2{
+
+    font-size:17px;
+
+    margin:0;
 }
+
+
+.reader-controls{
+
+    display:flex;
+
+    gap:5px;
+
+    flex-wrap:wrap;
+}
+
+
+.reader-controls button{
+
+    border:none;
+
+    background:
+        rgba(255,255,255,.14);
+
+    color:white;
+
+    padding:7px 9px;
+
+    border-radius:7px;
+
+    cursor:pointer;
+
+    font-size:11px;
+
+    font-weight:600;
+}
+
+
+.reader-controls button:hover{
+
+    background:
+        rgba(255,255,255,.25);
+}
+
 
 .reader-content{
-    padding:30px;
-    min-height:600px;
-    font-size:17px;
+
+    flex:1;
+
+    overflow-y:auto;
+
+    padding:
+        28px 25px 45px;
+
+    font-size:18px;
+
+    line-height:1.85;
+
+    color:#222;
+
+    background:#fff;
 }
+
 
 .reader-content h2{
+
+    color:#075c43;
+
     margin-bottom:15px;
-    color:#0b6b3a;
 }
+
+
+.reader-content h3{
+
+    color:#087f5b;
+
+    margin:
+        25px 0 8px;
+}
+
 
 .reader-content p{
-    margin-bottom:16px;
+
+    margin-bottom:15px;
 }
 
 
-/* =========================
-   READER THEMES
-========================= */
+/* READER THEMES */
 
-.reader-light{
+.theme-light .reader-content{
+
     background:#ffffff;
+
     color:#222;
 }
 
-.reader-sepia{
+
+.theme-sepia .reader-content{
+
     background:#f4ecd8;
-    color:#4b3b25;
+
+    color:#463d2f;
 }
 
-.reader-dark{
+
+.theme-sepia .reader-content h2,
+.theme-sepia .reader-content h3{
+
+    color:#704d25;
+}
+
+
+.theme-dark .reader-content{
+
     background:#181818;
-    color:#eeeeee;
+
+    color:#e9e9e9;
 }
 
-.reader-auto{
-    background:#ffffff;
-    color:#222;
+
+.theme-dark .reader-content h2,
+.theme-dark .reader-content h3{
+
+    color:#79d7b2;
 }
 
-@media(prefers-color-scheme:dark){
 
-    .reader-auto{
-        background:#181818;
-        color:#eee;
+/* ==================================================
+   FOOTER
+================================================== */
+
+footer{
+
+    background:#073f30;
+
+    color:white;
+
+    text-align:center;
+
+    padding:25px 15px;
+
+    margin-top:25px;
+}
+
+
+footer p{
+
+    font-size:12px;
+
+    opacity:.88;
+
+    margin:4px 0;
+}
+
+
+footer strong{
+
+    font-size:14px;
+}
+
+
+/* ==================================================
+   MOBILE
+================================================== */
+
+@media(max-width:900px){
+
+    .category-grid{
+
+        grid-template-columns:
+            repeat(3,1fr);
+    }
+
+
+    .book-grid{
+
+        grid-template-columns:
+            repeat(2,1fr);
+    }
+
+
+    .related-results{
+
+        grid-template-columns:
+            repeat(2,1fr);
     }
 
 }
 
-
-/* =========================
-   LOADING
-========================= */
-
-.loading{
-    text-align:center;
-    padding:25px;
-    color:#666;
-}
-
-.empty{
-    background:white;
-    padding:25px;
-    border-radius:12px;
-    text-align:center;
-    color:#777;
-}
-
-
-/* =========================
-   MONETIZATION AREA
-========================= */
-
-.ad-space{
-    margin:25px 0;
-    min-height:90px;
-    background:#f1f1f1;
-    border:1px dashed #bbb;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-    color:#777;
-    border-radius:10px;
-    font-size:13px;
-}
-
-
-/* =========================
-   FOOTER
-========================= */
-
-footer{
-    background:#083d25;
-    color:white;
-    text-align:center;
-    padding:25px 15px;
-    font-size:13px;
-}
-
-footer p{
-    margin:5px;
-}
-
-
-/* =========================
-   MOBILE
-========================= */
 
 @media(max-width:600px){
 
+    header{
+
+        padding:
+            14px 10px 11px;
+    }
+
+
     header h1{
+
         font-size:21px;
     }
 
+
+    .top-nav{
+
+        gap:5px;
+    }
+
+
     .top-nav button{
-        padding:8px 10px;
+
+        padding:
+            8px 9px;
+
+        font-size:11px;
+    }
+
+
+    main{
+
+        padding:
+            16px 10px 35px;
+    }
+
+
+    .hero{
+
+        padding:
+            25px 15px;
+    }
+
+
+    .hero h2{
+
+        font-size:23px;
+    }
+
+
+    .hero p{
+
+        font-size:13px;
+    }
+
+
+    .search-box{
+
+        padding:8px;
+    }
+
+
+    .search-box button{
+
+        padding:
+            10px 12px;
+
         font-size:12px;
     }
 
-    .hero h2{
-        font-size:24px;
+
+    .category-grid{
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+        gap:9px;
     }
 
+
+    .category-card{
+
+        padding:14px 7px;
+    }
+
+
+    .book-grid{
+
+        grid-template-columns:1fr;
+
+        gap:14px;
+    }
+
+
+    .related-results{
+
+        grid-template-columns:1fr;
+
+        gap:12px;
+    }
+
+
     .search-row{
+
         flex-direction:column;
     }
 
+
     .search-row button{
-        padding:12px;
+
+        width:100%;
     }
 
-    .book-grid{
-        grid-template-columns:
-            repeat(2,1fr);
-        gap:10px;
+
+    .reader{
+
+        padding:0;
     }
 
-    .book-cover{
-        height:145px;
-        font-size:16px;
+
+    .reader-box{
+
+        height:100vh;
+
+        border-radius:0;
     }
 
-    .book-info{
+
+    .reader-header{
+
         padding:10px;
     }
 
-    .book-info h3{
-        font-size:14px;
-    }
-
-    .book-buttons button,
-    .book-buttons a{
-        width:100%;
-        text-align:center;
-    }
 
     .reader-content{
-        padding:20px;
+
+        padding:
+            22px 17px 40px;
+
+        font-size:17px;
     }
 
+}
+
+
+/* ==================================================
+   ACCESSIBILITY
+================================================== */
+
+button{
+
+    -webkit-tap-highlight-color:
+        transparent;
+}
+
+
+input{
+
+    -webkit-appearance:none;
+}
+
+
+button:focus-visible,
+input:focus-visible{
+
+    outline:
+        2px solid #4dbb94;
+
+    outline-offset:2px;
 }
 
 </style>
@@ -667,646 +1379,444 @@ footer p{
 <body>
 
 
-<!-- =========================
+<!-- ==================================================
      HEADER
-========================= -->
+================================================== -->
 
 <header>
 
-<h1>📚 G Nurse E-Library</h1>
+    <div class="header-inner">
 
-<p>
-G Nurse Research Hub Nigeria
-</p>
+        <h1>
+            📚 G Nurse E-Library
+        </h1>
 
-
-<nav class="top-nav">
-
-<button
-class="active"
-onclick="showSection('home',this)">
-🏠 Home
-</button>
+        <p>
+            G Nurse Research Hub Nigeria
+        </p>
 
 
-<button
-onclick="showSection('myLibrary',this)">
-📚 My Library
-</button>
+        <nav class="top-nav">
+
+            <button
+                class="active"
+                onclick="showSection('home', this)">
+                🏠 Home
+            </button>
 
 
-<button
-onclick="showSection('relatedLibraries',this)">
-🌐 Other Related Libraries
-</button>
+            <button
+                onclick="showSection('myLibrary', this)">
+                📚 My Library
+            </button>
 
-</nav>
+
+            <button
+                onclick="showSection('relatedLibraries', this)">
+                🌐 Other Related Libraries
+            </button>
+
+        </nav>
+
+    </div>
 
 </header>
 
 
+<!-- ==================================================
+     MAIN
+================================================== -->
 
-<!-- =========================
+<main>
+
+
+<!-- ==================================================
      HOME
-========================= -->
+================================================== -->
 
 <section
-id="home"
-class="page-section active">
+    id="home"
+    class="page-section active">
 
 
-<div class="hero">
+    <div class="hero">
 
-<h2>Welcome to G Nurse E-Library</h2>
+        <div class="hero-icon">
+            📚
+        </div>
 
-<p>
-Explore nursing, medical, anatomy, pharmacology,
-research and past-question materials from G Nurse
-Research Hub Nigeria and discover books from
-legitimate external library catalogues.
-</p>
+        <h2>
+            Welcome to G Nurse E-Library
+        </h2>
 
-</div>
+        <p>
+            Explore nursing, medical, anatomy,
+            pharmacology, research and
+            educational reading materials
+            from G Nurse and related library
+            catalogues.
+        </p>
 
+    </div>
 
 
-<!-- SEARCH -->
+    <!-- SEARCH -->
 
-<div class="search-box">
+    <div class="search-box">
 
-<div class="search-row">
+        <input
+            type="search"
+            id="mainSearch"
+            placeholder="Search books, authors, subjects...">
 
-<input
-type="search"
-id="mainSearch"
-placeholder="Search books, authors, subjects...">
+        <button
+            onclick="searchAllBooks()">
+            🔎 Search
+        </button>
 
-<button onclick="searchAllBooks()">
-🔎 Search
-</button>
+    </div>
 
-</div>
 
-</div>
+    <!-- CATEGORIES -->
 
+    <div class="section-title">
 
+        <h2>
+            📖 Browse Categories
+        </h2>
 
-<!-- CATEGORIES -->
+        <p>
+            Find learning materials by subject.
+        </p>
 
-<div class="section-title">
+    </div>
 
-<h2>📖 Categories</h2>
 
-<p>
-Choose a category to explore educational materials.
-</p>
+    <div class="category-grid">
 
-</div>
 
+        <div
+            class="category-card"
+            onclick="searchCategory('Nursing')">
 
-<div class="category-grid">
+            <div class="category-icon">
+                👩‍⚕️
+            </div>
 
+            <strong>
+                Nursing
+            </strong>
 
-<div
-class="category-card"
-onclick="searchCategory('Nursing')">
+        </div>
 
-<span class="icon">👩‍⚕️</span>
 
-<strong>Nursing</strong>
+        <div
+            class="category-card"
+            onclick="searchCategory('Medical')">
 
-</div>
+            <div class="category-icon">
+                🏥
+            </div>
 
+            <strong>
+                Medical
+            </strong>
 
-<div
-class="category-card"
-onclick="searchCategory('Medical')">
+        </div>
 
-<span class="icon">🏥</span>
 
-<strong>Medical</strong>
+        <div
+            class="category-card"
+            onclick="searchCategory('Anatomy')">
 
-</div>
+            <div class="category-icon">
+                🫀
+            </div>
 
+            <strong>
+                Anatomy
+            </strong>
 
-<div
-class="category-card"
-onclick="searchCategory('Anatomy')">
+        </div>
 
-<span class="icon">🫀</span>
 
-<strong>Anatomy</strong>
+        <div
+            class="category-card"
+            onclick="searchCategory('Pharmacology')">
 
-</div>
+            <div class="category-icon">
+                💊
+            </div>
 
+            <strong>
+                Pharmacology
+            </strong>
 
-<div
-class="category-card"
-onclick="searchCategory('Pharmacology')">
+        </div>
 
-<span class="icon">💊</span>
 
-<strong>Pharmacology</strong>
+        <div
+            class="category-card"
+            onclick="searchCategory('Research')">
 
-</div>
+            <div class="category-icon">
+                🔬
+            </div>
 
+            <strong>
+                Research
+            </strong>
 
-<div
-class="category-card"
-onclick="searchCategory('Research')">
+        </div>
 
-<span class="icon">🔬</span>
 
-<strong>Research</strong>
+        <div
+            class="category-card"
+            onclick="searchCategory('Past Questions')">
 
-</div>
+            <div class="category-icon">
+                📝
+            </div>
 
+            <strong>
+                Past Questions
+            </strong>
 
-<div
-class="category-card"
-onclick="searchCategory('Past Questions')">
+        </div>
 
-<span class="icon">📝</span>
 
-<strong>Past Questions</strong>
+    </div>
 
-</div>
 
+    <!-- FEATURED -->
 
-</div>
+    <div class="section-title">
 
+        <h2>
+            ⭐ Featured Books
+        </h2>
 
+        <p>
+            Selected educational materials
+            from G Nurse.
+        </p>
 
-<!-- ADVERTISEMENT AREA -->
+    </div>
 
-<div class="ad-space">
 
+    <div
+        id="featuredBooks"
+        class="book-grid">
 
+    </div>
 
-</div>
 
+    <!-- HIDDEN AD AREA -->
 
-
-<!-- FEATURED -->
-
-<div class="section-title">
-
-<h2>⭐ Featured G Nurse Books</h2>
-
-<p>
-Books and educational materials published through
-G Nurse Research Hub Nigeria.
-</p>
-
-</div>
-
-
-<div
-id="featuredBooks"
-class="book-grid">
-
-
-<!-- Example books -->
-
-<div class="book-card">
-
-<div class="book-cover">
-G Nurse Nursing Research
-</div>
-
-<div class="book-info">
-
-<h3>
-Nursing Research
-</h3>
-
-<p>
-G Nurse Research Hub Nigeria
-</p>
-
-<div class="book-buttons">
-
-<button
-onclick="openGurseBook(
-'Nursing Research',
-'This is a read-only G Nurse educational book.'
-)">
-📖 Read Online
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-
-
-<div class="book-card">
-
-<div class="book-cover">
-Medical Surgical Nursing
-</div>
-
-<div class="book-info">
-
-<h3>
-Medical Surgical Nursing
-</h3>
-
-<p>
-G Nurse E-Library
-</p>
-
-<div class="book-buttons">
-
-<button
-onclick="openGurseBook(
-'Medical Surgical Nursing',
-'This G Nurse material is available for online reading.'
-)">
-📖 Read Online
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-
-
-<div class="book-card">
-
-<div class="book-cover">
-Research Methods
-</div>
-
-<div class="book-info">
-
-<h3>
-Research Methods
-</h3>
-
-<p>
-G Nurse Research Hub Nigeria
-</p>
-
-<div class="book-buttons">
-
-<button
-onclick="openGurseBook(
-'Research Methods',
-'Research educational material for G Nurse readers.'
-)">
-📖 Read Online
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-
-</div>
+    <div class="ad-space"></div>
 
 
 </section>
 
 
-
-<!-- =========================
+<!-- ==================================================
      MY LIBRARY
-========================= -->
+================================================== -->
 
 <section
-id="myLibrary"
-class="page-section">
+    id="myLibrary"
+    class="page-section">
 
 
-<div class="section-title">
+    <div class="section-title">
 
-<h2>📚 My Library</h2>
+        <h2>
+            📚 My Library
+        </h2>
 
-<p>
-Your G Nurse Research Hub Nigeria books and materials.
-</p>
+        <p>
+            G Nurse educational books and
+            reading materials.
+        </p>
+
+    </div>
+
+
+    <div class="library-notice">
+
+        <strong>
+            🔒 G Nurse Online Reading
+        </strong>
+
+        <p>
+            Read G Nurse books directly
+            inside the E-Library.
+        </p>
+
+   </div>
+           <div id="myLibraryBooks" class="book-grid">
+
+            <!-- G Nurse books will appear here automatically -->
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================
+         OTHER RELATED LIBRARIES
+    ========================================== -->
+
+    <section id="relatedLibraries" class="page-section">
+
+        <div class="section-title">
+
+            <h2>🌐 Other Related Libraries</h2>
+
+        </div>
+
+
+        <div class="related-search">
+
+            <h3>🔎 Search External Libraries</h3>
+
+            <div class="search-row">
+
+                <input
+                    type="search"
+                    id="externalSearch"
+                    placeholder="Search books, authors or subjects..."
+                >
+
+                <button onclick="searchExternalBooks()">
+                    🔎 Search
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div id="externalResults" class="related-results">
+
+            <div class="empty">
+
+                Search for books, authors,
+                nursing topics or other
+                educational subjects.
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<!-- =========================================
+     ONLINE BOOK READER
+========================================== -->
+
+<div id="reader" class="reader">
+
+    <div class="reader-box">
+
+        <div class="reader-header">
+
+            <h2 id="readerTitle">
+                G Nurse Reader
+            </h2>
+
+            <div class="reader-controls">
+
+                <button
+                    onclick="setReaderTheme('light')">
+                    ☀️ Light
+                </button>
+
+                <button
+                    onclick="setReaderTheme('sepia')">
+                    📖 Sepia
+                </button>
+
+                <button
+                    onclick="setReaderTheme('dark')">
+                    🌙 Dark
+                </button>
+
+                <button
+                    onclick="setReaderTheme('auto')">
+                    ⚙️ Auto
+                </button>
+
+                <button
+                    onclick="changeReaderFont(-1)">
+                    A−
+                </button>
+
+                <button
+                    onclick="resetReaderFont()">
+                    A
+                </button>
+
+                <button
+                    onclick="changeReaderFont(1)">
+                    A+
+                </button>
+
+                <button
+                    onclick="closeReader()">
+                    ✕ Close
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="readerContent"
+            class="reader-content reader-auto">
+
+            <p>
+                Loading book...
+            </p>
+
+        </div>
+
+    </div>
 
 </div>
 
 
-
-<div class="library-notice">
-
-<strong>🔒 Read-only library</strong>
-
-<p>
-G Nurse books are designed to be read online inside
-the G Nurse E-Library. A normal download button is
-not provided.
-</p>
-
-<p>
-For stronger protection, your actual files should be
-stored privately and delivered through controlled,
-short-lived access rather than permanent public PDF
-links.
-</p>
-
-</div>
-
-
-
-<div
-id="myLibraryBooks"
-class="book-grid">
-
-
-<div class="book-card">
-
-<div class="book-cover">
-📘 G Nurse Research Materials
-</div>
-
-<div class="book-info">
-
-<h3>
-G Nurse Research Materials
-</h3>
-
-<p>
-Nursing research and academic support materials.
-</p>
-
-<div class="book-buttons">
-
-<button
-onclick="openGurseBook(
-'G Nurse Research Materials',
-'Welcome to the G Nurse Research Hub Nigeria digital library.'
-)">
-📖 Read Online
-</button>
-
-<a
-href="resources.html"
-class="secondary">
-📚 Resources
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-
-</div>
-
-
-
-<div class="library-info">
-
-<h3>💰 Godfrey love reading </h3>
-
-<p>any students most read hard 
-
-</p>
-
-<p>
-Users can get gift from Godfrey as they consistently visit this site 
-</p>
-
-<p>
-happy reading 
-</p>
-
-</div>
-
-
-</section>
-
-
-
-<!-- =========================
-     RELATED LIBRARIES
-========================= -->
-
-<section
-id="relatedLibraries"
-class="page-section">
-
-
-<div class="section-title">
-
-<h2>🌐 Other Related Libraries</h2>
-
-<p>
-Discover books from legitimate external library
-catalogues without manually adding every book.
-</p>
-
-</div>
-
-
-
-<div class="related-search">
-
-<h3>
-🔎 Search External Library Catalogues
-</h3>
-
-<p>
-
-G Nurse can use approved public APIs/catalogues to
-discover external books. The catalogue information
-remains attributed to its original source.
-
-</p>
-
-
-<div class="search-row">
-
-<input
-type="search"
-id="externalSearch"
-placeholder="Search external books...">
-
-<button onclick="searchExternalBooks()">
-🔎 Search
-</button>
-
-</div>
-
-</div>
-
-
-
-<div
-id="externalResults"
-class="related-results">
-
-<div class="empty">
-
-Search for a book, author, nursing topic,
-medical topic or other educational subject.
-
-</div>
-
-</div>
-
-
-
-<div class="library-info">
-<p> g nurse wants users to explore 
-
-<p>
-Where a legitimate source provides an authorized
-reading option, the reader can use that option.
-</p>
-
-<p>
-External services may have their own terms, copyright
-rules, API limits and commercial restrictions.
-</p>
-
-</div>
-
-
-
-<div class="library-info">
-
-
-
-</div>
-
-
-
-<div class="ad-space">
-
-Advertisement space for an approved advertising network.
-
-</div>
-
-
-</section>
-
-
-
-<!-- =========================
-     READER
-========================= -->
-
-<div
-id="reader"
-class="reader">
-
-
-<div class="reader-box">
-
-
-<div class="reader-header">
-
-<h2 id="readerTitle">
-G Nurse Reader
-</h2>
-
-
-<div class="reader-controls">
-
-<button onclick="setReaderTheme('light')">
-☀️ Light
-</button>
-
-<button onclick="setReaderTheme('sepia')">
-📖 Sepia
-</button>
-
-<button onclick="setReaderTheme('dark')">
-🌙 Dark
-</button>
-
-<button onclick="setReaderTheme('auto')">
-⚙️ Auto
-</button>
-
-<button onclick="changeFontSize(-1)">
-A−
-</button>
-
-<button onclick="resetFontSize()">
-A
-</button>
-
-<button onclick="changeFontSize(1)">
-A+
-</button>
-
-<button onclick="closeReader()">
-✕ Close
-</button>
-
-</div>
-
-</div>
-
-
-<div
-id="readerContent"
-class="reader-content reader-auto">
-
-<p>
-Loading book...
-</p>
-
-</div>
-
-
-</div>
-
-</div>
-
-
-
-<!-- =========================
+<!-- =========================================
      FOOTER
-========================= -->
+========================================== -->
 
 <footer>
 
-<p>
-<strong>G Nurse Research Hub Nigeria</strong>
-</p>
+    <p>
+        <strong>
+            G Nurse Research Hub Nigeria
+        </strong>
+    </p>
 
-<p>
-Nursing Research • Academic Support •
-Study Resources • E-Library
-</p>
+    <p>
+        Nursing Research • Academic Support
+        • Study Resources • E-Library
+    </p>
 
-<p>
-© 2026 G Nurse Research Hub Nigeria
-</p>
+    <p>
+        © 2026 G Nurse Research Hub Nigeria
+    </p>
 
 </footer>
 
 
-<!--
-====================================================
-PART 2 GOES HERE
-====================================================
--->
-
-    <!-- ==================================================
-     PART 2 — READER DATA + EXTERNAL BOOK RESULTS
-================================================== -->
-
-
 <script>
-
-/* ==================================================
-   G NURSE BOOK DATA
-================================================== */
+   <script>
 
 const gNurseBooks = [
 
@@ -1314,50 +1824,34 @@ const gNurseBooks = [
         id: "gnurse-nursing-research",
         title: "Nursing Research",
         author: "G Nurse Research Hub Nigeria",
-        category: "Nursing",
+        category: "Research",
         description:
-            "Educational material covering nursing research concepts and academic research.",
+            "A nursing research study resource for students and researchers.",
         content: `
             <h2>Nursing Research</h2>
 
             <p>
-            Welcome to the G Nurse Research Hub Nigeria
-            E-Library.
+                Welcome to the G Nurse E-Library.
             </p>
+
+            <h3>Introduction to Nursing Research</h3>
 
             <p>
-            This material is provided for educational and
-            academic purposes. Read the material online
-            using the G Nurse reader.
+                Nursing research is the systematic investigation
+                of questions related to nursing practice, education,
+                administration and patient care.
             </p>
 
-            <h3>Introduction</h3>
+            <h3>Importance of Nursing Research</h3>
 
             <p>
-            Nursing research is the systematic investigation
-            of questions and problems related to nursing
-            practice, education, administration and patient
-            care.
+                Nursing research helps improve patient care,
+                support evidence-based practice and develop
+                nursing knowledge.
             </p>
-
-            <p>
-            Research helps nurses use evidence to improve
-            patient outcomes and the quality of healthcare.
-            </p>
-
-            <h3>Evidence-Based Nursing</h3>
-
-            <p>
-            Evidence-based nursing combines the best available
-            evidence with professional expertise and patient
-            preferences.
-            </p>
-
-            <p>
-            Continue reading your complete G Nurse material
-            inside the online library.
-            </p>
-        `
+        `,
+        isFree: true,
+        price: 0
     },
 
 
@@ -1367,29 +1861,33 @@ const gNurseBooks = [
         author: "G Nurse Research Hub Nigeria",
         category: "Medical",
         description:
-            "Medical-surgical nursing educational reading material.",
+            "Study materials covering important medical-surgical nursing concepts.",
         content: `
             <h2>Medical Surgical Nursing</h2>
 
             <p>
-            Medical-surgical nursing focuses on the care of
-            patients with medical and surgical conditions.
+                This section provides educational reading materials
+                for medical-surgical nursing students.
             </p>
 
-            <h3>Role of the Nurse</h3>
-
-            <p>
-            The nurse assesses patients, identifies nursing
-            problems, plans appropriate interventions,
-            implements care and evaluates patient outcomes.
-            </p>
+            <h3>Patient Assessment</h3>
 
             <p>
-            Safe nursing care requires accurate assessment,
-            clinical reasoning, communication and continuous
-            monitoring.
+                Assessment involves collecting information about
+                the patient's health status through history taking,
+                physical examination and appropriate investigations.
             </p>
-        `
+
+            <h3>Nursing Care</h3>
+
+            <p>
+                Nursing care should be based on careful assessment,
+                appropriate nursing diagnoses, planning,
+                implementation and evaluation.
+            </p>
+        `,
+        isFree: false,
+        price: 500
     },
 
 
@@ -1399,65 +1897,107 @@ const gNurseBooks = [
         author: "G Nurse Research Hub Nigeria",
         category: "Research",
         description:
-            "Introduction to research methods for nursing and health science students.",
+            "An introduction to research methods for nursing and health science students.",
         content: `
             <h2>Research Methods</h2>
-
-            <p>
-            Research methodology describes the systematic
-            approach used to answer a research question.
-            </p>
-
-            <h3>Research Problem</h3>
-
-            <p>
-            A research problem identifies an issue that
-            requires investigation. A clearly defined problem
-            helps the researcher develop appropriate objectives
-            and research questions.
-            </p>
 
             <h3>Research Design</h3>
 
             <p>
-            Research design provides the overall framework
-            for collecting and analysing data.
+                Research design provides the overall plan for
+                conducting a research study.
             </p>
 
+            <h3>Data Collection</h3>
+
             <p>
-            Common designs include descriptive, experimental,
-            quasi-experimental and observational approaches.
+                Data may be collected using questionnaires,
+                interviews, observations, measurements and
+                other appropriate research instruments.
             </p>
-        `
+        `,
+        isFree: true,
+        price: 0
+    },
+
+
+    {
+        id: "gnurse-human-anatomy",
+        title: "Human Anatomy",
+        author: "G Nurse Research Hub Nigeria",
+        category: "Anatomy",
+        description:
+            "Basic human anatomy study material for nursing students.",
+        content: `
+            <h2>Human Anatomy</h2>
+
+            <h3>Introduction</h3>
+
+            <p>
+                Anatomy is the study of the structure of the
+                human body and the relationship between its parts.
+            </p>
+
+            <h3>Body Systems</h3>
+
+            <p>
+                Major body systems include the cardiovascular,
+                respiratory, digestive, nervous, urinary and
+                reproductive systems.
+            </p>
+        `,
+        isFree: true,
+        price: 0
+    },
+
+
+    {
+        id: "gnurse-basic-pharmacology",
+        title: "Basic Pharmacology",
+        author: "G Nurse Research Hub Nigeria",
+        category: "Pharmacology",
+        description:
+            "Basic pharmacology reading material for nursing students.",
+        content: `
+            <h2>Basic Pharmacology</h2>
+
+            <h3>Introduction</h3>
+
+            <p>
+                Pharmacology is the study of drugs, including
+                their actions, effects, uses and interactions
+                within the body.
+            </p>
+
+            <h3>Safe Medication Administration</h3>
+
+            <p>
+                Nurses should follow medication safety principles
+                and verify the correct patient, medication, dose,
+                route and time before administration.
+            </p>
+        `,
+        isFree: false,
+        price: 300
     }
 
 ];
 
 
-/* ==================================================
-   EXTERNAL LIBRARY SETTINGS
-================================================== */
-
-/*
-   Open Library provides a public search API.
-
-   G Nurse does NOT copy or permanently host the
-   external books. The API is used to discover
-   catalogue information.
-
-   Reading availability depends on the original
-   source's permissions and availability.
-*/
-
 const OPEN_LIBRARY_API =
     "https://openlibrary.org/search.json";
 
 
-/* ==================================================
-   NAVIGATION
-================================================== */
+let currentReaderBookId = null;
 
-function showSection(sectionId, button) {
+let currentFontSize = 18;
+
+
+/* =========================================
+   SECTION NAVIGATION
+========================================= */
+
+function showSection(sectionId, button){
 
     document
         .querySelectorAll(".page-section")
@@ -1472,7 +2012,7 @@ function showSection(sectionId, button) {
         document.getElementById(sectionId);
 
 
-    if (section) {
+    if(section){
 
         section.classList.add("active");
 
@@ -1488,7 +2028,7 @@ function showSection(sectionId, button) {
         });
 
 
-    if (button) {
+    if(button){
 
         button.classList.add("active");
 
@@ -1503,20 +2043,36 @@ function showSection(sectionId, button) {
 }
 
 
-/* ==================================================
-   DISPLAY G NURSE BOOKS
-================================================== */
+/* =========================================
+   HTML SECURITY
+========================================= */
 
-function displayGurseBooks(books) {
+function escapeHTML(value){
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =========================================
+   DISPLAY G NURSE BOOKS
+========================================= */
+
+function displayGurseBooks(books){
 
     const container =
         document.getElementById("myLibraryBooks");
 
 
-    if (!container) return;
+    if(!container) return;
 
 
-    if (!books.length) {
+    if(!books.length){
 
         container.innerHTML = `
             <div class="empty">
@@ -1525,29 +2081,31 @@ function displayGurseBooks(books) {
         `;
 
         return;
-
     }
 
 
-    container.innerHTML = books.map(book => {
+    container.innerHTML =
+        books.map(book => {
 
-        return `
+            const priceText =
+                book.isFree
+                    ? "Free"
+                    : `₦${Number(book.price).toLocaleString()}`;
 
-            <div class="book-card">
 
-                <div class="book-cover">
-                    📘
-                    <br>
-                    ${escapeHTML(book.title)}
-                </div>
+            return `
 
-                <div class="book-info">
+                <article class="book-card">
+
+                    <div class="book-icon">
+                        📖
+                    </div>
 
                     <h3>
                         ${escapeHTML(book.title)}
                     </h3>
 
-                    <p>
+                    <p class="book-author">
                         ${escapeHTML(book.author)}
                     </p>
 
@@ -1555,31 +2113,95 @@ function displayGurseBooks(books) {
                         ${escapeHTML(book.description)}
                     </p>
 
-                    <div class="book-buttons">
+                    <span class="book-price">
+                        ${priceText}
+                    </span>
 
-                        <button
+                    <button
+                        class="primary-btn"
                         onclick="openGurseBookById('${book.id}')">
-                            📖 Read Online
-                        </button>
 
-                    </div>
+                        📖 Read Online
 
-                </div>
+                    </button>
 
-            </div>
+                </article>
 
-        `;
+            `;
 
-    }).join("");
+        }).join("");
 
 }
 
 
-/* ==================================================
-   OPEN G NURSE BOOK
-================================================== */
+/* =========================================
+   FEATURED BOOKS
+========================================= */
 
-function openGurseBookById(bookId) {
+function displayFeaturedBooks(){
+
+    const container =
+        document.getElementById("featuredBooks");
+
+
+    if(!container) return;
+
+
+    const featured =
+        gNurseBooks.slice(0, 3);
+
+
+    container.innerHTML =
+        featured.map(book => {
+
+            const priceText =
+                book.isFree
+                    ? "Free"
+                    : `₦${Number(book.price).toLocaleString()}`;
+
+
+            return `
+
+                <article class="book-card">
+
+                    <div class="book-icon">
+                        📚
+                    </div>
+
+                    <h3>
+                        ${escapeHTML(book.title)}
+                    </h3>
+
+                    <p>
+                        ${escapeHTML(book.description)}
+                    </p>
+
+                    <span class="book-price">
+                        ${priceText}
+                    </span>
+
+                    <button
+                        class="primary-btn"
+                        onclick="openGurseBookById('${book.id}')">
+
+                        📖 Read
+
+                    </button>
+
+                </article>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/* =========================================
+   OPEN G NURSE BOOK
+========================================= */
+
+function openGurseBookById(bookId){
 
     const book =
         gNurseBooks.find(
@@ -1587,96 +2209,55 @@ function openGurseBookById(bookId) {
         );
 
 
-    if (!book) {
+    if(!book){
 
-        alert("Book could not be found.");
+        alert("Book not found.");
 
         return;
-
     }
 
 
     openReader(
         book.title,
-        book.content
-    );
-
-
-    trackBookOpen(
-        book.id,
-        "gnurse"
+        book.content,
+        book.id
     );
 
 }
 
 
-/* ==================================================
-   DIRECT G NURSE BOOK READER
-================================================== */
-
-function openGurseBook(title, content) {
-
-    openReader(
-        title,
-        content
-    );
-
-}
-
-
-/* ==================================================
+/* =========================================
    SEARCH G NURSE BOOKS
-================================================== */
+========================================= */
 
-function searchGurseBooks(query) {
+function searchGurseBooks(searchTerm){
 
-    const text =
-        query
-        .trim()
-        .toLowerCase();
+    const term =
+        String(searchTerm || "")
+            .trim()
+            .toLowerCase();
 
 
-    if (!text) {
+    if(!term){
 
-        displayGurseBooks(
-            gNurseBooks
-        );
+        displayGurseBooks(gNurseBooks);
 
         return;
-
     }
 
 
     const results =
-        gNurseBooks.filter(book => {
+        gNurseBooks.filter(book =>
 
-            return (
+            book.title.toLowerCase().includes(term) ||
 
-                book.title
-                    .toLowerCase()
-                    .includes(text)
+            book.author.toLowerCase().includes(term) ||
 
-                ||
+            book.category.toLowerCase().includes(term) ||
 
-                book.author
-                    .toLowerCase()
-                    .includes(text)
+            book.description.toLowerCase().includes(term)
 
-                ||
-
-                book.category
-                    .toLowerCase()
-                    .includes(text)
-
-                ||
-
-                book.description
-                    .toLowerCase()
-                    .includes(text)
-
-            );
-
-        });
+        );
 
 
     displayGurseBooks(results);
@@ -1684,225 +2265,105 @@ function searchGurseBooks(query) {
 }
 
 
-/* ==================================================
-   SEARCH ALL BOOKS
-================================================== */
+/* =========================================
+   MAIN SEARCH
+========================================= */
 
-function searchAllBooks() {
+function searchAllBooks(){
 
     const input =
-        document.getElementById(
-            "mainSearch"
-        );
+        document.getElementById("mainSearch");
 
 
-    if (!input) return;
+    if(!input) return;
 
 
-    const query =
+    const term =
         input.value.trim();
 
 
-    if (!query) {
-
-        displayGurseBooks(
-            gNurseBooks
-        );
-
-        return;
-
-    }
+    showSection("myLibrary");
 
 
-    searchGurseBooks(query);
-
-
-    showSection(
-        "myLibrary",
-        document.querySelectorAll(
-            ".top-nav button"
-        )[1]
-    );
+    searchGurseBooks(term);
 
 }
 
 
-/* ==================================================
+/* =========================================
    CATEGORY SEARCH
-================================================== */
+========================================= */
 
-function searchCategory(category) {
-
-    const localResults =
-        gNurseBooks.filter(book => {
-
-            return book.category
-                .toLowerCase()
-                .includes(
-                    category.toLowerCase()
-                );
-
-        });
-
-
-    if (localResults.length) {
-
-        displayGurseBooks(
-            localResults
-        );
-
-    } else {
-
-        document.getElementById(
-            "myLibraryBooks"
-        ).innerHTML = `
-
-            <div class="empty">
-
-                No G Nurse material was found
-                in this category yet.
-
-                <br><br>
-
-                You can search the related
-                library catalogue instead.
-
-            </div>
-
-        `;
-
-    }
-
-
-    showSection(
-        "myLibrary",
-        document.querySelectorAll(
-            ".top-nav button"
-        )[1]
-    );
-
-
-    /*
-       Also place the category into the
-       external-library search box so the
-       user can search external catalogues.
-    */
-
-    const external =
-        document.getElementById(
-            "externalSearch"
-        );
-
-
-    if (external) {
-
-        external.value = category;
-
-    }
-
-}
-
-
-/* ==================================================
-   ESCAPE HTML
-================================================== */
-
-function escapeHTML(value) {
-
-    return String(value)
-
-        .replace(/&/g, "&amp;")
-
-        .replace(/</g, "&lt;")
-
-        .replace(/>/g, "&gt;")
-
-        .replace(/"/g, "&quot;")
-
-        .replace(/'/g, "&#039;");
-
-}
-
-
-/* ==================================================
-   EXTERNAL LIBRARY SEARCH
-================================================== */
-
-async function searchExternalBooks() {
-
-    const input =
-        document.getElementById(
-            "externalSearch"
-        );
-
+function searchCategory(category){
 
     const results =
-        document.getElementById(
-            "externalResults"
+        gNurseBooks.filter(book =>
+
+            book.category.toLowerCase() ===
+            category.toLowerCase()
+
         );
 
 
-    if (!input || !results) return;
+    showSection("myLibrary");
+
+
+    displayGurseBooks(results);
+
+}
+
+
+/* =========================================
+   EXTERNAL LIBRARY SEARCH
+========================================= */
+
+async function searchExternalBooks(){
+
+    const input =
+        document.getElementById("externalSearch");
+
+
+    const resultsContainer =
+        document.getElementById("externalResults");
+
+
+    if(!input || !resultsContainer) return;
 
 
     const query =
         input.value.trim();
 
 
-    if (!query) {
+    if(!query){
 
-        results.innerHTML = `
-
+        resultsContainer.innerHTML = `
             <div class="empty">
-
-                Enter a book title, author,
-                subject or nursing topic.
-
+                Enter a book, author or subject to search.
             </div>
-
         `;
 
         return;
-
     }
 
 
-    results.innerHTML = `
-
+    resultsContainer.innerHTML = `
         <div class="loading">
-
-            🔎 Searching legitimate
-            external library catalogue...
-
+            🔎 Searching library catalogues...
         </div>
-
     `;
 
 
-    try {
-
-        const url =
-            OPEN_LIBRARY_API
-            + "?q="
-            + encodeURIComponent(query)
-            + "&limit=12"
-            + "&fields=key,title,author_name,cover_i,first_publish_year,ebook_access,ia";
-
+    try{
 
         const response =
-            await fetch(url, {
-                headers: {
-                    "Accept":
-                        "application/json"
-                }
-            });
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Library search failed."
+            await fetch(
+                `${OPEN_LIBRARY_API}?q=${encodeURIComponent(query)}&limit=20`
             );
+
+
+        if(!response.ok){
+
+            throw new Error("Search failed");
 
         }
 
@@ -1916,25 +2377,16 @@ async function searchExternalBooks() {
         );
 
 
-    } catch (error) {
+    }catch(error){
 
         console.error(error);
 
 
-        results.innerHTML = `
-
+        resultsContainer.innerHTML = `
             <div class="empty">
-
-                ⚠️ Unable to search the
-                external catalogue right now.
-
-                <br><br>
-
-                Please check your internet
-                connection and try again.
-
+                Unable to search the external library right now.
+                Please try again.
             </div>
-
         `;
 
     }
@@ -1942,472 +2394,152 @@ async function searchExternalBooks() {
 }
 
 
-/* ==================================================
+/* =========================================
    DISPLAY EXTERNAL BOOKS
-================================================== */
+========================================= */
 
-function displayExternalBooks(books) {
+function displayExternalBooks(books){
 
     const container =
-        document.getElementById(
-            "externalResults"
-        );
+        document.getElementById("externalResults");
 
 
-    if (!container) return;
+    if(!container) return;
 
 
-    if (!books.length) {
+    if(!books.length){
 
         container.innerHTML = `
-
             <div class="empty">
-
-                No external books were found
-                for this search.
-
+                No books found.
             </div>
-
         `;
 
         return;
-
     }
 
 
     container.innerHTML =
-        books.map(book => {
+        books.map((book, index) => {
 
             const title =
-                book.title ||
-                "Untitled book";
+                book.title || "Untitled Book";
 
 
             const author =
-                book.author_name &&
-                book.author_name.length
-
-                ?
-
-                book.author_name
-                    .slice(0,2)
-                    .join(", ")
-
-                :
-
-                "Unknown author";
+                Array.isArray(book.author_name)
+                    ? book.author_name.join(", ")
+                    : "Unknown author";
 
 
             const year =
-                book.first_publish_year
-                || "Year unavailable";
+                book.first_publish_year || "";
 
 
             const cover =
                 book.cover_i
-
-                ?
-
-                `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
-
-                :
-
-                "";
+                    ? `https://covers.openlibrary.org/b/id/${book.cover_i}-M.jpg`
+                    : "";
 
 
             const key =
                 book.key || "";
 
 
-            const bookUrl =
-                key
-
-                ?
-
-                `https://openlibrary.org${key}`
-
-                :
-
-                "https://openlibrary.org";
-
-
-            const hasEbook =
-                book.ebook_access &&
-                book.ebook_access !==
-                "no_ebook";
-
-
             return `
 
-                <div class="external-book">
+                <article class="book-card external-book">
 
                     ${
                         cover
-
-                        ?
-
-                        `
-                        <img
-                        src="${cover}"
-                        alt="Book cover"
-                        loading="lazy">
-                        `
-
-                        :
-
-                        `
-                        <div
-                        style="
-                        height:170px;
-                        display:flex;
-                        align-items:center;
-                        justify-content:center;
-                        background:#f1f1f1;
-                        border-radius:8px;
-                        font-size:50px;">
-                        📚
-                        </div>
-                        `
+                            ? `
+                                <img
+                                    src="${cover}"
+                                    alt="${escapeHTML(title)}"
+                                    class="book-cover"
+                                >
+                              `
+                            : `
+                                <div class="book-icon">
+                                    📘
+                                </div>
+                              `
                     }
-
 
                     <h3>
                         ${escapeHTML(title)}
                     </h3>
 
-
                     <p>
-                        👤
                         ${escapeHTML(author)}
                     </p>
 
-
-                    <p>
-                        📅
-                        ${escapeHTML(year)}
-                    </p>
-
-
-                    <div class="source">
-
-                        Source:
-                        Open Library catalogue
-
-                    </div>
-
+                    ${
+                        year
+                            ? `<p>Published: ${escapeHTML(year)}</p>`
+                            : ""
+                    }
 
                     <button
-                    onclick="openExternalBook(
-                        '${escapeHTML(bookUrl)}',
-                        '${escapeHTML(title)}',
-                        ${hasEbook}
-                    )">
+                        class="primary-btn"
+                        onclick="openExternalBook(${index})">
 
-                        ${
-                            hasEbook
-
-                            ?
-
-                            "📖 Check Reading Availability"
-
-                            :
-
-                            "🔗 View Catalogue"
-
-                        }
+                        🌐 View Book
 
                     </button>
 
-                </div>
+                </article>
 
             `;
 
         }).join("");
 
+
+    window.externalBooks = books;
+
 }
 
 
-/* ==================================================
+/* =========================================
    OPEN EXTERNAL BOOK
-================================================== */
+========================================= */
 
-function openExternalBook(
-    url,
-    title,
-    hasEbook
-) {
+function openExternalBook(index){
 
-    trackExternalBookClick(
-        title
-    );
+    const book =
+        window.externalBooks?.[index];
 
 
-    /*
-       We open the legitimate external
-       source rather than copying the
-       external book into G Nurse.
-    */
+    if(!book) return;
+
+
+    const key =
+        book.key || "";
+
+
+    const cleanKey =
+        key.replace(/^\/+/, "");
+
+
+    const openLibraryUrl =
+        cleanKey
+            ? `https://openlibrary.org/${cleanKey}`
+            : `https://openlibrary.org/search?q=${encodeURIComponent(book.title || "")}`;
+
 
     window.open(
-        url,
+        openLibraryUrl,
         "_blank",
         "noopener,noreferrer"
     );
 
-}
-
-
-/* ==================================================
-   EXTERNAL SEARCH ENTER KEY
-================================================== */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function() {
-
-        const externalSearch =
-            document.getElementById(
-                "externalSearch"
-            );
-
-
-        if (externalSearch) {
-
-            externalSearch.addEventListener(
-                "keydown",
-                function(event) {
-
-                    if (
-                        event.key === "Enter"
-                    ) {
-
-                        searchExternalBooks();
-
-                    }
-
-                }
-            );
-
-        }
-
-
-        const mainSearch =
-            document.getElementById(
-                "mainSearch"
-            );
-
-
-        if (mainSearch) {
-
-            mainSearch.addEventListener(
-                "keydown",
-                function(event) {
-
-                    if (
-                        event.key === "Enter"
-                    ) {
-
-                        searchAllBooks();
-
-                    }
-
-                }
-            );
-
-        }
-
-
-        /*
-           Load the G Nurse books
-           when the page opens.
-        */
-
-        displayGurseBooks(
-            gNurseBooks
-        );
-
-    }
-);
-
-
-/* ==================================================
-   PLACEHOLDER ANALYTICS
-================================================== */
-
-/*
-   These functions prepare the E-Library for
-   Supabase analytics later.
-
-   They do not send private information anywhere
-   at this stage.
-*/
-
-
-function trackBookOpen(
-    bookId,
-    bookType
-) {
-
-    console.log(
-        "Book opened:",
-        bookId,
-        bookType
-    );
-
-}
-
-
-function trackExternalBookClick(
-    title
-) {
-
-    console.log(
-        "External catalogue opened:",
-        title
-    );
-    }
-    /* ==================================================
-   PART 3 — READER, THEMES, FONT CONTROLS,
-   SEARCH, ADS, ANALYTICS AND FINALIZATION
-================================================== */
-
-
-/* ==================================================
-   READER THEME
-================================================== */
-
-function setReaderTheme(theme) {
-
-    const reader = document.getElementById("reader");
-
-    if (!reader) return;
-
-    reader.classList.remove(
-        "theme-light",
-        "theme-sepia",
-        "theme-dark"
-    );
-
-    if (theme === "light") {
-
-        reader.classList.add("theme-light");
-
-    }
-
-    else if (theme === "sepia") {
-
-        reader.classList.add("theme-sepia");
-
-    }
-
-    else if (theme === "dark") {
-
-        reader.classList.add("theme-dark");
-
-    }
-
-    else if (theme === "auto") {
-
-        const prefersDark =
-            window.matchMedia &&
-            window.matchMedia(
-                "(prefers-color-scheme: dark)"
-            ).matches;
-
-        if (prefersDark) {
-
-            reader.classList.add("theme-dark");
-
-        } else {
-
-            reader.classList.add("theme-light");
-
-        }
-
-    }
-
-}
-
-
-/* ==================================================
-   READER FONT SIZE
-================================================== */
-
-let readerFontSize = 18;
-
-function changeReaderFont(change) {
-
-    readerFontSize += change;
-
-    if (readerFontSize < 14) {
-
-        readerFontSize = 14;
-
-    }
-
-    if (readerFontSize > 28) {
-
-        readerFontSize = 28;
-
-    }
-
-    const content =
-        document.getElementById("readerContent");
-
-    if (content) {
-
-        content.style.fontSize =
-            readerFontSize + "px";
-
-    }
-
-}
-
-
-/* ==================================================
-   RESET FONT SIZE
-================================================== */
-
-function resetReaderFont() {
-
-    readerFontSize = 18;
-
-    const content =
-        document.getElementById("readerContent");
-
-    if (content) {
-
-        content.style.fontSize =
-            "18px";
-
-    }
-
-}
-
-
-/* ==================================================
-   CLOSE READER
-================================================== */
-
-function closeReader() {
-
-    const reader =
-        document.getElementById("reader");
-
-    if (!reader) return;
-
-    reader.classList.remove("open");
-
-    reader.style.display = "none";
-
-}
-
-
-/* ==================================================
-   OPEN G NURSE BOOK
-================================================== */
-
-function openGurseBook(title, content) {
+   }
+   
+   /* =========================================
+   READER
+========================================= */
+
+function openReader(title, content, bookId = null){
 
     const reader =
         document.getElementById("reader");
@@ -2418,217 +2550,276 @@ function openGurseBook(title, content) {
     const readerContent =
         document.getElementById("readerContent");
 
-    if (!reader ||
-        !readerTitle ||
-        !readerContent) {
 
+    if(!reader || !readerTitle || !readerContent){
         return;
-
     }
+
+
+    currentReaderBookId = bookId;
+
 
     readerTitle.textContent = title;
 
+
     readerContent.innerHTML =
-        content;
-
-    resetReaderFont();
-
-    setReaderTheme("auto");
-
-    reader.style.display = "flex";
-
-    reader.classList.add("open");
-
-    document.body.style.overflow = "hidden";
-
-    trackBookOpen(
-        title,
-        "G Nurse"
-    );
-
-}
+        content || `
+            <p>
+                No reading content is available
+                for this book yet.
+            </p>
+        `;
 
 
-/* ==================================================
-   CLOSE READER WHEN BACKGROUND IS CLICKED
-================================================== */
-
-document.addEventListener(
-    "click",
-    function(event) {
-
-        const reader =
-            document.getElementById("reader");
-
-        if (!reader) return;
-
-        if (
-            event.target === reader
-        ) {
-
-            closeReader();
-
-        }
-
-    }
-);
+    readerContent.style.fontSize =
+        currentFontSize + "px";
 
 
-/* ==================================================
-   ESC KEY CLOSES READER
-================================================== */
+    reader.classList.add("active");
 
-document.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (
-            event.key === "Escape"
-        ) {
-
-            closeReader();
-
-        }
-
-    }
-);
-
-
-/* ==================================================
-   RESTORE PAGE SCROLL
-================================================== */
-
-const originalCloseReader =
-    closeReader;
-
-window.closeReader = function() {
-
-    originalCloseReader();
 
     document.body.style.overflow =
-        "";
-
-};
+        "hidden";
 
 
-/* ==================================================
-   CATEGORY SEARCH
-================================================== */
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 
-function searchCategory(category) {
 
-    showSection(
-        "homeSection",
-        null
+    if(bookId){
+        trackBookOpen(bookId);
+    }
+
+}
+
+
+/* =========================================
+   READER THEME
+========================================= */
+
+function setReaderTheme(theme){
+
+    const readerContent =
+        document.getElementById("readerContent");
+
+
+    if(!readerContent) return;
+
+
+    readerContent.classList.remove(
+        "reader-light",
+        "reader-sepia",
+        "reader-dark",
+        "reader-auto"
     );
 
-    const searchInput =
-        document.getElementById(
-            "mainSearch"
-        );
 
-    if (searchInput) {
+    readerContent.classList.add(
+        "reader-" + theme
+    );
 
-        searchInput.value =
-            category;
 
-    }
-
-    searchGurseBooks(category);
+    localStorage.setItem(
+        "gnurseReaderTheme",
+        theme
+    );
 
 }
 
 
-/* ==================================================
-   MAIN SEARCH BUTTON
-================================================== */
+/* =========================================
+   READER FONT SIZE
+========================================= */
 
-function searchAllBooks() {
+function changeReaderFont(change){
 
-    const input =
-        document.getElementById(
-            "mainSearch"
-        );
+    currentFontSize += change;
 
-    if (!input) return;
 
-    const query =
-        input.value.trim();
+    if(currentFontSize < 14){
+        currentFontSize = 14;
+    }
 
-    if (!query) {
 
-        displayGurseBooks(
-            gNurseBooks
-        );
+    if(currentFontSize > 30){
+        currentFontSize = 30;
+    }
 
-        return;
+
+    const readerContent =
+        document.getElementById("readerContent");
+
+
+    if(readerContent){
+
+        readerContent.style.fontSize =
+            currentFontSize + "px";
 
     }
 
-    searchGurseBooks(query);
+
+    localStorage.setItem(
+        "gnurseReaderFontSize",
+        currentFontSize
+    );
 
 }
 
 
-/* ==================================================
-   EXTERNAL SEARCH BUTTON
-================================================== */
+/* =========================================
+   RESET READER FONT
+========================================= */
 
-async function runExternalSearch() {
+function resetReaderFont(){
 
-    const input =
-        document.getElementById(
-            "externalSearch"
-        );
+    currentFontSize = 18;
 
-    if (!input) return;
 
-    const query =
-        input.value.trim();
+    const readerContent =
+        document.getElementById("readerContent");
 
-    if (!query) {
 
-        return;
+    if(readerContent){
+
+        readerContent.style.fontSize =
+            currentFontSize + "px";
 
     }
 
-    await searchExternalBooks();
+
+    localStorage.setItem(
+        "gnurseReaderFontSize",
+        currentFontSize
+    );
 
 }
 
 
-/* ==================================================
-   SEARCH BUTTON ENTER KEY
-================================================== */
+/* =========================================
+   CLOSE READER
+========================================= */
+
+function closeReader(){
+
+    const reader =
+        document.getElementById("reader");
+
+
+    if(!reader) return;
+
+
+    reader.classList.remove("active");
+
+
+    document.body.style.overflow = "";
+
+
+    currentReaderBookId = null;
+
+}
+
+
+/* =========================================
+   BOOK VIEW TRACKING
+========================================= */
+
+function trackBookOpen(bookId){
+
+    try{
+
+        const views =
+            JSON.parse(
+                localStorage.getItem(
+                    "gnurseBookViews"
+                ) || "{}"
+            );
+
+
+        views[bookId] =
+            (views[bookId] || 0) + 1;
+
+
+        localStorage.setItem(
+            "gnurseBookViews",
+            JSON.stringify(views)
+        );
+
+    }catch(error){
+
+        console.warn(
+            "Book view tracking failed:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   EXTERNAL BOOK CLICK TRACKING
+========================================= */
+
+function trackExternalBookClick(bookKey){
+
+    try{
+
+        const clicks =
+            JSON.parse(
+                localStorage.getItem(
+                    "gnurseExternalBookClicks"
+                ) || "{}"
+            );
+
+
+        clicks[bookKey] =
+            (clicks[bookKey] || 0) + 1;
+
+
+        localStorage.setItem(
+            "gnurseExternalBookClicks",
+            JSON.stringify(clicks)
+        );
+
+    }catch(error){
+
+        console.warn(
+            "External book tracking failed:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================
+   ENTER KEY SEARCH
+========================================= */
 
 document.addEventListener(
     "keydown",
-    function(event) {
+    function(event){
 
-        if (
-            event.key !== "Enter"
-        ) {
-
+        if(event.key !== "Enter"){
             return;
-
         }
 
-        const active =
+
+        const activeElement =
             document.activeElement;
 
-        if (
-            active &&
-            active.id === "mainSearch"
-        ) {
+
+        if(activeElement?.id === "mainSearch"){
 
             searchAllBooks();
 
         }
 
-        if (
-            active &&
-            active.id === "externalSearch"
-        ) {
+
+        if(activeElement?.id === "externalSearch"){
 
             searchExternalBooks();
 
@@ -2638,290 +2829,22 @@ document.addEventListener(
 );
 
 
-/* ==================================================
-   SHOW HOME
-================================================== */
-
-function goHome() {
-
-    showSection(
-        "homeSection",
-        null
-    );
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-
-}
-
-
-/* ==================================================
-   SHOW MY LIBRARY
-================================================== */
-
-function goToMyLibrary() {
-
-    showSection(
-        "librarySection",
-        null
-    );
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-
-}
-
-
-/* ==================================================
-   SHOW RELATED LIBRARIES
-================================================== */
-
-function goToRelatedLibraries() {
-
-    showSection(
-        "relatedSection",
-        null
-    );
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-
-}
-
-
-/* ==================================================
-   READER BUTTON HELPERS
-================================================== */
-
-function readerLight() {
-
-    setReaderTheme(
-        "light"
-    );
-
-}
-
-function readerSepia() {
-
-    setReaderTheme(
-        "sepia"
-    );
-
-}
-
-function readerDark() {
-
-    setReaderTheme(
-        "dark"
-    );
-
-}
-
-function readerAuto() {
-
-    setReaderTheme(
-        "auto"
-    );
-
-}
-
-function readerFontMinus() {
-
-    changeReaderFont(
-        -1
-    );
-
-}
-
-function readerFontPlus() {
-
-    changeReaderFont(
-        1
-    );
-
-}
-
-function readerFontNormal() {
-
-    resetReaderFont();
-
-}
-
-
-/* ==================================================
-   BOOK VIEW ANALYTICS
-================================================== */
-
-let localBookViews = {};
-
-function trackBookOpen(
-    bookId,
-    bookType
-) {
-
-    if (!bookId) return;
-
-    if (
-        !localBookViews[
-            bookId
-        ]
-    ) {
-
-        localBookViews[
-            bookId
-        ] = 0;
-
-    }
-
-    localBookViews[
-        bookId
-    ]++;
-
-    try {
-
-        localStorage.setItem(
-            "gnurseBookViews",
-            JSON.stringify(
-                localBookViews
-            )
-        );
-
-    }
-
-    catch (error) {
-
-        console.log(
-            "Analytics storage unavailable"
-        );
-
-    }
-
-    console.log(
-        "Book opened:",
-        bookId,
-        bookType
-    );
-
-}
-
-
-/* ==================================================
-   LOAD LOCAL ANALYTICS
-================================================== */
-
-function loadLocalAnalytics() {
-
-    try {
-
-        const saved =
-            localStorage.getItem(
-                "gnurseBookViews"
-            );
-
-        if (saved) {
-
-            localBookViews =
-                JSON.parse(saved);
-
-        }
-
-    }
-
-    catch (error) {
-
-        localBookViews = {};
-
-    }
-
-}
-
-
-/* ==================================================
-   EXTERNAL BOOK CLICK TRACKING
-================================================== */
-
-function trackExternalBookClick(
-    title
-) {
-
-    try {
-
-        const key =
-            "gnurseExternalBookClicks";
-
-        let clicks =
-            JSON.parse(
-                localStorage.getItem(
-                    key
-                ) || "{}"
-            );
-
-        if (
-            !clicks[title]
-        ) {
-
-            clicks[title] = 0;
-
-        }
-
-        clicks[title]++;
-
-        localStorage.setItem(
-            key,
-            JSON.stringify(
-                clicks
-            )
-        );
-
-    }
-
-    catch (error) {
-
-        console.log(
-            "External analytics unavailable"
-        );
-
-    }
-
-    console.log(
-        "External book clicked:",
-        title
-    );
-
-}
-
-
-/* ==================================================
-   PREVENT DOWNLOAD BUTTONS
-   FOR G NURSE ONLINE READING
-================================================== */
+/* =========================================
+   CLOSE READER WITH ESCAPE
+========================================= */
 
 document.addEventListener(
-    "contextmenu",
-    function(event) {
+    "keydown",
+    function(event){
 
-        const reader =
-            document.getElementById(
-                "reader"
-            );
+        if(
+            event.key === "Escape" &&
+            document
+                .getElementById("reader")
+                ?.classList.contains("active")
+        ){
 
-        if (
-            reader &&
-            reader.classList.contains(
-                "open"
-            ) &&
-            reader.contains(
-                event.target
-            )
-        ) {
-
-            event.preventDefault();
+            closeReader();
 
         }
 
@@ -2929,100 +2852,82 @@ document.addEventListener(
 );
 
 
-/* ==================================================
-   PREVENT SIMPLE DRAGGING
-================================================== */
+/* =========================================
+   CLOSE READER WHEN BACKGROUND IS CLICKED
+========================================= */
 
-document.addEventListener(
-    "dragstart",
-    function(event) {
+document
+    .getElementById("reader")
+    ?.addEventListener(
+        "click",
+        function(event){
 
-        const reader =
-            document.getElementById(
-                "reader"
-            );
+            if(event.target === this){
 
-        if (
-            reader &&
-            reader.classList.contains(
-                "open"
-            ) &&
-            reader.contains(
-                event.target
-            )
-        ) {
+                closeReader();
 
-            event.preventDefault();
+            }
 
         }
-
-    }
-);
+    );
 
 
-/* ==================================================
-   INITIALIZE E-LIBRARY
-================================================== */
+/* =========================================
+   INITIAL SETTINGS
+========================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
-    function() {
+    function(){
 
-        loadLocalAnalytics();
+        const savedFont =
+            Number(
+                localStorage.getItem(
+                    "gnurseReaderFontSize"
+                )
+            );
+
+
+        if(
+            Number.isFinite(savedFont) &&
+            savedFont >= 14 &&
+            savedFont <= 30
+        ){
+
+            currentFontSize =
+                savedFont;
+
+        }
+
+
+        const savedTheme =
+            localStorage.getItem(
+                "gnurseReaderTheme"
+            ) || "auto";
+
+
+        setReaderTheme(
+            savedTheme
+        );
+
 
         displayGurseBooks(
             gNurseBooks
         );
 
-        setReaderTheme(
-            "auto"
-        );
 
-        resetReaderFont();
-
-        console.log(
-            "G Nurse E-Library loaded successfully."
-        );
+        displayFeaturedBooks();
 
     }
 );
 
 
-/* ==================================================
-   MOBILE SAFETY
-================================================== */
+/* =========================================
+   START HOME PAGE
+========================================= */
 
-window.addEventListener(
-    "resize",
-    function() {
+showSection("home");
 
-        const reader =
-            document.getElementById(
-                "reader"
-            );
-
-        if (!reader) return;
-
-        if (
-            window.innerWidth > 768
-        ) {
-
-            reader.style.width =
-                "100%";
-
-        }
-
-    }
-);
-
-
-/* ==================================================
-   FINAL E-LIBRARY MESSAGE
-================================================== */
-
-console.log(
-    "G Nurse E-Library is ready."
-);
 
 </script>
 
