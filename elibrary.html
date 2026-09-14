@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>G Nurse E-Library | G Nurse Research Hub Nigeria</title>
+
+<meta name="description"
+content="G Nurse E-Library - Nursing, medical, health science books, study resources and related libraries.">
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f4f7f6;
+    color: #1d2925;
+    line-height: 1.6;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+    background: #087f5b;
+    color: white;
+    padding: 18px 15px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 25px;
+    margin-bottom: 5px;
+}
+
+header p {
+    font-size: 14px;
+    opacity: 0.95;
+}
+
+/* =========================
+   TOP NAVIGATION
+========================= */
+
+.top-nav {
+    background: white;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.top-nav button {
+    border: none;
+    background: #eaf5f1;
+    color: #075c43;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.top-nav button:hover,
+.top-nav button.active {
+    background: #087f5b;
+    color: white;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+main {
+    max-width: 1100px;
+    margin: auto;
+    padding: 20px 15px;
+}
+
+/* =========================
+   WELCOME
+========================= */
+
+.welcome {
+    background: linear-gradient(135deg, #087f5b, #0b9b70);
+    color: white;
+    border-radius: 15px;
+    padding: 30px 20px;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.welcome h2 {
+    font-size: 25px;
+    margin-bottom: 8px;
+}
+
+.welcome p {
+    font-size: 15px;
+}
+
+/* =========================
+   SEARCH
+========================= */
+
+.search-box {
+    margin-top: 20px;
+    display: flex;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.search-box input {
+    flex: 1;
+    padding: 14px;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    border-radius: 8px 0 0 8px;
+}
+
+.search-box button {
+    border: none;
+    background: #063f30;
+    color: white;
+    padding: 0 20px;
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* =========================
+   SECTIONS
+========================= */
+
+.section {
+    margin-bottom: 35px;
+}
+
+.section-title {
+    color: #075c43;
+    margin-bottom: 15px;
+    font-size: 22px;
+}
+
+/* =========================
+   CATEGORY CARDS
+========================= */
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.category-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px 10px;
+    text-align: center;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.category-card:hover {
+    transform: translateY(-3px);
+}
+
+.category-icon {
+    font-size: 35px;
+    margin-bottom: 8px;
+}
+
+.category-card h3 {
+    font-size: 15px;
+    color: #075c43;
+}
+
+/* =========================
+   BOOK GRID
+========================= */
+
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+}
+
+.book-card {
+    background: white;
+    border-radius: 13px;
+    overflow: hidden;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+}
+
+.book-cover {
+    height: 180px;
+    background: #dfece7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 55px;
+}
+
+.book-info {
+    padding: 15px;
+}
+
+.book-info h3 {
+    color: #075c43;
+    font-size: 17px;
+    margin-bottom: 5px;
+}
+
+.book-info p {
+    font-size: 13px;
+    color: #666;
+}
+
+.book-button {
+    display: inline-block;
+    margin-top: 12px;
+    background: #087f5b;
+    color: white;
+    border: none;
+    padding: 9px 14px;
+    border-radius: 7px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.book-button:hover {
+    background: #065c42;
+}
+
+/* =========================
+   EXTERNAL LIBRARIES
+========================= */
+
+.library-list {
+    display: grid;
+    gap: 15px;
+}
+
+.library-card {
+    background: white;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.library-card h3 {
+    color: #075c43;
+    margin-bottom: 4px;
+}
+
+.library-card p {
+    font-size: 13px;
+    color: #666;
+}
+
+.library-icon {
+    font-size: 40px;
+}
+
+/* =========================
+   READER
+========================= */
+
+.reader {
+    display: none;
+    margin-top: 25px;
+}
+
+.reader.active {
+    display: block;
+}
+
+.reader-controls {
+    background: white;
+    padding: 12px;
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    border-bottom: 1px solid #ddd;
+}
+
+.reader-controls button {
+    border: 1px solid #ccc;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.reader-content {
+    background: #fffdf7;
+    color: #222;
+    max-width: 800px;
+    margin: auto;
+    padding: 35px 25px;
+    min-height: 500px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+}
+
+.reader-content h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.reader-content p {
+    margin-bottom: 18px;
+    font-size: 17px;
+}
+
+/* Reader themes */
+
+.reader-light {
+    background: #fffdf7;
+    color: #222;
+}
+
+.reader-sepia {
+    background: #f3e4c5;
+    color: #4a3a25;
+}
+
+.reader-dark {
+    background: #202124;
+    color: #e8e8e8;
+}
+
+.reader-auto {
+    background: #fffdf7;
+    color: #222;
+}
+
+@media (prefers-color-scheme: dark) {
+    .reader-auto {
+        background: #202124;
+        color: #e8e8e8;
+    }
+}
+
+/* =========================
+   HIDDEN SECTIONS
+========================= */
+
+.page-section {
+    display: none;
+}
+
+.page-section.active {
+    display: block;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    header h1 {
+        font-size: 21px;
+    }
+
+    .top-nav {
+        overflow-x: auto;
+        justify-content: flex-start;
+    }
+
+    .top-nav button {
+        white-space: nowrap;
+    }
+
+    .welcome h2 {
+        font-size: 21px;
+    }
+
+    .search-box {
+        display: flex;
+    }
+
+    .search-box input {
+        width: 100%;
+    }
+
+    .library-card {
+        align-items: flex-start;
+    }
+
+    .reader-content {
+        padding: 25px 18px;
+    }
+
+    .reader-content p {
+        font-size: 16px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+    <h1>📚 G Nurse E-Library</h1>
+    <p>Nursing • Medical • Health Sciences • Study Resources</p>
+</header>
+
+
+<!-- =========================
+     TOP NAVIGATION ONLY
+========================= -->
+
+<nav class="top-nav">
+
+    <button
+        class="active"
+        onclick="showSection('home', this)">
+        🏠 Home
+    </button>
+
+    <button
+        onclick="showSection('my-library', this)">
+        📚 My Library
+    </button>
+
+    <button
+        onclick="showSection('other-libraries', this)">
+        🌐 Other Related Libraries
+    </button>
+
+</nav>
+
+
+<main>
+
+<!-- =========================
+     HOME
+========================= -->
+
+<section id="home" class="page-section active">
+
+    <div class="welcome">
+
+        <h2>Welcome to G Nurse E-Library</h2>
+
+        <p>
+            Discover nursing books, medical resources,
+            study materials and connected educational libraries.
+        </p>
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Search books, authors, subjects..."
+                onkeyup="searchBooks()">
+
+            <button onclick="searchBooks()">
+                🔍 Search
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- CATEGORIES -->
+
+    <div class="section">
+
+        <h2 class="section-title">
+            📚 Browse Categories
+        </h2>
+
+        <div class="category-grid">
+
+            <div class="category-card"
+                 onclick="filterCategory('Nursing')">
+
+                <div class="category-icon">🩺</div>
+                <h3>Nursing</h3>
+
+            </div>
+
+
+            <div class="category-card"
+                 onclick="filterCategory('Medical')">
+
+                <div class="category-icon">🏥</div>
+                <h3>Medical</h3>
+
+            </div>
+
+
+            <div class="category-card"
+                 onclick="filterCategory('Anatomy')">
+
+                <div class="category-icon">🧬</div>
+                <h3>Anatomy</h3>
+
+            </div>
+
+
+            <div class="category-card"
+                 onclick="filterCategory('Pharmacology')">
+
+                <div class="category-icon">💊</div>
+                <h3>Pharmacology</h3>
+
+            </div>
+
+
+            <div class="category-card"
+                 onclick="filterCategory('Research')">
+
+                <div class="category-icon">📑</div>
+                <h3>Research</h3>
+
+            </div>
+
+
+            <div class="category-card"
+                 onclick="filterCategory('Past Questions')">
+
+                <div class="category-icon">📝</div>
+                <h3>Past Questions</h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- FEATURED BOOKS -->
+
+    <div class="section">
+
+        <h2 class="section-title">
+            📖 Featured Books
+        </h2>
+
+        <div class="book-grid" id="bookGrid">
+
+            <div class="book-card"
+                 data-title="Fundamentals of Nursing"
+                 data-category="Nursing">
+
+                <div class="book-cover">
+                    📕
+                </div>
+
+                <div class="book-info">
+
+                    <h3>Fundamentals of Nursing</h3>
+
+                    <p>
+                        Nursing • G Nurse Library
+                    </p>
+
+                    <button
+                        class="book-button"
+                        onclick="openReader(
+                        'Fundamentals of Nursing')">
+
+                        📖 Read
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="book-card"
+                 data-title="Medical Surgical Nursing"
+                 data-category="Medical">
+
+                <div class="book-cover">
+                    📘
+                </div>
+
+                <div class="book-info">
+
+                    <h3>Medical-Surgical Nursing</h3>
+
+                    <p>
+                        Medical • G Nurse Library
+                    </p>
+
+                    <button
+                        class="book-button"
+                        onclick="openReader(
+                        'Medical-Surgical Nursing')">
+
+                        📖 Read
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="book-card"
+                 data-title="Anatomy and Physiology"
+                 data-category="Anatomy">
+
+                <div class="book-cover">
+                    📗
+                </div>
+
+                <div class="book-info">
+
+                    <h3>Anatomy & Physiology</h3>
+
+                    <p>
+                        Anatomy • G Nurse Library
+                    </p>
+
+                    <button
+                        class="book-button"
+                        onclick="openReader(
+                        'Anatomy & Physiology')">
+
+                        📖 Read
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     MY LIBRARY
+========================= -->
+
+<section
+    id="my-library"
+    class="page-section">
+
+    <div class="section">
+
+        <h2 class="section-title">
+            📚 My Library
+        </h2>
+
+        <p style="margin-bottom:20px;color:#666;">
+            Your G Nurse books and educational resources
+            will appear here.
+        </p>
+
+        <div class="book-grid">
+
+            <div class="book-card">
+
+                <div class="book-cover">
+                    📚
+                </div>
+
+                <div class="book-info">
+
+                    <h3>G Nurse Resources</h3>
+
+                    <p>
+                        Books and materials provided
+                        by G Nurse Research Hub Nigeria.
+                    </p>
+
+                    <a
+                        href="resources.html"
+                        class="book-button">
+
+                        Open Resources
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     OTHER LIBRARIES
+========================= -->
+
+<section
+    id="other-libraries"
+    class="page-section">
+
+    <div class="section">
+
+        <h2 class="section-title">
+            🌐 Other Related Libraries
+        </h2>
+
+        <p style="margin-bottom:20px;color:#666;">
+            Discover books and educational resources
+            from connected external libraries and publishers.
+        </p>
+
+
+        <div class="library-list">
+
+            <!-- Open Library -->
+
+            <div class="library-card">
+
+                <div style="display:flex;gap:15px;align-items:center;">
+
+                    <div class="library-icon">
+                        📚
+                    </div>
+
+                    <div>
+
+                        <h3>Open Library</h3>
+
+                        <p>
+                            Search a large catalogue of books
+                            and discover available editions.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <a
+                    href="https://openlibrary.org/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="book-button">
+
+                    Visit →
+                </a>
+
+            </div>
+
+
+            <!-- African Books Collective -->
+
+            <div class="library-card">
+
+                <div style="display:flex;gap:15px;align-items:center;">
+
+                    <div class="library-icon">
+                        🌍
+                    </div>
+
+                    <div>
+
+                        <h3>African Books Collective</h3>
+
+                        <p>
+                            Discover African books and
+                            academic publications.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <a
+                    href="https://www.africanbookscollective.com/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="book-button">
+
+                    Visit →
+                </a>
+
+            </div>
+
+
+            <!-- Future automatic sources -->
+
+            <div class="library-card">
+
+                <div style="display:flex;gap:15px;align-items:center;">
+
+                    <div class="library-icon">
+                        🔗
+                    </div>
+
+                    <div>
+
+                        <h3>Connected Libraries</h3>
+
+                        <p>
+                            Additional library sources can
+                            appear here automatically when
+                            an approved API or catalogue
+                            integration is available.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     BOOK READER
+========================= -->
+
+<section
+    id="reader"
+    class="reader">
+
+    <div class="reader-controls">
+
+        <button onclick="changeFontSize(-1)">
+            A−
+        </button>
+
+        <button onclick="resetFontSize()">
+            A
+        </button>
+
+        <button onclick="changeFontSize(1)">
+            A+
+        </button>
+
+        <button onclick="setReaderTheme('light')">
+            ☀️ Light
+        </button>
+
+        <button onclick="setReaderTheme('sepia')">
+            📖 Sepia
+        </button>
+
+        <button onclick="setReaderTheme('dark')">
+            🌙 Dark
+        </button>
+
+        <button onclick="setReaderTheme('auto')">
+            ⚙️ Auto
+        </button>
+
+        <button onclick="closeReader()">
+            ✕ Close
+        </button>
+
+    </div>
+
+
+    <article
+        id="readerContent"
+        class="reader-content reader-auto">
+
+        <h2 id="readerTitle">
+            Book Title
+        </h2>
+
+        <p>
+            This is the G Nurse digital reading area.
+        </p>
+
+        <p>
+            When your library is connected to Supabase,
+            the actual book content can be loaded here.
+        </p>
+
+        <p>
+            The reader automatically supports different
+            reading backgrounds and adjustable text size
+            for comfortable reading.
+        </p>
+
+        <p>
+            Your future books can be loaded from your
+            authorized library resources here.
+        </p>
+
+    </article>
+
+</section>
+
+</main>
+
+
+<script>
+
+/* =========================
+   NAVIGATION
+========================= */
+
+function showSection(sectionId, button) {
+
+    document
+        .querySelectorAll(".page-section")
+        .forEach(section => {
+
+            section.classList.remove("active");
+
+        });
+
+    const section =
+        document.getElementById(sectionId);
+
+    if (section) {
+
+        section.classList.add("active");
+
+    }
+
+    document
+        .querySelectorAll(".top-nav button")
+        .forEach(btn => {
+
+            btn.classList.remove("active");
+
+        });
+
+    button.classList.add("active");
+
+    document
+        .getElementById("reader")
+        .classList.remove("active");
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/* =========================
+   SEARCH BOOKS
+========================= */
+
+function searchBooks() {
+
+    const query =
+        document
+        .getElementById("searchInput")
+        .value
+        .toLowerCase()
+        .trim();
+
+    const books =
+        document.querySelectorAll(".book-card");
+
+    books.forEach(book => {
+
+        const title =
+            book.dataset.title
+            ?.toLowerCase() || "";
+
+        const category =
+            book.dataset.category
+            ?.toLowerCase() || "";
+
+        if (
+            title.includes(query) ||
+            category.includes(query)
+        ) {
+
+            book.style.display = "";
+
+        } else {
+
+            book.style.display = "none";
+
+        }
+
+    });
+
+}
+
+
+/* =========================
+   CATEGORY FILTER
+========================= */
+
+function filterCategory(category) {
+
+    const books =
+        document.querySelectorAll(".book-card");
+
+    books.forEach(book => {
+
+        const bookCategory =
+            book.dataset.category || "";
+
+        if (
+            bookCategory
+            .toLowerCase()
+            .includes(category.toLowerCase())
+        ) {
+
+            book.style.display = "";
+
+        } else {
+
+            book.style.display = "none";
+
+        }
+
+    });
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/* =========================
+   BOOK READER
+========================= */
+
+let fontSize = 17;
+
+
+function openReader(title) {
+
+    document
+        .getElementById("readerTitle")
+        .textContent = title;
+
+    document
+        .getElementById("reader")
+        .classList.add("active");
+
+    document
+        .getElementById("reader")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
+
+}
+
+
+function closeReader() {
+
+    document
+        .getElementById("reader")
+        .classList.remove("active");
+
+}
+
+
+/* =========================
+   FONT SIZE
+========================= */
+
+function changeFontSize(amount) {
+
+    fontSize += amount;
+
+    if (fontSize < 12) {
+        fontSize = 12;
+    }
+
+    if (fontSize > 30) {
+        fontSize = 30;
+    }
+
+    document
+        .querySelectorAll(".reader-content p")
+        .forEach(p => {
+
+            p.style.fontSize =
+                fontSize + "px";
+
+        });
+
+}
+
+
+function resetFontSize() {
+
+    fontSize = 17;
+
+    document
+        .querySelectorAll(".reader-content p")
+        .forEach(p => {
+
+            p.style.fontSize =
+                "17px";
+
+        });
+
+}
+
+
+/* =========================
+   READER THEMES
+========================= */
+
+function setReaderTheme(theme) {
+
+    const reader =
+        document.getElementById(
+            "readerContent"
+        );
+
+    reader.classList.remove(
+        "reader-light",
+        "reader-sepia",
+        "reader-dark",
+        "reader-auto"
+    );
+
+    reader.classList.add(
+        "reader-" + theme
+    );
+
+}
+
+</script>
+
+</body>
+</html>
+  
