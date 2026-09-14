@@ -355,6 +355,9 @@
             z-index: 2000;
             display: none;
         }
+        .menu-overlay.active {
+    display: flex;
+        }
 
         .menu-overlay.show {
             display: block;
@@ -568,9 +571,8 @@
         <div class="top-nav-inner">
 
             <!-- 1. MENU -->
-            <button class="nav-item" onclick="openMenu()" aria-label="Open menu">
-                <span class="nav-icon">☰</span>
-                <span class="nav-small">Menu</span>
+            <button class="top-nav-item" type="button" onclick="openMenu()">
+    ☰
             </button>
 
             <!-- 2. CHAT G NURSE -->
