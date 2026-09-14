@@ -493,6 +493,67 @@
                 grid-template-columns: repeat(4, 1fr);
             }
         }
+        /* ==============================
+   FIXED LOWER NAVIGATION
+   ============================== */
+
+.bottom-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    width: 100%;
+    height: 65px;
+
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+
+    background: #07562f;
+
+    z-index: 99999;
+
+    padding-bottom: env(safe-area-inset-bottom);
+
+    box-shadow: 0 -3px 10px rgba(0,0,0,0.25);
+}
+
+.bottom-nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+    text-decoration: none;
+
+    min-width: 0;
+
+    font-size: 12px;
+}
+
+.bottom-nav-item span {
+    font-size: 22px;
+    line-height: 25px;
+}
+
+.bottom-nav-item small {
+    font-size: 10px;
+    margin-top: 2px;
+    white-space: nowrap;
+}
+
+.bottom-nav-item:active {
+    background: rgba(255,255,255,0.15);
+}
+
+
+/* Make sure page content does not hide behind
+   the bottom navigation */
+
+.main-content {
+    padding-bottom: 85px;
+                }
     </style>
 </head>
 
@@ -772,6 +833,36 @@
     
 
     </main>
+    <!-- FIXED LOWER NAVIGATION BAR -->
+
+<nav class="bottom-nav">
+
+    <a href="chart2.html" class="bottom-nav-item">
+        <span>👥</span>
+        <small>Chat</small>
+    </a>
+
+    <a href="resources.html" class="bottom-nav-item">
+        <span>📚</span>
+        <small>Resource</small>
+    </a>
+
+    <a href="videos.html" class="bottom-nav-item">
+        <span>🎥</span>
+        <small>Videos</small>
+    </a>
+
+    <a href="tests.html" class="bottom-nav-item">
+        <span>📝</span>
+        <small>Test</small>
+    </a>
+
+    <a href="osce.html" class="bottom-nav-item">
+        <span>🩺</span>
+        <small>OSCE</small>
+    </a>
+
+</nav>
 
 
     <!-- ============================= -->
