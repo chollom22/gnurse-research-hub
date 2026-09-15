@@ -1501,7 +1501,7 @@ function showSection(
 /* =========================================
    LOAD G NURSE BOOKS
 ========================================= */
-async function loadGurseBooks() {
+    async function loadGurseBooks() {
 
     const featuredBooks =
         document.getElementById("featuredBooks");
@@ -1523,38 +1523,128 @@ async function loadGurseBooks() {
 
     try {
 
-        const { data, error } =
-            await supabase
-                .from("e_library_books")
-                .select("*")
-                .eq("published", true)
-                .order("created_at", {
-                    ascending: false
-                });
+        /* -----------------------------
+           LOAD G NURSE E-LIBRARY BOOKS
+        ----------------------------- */
+
+        const {
+            data: libraryBooks,
+            error: libraryError
+        } = await supabase
+            .from("e_library_books")
+            .select("*")
+            .eq("published", true)
+            .order("created_at", {
+                ascending: false
+            });
 
 
-        if (error) {
+        if (libraryError) {
             console.error(
-                "E-Library error:",
-                error
+                "E-Library books error:",
+                libraryError
             );
-
-            if (featuredBooks) {
-                featuredBooks.innerHTML =
-                    "<p>Unable to load featured books.</p>";
-            }
-
-            if (myLibraryBooks) {
-                myLibraryBooks.innerHTML =
-                    "<p>Unable to load books.</p>";
-            }
-
-            return;
         }
 
 
-        gNurseBooks = data || [];
+        /* -----------------------------
+           LOAD RESOURCE MATERIALS
+        ----------------------------- */
 
+        const {
+            data: resourceBooks,
+            error: resourceError
+        } = await supabase
+            .from("e_library_resource_books")
+            .select("*")
+            .order("created_at", {
+                ascending: false
+            });
+
+
+        if (resourceError) {
+            console.error(
+                "Resource materials error:",
+                resourceError
+            );
+        }
+
+
+        /* -----------------------------
+           CONVERT RESOURCE MATERIALS
+           INTO E-LIBRARY FORMAT
+        ----------------------------- */
+
+        const convertedResources =
+            (resourceBooks || []).map(
+                function(resource) {
+
+                    return {
+
+                        id:
+                            "resource-" +
+                            resource.id,
+
+                        title:
+                            resource.title,
+
+                        author:
+                            "G Nurse Research Hub Nigeria",
+
+                        category:
+                            resource.category ||
+                            "Resources",
+
+                        description:
+                            resource.description ||
+                            "",
+
+                        content:
+                            "",
+
+                        cover_url:
+                            "",
+
+                        is_free:
+                            true,
+
+                        price:
+                            0,
+
+                        currency:
+                            "NGN",
+
+                        published:
+                            true,
+
+                        created_at:
+                            resource.created_at,
+
+                        file_url:
+                            resource.file_url,
+
+                        source:
+                            "resource_materials"
+
+                    };
+
+                }
+            );
+
+
+        /* -----------------------------
+           COMBINE BOTH SOURCES
+        ----------------------------- */
+
+        gNurseBooks = [
+            ...(libraryBooks || []),
+            ...convertedResources
+        ];
+
+
+        /* -----------------------------
+           CHECK RESULTS
+        ----------------------------- */
 
         if (gNurseBooks.length === 0) {
 
@@ -1572,6 +1662,10 @@ async function loadGurseBooks() {
         }
 
 
+        /* -----------------------------
+           DISPLAY BOOKS
+        ----------------------------- */
+
         displayFeaturedBooks();
 
         displayGurseBooks(
@@ -1579,26 +1673,37 @@ async function loadGurseBooks() {
         );
 
 
+        console.log(
+            "E-Library books loaded:",
+            gNurseBooks
+        );
+
     } catch (error) {
 
         console.error(
-            "Unexpected E-Library error:",
+            "E-Library loading error:",
             error
         );
 
+
         if (featuredBooks) {
+
             featuredBooks.innerHTML =
-                "<p>Unable to load featured books.</p>";
+                "<p>Unable to load books.</p>";
+
         }
 
+
         if (myLibraryBooks) {
+
             myLibraryBooks.innerHTML =
                 "<p>Unable to load books.</p>";
+
         }
 
     }
 
-            }
+    }
    /* =========================================
    DISPLAY G NURSE BOOKS
 ========================================= */
