@@ -2031,51 +2031,28 @@ let currentFontSize = 18;
    SECTION NAVIGATION
 ========================================= */
 
-function showSection(sectionId, button){
+window.showSection = function(sectionId, button) {
 
-    document
-        .querySelectorAll(".page-section")
-        .forEach(section => {
-
-            section.classList.remove("active");
-
-        });
-
-
-    const section =
-        document.getElementById(sectionId);
-
-
-    if(section){
-
-        section.classList.add("active");
-
-    }
-
-
-    document
-        .querySelectorAll(".top-nav button")
-        .forEach(btn => {
-
-            btn.classList.remove("active");
-
-        });
-
-
-    if(button){
-
-        button.classList.add("active");
-
-    }
-
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
+    document.querySelectorAll(".page-section").forEach(function(section) {
+        section.classList.remove("active");
     });
 
-}
+    const selectedSection = document.getElementById(sectionId);
 
+    if (selectedSection) {
+        selectedSection.classList.add("active");
+    }
+
+    document.querySelectorAll(".top-nav button").forEach(function(btn) {
+        btn.classList.remove("active");
+    });
+
+    if (button) {
+        button.classList.add("active");
+    }
+
+    window.scrollTo(0, 0);
+};
 
 /* =========================================
    HTML SECURITY
