@@ -1815,8 +1815,6 @@ input:focus-visible{
 </footer>
 
 
-<script>
-   <script>
      <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
@@ -2206,9 +2204,9 @@ function displayFeaturedBooks(){
         featured.map(book => {
 
             const priceText =
-                book.isFree
-                    ? "Free"
-                    : `₦${Number(book.price).toLocaleString()}`;
+    book.is_free
+        ? "FREE"
+        : `₦${Number(book.price || 0).toLocaleString()}`;
 
 
             return `
@@ -2927,50 +2925,72 @@ document
    INITIAL SETTINGS
 ========================================= */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function(){
+/* =========================================
+   INITIALIZE E-LIBRARY
+========================================= */
 
-        const savedFont =
-            Number(
-                localStorage.getItem(
-                    "gnurseReaderFontSize"
-                )
-            );
+document.addEventListener("DOMContentLoaded", function () {
+
+    const savedFont =
+        Number(
+            localStorage.getItem("gnurseReaderFontSize")
+        );
+
+    if (
+        Number.isFinite(savedFont) &&
+        savedFont >= 14 &&
+        savedFont <= 30
+    ) {
+        currentFontSize = savedFont;
+    }
 
 
-        if(
-            Number.isFinite(savedFont) &&
-            savedFont >= 14 &&
-            savedFont <= 30
-        ){
+    const savedTheme =
+        localStorage.getItem("gnurseReaderTheme") || "auto";
 
-            currentFontSize =
-                savedFont;
+    setReaderTheme(savedTheme);
 
+
+    /* Load G Nurse books from Supabase */
+    loadGurseBooks();
+
+
+    /* Start on Home */
+    showSection("home");
+});
+
+
+/* =========================================
+   CLOSE READER WITH ESCAPE
+========================================= */
+
+document.addEventListener("keydown", function (event) {
+
+    if (
+        event.key === "Escape" &&
+        document
+            .getElementById("reader")
+            ?.classList.contains("active")
+    ) {
+        closeReader();
+    }
+
+});
+
+
+/* =========================================
+   CLOSE READER WHEN BACKGROUND IS CLICKED
+========================================= */
+
+document
+    .getElementById("reader")
+    ?.addEventListener("click", function (event) {
+
+        if (event.target === this) {
+            closeReader();
         }
 
-
-        const savedTheme =
-            localStorage.getItem(
-                "gnurseReaderTheme"
-            ) || "auto";
-
-
-        setReaderTheme(
-            savedTheme
-        );
-
-
-        displayGurseBooks(
-            gNurseBooks
-        );
-
-
-        displayFeaturedBooks();
-
-    }
-);
+    });
 
 
 /* =========================================
