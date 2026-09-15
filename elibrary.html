@@ -1832,41 +1832,63 @@ const supabaseClient =
         SUPABASE_KEY
     ); 
 
-const gNurseBooks = [
+let gNurseBooks = [];
 
-    {
-        id: "gnurse-nursing-research",
-        title: "Nursing Research",
-        author: "G Nurse Research Hub Nigeria",
-        category: "Research",
-        description:
-            "A nursing research study resource for students and researchers.",
-        content: `
-            <h2>Nursing Research</h2>
 
-            <p>
-                Welcome to the G Nurse E-Library.
-            </p>
+/* =========================================
+   LOAD G NURSE BOOKS FROM SUPABASE
+========================================= */
 
-            <h3>Introduction to Nursing Research</h3>
+async function loadGurseBooks() {
 
-            <p>
-                Nursing research is the systematic investigation
-                of questions related to nursing practice, education,
-                administration and patient care.
-            </p>
+    const bookContainer =
+        document.getElementById("myLibraryBooks");
 
-            <h3>Importance of Nursing Research</h3>
+    if (!bookContainer) return;
 
-            <p>
-                Nursing research helps improve patient care,
-                support evidence-based practice and develop
-                nursing knowledge.
-            </p>
-        `,
-        isFree: true,
-        price: 0
-    },
+    bookContainer.innerHTML = `
+        <div class="empty">
+            📚 Loading G Nurse books...
+        </div>
+    `;
+
+
+    const { data, error } =
+        await supabaseClient
+            .from("e_library_books")
+            .select("*")
+            .eq("published", true)
+            .order("created_at", {
+                ascending: false
+            });
+
+
+    if (error) {
+
+        console.error(
+            "E-Library loading error:",
+            error
+        );
+
+        bookContainer.innerHTML = `
+            <div class="empty">
+                ❌ Unable to load the library.
+                <br><br>
+                Please try again later.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    gNurseBooks = data || [];
+
+
+    displayGurseBooks(gNurseBooks);
+
+    displayFeaturedBooks();
+}
 
 
     {
@@ -2077,20 +2099,19 @@ function escapeHTML(value){
    DISPLAY G NURSE BOOKS
 ========================================= */
 
-function displayGurseBooks(books){
+function displayGurseBooks(books) {
 
     const container =
         document.getElementById("myLibraryBooks");
 
+    if (!container) return;
 
-    if(!container) return;
 
-
-    if(!books.length){
+    if (!books || books.length === 0) {
 
         container.innerHTML = `
             <div class="empty">
-                No G Nurse books found.
+                📚 No G Nurse books are available yet.
             </div>
         `;
 
@@ -2098,54 +2119,70 @@ function displayGurseBooks(books){
     }
 
 
-    container.innerHTML =
-        books.map(book => {
+    container.innerHTML = books.map(book => {
 
-            const priceText =
-                book.isFree
-                    ? "Free"
-                    : `₦${Number(book.price).toLocaleString()}`;
+        const priceText =
+            book.is_free
+                ? "FREE"
+                : `${book.currency || "NGN"} ${Number(book.price || 0).toLocaleString()}`;
 
 
-            return `
+        return `
+            <article class="book-card">
 
-                <article class="book-card">
+                ${
+                    book.cover_url
+                        ? `
+                        <img
+                            src="${escapeHTML(book.cover_url)}"
+                            alt="${escapeHTML(book.title)}"
+                            class="book-cover"
+                        >
+                        `
+                        : `
+                        <div class="book-cover-placeholder">
+                            📚
+                        </div>
+                        `
+                }
 
-                    <div class="book-icon">
-                        📖
-                    </div>
+                <div class="book-info">
+
+                    <span class="book-category">
+                        ${escapeHTML(book.category || "General")}
+                    </span>
 
                     <h3>
                         ${escapeHTML(book.title)}
                     </h3>
 
-                    <p class="book-author">
-                        ${escapeHTML(book.author)}
-                    </p>
-
                     <p>
-                        ${escapeHTML(book.description)}
+                        ${escapeHTML(book.author || "G Nurse Research Hub Nigeria")}
                     </p>
 
-                    <span class="book-price">
+                    <p class="book-description">
+                        ${escapeHTML(book.description || "")}
+                    </p>
+
+                    <strong class="book-price">
                         ${priceText}
-                    </span>
+                    </strong>
 
                     <button
-                        class="primary-btn"
-                        onclick="openGurseBookById('${book.id}')">
-
-                        📖 Read Online
-
+                        class="read-book-btn"
+                        onclick="openGurseBookById('${book.id}')"
+                    >
+                        📖 Read Book
                     </button>
 
-                </article>
+                </div>
 
-            `;
+            </article>
+        `;
 
-        }).join("");
-
+    }).join("");
 }
+
 
 
 /* =========================================
@@ -2813,34 +2850,34 @@ function trackExternalBookClick(bookKey){
    ENTER KEY SEARCH
 ========================================= */
 
-document.addEventListener(
-    "keydown",
-    function(event){
+document.addEventListener("DOMContentLoaded", function(){
 
-        if(event.key !== "Enter"){
-            return;
-        }
+    const savedFont =
+        Number(localStorage.getItem("gnurseReaderFontSize"));
 
-
-        const activeElement =
-            document.activeElement;
-
-
-        if(activeElement?.id === "mainSearch"){
-
-            searchAllBooks();
-
-        }
-
-
-        if(activeElement?.id === "externalSearch"){
-
-            searchExternalBooks();
-
-        }
-
+    if(
+        Number.isFinite(savedFont) &&
+        savedFont >= 14 &&
+        savedFont <= 30
+    ){
+        currentFontSize = savedFont;
     }
-);
+
+
+    const savedTheme =
+        localStorage.getItem("gnurseReaderTheme") || "auto";
+
+
+    setReaderTheme(savedTheme);
+
+
+    // Load books from Supabase
+    loadGurseBooks();
+
+});
+
+
+showSection("home");
 
 
 /* =========================================
