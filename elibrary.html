@@ -1501,72 +1501,104 @@ function showSection(
 /* =========================================
    LOAD G NURSE BOOKS
 ========================================= */
+async function loadGurseBooks() {
 
-async function loadGurseBooks(){
+    const featuredBooks =
+        document.getElementById("featuredBooks");
 
-    const bookContainer =
-        document.getElementById(
-            "myLibraryBooks"
-        );
+    const myLibraryBooks =
+        document.getElementById("myLibraryBooks");
 
-    if(!bookContainer){
 
-        return;
-
+    if (featuredBooks) {
+        featuredBooks.innerHTML =
+            "<p>Loading featured books...</p>";
     }
 
-    bookContainer.innerHTML = `
-        <div class="empty">
-            📚 Loading G Nurse books...
-        </div>
-    `;
+    if (myLibraryBooks) {
+        myLibraryBooks.innerHTML =
+            "<p>Loading books...</p>";
+    }
 
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("e_library_books")
-            .select("*")
-            .eq("published", true)
-            .order(
-                "created_at",
-                {
-                    ascending:false
-                }
+
+    try {
+
+        const { data, error } =
+            await supabase
+                .from("e_library_books")
+                .select("*")
+                .eq("published", true)
+                .order("created_at", {
+                    ascending: false
+                });
+
+
+        if (error) {
+            console.error(
+                "E-Library error:",
+                error
             );
 
-    if(error){
+            if (featuredBooks) {
+                featuredBooks.innerHTML =
+                    "<p>Unable to load featured books.</p>";
+            }
+
+            if (myLibraryBooks) {
+                myLibraryBooks.innerHTML =
+                    "<p>Unable to load books.</p>";
+            }
+
+            return;
+        }
+
+
+        gNurseBooks = data || [];
+
+
+        if (gNurseBooks.length === 0) {
+
+            if (featuredBooks) {
+                featuredBooks.innerHTML =
+                    "<p>No books available yet.</p>";
+            }
+
+            if (myLibraryBooks) {
+                myLibraryBooks.innerHTML =
+                    "<p>No books available yet.</p>";
+            }
+
+            return;
+        }
+
+
+        displayFeaturedBooks();
+
+        displayGurseBooks(
+            gNurseBooks
+        );
+
+
+    } catch (error) {
 
         console.error(
-            "E-Library loading error:",
+            "Unexpected E-Library error:",
             error
         );
 
-        bookContainer.innerHTML = `
-            <div class="empty">
-                ❌ Unable to load the library.
-                <br><br>
-                Please try again later.
-            </div>
-        `;
+        if (featuredBooks) {
+            featuredBooks.innerHTML =
+                "<p>Unable to load featured books.</p>";
+        }
 
-        return;
+        if (myLibraryBooks) {
+            myLibraryBooks.innerHTML =
+                "<p>Unable to load books.</p>";
+        }
 
     }
 
-    gNurseBooks =
-        Array.isArray(data)
-            ? data
-            : [];
-
-    displayGurseBooks(
-        gNurseBooks
-    );
-
-    displayFeaturedBooks();
-
-       }
+            }
    /* =========================================
    DISPLAY G NURSE BOOKS
 ========================================= */
