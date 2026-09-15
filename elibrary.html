@@ -3272,38 +3272,39 @@ document.addEventListener(
         /* -----------------------------
            NAVIGATION LINKS
         ----------------------------- */
+/* -----------------------------
+   NAVIGATION
+----------------------------- */
 
-        const navigationLinks =
-            document.querySelectorAll(
-                "[data-section]"
-            );
+document.querySelectorAll("a[data-section]").forEach(
+    function(link) {
 
+        link.addEventListener(
+            "click",
+            function(event) {
 
-        navigationLinks.forEach(
-            function(link) {
+                event.preventDefault();
 
-                link.addEventListener(
-                    "click",
-                    function(event) {
+                const section =
+                    this.getAttribute("data-section");
 
-                        event.preventDefault();
-
-                        const section =
-                            link.getAttribute(
-                                "data-section"
-                            );
-
-                        if (section) {
-
-                            showSection(section);
-
-                        }
-
-                    }
-                );
+                if (section) {
+                    showSection(section);
+                }
 
             }
         );
+
+    }
+);
+
+
+/* -----------------------------
+   OPEN HOME BY DEFAULT
+----------------------------- */
+
+showSection("home");
+        
 
 
         /* -----------------------------
