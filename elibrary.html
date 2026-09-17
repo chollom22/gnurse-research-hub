@@ -3883,84 +3883,107 @@ async function openBook(bookId, type) {
 
 async function openGNurseBook(book) {
 
-    /*
-     * Some older records may still contain
-     * content directly in e_library_books.
-     *
-     * Newer records may store their content
-     * inside e_library_book_content.
-     *
-     * We first check the public book record.
-     */
+    readerContent.innerHTML = `
+        <div class="reader-loading">
+            <div class="loading-spinner"></div>
+            <p>Opening book...</p>
+        </div>
+    `;
 
-    if (
-        book.content &&
-        String(book.content).trim()
-    ) {
+    pdfReader.innerHTML = "";
+    pdfReader.style.display = "none";
+    readerContent.style.display = "block";
 
-        renderBookContent(
-            book.content
+    try {
+
+        const { data, error } = await supabaseClient
+            .rpc(
+                "get_gnurse_book_content",
+                {
+                    requested_book_id: book.id
+                }
+            );
+
+        if (error) {
+            console.error("Book content error:", error);
+
+            readerContent.innerHTML = `
+                <div class="reader-message">
+                    <h3>Unable to open this book</h3>
+                    <p>
+                        The book could not be loaded at the moment.
+                        Please try again.
+                    </p>
+                </div>
+            `;
+
+            showToast("Unable to load book content.");
+            return;
+        }
+
+        if (!data || data.length === 0) {
+
+            readerContent.innerHTML = `
+                <div class="reader-message">
+                    <h3>Book content unavailable</h3>
+                    <p>
+                        This book has been published, but its reading
+                        content has not been added yet.
+                    </p>
+                </div>
+            `;
+
+            return;
+        }
+
+        const bookData = data[0];
+
+        currentBook = {
+            ...book,
+            ...bookData
+        };
+
+        renderBookContent(bookData.content);
+
+        restoreReadingPosition(bookData.book_id);
+
+        try {
+
+            await supabaseClient
+                .from("e_library_book_views")
+                .insert({
+                    book_id: bookData.book_id
+                });
+
+        } catch (viewError) {
+
+            console.warn(
+                "Book view tracking failed:",
+                viewError
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Unexpected book opening error:",
+            error
         );
-
-        restoreReadingPosition(
-            book.id
-        );
-
-        return;
-    }
-
-
-    /*
-     * The e_library_book_content table is
-     * intentionally protected by RLS.
-     *
-     * We therefore do NOT attempt to bypass
-     * that protection from the browser.
-     *
-     * If no public content is available,
-     * show a clear message instead of pretending
-     * that the book loaded.
-     */
-
-    if (readerContent) {
 
         readerContent.innerHTML = `
-
             <div class="reader-message">
-
-                <div
-                    style="
-                        font-size:42px;
-                        margin-bottom:15px;
-                    "
-                >
-                    🔒
-                </div>
-
-                <strong>
-                    Reading content is protected
-                </strong>
-
+                <h3>Unable to open book</h3>
                 <p>
-                    This book is stored in the
-                    protected G Nurse book-content
-                    table.
+                    Please refresh the page and try again.
                 </p>
-
-                <p>
-                    The secure reading connection
-                    must be enabled before this
-                    material can be displayed here.
-                </p>
-
             </div>
-
         `;
 
+        showToast("An unexpected error occurred.");
+
     }
-
-}
-
+    }
 
 /* =====================================================
    OPEN RESOURCE MATERIAL
