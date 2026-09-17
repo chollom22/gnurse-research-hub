@@ -4217,90 +4217,40 @@ function renderBookContent(content) {
 /* =====================================================
    PDF READER
 ===================================================== */
+async function openPDF(url) {
 
-async function openPDF(fileURL, book) {
-
-    if (!pdfReader) {
-        return;
-    }
-
-
-    if (!window.pdfjsLib) {
-
-        showToast(
-            "PDF reader is not available."
-        );
-
-        return;
-
-    }
-
-
-    if (readerContent) {
-
-        readerContent.style.display =
-            "none";
-
-    }
-
-
-    pdfReader.style.display =
-        "block";
-
+    readerContent.style.display = "none";
+    pdfReader.style.display = "block";
 
     pdfReader.innerHTML = `
-
-        <div class="loading-state">
-
-            <div class="spinner"></div>
-
-            <p>
-                Loading PDF...
-            </p>
-
+        <div class="reader-loading">
+            <div class="loading-spinner"></div>
+            <p>Loading PDF...</p>
         </div>
-
     `;
-
 
     try {
 
-        window.pdfjsLib.GlobalWorkerOptions
-            .workerSrc =
-            "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs";
+        const response = await fetch(url, {
+            method: "GET",
+            mode: "cors"
+        });
 
+        if (!response.ok) {
+            throw new Error(
+                "PDF server returned HTTP " + response.status
+            );
+        }
 
-        const loadingTask =
-            window.pdfjsLib.getDocument({
-                url: fileURL,
-                withCredentials: false
-            });
+        const pdfData = await response.arrayBuffer();
 
+        const loadingTask = pdfjsLib.getDocument({
+            data: pdfData
+        });
 
-        const pdf =
-            await loadingTask.promise;
-
+        const pdf = await loadingTask.promise;
 
         pdfReader.innerHTML = "";
-
-
-        const pdfTitle =
-            document.createElement(
-                "div"
-            );
-
-        pdfTitle.className =
-            "pdf-title";
-
-        pdfTitle.textContent =
-            book.title ||
-            "PDF Document";
-
-
-        pdfReader.appendChild(
-            pdfTitle
-        );
-
 
         for (
             let pageNumber = 1;
@@ -4308,132 +4258,67 @@ async function openPDF(fileURL, book) {
             pageNumber++
         ) {
 
-            const page =
-                await pdf.getPage(
-                    pageNumber
-                );
+            const page = await pdf.getPage(pageNumber);
 
+            const viewport = page.getViewport({
+                scale: 1.5
+            });
 
-            const viewport =
-                page.getViewport({
-                    scale: 1.35
-                });
+            const canvas = document.createElement("canvas");
 
+            canvas.className = "pdf-page";
 
-            const canvas =
-                document.createElement(
-                    "canvas"
-                );
+            const context = canvas.getContext("2d");
 
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
 
-            canvas.className =
-                "pdf-page";
-
-
-            canvas.width =
-                Math.floor(
-                    viewport.width
-                );
-
-            canvas.height =
-                Math.floor(
-                    viewport.height
-                );
-
-
-            const pageWrapper =
-                document.createElement(
-                    "div"
-                );
-
-            pageWrapper.className =
-                "pdf-page-wrapper";
-
-
-            const pageNumberLabel =
-                document.createElement(
-                    "div"
-                );
-
-            pageNumberLabel.className =
-                "pdf-page-number";
-
-            pageNumberLabel.textContent =
-                "Page " +
-                pageNumber;
-
-
-            pageWrapper.appendChild(
-                pageNumberLabel
-            );
-
-            pageWrapper.appendChild(
-                canvas
-            );
-
-            pdfReader.appendChild(
-                pageWrapper
-            );
-
-
-            const context =
-                canvas.getContext(
-                    "2d"
-                );
-
+            pdfReader.appendChild(canvas);
 
             await page.render({
-                canvasContext:
-                    context,
-                viewport:
-                    viewport
+                canvasContext: context,
+                viewport: viewport
             }).promise;
-
         }
-
-
-        updateReaderProgress();
-
 
     } catch (error) {
 
         console.error(
-            "PDF reader error:",
+            "PDF loading error:",
             error
         );
 
-
         pdfReader.innerHTML = `
-
             <div class="reader-message">
 
-                <div
-                    style="
-                        font-size:42px;
-                        margin-bottom:15px;
-                    "
-                >
-                    ⚠️
-                </div>
-
-                <strong>
-                    Unable to display this PDF
-                </strong>
+                <h3>Unable to display this PDF</h3>
 
                 <p>
-                    The file may be unavailable,
-                    protected, or may not allow
-                    browser reading.
+                    The PDF could not be loaded from its
+                    storage location.
                 </p>
 
+                <button
+                    type="button"
+                    onclick="window.open('${url}', '_blank')"
+                    style="
+                        margin-top:16px;
+                        padding:12px 18px;
+                        border:0;
+                        border-radius:10px;
+                        background:#087f8c;
+                        color:white;
+                        font-weight:700;
+                        cursor:pointer;
+                    "
+                >
+                    Open PDF
+                </button>
+
             </div>
-
         `;
-
     }
-
 }
-
 
 /* =====================================================
    READER CLOSE
