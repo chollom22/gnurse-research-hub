@@ -3588,59 +3588,90 @@ if (bookSearch) {
 
 
 /* =====================================================
-   BOOK ACTIONS
+   BOOK ACTIONS — FIXED
 ===================================================== */
 
 document.addEventListener(
     "click",
     function(event) {
 
-        const button =
+        const readButton =
             event.target.closest(
-                "[data-action]"
+                'button[data-action="read"]'
             );
 
 
-        if (!button) {
-            return;
-        }
+        if (readButton) {
+
+            event.preventDefault();
+            event.stopPropagation();
 
 
-        const action =
-            button.dataset.action;
-
-        const id =
-            button.dataset.id;
-
-        const type =
-            button.dataset.type;
+            const bookId =
+                readButton.getAttribute(
+                    "data-id"
+                );
 
 
-        if (
-            action === "read"
-        ) {
+            const bookType =
+                readButton.getAttribute(
+                    "data-type"
+                ) || "book";
+
+
+            if (!bookId) {
+
+                showToast(
+                    "This book could not be opened."
+                );
+
+                return;
+
+            }
+
 
             openBook(
-                id,
-                type
+                bookId,
+                bookType
             );
+
+            return;
 
         }
 
 
-        if (
-            action === "save"
-        ) {
+        const saveButton =
+            event.target.closest(
+                'button[data-action="save"]'
+            );
+
+
+        if (saveButton) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+
+            const bookId =
+                saveButton.getAttribute(
+                    "data-id"
+                );
+
+
+            if (!bookId) {
+                return;
+            }
+
 
             toggleSavedBook(
-                id
+                bookId
             );
 
         }
 
-    }
+    },
+    false
 );
-
 
 /* =====================================================
    SAVE / UNSAVE
