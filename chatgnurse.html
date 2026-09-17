@@ -2388,92 +2388,121 @@ async function updateVisitorInformation() {
    ========================================================= */
 
 async function startChatGNurse() {
-
-    if (!saveVisitorDetails()) {
+    if (gNurseStartupRunning) {
         return;
     }
 
-
-    if (startChatButton) {
-
-        startChatButton.disabled =
-            true;
-
-    }
-
+    gNurseStartupRunning = true;
 
     try {
+        const name = visitorName.value.trim();
+        const email = visitorEmail.value.trim();
+        const phone = visitorPhone.value.trim();
 
-        showStartStatus(
-            "Connecting to G Nurse...",
-            "info"
-        );
+        console.log("G Nurse diagnostic: Start Chat clicked");
+        console.log("Name:", name);
+        console.log("Email:", email);
+        console.log("Phone:", phone);
 
+        if (!name) {
+            showStartStatus("Please enter your name.", "error");
+            gNurseStartupRunning = false;
+            return;
+        }
 
-        showLoading(
-            "Connecting to G Nurse..."
-        );
+        if (!email && !phone) {
+            showStartStatus(
+                "Please enter either your email address or phone number.",
+                "error"
+            );
+            gNurseStartupRunning = false;
+            return;
+        }
 
+        showLoading("Connecting to G Nurse...");
 
-        await ensureAnonymousUser();
+        console.log("STEP 1: Saving visitor details");
 
+        saveVisitorDetails();
 
-        await loadOrCreateConversation();
+        console.log("STEP 1 SUCCESS");
 
+        console.log("STEP 2: Checking anonymous Supabase user");
+
+        const user = await ensureAnonymousUser();
+
+        console.log("STEP 2 SUCCESS");
+        console.log("Anonymous user ID:", user?.id);
+
+        if (!user || !user.id) {
+            throw new Error(
+                "Anonymous user was not created. Please check Supabase Authentication → Providers → Anonymous Sign-Ins."
+            );
+        }
+
+        console.log("STEP 3: Loading or creating conversation");
+
+        const conversation = await loadOrCreateConversation();
+
+        console.log("STEP 3 SUCCESS");
+        console.log("Conversation:", conversation);
+
+        if (!conversation || !conversation.id) {
+            throw new Error(
+                "Conversation was not returned from Supabase."
+            );
+        }
+
+        console.log("STEP 4: Updating visitor information");
 
         await updateVisitorInformation();
 
+        console.log("STEP 4 SUCCESS");
+
+        console.log("STEP 5: Opening chat interface");
 
         showChatInterface();
 
+        console.log("STEP 5 SUCCESS");
 
         hideLoading();
 
+        gNurseChatStarted = true;
 
-        showStartStatus(
-            "",
-            "info"
-        );
-
-
-        /*
-         * Part 3 will load messages,
-         * notifications and realtime.
-         */
-
+        console.log("G NURSE CHAT STARTED SUCCESSFULLY");
 
     } catch (error) {
 
-        console.error(
-            "Chat G Nurse connection error:",
-            error
-        );
-
+        console.error("=================================");
+        console.error("G NURSE START CHAT ERROR");
+        console.error("=================================");
+        console.error("Error object:", error);
+        console.error("Message:", error?.message);
+        console.error("Details:", error?.details);
+        console.error("Hint:", error?.hint);
+        console.error("Code:", error?.code);
 
         hideLoading();
 
-
-        showStartScreen();
-
+        const exactError =
+            error?.message ||
+            error?.details ||
+            error?.hint ||
+            "Unknown Supabase error";
 
         showStartStatus(
-            "Unable to connect to G Nurse. Please try again.",
+            "G Nurse connection failed: " + exactError,
             "error"
         );
 
+        gNurseStartupRunning = false;
+        gNurseChatStarted = false;
 
-    } finally {
-
-        if (startChatButton) {
-
-            startChatButton.disabled =
-                false;
-
-        }
-
+        return;
     }
 
-}
+    gNurseStartupRunning = false;
+    }
 
 
 /* =========================================================
