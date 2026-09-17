@@ -7,25 +7,60 @@
 
 <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
 >
 
 <title>
-    E-Library | G Nurse Research Hub Nigeria
+    G Nurse E-Library | G Nurse Research Hub Nigeria
 </title>
 
 <meta
     name="description"
-    content="G Nurse Research Hub Nigeria E-Library - Read nursing, medical, anatomy, pharmacology and research books online."
+    content="G Nurse Research Hub Nigeria E-Library. Read nursing, medical, anatomy, pharmacology, research and educational materials online."
 >
+
+<meta
+    name="theme-color"
+    content="#087f8c"
+>
+
+<!-- =====================================================
+     SUPABASE
+===================================================== -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
+<!-- =====================================================
+     GOOGLE ADSENSE
+     
+     Ads are intentionally NOT placed inside Reading Mode.
+===================================================== -->
+
+<script
+    async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3660632082094744"
+    crossorigin="anonymous">
+</script>
+
+
+<!-- =====================================================
+     PDF.JS
+     
+     Used only when a Resource Material is supplied as a
+     readable PDF. There is no download button in our UI.
+===================================================== -->
+
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js">
+</script>
+
+
 <style>
 
-/* =========================================
-   GENERAL
-========================================= */
+/* =====================================================
+   GLOBAL RESET
+===================================================== */
 
 *{
     box-sizing:border-box;
@@ -38,137 +73,287 @@ html{
 }
 
 body{
+
     font-family:
+        Inter,
         Arial,
         Helvetica,
         sans-serif;
 
-    background:#f5f7f6;
-    color:#222;
+    background:#f4f8f8;
+
+    color:#182526;
 
     line-height:1.6;
 
     min-height:100vh;
+
+    overflow-x:hidden;
+}
+
+button,
+input,
+select{
+
+    font-family:inherit;
+}
+
+button{
+
+    -webkit-tap-highlight-color:transparent;
+}
+
+img{
+
+    max-width:100%;
 }
 
 
-/* =========================================
-   HEADER
-========================================= */
+/* =====================================================
+   MAIN APP HEADER
+===================================================== */
 
-header{
-    background:#0b6b3a;
-    color:white;
-
-    padding:18px 15px;
-
-    text-align:center;
+.app-header{
 
     position:sticky;
+
     top:0;
 
-    z-index:1000;
+    z-index:3000;
+
+    background:
+        linear-gradient(
+            135deg,
+            #087f8c,
+            #05636e
+        );
+
+    color:white;
+
+    padding:
+        14px
+        14px
+        13px;
 
     box-shadow:
-        0 2px 10px rgba(0,0,0,.15);
+        0 3px 16px
+        rgba(0,0,0,.16);
 }
 
-header h1{
-    font-size:22px;
-    margin-bottom:4px;
-}
+.header-inner{
 
-header p{
-    font-size:13px;
-    opacity:.9;
-}
+    max-width:1250px;
 
-
-/* =========================================
-   TOP NAVIGATION
-========================================= */
-
-.top-nav{
+    margin:auto;
 
     display:flex;
 
-    justify-content:center;
+    align-items:center;
 
-    gap:6px;
-
-    flex-wrap:wrap;
-
-    background:white;
-
-    border-bottom:1px solid #ddd;
-
-    padding:8px;
-
-    position:sticky;
-
-    top:74px;
-
-    z-index:900;
+    gap:12px;
 }
 
-.top-nav button{
+.header-brand{
+
+    min-width:0;
+
+    flex:1;
+}
+
+.header-brand h1{
+
+    font-size:20px;
+
+    line-height:1.2;
+
+    font-weight:800;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+}
+
+.header-brand p{
+
+    font-size:11px;
+
+    opacity:.9;
+
+    margin-top:2px;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+}
+
+
+/* =====================================================
+   HEADER BUTTON
+===================================================== */
+
+.icon-button{
+
+    width:43px;
+
+    height:43px;
 
     border:none;
 
-    background:#f0f3f1;
+    border-radius:12px;
 
-    color:#174b32;
+    background:
+        rgba(255,255,255,.15);
 
-    padding:10px 14px;
+    color:white;
 
-    border-radius:8px;
+    display:flex;
 
-    font-size:14px;
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:20px;
 
     cursor:pointer;
+
+    flex-shrink:0;
+
+    transition:
+        background .2s,
+        transform .2s;
+}
+
+.icon-button:hover{
+
+    background:
+        rgba(255,255,255,.25);
+
+    transform:translateY(-1px);
+}
+
+.icon-button:active{
+
+    transform:scale(.95);
+}
+
+
+/* =====================================================
+   MAIN NAVIGATION
+===================================================== */
+
+.main-nav{
+
+    position:sticky;
+
+    top:71px;
+
+    z-index:2900;
+
+    background:#ffffff;
+
+    border-bottom:
+        1px solid #dce7e8;
+
+    box-shadow:
+        0 2px 8px
+        rgba(0,0,0,.05);
+}
+
+.nav-inner{
+
+    max-width:1250px;
+
+    margin:auto;
+
+    display:flex;
+
+    overflow-x:auto;
+
+    scrollbar-width:none;
+}
+
+.nav-inner::-webkit-scrollbar{
+
+    display:none;
+}
+
+.nav-button{
+
+    border:none;
+
+    background:transparent;
+
+    color:#416064;
+
+    padding:
+        13px
+        15px;
+
+    min-width:max-content;
+
+    cursor:pointer;
+
+    font-size:13px;
+
+    font-weight:700;
+
+    border-bottom:
+        3px solid transparent;
 
     transition:.2s;
 }
 
-.top-nav button:hover{
+.nav-button:hover{
 
-    background:#dcebe3;
+    color:#087f8c;
+
+    background:#f1f8f8;
 }
 
-.top-nav button.active{
+.nav-button.active{
 
-    background:#0b6b3a;
+    color:#087f8c;
 
-    color:white;
+    border-bottom-color:
+        #087f8c;
+
+    background:#f4fbfb;
 }
 
 
-/* =========================================
-   PAGE CONTAINER
-========================================= */
+/* =====================================================
+   APP CONTAINER
+===================================================== */
 
-.container{
+.app-container{
 
     width:100%;
 
-    max-width:1200px;
+    max-width:1250px;
 
     margin:auto;
 
-    padding:20px 15px 50px;
+    padding:
+        18px
+        14px
+        45px;
 }
 
 
-/* =========================================
+/* =====================================================
    PAGE SECTIONS
-========================================= */
+===================================================== */
 
 .page-section{
 
     display:none;
 
     animation:
-        sectionIn .3s ease;
+        pageEnter .25s ease;
 }
 
 .page-section.active{
@@ -176,128 +361,301 @@ header p{
     display:block;
 }
 
-@keyframes sectionIn{
+@keyframes pageEnter{
 
     from{
+
         opacity:0;
-        transform:translateY(8px);
+
+        transform:
+            translateY(7px);
     }
 
     to{
+
         opacity:1;
-        transform:translateY(0);
+
+        transform:
+            translateY(0);
     }
 }
 
 
-/* =========================================
+/* =====================================================
    HERO
-========================================= */
+===================================================== */
 
 .hero{
+
+    position:relative;
+
+    overflow:hidden;
 
     background:
         linear-gradient(
             135deg,
-            #0b6b3a,
-            #12844a
+            #087f8c,
+            #075c66
         );
 
     color:white;
 
-    border-radius:16px;
+    border-radius:20px;
 
-    padding:30px 20px;
+    padding:
+        30px
+        20px;
 
-    margin-bottom:20px;
-
-    text-align:center;
+    margin-bottom:18px;
 
     box-shadow:
-        0 5px 20px rgba(0,0,0,.12);
+        0 8px 25px
+        rgba(5,99,110,.2);
+}
+
+.hero::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:180px;
+
+    height:180px;
+
+    border-radius:50%;
+
+    right:-70px;
+
+    top:-80px;
+
+    background:
+        rgba(255,255,255,.08);
 }
 
 .hero h2{
 
-    font-size:27px;
+    position:relative;
+
+    z-index:1;
+
+    font-size:28px;
+
+    line-height:1.25;
 
     margin-bottom:8px;
 }
 
 .hero p{
 
-    max-width:700px;
+    position:relative;
 
-    margin:auto;
+    z-index:1;
 
-    opacity:.95;
+    max-width:750px;
 
-    font-size:15px;
+    font-size:14px;
+
+    opacity:.94;
 }
 
 
-/* =========================================
-   SEARCH
-========================================= */
+/* =====================================================
+   ADVERTISEMENT AREA
+===================================================== */
 
-.search-box{
+.ad-area{
 
-    background:white;
+    background:#ffffff;
 
-    padding:15px;
+    border:
+        1px solid #e3ebec;
 
-    border-radius:12px;
+    border-radius:14px;
 
-    box-shadow:
-        0 2px 10px rgba(0,0,0,.06);
+    min-height:90px;
+
+    margin:
+        16px
+        0;
+
+    padding:12px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-align:center;
+
+    color:#89999b;
+
+    font-size:11px;
+}
+
+.ad-label{
+
+    display:block;
+
+    font-size:9px;
+
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+
+    margin-bottom:4px;
+
+    color:#a0adaf;
+}
+
+
+/* =====================================================
+   SEARCH CARD
+===================================================== */
+
+.search-card{
+
+    background:#ffffff;
+
+    border-radius:16px;
+
+    padding:14px;
 
     margin-bottom:20px;
+
+    box-shadow:
+        0 3px 14px
+        rgba(0,0,0,.06);
 }
 
-.search-box input{
+.search-wrapper{
+
+    position:relative;
+}
+
+.search-icon{
+
+    position:absolute;
+
+    left:14px;
+
+    top:50%;
+
+    transform:
+        translateY(-50%);
+
+    font-size:18px;
+
+    pointer-events:none;
+}
+
+.search-input{
 
     width:100%;
 
-    padding:13px 15px;
+    height:48px;
 
-    border:1px solid #ccc;
+    border:
+        1px solid #d6e1e2;
 
-    border-radius:9px;
+    border-radius:12px;
 
-    font-size:16px;
+    padding:
+        0
+        45px
+        0
+        43px;
+
+    font-size:15px;
+
+    color:#193335;
+
+    background:#fbfdfd;
 
     outline:none;
+
+    transition:.2s;
 }
 
-.search-box input:focus{
+.search-input:focus{
 
-    border-color:#0b6b3a;
+    border-color:#087f8c;
 
     box-shadow:
-        0 0 0 2px rgba(11,107,58,.1);
+        0 0 0 3px
+        rgba(8,127,140,.1);
+
+    background:white;
+}
+
+.clear-search{
+
+    position:absolute;
+
+    right:9px;
+
+    top:50%;
+
+    transform:
+        translateY(-50%);
+
+    width:32px;
+
+    height:32px;
+
+    border:none;
+
+    border-radius:8px;
+
+    background:#eef5f5;
+
+    color:#567073;
+
+    cursor:pointer;
 }
 
 
-/* =========================================
+/* =====================================================
    SECTION TITLE
-========================================= */
+===================================================== */
 
-.section-title{
+.section-heading{
 
-    font-size:21px;
+    display:flex;
 
-    color:#0b6b3a;
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:10px;
 
     margin:
-
-        25px 0
+        25px
+        0
         12px;
 }
 
+.section-heading h2{
 
-/* =========================================
+    font-size:20px;
+
+    color:#075e68;
+
+    line-height:1.3;
+}
+
+.section-heading span{
+
+    color:#829294;
+
+    font-size:12px;
+}
+
+
+/* =====================================================
    CATEGORY GRID
-========================================= */
+===================================================== */
 
 .category-grid{
 
@@ -310,43 +668,65 @@ header p{
         );
 
     gap:10px;
-
-    margin-bottom:25px;
 }
 
-.category-btn{
+.category-button{
 
-    border:none;
+    border:
+        1px solid #dbe7e8;
 
-    background:white;
+    background:#ffffff;
 
-    padding:15px 10px;
+    border-radius:14px;
 
-    border-radius:12px;
+    padding:
+        15px
+        10px;
+
+    color:#245156;
+
+    font-weight:700;
 
     cursor:pointer;
 
-    color:#174b32;
-
-    font-weight:bold;
-
     box-shadow:
-        0 2px 8px rgba(0,0,0,.06);
+        0 2px 8px
+        rgba(0,0,0,.04);
 
-    transition:.2s;
+    transition:
+        transform .2s,
+        background .2s,
+        border .2s;
 }
 
-.category-btn:hover{
+.category-button:hover{
 
-    background:#eaf5ef;
+    transform:
+        translateY(-2px);
 
-    transform:translateY(-2px);
+    background:#f0fafb;
+
+    border-color:#a9d4d8;
+}
+
+.category-icon{
+
+    display:block;
+
+    font-size:24px;
+
+    margin-bottom:5px;
+}
+
+.category-name{
+
+    font-size:12px;
 }
 
 
-/* =========================================
+/* =====================================================
    BOOK GRID
-========================================= */
+===================================================== */
 
 .book-grid{
 
@@ -355,59 +735,69 @@ header p{
     grid-template-columns:
         repeat(
             auto-fill,
-            minmax(220px,1fr)
+            minmax(215px,1fr)
         );
 
     gap:16px;
 }
 
 
-/* =========================================
+/* =====================================================
    BOOK CARD
-========================================= */
+===================================================== */
 
 .book-card{
 
-    background:white;
+    position:relative;
 
-    border-radius:14px;
+    background:#ffffff;
+
+    border:
+        1px solid #e2ebec;
+
+    border-radius:17px;
 
     overflow:hidden;
-
-    box-shadow:
-        0 3px 12px rgba(0,0,0,.08);
 
     display:flex;
 
     flex-direction:column;
 
-    transition:.2s;
+    min-width:0;
+
+    box-shadow:
+        0 4px 14px
+        rgba(0,0,0,.055);
+
+    transition:
+        transform .2s,
+        box-shadow .2s;
 }
 
 .book-card:hover{
 
-    transform:translateY(-3px);
+    transform:
+        translateY(-3px);
 
     box-shadow:
-        0 7px 20px rgba(0,0,0,.12);
+        0 10px 25px
+        rgba(0,0,0,.1);
 }
 
 
-/* =========================================
+/* =====================================================
    BOOK COVER
-========================================= */
+===================================================== */
 
 .book-cover{
 
-    width:100%;
-
-    height:210px;
+    height:225px;
 
     background:
         linear-gradient(
             135deg,
-            #e8eee9,
-            #d8e4dc
+            #e7f0f1,
+            #d5e5e7
         );
 
     display:flex;
@@ -428,141 +818,155 @@ header p{
     object-fit:cover;
 }
 
-.book-cover-placeholder{
+.cover-placeholder{
 
-    font-size:55px;
+    display:flex;
 
-    color:#0b6b3a;
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    color:#087f8c;
+
+    text-align:center;
+}
+
+.cover-placeholder-icon{
+
+    font-size:58px;
+
+    margin-bottom:5px;
+}
+
+.cover-placeholder-text{
+
+    font-size:11px;
+
+    font-weight:700;
 }
 
 
-/* =========================================
+/* =====================================================
    BOOK INFORMATION
-========================================= */
+===================================================== */
 
 .book-info{
 
-    padding:15px;
+    padding:14px;
+
+    display:flex;
+
+    flex-direction:column;
 
     flex:1;
-}
-
-.book-title{
-
-    font-size:18px;
-
-    font-weight:bold;
-
-    color:#163f2b;
-
-    margin-bottom:6px;
-}
-
-.book-author{
-
-    color:#666;
-
-    font-size:13px;
-
-    margin-bottom:6px;
 }
 
 .book-category{
 
-    display:inline-block;
+    align-self:flex-start;
 
-    background:#eaf5ef;
+    background:#eaf7f8;
 
-    color:#0b6b3a;
+    color:#087f8c;
 
-    padding:4px 8px;
+    padding:
+        4px
+        9px;
 
-    border-radius:20px;
+    border-radius:30px;
 
-    font-size:11px;
+    font-size:10px;
+
+    font-weight:800;
 
     margin-bottom:8px;
 }
 
+.book-title{
+
+    color:#183d41;
+
+    font-size:17px;
+
+    line-height:1.35;
+
+    margin-bottom:5px;
+}
+
+.book-author{
+
+    color:#718083;
+
+    font-size:12px;
+
+    margin-bottom:7px;
+}
+
 .book-description{
 
-    color:#555;
+    color:#607174;
 
-    font-size:13px;
+    font-size:12px;
 
-    margin-bottom:10px;
+    line-height:1.55;
+
+    display:
+        -webkit-box;
+
+    -webkit-line-clamp:3;
+
+    -webkit-box-orient:vertical;
+
+    overflow:hidden;
+
+    margin-bottom:12px;
 }
 
-.book-price{
+.book-action{
 
-    font-weight:bold;
+    margin-top:auto;
 
-    color:#b35b00;
-
-    margin-bottom:10px;
-}
-
-
-/* =========================================
-   BOOK BUTTONS
-========================================= */
-
-.book-buttons{
-
-    display:flex;
-
-    gap:7px;
-
-    padding:0 15px 15px;
-}
-
-.book-buttons button{
-
-    flex:1;
+    width:100%;
 
     border:none;
 
-    padding:10px 8px;
+    background:#087f8c;
 
-    border-radius:8px;
+    color:white;
 
-    cursor:pointer;
+    border-radius:10px;
+
+    padding:
+        11px
+        12px;
+
+    font-weight:800;
 
     font-size:13px;
 
-    font-weight:bold;
+    cursor:pointer;
+
+    transition:.2s;
 }
 
-.read-book-btn{
+.book-action:hover{
 
-    background:#0b6b3a;
-
-    color:white;
+    background:#05636e;
 }
 
-.read-book-btn:hover{
+.book-action:active{
 
-    background:#07562f;
-}
-
-.buy-book-btn{
-
-    background:#e98b20;
-
-    color:white;
-}
-
-.buy-book-btn:hover{
-
-    background:#cf7310;
+    transform:scale(.98);
 }
 
 
-/* =========================================
-   BOOK BADGES
-========================================= */
+/* =====================================================
+   FREE READING BADGE
+===================================================== */
 
-.book-badge{
+.reading-badge{
 
     position:absolute;
 
@@ -570,172 +974,567 @@ header p{
 
     right:10px;
 
-    padding:5px 8px;
-
-    border-radius:20px;
-
-    font-size:11px;
-
-    font-weight:bold;
+    background:
+        rgba(8,127,140,.94);
 
     color:white;
 
-    background:#0b6b3a;
+    border-radius:20px;
+
+    padding:
+        5px
+        9px;
+
+    font-size:9px;
+
+    font-weight:800;
+
+    z-index:2;
 }
 
-.cover-wrapper{
 
-    position:relative;
-}
-
-
-/* =========================================
+/* =====================================================
    EMPTY / LOADING
-========================================= */
+===================================================== */
 
-.empty{
+.empty-state{
 
-    background:white;
+    background:#ffffff;
 
-    border-radius:12px;
+    border:
+        1px solid #e2ebec;
 
-    padding:30px 20px;
+    border-radius:15px;
+
+    padding:
+        35px
+        20px;
 
     text-align:center;
 
-    color:#666;
+    color:#718083;
 
     box-shadow:
-        0 2px 8px rgba(0,0,0,.05);
+        0 2px 9px
+        rgba(0,0,0,.04);
+}
+
+.empty-icon{
+
+    font-size:38px;
+
+    margin-bottom:8px;
+}
+
+.empty-state h3{
+
+    color:#35585c;
+
+    font-size:16px;
+
+    margin-bottom:4px;
+}
+
+.empty-state p{
+
+    font-size:13px;
 }
 
 
-/* =========================================
-   RELATED LIBRARIES
-========================================= */
+/* =====================================================
+   LIBRARY INFORMATION CARD
+===================================================== */
 
-.external-search{
+.info-card{
+
+    background:#ffffff;
+
+    border:
+        1px solid #e1ebec;
+
+    border-radius:16px;
+
+    padding:17px;
+
+    margin-bottom:16px;
+
+    box-shadow:
+        0 3px 12px
+        rgba(0,0,0,.045);
+}
+
+.info-card h3{
+
+    color:#075e68;
+
+    font-size:17px;
+
+    margin-bottom:6px;
+}
+
+.info-card p{
+
+    color:#66777a;
+
+    font-size:13px;
+}
+
+
+/* =====================================================
+   EXTERNAL LIBRARY CARDS
+===================================================== */
+
+.library-selector{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(
+            auto-fit,
+            minmax(200px,1fr)
+        );
+
+    gap:12px;
+
+    margin-bottom:18px;
+}
+
+.library-card{
+
+    background:#ffffff;
+
+    border:
+        1px solid #dfe9ea;
+
+    border-radius:15px;
+
+    padding:15px;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 2px 9px
+        rgba(0,0,0,.04);
+
+    transition:.2s;
+}
+
+.library-card:hover{
+
+    transform:
+        translateY(-2px);
+
+    border-color:#9fcdd1;
+}
+
+.library-card.active{
+
+    border:
+        2px solid #087f8c;
+
+    background:#f2fbfb;
+}
+
+.library-card h3{
+
+    color:#214a4f;
+
+    font-size:16px;
+
+    margin-bottom:4px;
+}
+
+.library-card p{
+
+    color:#758386;
+
+    font-size:12px;
+}
+
+
+/* =====================================================
+   EXTERNAL SEARCH
+===================================================== */
+
+.external-toolbar{
+
+    background:#ffffff;
+
+    border-radius:15px;
+
+    padding:14px;
+
+    margin-bottom:16px;
+
+    box-shadow:
+        0 2px 10px
+        rgba(0,0,0,.05);
+}
+
+.external-search-row{
 
     display:flex;
 
     gap:8px;
-
-    margin-bottom:20px;
 }
 
-.external-search input{
+.external-search-input{
 
     flex:1;
 
-    padding:12px;
+    min-width:0;
 
-    border:1px solid #ccc;
+    height:46px;
 
-    border-radius:8px;
+    border:
+        1px solid #d5e2e3;
 
-    font-size:15px;
+    border-radius:10px;
+
+    padding:
+        0
+        13px;
+
+    outline:none;
+
+    font-size:14px;
 }
 
-.external-search button{
+.external-search-input:focus{
 
-    background:#0b6b3a;
+    border-color:#087f8c;
+}
 
-    color:white;
+.external-search-button{
 
     border:none;
 
-    border-radius:8px;
+    background:#087f8c;
 
-    padding:0 18px;
+    color:white;
+
+    border-radius:10px;
+
+    padding:
+        0
+        17px;
+
+    font-weight:800;
 
     cursor:pointer;
-
-    font-weight:bold;
 }
 
-.external-results{
+
+/* =====================================================
+   EXTERNAL BOOK GRID
+===================================================== */
+
+.external-grid{
 
     display:grid;
 
     grid-template-columns:
         repeat(
             auto-fill,
-            minmax(220px,1fr)
+            minmax(210px,1fr)
         );
 
-    gap:15px;
+    gap:14px;
 }
 
 .external-book{
 
-    background:white;
+    background:#ffffff;
 
-    border-radius:12px;
+    border:
+        1px solid #e1eaeb;
 
-    padding:15px;
+    border-radius:15px;
+
+    overflow:hidden;
 
     box-shadow:
-        0 2px 9px rgba(0,0,0,.07);
+        0 3px 12px
+        rgba(0,0,0,.045);
 }
 
-.external-book h3{
+.external-cover{
 
-    font-size:16px;
+    height:190px;
 
-    color:#173f2b;
+    background:#eaf2f3;
 
-    margin-bottom:6px;
-}
-
-.external-book p{
-
-    font-size:13px;
-
-    color:#666;
-
-    margin-bottom:10px;
-}
-
-.external-book button{
-
-    width:100%;
-
-    border:none;
-
-    background:#0b6b3a;
-
-    color:white;
-
-    padding:10px;
-
-    border-radius:8px;
-
-    cursor:pointer;
-}
-
-
-/* =========================================
-   READER
-========================================= */
-
-.reader{
-
-    display:none;
-
-    position:fixed;
-
-    inset:0;
-
-    z-index:5000;
-
-    background:
-        rgba(0,0,0,.72);
+    display:flex;
 
     align-items:center;
 
     justify-content:center;
 
+    color:#087f8c;
+
+    font-size:48px;
+
+    overflow:hidden;
+}
+
+.external-cover img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+}
+
+.external-info{
+
+    padding:13px;
+}
+
+.external-info h3{
+
+    color:#24494e;
+
+    font-size:15px;
+
+    line-height:1.4;
+
+    margin-bottom:5px;
+}
+
+.external-info p{
+
+    color:#718083;
+
+    font-size:12px;
+
+    margin-bottom:7px;
+}
+
+.external-source{
+
+    color:#8a999b;
+
+    font-size:10px;
+
+    margin-bottom:10px;
+}
+
+.external-open{
+
+    width:100%;
+
+    border:none;
+
+    border-radius:9px;
+
+    background:#087f8c;
+
+    color:white;
+
+    padding:10px;
+
+    font-size:12px;
+
+    font-weight:800;
+
+    cursor:pointer;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+.app-footer{
+
+    background:#075c66;
+
+    color:white;
+
+    text-align:center;
+
+    padding:
+        25px
+        15px;
+
+    font-size:12px;
+
+    margin-top:30px;
+}
+
+.app-footer strong{
+
+    display:block;
+
+    font-size:14px;
+
+    margin-bottom:4px;
+}
+
+
+/* =====================================================
+   MENU DRAWER
+===================================================== */
+
+.menu-overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:
+        rgba(0,0,0,.42);
+
+    z-index:8000;
+
+    display:none;
+}
+
+.menu-overlay.open{
+
+    display:block;
+}
+
+.menu-drawer{
+
+    position:absolute;
+
+    left:0;
+
+    top:0;
+
+    bottom:0;
+
+    width:
+        min(320px,88vw);
+
+    background:#ffffff;
+
+    box-shadow:
+        8px 0 30px
+        rgba(0,0,0,.2);
+
+    transform:
+        translateX(-100%);
+
+    transition:
+        transform .25s ease;
+
+    display:flex;
+
+    flex-direction:column;
+}
+
+.menu-overlay.open
+.menu-drawer{
+
+    transform:
+        translateX(0);
+}
+
+.menu-header{
+
+    background:
+        linear-gradient(
+            135deg,
+            #087f8c,
+            #05636e
+        );
+
+    color:white;
+
+    padding:20px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+}
+
+.menu-header h2{
+
+    font-size:18px;
+}
+
+.menu-close{
+
+    border:none;
+
+    background:
+        rgba(255,255,255,.15);
+
+    color:white;
+
+    width:38px;
+
+    height:38px;
+
+    border-radius:10px;
+
+    font-size:18px;
+
+    cursor:pointer;
+}
+
+.menu-list{
+
     padding:12px;
+
+    overflow-y:auto;
+}
+
+.menu-item{
+
+    width:100%;
+
+    border:none;
+
+    background:white;
+
+    padding:14px;
+
+    border-radius:11px;
+
+    text-align:left;
+
+    color:#294d51;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    margin-bottom:5px;
+}
+
+.menu-item:hover{
+
+    background:#eef8f9;
+
+    color:#087f8c;
+}
+
+
+/* =====================================================
+   READER
+===================================================== */
+
+.reader{
+
+    position:fixed;
+
+    inset:0;
+
+    z-index:10000;
+
+    background:#ffffff;
+
+    display:none;
+
+    flex-direction:column;
 }
 
 .reader.open{
@@ -743,1675 +1542,3283 @@ header p{
     display:flex;
 }
 
-.reader-box{
 
-    width:100%;
+/* =====================================================
+   READER TOP BAR
+===================================================== */
 
-    max-width:900px;
+.reader-topbar{
 
-    height:95vh;
+    height:60px;
 
-    background:white;
+    flex-shrink:0;
 
-    border-radius:14px;
-
-    display:flex;
-
-    flex-direction:column;
-
-    overflow:hidden;
-
-    box-shadow:
-        0 10px 40px rgba(0,0,0,.3);
-}
-
-
-/* =========================================
-   READER HEADER
-========================================= */
-
-.reader-header{
-
-    background:#0b6b3a;
+    background:
+        linear-gradient(
+            135deg,
+            #087f8c,
+            #05636e
+        );
 
     color:white;
-
-    padding:10px;
 
     display:flex;
 
     align-items:center;
 
-    gap:8px;
+    gap:6px;
 
-    flex-wrap:wrap;
+    padding:
+        7px
+        9px;
+
+    box-shadow:
+        0 2px 12px
+        rgba(0,0,0,.18);
+
+    z-index:3;
 }
 
-.reader-header h2{
+.reader-nav-button{
 
-    flex:1;
+    width:40px;
 
-    font-size:17px;
+    height:40px;
 
-    min-width:150px;
-}
-
-.reader-header button{
+    flex-shrink:0;
 
     border:none;
 
-    background:rgba(255,255,255,.15);
+    border-radius:10px;
+
+    background:
+        rgba(255,255,255,.13);
 
     color:white;
 
-    padding:7px 9px;
-
-    border-radius:7px;
-
     cursor:pointer;
-}
-
-.reader-header button:hover{
-
-    background:rgba(255,255,255,.28);
-}
-
-
-/* =========================================
-   READER CONTENT
-========================================= */
-
-.reader-content{
-
-    flex:1;
-
-    overflow-y:auto;
-
-    padding:25px;
 
     font-size:18px;
 
-    line-height:1.8;
+    display:flex;
 
-    background:#fff;
+    align-items:center;
 
-    color:#222;
+    justify-content:center;
 }
 
-.reader-content p{
+.reader-nav-button:hover{
 
-    margin-bottom:16px;
+    background:
+        rgba(255,255,255,.24);
+}
+
+.reader-title{
+
+    flex:1;
+
+    min-width:0;
+
+    font-size:14px;
+
+    font-weight:800;
+
+    white-space:nowrap;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+}
+
+.reader-top-actions{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    flex-shrink:0;
+}
+
+.reader-top-btn{
+    width:36px;
+    height:36px;
+    border:none;
+    border-radius:10px;
+    background:#ffffff;
+    color:#07562f;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:17px;
+    cursor:pointer;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.reader-top-btn:active{
+    transform:scale(.95);
+}
+
+.reader-controls{
+    position:fixed;
+    top:58px;
+    left:0;
+    right:0;
+    z-index:10001;
+    height:48px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+    padding:5px 8px;
+    background:rgba(255,255,255,.97);
+    border-bottom:1px solid #e5e7eb;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+    overflow-x:auto;
+    scrollbar-width:none;
+}
+
+.reader-controls::-webkit-scrollbar{
+    display:none;
+}
+
+.reader-control{
+    border:none;
+    background:#f1f5f9;
+    color:#334155;
+    min-width:38px;
+    height:34px;
+    padding:0 9px;
+    border-radius:9px;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+    white-space:nowrap;
+}
+
+.reader-control:active{
+    transform:scale(.96);
+}
+
+.reader-control.active{
+    background:#07562f;
+    color:#fff;
+}
+
+.reader-progress{
+    position:fixed;
+    top:106px;
+    left:0;
+    right:0;
+    height:3px;
+    background:#dbe4e8;
+    z-index:10002;
+}
+
+.reader-progress-bar{
+    width:0%;
+    height:100%;
+    background:#0b8f68;
+    transition:width:.15s linear;
+}
+
+.reader-body{
+    position:absolute;
+    top:109px;
+    left:0;
+    right:0;
+    bottom:0;
+    overflow-y:auto;
+    overflow-x:hidden;
+    background:#f8fafc;
+    -webkit-overflow-scrolling:touch;
+}
+
+.reader-content{
+    width:100%;
+    max-width:850px;
+    margin:0 auto;
+    padding:25px 18px 80px;
+    color:#1f2937;
+    font-size:18px;
+    line-height:1.85;
+    font-family:Georgia,"Times New Roman",serif;
 }
 
 .reader-content h1,
 .reader-content h2,
 .reader-content h3{
-
-    margin:
-        20px 0 10px;
-
-    color:#0b6b3a;
+    color:#07562f;
+    line-height:1.3;
+    margin-top:1.5em;
+    margin-bottom:.7em;
 }
 
-
-/* =========================================
-   READER THEMES
-========================================= */
-
-.reader-content.theme-light{
-
-    background:#ffffff;
-
-    color:#222;
+.reader-content h1{
+    font-size:28px;
 }
 
-.reader-content.theme-sepia{
-
-    background:#f5ecd7;
-
-    color:#463b2b;
+.reader-content h2{
+    font-size:24px;
 }
 
-.reader-content.theme-dark{
-
-    background:#181818;
-
-    color:#eeeeee;
+.reader-content h3{
+    font-size:20px;
 }
 
+.reader-content p{
+    margin:0 0 1.1em;
+}
 
-/* =========================================
-   FOOTER
-========================================= */
+.reader-content img{
+    max-width:100%;
+    height:auto;
+    display:block;
+    margin:20px auto;
+    border-radius:12px;
+}
 
-footer{
+.reader-content blockquote{
+    margin:20px 0;
+    padding:15px 18px;
+    border-left:4px solid #0b8f68;
+    background:#eef8f4;
+    border-radius:8px;
+}
 
+.reader-content ul,
+.reader-content ol{
+    padding-left:25px;
+}
+
+.reader-content table{
+    width:100%;
+    border-collapse:collapse;
+    margin:20px 0;
+    display:block;
+    overflow-x:auto;
+}
+
+.reader-content th,
+.reader-content td{
+    border:1px solid #d1d5db;
+    padding:9px;
+    text-align:left;
+}
+
+.reader-content pre{
+    white-space:pre-wrap;
+    word-break:break-word;
+    background:#111827;
+    color:#f9fafb;
+    padding:15px;
+    border-radius:10px;
+    overflow-x:auto;
+}
+
+.reader-content code{
+    background:#eef2f7;
+    padding:2px 5px;
+    border-radius:4px;
+}
+
+.reader-meta{
+    margin-bottom:25px;
+    padding-bottom:18px;
+    border-bottom:1px solid #e2e8f0;
+}
+
+.reader-meta-title{
+    font-size:25px;
+    font-weight:800;
+    color:#07562f;
+    margin-bottom:7px;
+}
+
+.reader-meta-author{
+    color:#64748b;
+    font-size:14px;
+}
+
+.reader-loading{
+    min-height:300px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
     text-align:center;
-
-    padding:25px 15px;
-
-    background:#0b6b3a;
-
-    color:white;
-
-    font-size:13px;
-
-    margin-top:30px;
+    color:#64748b;
+    font-size:15px;
+    padding:30px;
 }
 
+.reader-message{
+    margin:30px auto;
+    max-width:650px;
+    padding:22px;
+    background:#fff;
+    border-radius:15px;
+    border:1px solid #e2e8f0;
+    text-align:center;
+    box-shadow:0 5px 20px rgba(0,0,0,.05);
+}
 
-/* =========================================
-   MOBILE
-========================================= */
+.reader-message h3{
+    margin:0 0 10px;
+    color:#07562f;
+}
+
+.reader-message p{
+    margin:0;
+    color:#64748b;
+    line-height:1.6;
+}
+
+/* PDF READER */
+
+.pdf-reader{
+    width:100%;
+    max-width:850px;
+    margin:0 auto;
+    padding:15px 8px 60px;
+}
+
+.pdf-page{
+    display:block;
+    margin:0 auto 18px;
+    max-width:100%;
+    height:auto;
+    background:#fff;
+    box-shadow:0 3px 15px rgba(0,0,0,.15);
+}
+
+/* READER THEMES */
+
+#readerShell.theme-light{
+    background:#f8fafc;
+}
+
+#readerShell.theme-sepia .reader-body{
+    background:#f4ecd8;
+}
+
+#readerShell.theme-sepia .reader-content{
+    color:#4b3b27;
+}
+
+#readerShell.theme-sepia .reader-content h1,
+#readerShell.theme-sepia .reader-content h2,
+#readerShell.theme-sepia .reader-content h3{
+    color:#6b4f2a;
+}
+
+#readerShell.theme-dark .reader-body{
+    background:#111827;
+}
+
+#readerShell.theme-dark .reader-content{
+    color:#e5e7eb;
+}
+
+#readerShell.theme-dark .reader-content h1,
+#readerShell.theme-dark .reader-content h2,
+#readerShell.theme-dark .reader-content h3{
+    color:#7dd3a8;
+}
+
+#readerShell.theme-dark .reader-meta{
+    border-color:#374151;
+}
+
+#readerShell.theme-dark .reader-meta-author{
+    color:#9ca3af;
+}
+
+#readerShell.theme-dark .reader-message{
+    background:#1f2937;
+    border-color:#374151;
+}
+
+#readerShell.theme-dark .reader-message p{
+    color:#cbd5e1;
+}
+
+/* MOBILE */
 
 @media(max-width:600px){
 
-    header h1{
-
-        font-size:19px;
-    }
-
-    .top-nav{
-
-        top:67px;
-
-        justify-content:flex-start;
-
-        overflow-x:auto;
-
-        flex-wrap:nowrap;
-
-    }
-
-    .top-nav button{
-
-        white-space:nowrap;
-
+    .reader-title{
         font-size:13px;
-
-        padding:9px 11px;
     }
 
-    .hero{
-
-        padding:25px 15px;
-    }
-
-    .hero h2{
-
-        font-size:23px;
-    }
-
-    .book-grid{
-
-        grid-template-columns:
-            repeat(
-                2,
-                minmax(0,1fr)
-            );
-
-        gap:10px;
-    }
-
-    .book-cover{
-
-        height:160px;
-    }
-
-    .book-info{
-
-        padding:10px;
-    }
-
-    .book-title{
-
-        font-size:15px;
-    }
-
-    .book-buttons{
-
-        padding:
-            0 10px 10px;
-
-        flex-direction:column;
-    }
-
-    .reader-box{
-
-        height:100vh;
-
-        border-radius:0;
-    }
-
-    .reader{
-
-        padding:0;
+    .reader-top-btn{
+        width:34px;
+        height:34px;
+        font-size:16px;
     }
 
     .reader-content{
-
-        padding:18px;
-
+        padding:20px 15px 70px;
         font-size:17px;
+        line-height:1.8;
     }
 
-    .external-search{
-
-        flex-direction:column;
+    .reader-content h1{
+        font-size:25px;
     }
 
-    .external-search button{
-
-        padding:12px;
+    .reader-content h2{
+        font-size:21px;
     }
-}
 
-</style>
+    .reader-content h3{
+        font-size:19px;
+    }
 
+    .reader-controls{
+        justify-content:flex-start;
+    }
+
+    }
+    </style>
 </head>
-
 
 <body>
 
+<!-- ================================
+     MAIN APPLICATION
+================================ -->
 
-<header>
+<div id="app">
 
-    <h1>
-        📚 G Nurse E-Library
-    </h1>
+    <!-- TOP APP BAR -->
+    <header class="app-header">
 
-    <p>
-        G Nurse Research Hub Nigeria
-    </p>
+        <div class="app-header-left">
+            <button
+                class="header-icon"
+                id="menuButton"
+                aria-label="Open menu">
+                ☰
+            </button>
 
-</header>
+            <div class="app-logo">
+                📚
+            </div>
 
-
-<nav class="top-nav">
-
-    <button
-        class="active"
-        onclick="showSection('home', this)"
-    >
-        🏠 Home
-    </button>
-
-    <button
-        onclick="showSection('myLibrary', this)"
-    >
-        📚 My Library
-    </button>
-
-    <button
-        onclick="showSection('relatedLibraries', this)"
-    >
-        🌐 Other Related Libraries
-    </button>
-
-</nav>
-
-
-<main class="container">
-
-
-<!-- =====================================
-     HOME
-===================================== -->
-
-<section
-    id="home"
-    class="page-section active"
->
-
-    <div class="hero">
-
-        <h2>
-            Welcome to G Nurse E-Library
-        </h2>
-
-        <p>
-            Read nursing, medical, anatomy,
-            pharmacology, research and other
-            educational materials online.
-        </p>
-
-    </div>
-
-
-    <div class="search-box">
-
-        <input
-            type="search"
-            id="homeSearch"
-            placeholder="🔎 Search books..."
-            oninput="searchGurseBooks(this.value)"
-        >
-
-    </div>
-
-
-    <h2 class="section-title">
-        📚 Categories
-    </h2>
-
-
-    <div class="category-grid">
-
-        <button
-            class="category-btn"
-            onclick="searchCategory('Nursing')"
-        >
-            👩‍⚕️ Nursing
-        </button>
-
-        <button
-            class="category-btn"
-            onclick="searchCategory('Medical')"
-        >
-            🏥 Medical
-        </button>
-
-        <button
-            class="category-btn"
-            onclick="searchCategory('Anatomy')"
-        >
-            🫀 Anatomy
-        </button>
-
-        <button
-            class="category-btn"
-            onclick="searchCategory('Pharmacology')"
-        >
-            💊 Pharmacology
-        </button>
-
-        <button
-            class="category-btn"
-            onclick="searchCategory('Research')"
-        >
-            🔬 Research
-        </button>
-
-        <button
-            class="category-btn"
-            onclick="searchCategory('Past Questions')"
-        >
-            📝 Past Questions
-        </button>
-
-    </div>
-
-
-    <h2 class="section-title">
-        ⭐ Featured Books
-    </h2>
-
-
-    <div
-        id="featuredBooks"
-        class="book-grid"
-    >
-
-        <div class="empty">
-
-            📚 Loading featured books...
-
+            <div class="app-title">
+                <strong>G Nurse E-Library</strong>
+                <span>Read • Learn • Grow</span>
+            </div>
         </div>
 
-    </div>
-
-</section>
+    </header>
 
 
-<!-- =====================================
-     MY LIBRARY
-===================================== -->
+    <!-- ================================
+         MAIN NAVIGATION
+    ================================= -->
 
-<section
-    id="myLibrary"
-    class="page-section"
->
-
-    <h2 class="section-title">
-        📚 My Library
-    </h2>
-
-
-    <p style="
-        margin-bottom:15px;
-        color:#666;
-        font-size:14px;
-    ">
-
-        G Nurse books and educational
-        materials available for online reading.
-
-    </p>
-
-
-    <div class="search-box">
-
-        <input
-            type="search"
-            id="librarySearch"
-            placeholder="🔎 Search my library..."
-            oninput="searchGurseBooks(this.value)"
-        >
-
-    </div>
-
-
-    <div
-        id="myLibraryBooks"
-        class="book-grid"
-    >
-
-        <div class="empty">
-
-            📚 Loading G Nurse books...
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =====================================
-     OTHER RELATED LIBRARIES
-===================================== -->
-
-<section
-    id="relatedLibraries"
-    class="page-section"
->
-
-    <h2 class="section-title">
-        🌐 Other Related Libraries
-    </h2>
-
-
-    <p style="
-        color:#666;
-        margin-bottom:15px;
-        font-size:14px;
-    ">
-
-        Search available books and catalogues
-        from external library services.
-
-    </p>
-
-
-    <div class="external-search">
-
-        <input
-            type="search"
-            id="externalSearchInput"
-            placeholder="🔎 Search external libraries..."
-            onkeydown="
-                if(event.key === 'Enter'){
-                    searchExternalBooks();
-                }
-            "
-        >
+    <nav class="main-nav">
 
         <button
-            onclick="searchExternalBooks()"
-        >
-            Search
+            class="nav-item active"
+            data-section="homeSection">
+
+            <span>🏠</span>
+            <small>Home</small>
+
         </button>
 
-    </div>
+        <button
+            class="nav-item"
+            data-section="librarySection">
+
+            <span>📚</span>
+            <small>Library</small>
+
+        </button>
+
+        <button
+            class="nav-item"
+            data-section="myLibrarySection">
+
+            <span>⭐</span>
+            <small>My Library</small>
+
+        </button>
+
+        <button
+            class="nav-item"
+            data-section="relatedSection">
+
+            <span>🌐</span>
+            <small>Related</small>
+
+        </button>
+
+    </nav>
 
 
-    <div
-        id="externalResults"
-        class="external-results"
-    >
+    <!-- ================================
+         HOME
+    ================================= -->
 
-        <div class="empty">
+    <main id="homeSection" class="page-section active-section">
 
-            🌐 Search for a book above.
+        <section class="hero-section">
 
-        </div>
+            <div class="hero-icon">
+                📖
+            </div>
 
-    </div>
+            <h1>
+                G Nurse E-Library
+            </h1>
 
-</section>
+            <p>
+                Access nursing, medical, research and educational
+                materials online and read them directly in the
+                G Nurse Reading Mode.
+            </p>
 
-</main>
+            <button
+                class="primary-button"
+                id="openLibraryButton">
+
+                📚 Open Library
+
+            </button>
+
+        </section>
 
 
-<footer>
+        <!-- ADVERTISEMENT AREA -->
 
-    © 2026 G Nurse Research Hub Nigeria
+        <section class="advertisement-area">
 
-</footer>
+            <span>Advertisement</span>
+
+            <div class="ad-container">
+                <!-- Google AdSense Auto Ads will handle ads here -->
+            </div>
+
+        </section>
 
 
-<!-- =====================================
-     READER
-===================================== -->
+        <!-- QUICK FEATURES -->
 
-<div
-    id="reader"
-    class="reader"
->
+        <section class="feature-grid">
 
-    <div class="reader-box">
+            <div class="feature-card">
 
-        <div class="reader-header">
+                <div class="feature-icon">
+                    📚
+                </div>
 
-            <h2 id="readerTitle">
-                G Nurse Reader
+                <h3>
+                    Nursing Books
+                </h3>
+
+                <p>
+                    Explore nursing and health-related
+                    educational materials.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🔎
+                </div>
+
+                <h3>
+                    Search
+                </h3>
+
+                <p>
+                    Quickly find books by title,
+                    author or category.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    📖
+                </div>
+
+                <h3>
+                    Reading Mode
+                </h3>
+
+                <p>
+                    Enjoy a clean, distraction-free
+                    reading experience.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-icon">
+                    🌐
+                </div>
+
+                <h3>
+                    Related Libraries
+                </h3>
+
+                <p>
+                    Discover books from other
+                    library catalogues.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- INFORMATION -->
+
+        <section class="information-card">
+
+            <h2>
+                About the G Nurse E-Library
             </h2>
 
+            <p>
+                The G Nurse E-Library is designed to provide
+                convenient online access to educational materials
+                for nursing students, health professionals and
+                other learners.
+            </p>
+
+            <p>
+                Materials available through the E-Library are
+                provided for online reading. The library does not
+                provide purchasing through this page.
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================================
+         LIBRARY SECTION
+    ================================= -->
+
+    <main id="librarySection" class="page-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>
+                    📚 G Nurse Library
+                </h2>
+
+                <p>
+                    Browse available reading materials.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- SEARCH -->
+
+        <div class="search-box">
+
+            <span>
+                🔎
+            </span>
+
+            <input
+                type="search"
+                id="librarySearch"
+                placeholder="Search books, authors or subjects..."
+                autocomplete="off">
+
+        </div>
+
+
+        <!-- CATEGORIES -->
+
+        <div
+            class="category-container"
+            id="categoryContainer">
 
             <button
-                onclick="setReaderTheme('light')"
-                title="Light"
-            >
-                ☀️
-            </button>
+                class="category-button active"
+                data-category="all">
 
+                All
 
-            <button
-                onclick="setReaderTheme('sepia')"
-                title="Sepia"
-            >
-                📖
-            </button>
-
-
-            <button
-                onclick="setReaderTheme('dark')"
-                title="Dark"
-            >
-                🌙
-            </button>
-
-
-            <button
-                onclick="setReaderTheme('auto')"
-                title="Auto"
-            >
-                ⚙️
-            </button>
-
-
-            <button
-                onclick="changeFontSize(-1)"
-                title="Decrease font"
-            >
-                A−
-            </button>
-
-
-            <button
-                onclick="changeFontSize(1)"
-                title="Increase font"
-            >
-                A+
-            </button>
-
-
-            <button
-                onclick="closeReader()"
-                title="Close"
-            >
-                ✕
             </button>
 
         </div>
 
 
-        <article
-            id="readerContent"
-            class="reader-content theme-light"
-        >
+        <!-- LIBRARY STATUS -->
 
-        </article>
+        <div
+            id="libraryStatus"
+            class="library-status">
+
+            Loading library...
+
+        </div>
+
+
+        <!-- BOOK GRID -->
+
+        <div
+            id="bookGrid"
+            class="book-grid">
+
+        </div>
+
+
+        <!-- EMPTY RESULT -->
+
+        <div
+            id="emptyLibrary"
+            class="empty-state"
+            style="display:none;">
+
+            <div>
+                🔎
+            </div>
+
+            <h3>
+                No books found
+            </h3>
+
+            <p>
+                Try another search term or category.
+            </p>
+
+        </div>
+
+
+        <!-- ADVERTISEMENT -->
+
+        <section class="advertisement-area">
+
+            <span>Advertisement</span>
+
+            <div class="ad-container"></div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================================
+         MY LIBRARY
+    ================================= -->
+
+    <main
+        id="myLibrarySection"
+        class="page-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>
+                    ⭐ My Library
+                </h2>
+
+                <p>
+                    Books you have recently opened or saved.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="myLibraryBooks"
+            class="book-grid">
+
+        </div>
+
+
+        <div
+            id="emptyMyLibrary"
+            class="empty-state">
+
+            <div>
+                ⭐
+            </div>
+
+            <h3>
+                Your library is empty
+            </h3>
+
+            <p>
+                Open a book from the library and it will appear
+                here on this device.
+            </p>
+
+        </div>
+
+    </main>
+
+
+    <!-- ================================
+         RELATED LIBRARIES
+    ================================= -->
+
+    <main
+        id="relatedSection"
+        class="page-section">
+
+        <div class="section-heading">
+
+            <div>
+
+                <h2>
+                    🌐 Related Libraries
+                </h2>
+
+                <p>
+                    Discover materials from connected library
+                    catalogues.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- RELATED LIBRARIES -->
+
+        <div
+            id="relatedLibrariesGrid"
+            class="related-grid">
+
+        </div>
+
+
+        <!-- EXTERNAL BOOKS -->
+
+        <div class="external-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h3>
+                        📚 External Catalogue
+                    </h3>
+
+                    <p>
+                        Books synchronized from related libraries.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="search-box">
+
+                <span>
+                    🔎
+                </span>
+
+                <input
+                    type="search"
+                    id="externalSearch"
+                    placeholder="Search external books..."
+                    autocomplete="off">
+
+            </div>
+
+
+            <div
+                id="externalBooksGrid"
+                class="book-grid">
+
+            </div>
+
+
+            <div
+                id="emptyExternalBooks"
+                class="empty-state"
+                style="display:none;">
+
+                <div>
+                    🌐
+                </div>
+
+                <h3>
+                    No external books found
+                </h3>
+
+                <p>
+                    Try another search.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ADVERTISEMENT -->
+
+        <section class="advertisement-area">
+
+            <span>Advertisement</span>
+
+            <div class="ad-container"></div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================================
+         FOOTER
+    ================================= -->
+
+    <footer class="app-footer">
+
+        <div class="footer-logo">
+            📚
+        </div>
+
+        <h3>
+            G Nurse Research Hub Nigeria
+        </h3>
+
+        <p>
+            Nursing Education • Research • Learning
+        </p>
+
+        <p class="footer-small">
+            © 2026 G Nurse Research Hub Nigeria
+        </p>
+
+    </footer>
+
+</div>
+
+
+<!-- ================================
+     SIDE MENU
+================================ -->
+
+<div
+    id="menuOverlay"
+    class="menu-overlay">
+
+    <div
+        class="menu-panel">
+
+        <div class="menu-header">
+
+            <div>
+
+                <strong>
+                    G Nurse
+                </strong>
+
+                <span>
+                    E-Library
+                </span>
+
+            </div>
+
+            <button
+                id="closeMenuButton"
+                class="menu-close">
+
+                ✕
+
+            </button>
+
+        </div>
+
+
+        <div class="menu-list">
+
+            <button
+                class="menu-item"
+                data-section="homeSection">
+
+                <span>🏠</span>
+
+                <div>
+                    <strong>Home</strong>
+                    <small>Library home</small>
+                </div>
+
+            </button>
+
+
+            <button
+                class="menu-item"
+                data-section="librarySection">
+
+                <span>📚</span>
+
+                <div>
+                    <strong>G Nurse Library</strong>
+                    <small>Browse books</small>
+                </div>
+
+            </button>
+
+
+            <button
+                class="menu-item"
+                data-section="myLibrarySection">
+
+                <span>⭐</span>
+
+                <div>
+                    <strong>My Library</strong>
+                    <small>Recently opened books</small>
+                </div>
+
+            </button>
+
+
+            <button
+                class="menu-item"
+                data-section="relatedSection">
+
+                <span>🌐</span>
+
+                <div>
+                    <strong>Related Libraries</strong>
+                    <small>External catalogues</small>
+                </div>
+
+            </button>
+
+        </div>
 
     </div>
 
 </div>
 
 
+<!-- ================================
+     TOAST
+================================ -->
+
+<div
+    id="toast"
+    class="toast">
+
+</div>
+
+
+<!-- ============================================================
+     READING MODE
+============================================================ -->
+
+<div
+    id="readerShell"
+    class="reader-shell"
+    aria-hidden="true">
+
+
+    <!-- READER TOP BAR -->
+
+    <div class="reader-topbar">
+
+        <button
+            id="readerMenuButton"
+            class="reader-top-btn"
+            aria-label="Reader menu">
+
+            ☰
+
+        </button>
+
+
+        <button
+            id="readerMyLibraryButton"
+            class="reader-top-btn"
+            aria-label="My Library">
+
+            📚
+
+        </button>
+
+
+        <button
+            id="readerRelatedButton"
+            class="reader-top-btn"
+            aria-label="Related Libraries">
+
+            🌐
+
+        </button>
+
+
+        <div
+            id="readerTitle"
+            class="reader-title">
+
+            G Nurse E-Library
+
+        </div>
+
+
+        <button
+            id="readerCloseButton"
+            class="reader-top-btn"
+            aria-label="Close reader">
+
+            ✕
+
+        </button>
+
+    </div>
+
+
+    <!-- READER CONTROLS -->
+
+    <div class="reader-controls">
+
+        <button
+            class="reader-control active"
+            data-theme="light">
+
+            ☀️ Light
+
+        </button>
+
+
+        <button
+            class="reader-control"
+            data-theme="sepia">
+
+            📖 Sepia
+
+        </button>
+
+
+        <button
+            class="reader-control"
+            data-theme="dark">
+
+            🌙 Dark
+
+        </button>
+
+
+        <button
+            class="reader-control"
+            data-theme="auto">
+
+            ⚙️ Auto
+
+        </button>
+
+
+        <button
+            id="fontDecrease"
+            class="reader-control">
+
+            A−
+
+        </button>
+
+
+        <button
+            id="fontReset"
+            class="reader-control">
+
+            A
+
+        </button>
+
+
+        <button
+            id="fontIncrease"
+            class="reader-control">
+
+            A+
+
+        </button>
+
+    </div>
+
+
+    <!-- READING PROGRESS -->
+
+    <div class="reader-progress">
+
+        <div
+            id="readerProgressBar"
+            class="reader-progress-bar">
+
+        </div>
+
+    </div>
+
+
+    <!-- READER SCROLL AREA -->
+
+    <div
+        id="readerBody"
+        class="reader-body">
+
+
+        <!-- NORMAL BOOK CONTENT -->
+
+        <article
+            id="readerContent"
+            class="reader-content">
+
+        </article>
+
+
+        <!-- PDF CONTENT -->
+
+        <div
+            id="pdfReader"
+            class="pdf-reader"
+            style="display:none;">
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ============================================================
+     DATABASE + APPLICATION JAVASCRIPT
+============================================================ -->
+
 <script>
 
-/* =========================================
-   SUPABASE
-========================================= */
+/* ============================================================
+   SUPABASE CONFIGURATION
+============================================================ */
 
 const SUPABASE_URL =
     "https://bmiechymiyedubezhcqk.supabase.co";
 
-const SUPABASE_KEY =
+const SUPABASE_ANON_KEY =
     "sb_publishable_9JL2ALhTGlZV57hUV0mTdQ_c2hdT8O8";
 
 
-const supabase =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+);
 
 
-/* =========================================
-   GLOBAL VARIABLES
-========================================= */
+/* ============================================================
+   PDF.JS CONFIGURATION
+============================================================ */
 
-let gNurseBooks = [];
+if(window.pdfjsLib){
 
-let currentReaderBookId = null;
-
-let currentFontSize = 18;
-
-
-/* =========================================
-   OPEN LIBRARY
-========================================= */
-
-const OPEN_LIBRARY_API =
-    "https://openlibrary.org/search.json";
-
-
-/* =========================================
-   ESCAPE HTML
-========================================= */
-
-function escapeHTML(value){
-
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
 }
 
 
-/* =========================================
-   SHOW SECTION
-========================================= */
+/* ============================================================
+   APPLICATION STATE
+============================================================ */
 
-function showSection(
-    sectionId,
-    button = null
-){
+const state = {
+
+    books: [],
+
+    resourceBooks: [],
+
+    allBooks: [],
+
+    categories: [],
+
+    relatedLibraries: [],
+
+    externalBooks: [],
+
+    currentBook: null,
+
+    currentSection: "homeSection",
+
+    currentCategory: "all",
+
+    searchTerm: "",
+
+    externalSearchTerm: "",
+
+    readerFontSize: 18,
+
+    readerTheme: "light",
+
+    readerProgress: 0,
+
+    readerScrollHandler: null,
+
+    readerResizeHandler: null,
+
+    isReaderOpen: false
+
+};
+
+
+/* ============================================================
+   DOM HELPERS
+============================================================ */
+
+function $(id){
+
+    return document.getElementById(id);
+
+}
+
+
+function escapeHTML(value){
+
+    if(value === null || value === undefined){
+
+        return "";
+
+    }
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* ============================================================
+   TOAST
+============================================================ */
+
+let toastTimer = null;
+
+function showToast(message){
+
+    const toast = $("toast");
+
+    if(!toast){
+
+        return;
+
+    }
+
+    toast.textContent = message;
+
+    toast.classList.add("show");
+
+    clearTimeout(toastTimer);
+
+    toastTimer = setTimeout(() => {
+
+        toast.classList.remove("show");
+
+    },3000);
+
+}
+
+
+/* ============================================================
+   SECTION NAVIGATION
+============================================================ */
+
+function showSection(sectionId){
 
     document
         .querySelectorAll(".page-section")
         .forEach(section => {
 
             section.classList.remove(
-                "active"
+                "active-section"
             );
 
         });
 
 
-    const section =
-        document.getElementById(sectionId);
+    const target =
+        $(sectionId);
 
+    if(target){
 
-    if(section){
-
-        section.classList.add("active");
+        target.classList.add(
+            "active-section"
+        );
 
     }
 
 
     document
-        .querySelectorAll(".top-nav button")
-        .forEach(btn => {
+        .querySelectorAll(".nav-item")
+        .forEach(button => {
 
-            btn.classList.remove("active");
+            button.classList.toggle(
+                "active",
+                button.dataset.section === sectionId
+            );
 
         });
 
 
-    if(button){
+    state.currentSection = sectionId;
 
-        button.classList.add("active");
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
 
-    }
-    else{
 
-        const defaultButton =
-            document.querySelector(
-                ".top-nav button"
-            );
+    closeMenu();
 
-        if(defaultButton){
+}
 
-            defaultButton.classList.add(
-    "active"
-);
 
-        }
+/* ============================================================
+   MENU
+============================================================ */
+
+function openMenu(){
+
+    const overlay = $("menuOverlay");
+
+    if(overlay){
+
+        overlay.classList.add("open");
 
     }
 
 }
 
 
-/* =========================================
+function closeMenu(){
+
+    const overlay = $("menuOverlay");
+
+    if(overlay){
+
+        overlay.classList.remove("open");
+
+    }
+
+}
+
+
+/* ============================================================
+   CATEGORY NORMALIZATION
+============================================================ */
+
+function normalizeCategory(category){
+
+    if(!category){
+
+        return "General";
+
+    }
+
+    return String(category)
+        .trim()
+        .replace(/\s+/g," ");
+
+}
+
+
+/* ============================================================
+   RESOURCE BOOK CONVERSION
+============================================================ */
+
+function convertResourceBook(resource){
+
+    return {
+
+        id:
+            "resource-" +
+            String(resource.id),
+
+        sourceType:
+            "resource",
+
+        originalId:
+            resource.id,
+
+        title:
+            resource.title || "Untitled Resource",
+
+        author:
+            "G Nurse Research Hub Nigeria",
+
+        category:
+            normalizeCategory(resource.category),
+
+        description:
+            resource.description ||
+            "Educational resource material.",
+
+        content:
+            null,
+
+        cover_url:
+            "",
+
+        file_url:
+            resource.file_url || "",
+
+        is_free:
+            true,
+
+        price:
+            0,
+
+        currency:
+            "NGN",
+
+        published:
+            true,
+
+        created_at:
+            resource.created_at
+
+    };
+
+}
+
+
+/* ============================================================
+   NORMAL BOOK CONVERSION
+============================================================ */
+
+function convertBook(book){
+
+    return {
+
+        ...book,
+
+                sourceType:
+            "gnurse"
+
+    };
+
+}
+
+
+/* ============================================================
    LOAD G NURSE BOOKS
-========================================= */
-    async function loadGurseBooks() {
+============================================================ */
 
-    const featuredBooks =
-        document.getElementById("featuredBooks");
+async function loadGNurseBooks(){
 
-    const myLibraryBooks =
-        document.getElementById("myLibraryBooks");
-
-
-    if (featuredBooks) {
-        featuredBooks.innerHTML =
-            "<p>Loading featured books...</p>";
-    }
-
-    if (myLibraryBooks) {
-        myLibraryBooks.innerHTML =
-            "<p>Loading books...</p>";
-    }
-
-
-    try {
-
-        /* -----------------------------
-           LOAD G NURSE E-LIBRARY BOOKS
-        ----------------------------- */
-
-        const {
-            data: libraryBooks,
-            error: libraryError
-        } = await supabase
-            .from("e_library_books")
-            .select("*")
-            .eq("published", true)
-            .order("created_at", {
-                ascending: false
-            });
-
-
-        if (libraryError) {
-            console.error(
-                "E-Library books error:",
-                libraryError
-            );
-        }
-
-
-        /* -----------------------------
-           LOAD RESOURCE MATERIALS
-        ----------------------------- */
-
-        const {
-            data: resourceBooks,
-            error: resourceError
-        } = await supabase
-            .from("e_library_resource_books")
-            .select("*")
-            .order("created_at", {
-                ascending: false
-            });
-
-
-        if (resourceError) {
-            console.error(
-                "Resource materials error:",
-                resourceError
-            );
-        }
-
-
-        /* -----------------------------
-           CONVERT RESOURCE MATERIALS
-           INTO E-LIBRARY FORMAT
-        ----------------------------- */
-
-        const convertedResources =
-            (resourceBooks || []).map(
-                function(resource) {
-
-                    return {
-
-                        id:
-                            "resource-" +
-                            resource.id,
-
-                        title:
-                            resource.title,
-
-                        author:
-                            "G Nurse Research Hub Nigeria",
-
-                        category:
-                            resource.category ||
-                            "Resources",
-
-                        description:
-                            resource.description ||
-                            "",
-
-                        content:
-                            "",
-
-                        cover_url:
-                            "",
-
-                        is_free:
-                            true,
-
-                        price:
-                            0,
-
-                        currency:
-                            "NGN",
-
-                        published:
-                            true,
-
-                        created_at:
-                            resource.created_at,
-
-                        file_url:
-                            resource.file_url,
-
-                        source:
-                            "resource_materials"
-
-                    };
-
-                }
-            );
-
-
-        /* -----------------------------
-           COMBINE BOTH SOURCES
-        ----------------------------- */
-
-        gNurseBooks = [
-            ...(libraryBooks || []),
-            ...convertedResources
-        ];
-
-
-        /* -----------------------------
-           CHECK RESULTS
-        ----------------------------- */
-
-        if (gNurseBooks.length === 0) {
-
-            if (featuredBooks) {
-                featuredBooks.innerHTML =
-                    "<p>No books available yet.</p>";
-            }
-
-            if (myLibraryBooks) {
-                myLibraryBooks.innerHTML =
-                    "<p>No books available yet.</p>";
-            }
-
-            return;
-        }
-
-
-        /* -----------------------------
-           DISPLAY BOOKS
-        ----------------------------- */
-
-        displayFeaturedBooks();
-
-        displayGurseBooks(
-            gNurseBooks
-        );
-
-
-        console.log(
-            "E-Library books loaded:",
-            gNurseBooks
-        );
-
-    } catch (error) {
-
-        console.error(
-            "E-Library loading error:",
-            error
-        );
-
-
-        if (featuredBooks) {
-
-            featuredBooks.innerHTML =
-                "<p>Unable to load books.</p>";
-
-        }
-
-
-        if (myLibraryBooks) {
-
-            myLibraryBooks.innerHTML =
-                "<p>Unable to load books.</p>";
-
-        }
-
-    }
-
-    }
-   /* =========================================
-   DISPLAY G NURSE BOOKS
-========================================= */
-
-function displayGurseBooks(books){
-
-    const container =
-        document.getElementById(
-            "myLibraryBooks"
-        );
-
-    if(!container){
-        return;
-    }
-
-    if(!books || books.length === 0){
-
-        container.innerHTML = `
-            <div class="empty">
-                📚 No books found.
-                <br><br>
-                Try another search or category.
-            </div>
-        `;
-
-        return;
-    }
-
-    container.innerHTML = "";
-
-    books.forEach(book => {
-
-        const card =
-            document.createElement("div");
-
-        card.className = "book-card";
-
-        const title =
-            String(book.title || "Untitled Book");
-
-        const author =
-            String(
-                book.author ||
-                "G Nurse Research Hub Nigeria"
-            );
-
-        const category =
-            String(
-                book.category ||
-                "General"
-            );
-
-        const description =
-            String(
-                book.description ||
-                "Educational reading material from G Nurse Research Hub Nigeria."
-            );
-
-        const cover =
-            String(
-                book.cover_url || ""
-            );
-
-        const isFree =
-            Boolean(book.is_free) ||
-            Number(book.price || 0) === 0;
-
-        const price =
-            Number(book.price || 0);
-
-        let coverHTML = "";
-
-        if(cover){
-
-            coverHTML = `
-                <img
-                    src="${escapeHTML(cover)}"
-                    alt="${escapeHTML(title)}"
-                    loading="lazy"
-                >
-            `;
-
-        }else{
-
-            coverHTML = `
-                <div class="book-cover-placeholder">
-                    📖
-                </div>
-            `;
-
-        }
-
-        let actionButton = "";
-
-        if(isFree){
-
-            actionButton = `
-                <button
-                    class="book-button"
-                    onclick="openGurseBookById('${book.id}')"
-                >
-                    📖 Read Now
-                </button>
-            `;
-
-        }else{
-
-            actionButton = `
-                <button
-                    class="book-button"
-                    onclick="openGurseBookById('${book.id}')"
-                >
-                    🔐 Buy & Read
-                </button>
-            `;
-
-        }
-
-        card.innerHTML = `
-
-            <div class="book-cover">
-
-                ${coverHTML}
-
-            </div>
-
-            <div class="book-info">
-
-                <span class="book-category">
-                    ${escapeHTML(category)}
-                </span>
-
-                <h3>
-                    ${escapeHTML(title)}
-                </h3>
-
-                <p class="book-author">
-                    ${escapeHTML(author)}
-                </p>
-
-                <p class="book-description">
-                    ${escapeHTML(description)}
-                </p>
-
-                <div class="book-bottom">
-
-                    ${
-                        isFree
-                        ?
-                        `<span class="free-badge">
-                            FREE
-                         </span>`
-                        :
-                        `<span class="price-badge">
-                            ${escapeHTML(
-                                String(
-                                    book.currency || "NGN"
-                                )
-                            )}
-                            ${price.toLocaleString()}
-                         </span>`
-                    }
-
-                </div>
-
-                ${actionButton}
-
-            </div>
-        `;
-
-        container.appendChild(card);
-
-    });
-
-}
-
-
-/* =========================================
-   FEATURED BOOKS
-========================================= */
-
-function displayFeaturedBooks(){
-
-    const container =
-        document.getElementById(
-            "featuredBooks"
-        );
-
-    if(!container){
-        return;
-    }
-
-    if(
-        !Array.isArray(gNurseBooks) ||
-        gNurseBooks.length === 0
-    ){
-
-        container.innerHTML = `
-            <div class="empty">
-                📚 No featured books available yet.
-            </div>
-        `;
-
-        return;
-
-    }
-
-    const featured =
-        gNurseBooks.slice(0, 6);
-
-    container.innerHTML = "";
-
-    featured.forEach(book => {
-
-        const card =
-            document.createElement("div");
-
-        card.className = "book-card";
-
-        const title =
-            String(
-                book.title ||
-                "Untitled Book"
-            );
-
-        const author =
-            String(
-                book.author ||
-                "G Nurse Research Hub Nigeria"
-            );
-
-        const cover =
-            String(
-                book.cover_url || ""
-            );
-
-        const isFree =
-            Boolean(book.is_free) ||
-            Number(book.price || 0) === 0;
-
-        card.innerHTML = `
-
-            <div class="book-cover">
-
-                ${
-                    cover
-                    ?
-                    `<img
-                        src="${escapeHTML(cover)}"
-                        alt="${escapeHTML(title)}"
-                        loading="lazy"
-                    >`
-                    :
-                    `<div class="book-cover-placeholder">
-                        📖
-                     </div>`
-                }
-
-            </div>
-
-            <div class="book-info">
-
-                <span class="book-category">
-                    ${escapeHTML(
-                        String(
-                            book.category ||
-                            "General"
-                        )
-                    )}
-                </span>
-
-                <h3>
-                    ${escapeHTML(title)}
-                </h3>
-
-                <p class="book-author">
-                    ${escapeHTML(author)}
-                </p>
-
-                <button
-                    class="book-button"
-                    onclick="openGurseBookById('${book.id}')"
-                >
-                    ${
-                        isFree
-                        ? "📖 Read Now"
-                        : "🔐 Buy & Read"
-                    }
-                </button>
-
-            </div>
-
-        `;
-
-        container.appendChild(card);
-
-    });
-
-}
-
-
-/* =========================================
-   SEARCH G NURSE BOOKS
-========================================= */
-
-function searchGurseBooks(searchTerm){
-
-    const term =
-        String(searchTerm || "")
-            .trim()
-            .toLowerCase();
-
-    if(!term){
-
-        displayGurseBooks(
-            gNurseBooks
-        );
-
-        return;
-
-    }
-
-    const results =
-        gNurseBooks.filter(book => {
-
-            const title =
-                String(
-                    book.title || ""
-                ).toLowerCase();
-
-            const author =
-                String(
-                    book.author || ""
-                ).toLowerCase();
-
-            const category =
-                String(
-                    book.category || ""
-                ).toLowerCase();
-
-            const description =
-                String(
-                    book.description || ""
-                ).toLowerCase();
-
-            return (
-                title.includes(term) ||
-                author.includes(term) ||
-                category.includes(term) ||
-                description.includes(term)
-            );
-
-        });
-
-    displayGurseBooks(results);
-
-}
-
-
-/* =========================================
-   SEARCH BY CATEGORY
-========================================= */
-
-function searchCategory(category){
-
-    const selectedCategory =
-        String(category || "")
-            .trim()
-            .toLowerCase();
-
-    if(!selectedCategory){
-
-        displayGurseBooks(
-            gNurseBooks
-        );
-
-        return;
-
-    }
-
-    const results =
-        gNurseBooks.filter(book => {
-
-            return String(
-                book.category || ""
-            )
-            .trim()
-            .toLowerCase()
-            === selectedCategory;
-
-        });
-
-    showSection(
-        "myLibrary"
-    );
-
-    displayGurseBooks(
-        results
-    );
-
-}
-
-
-/* =========================================
-   OPEN G NURSE BOOK
-========================================= */
-
-async function openGurseBookById(bookId){
-
-    if(!bookId){
-        return;
-    }
-
-    const book =
-        gNurseBooks.find(
-            item =>
-                String(item.id) ===
-                String(bookId)
-        );
-
-    if(!book){
-
-        alert(
-            "Book could not be found."
-        );
-
-        return;
-
-    }
-
-    const isFree =
-        Boolean(book.is_free) ||
-        Number(book.price || 0) === 0;
-
-
-    /*
-       FREE BOOK
-
-       Free books can be opened directly.
-    */
-
-    if(isFree){
-
-        openReader(
-            book.title,
-            book.content ||
-            `
-                <p>
-                    This book does not have
-                    reading content yet.
-                </p>
-            `,
-            book.id
-        );
-
-        return;
-
-    }
-
-
-    /*
-       PAID BOOK
-
-       Paid-book unlocking will be connected
-       to the secure Paystack/Supabase system.
-       We do NOT expose paid content here.
-    */
-
-    alert(
-        "🔐 This book requires payment before reading. The secure payment and unlocking system will be connected to this button."
-    );
-
-}
-
-
-/* =========================================
-   BOOK OPEN TRACKING
-========================================= */
-
-async function trackBookOpen(bookId){
-
-    if(!bookId){
-        return;
-    }
+    const status =
+        $("libraryStatus");
 
     try{
 
         const {
-            data: {
-                user
-            }
-        } =
-        await supabaseClient
-            .auth
-            .getUser();
+            data,
+            error
+        } = await supabase
 
-        await supabaseClient
-            .from(
-                "e_library_book_views"
-            )
-            .insert({
+            .from("e_library_books")
 
-                book_id:
-                    bookId,
+            .select(`
+                id,
+                title,
+                author,
+                category,
+                description,
+                content,
+                cover_url,
+                is_free,
+                price,
+                currency,
+                published,
+                created_at,
+                updated_at
+            `)
 
-                user_id:
-                    user
-                    ? user.id
-                    : null
+            .eq("published", true)
 
-            });
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+        if(error){
+
+            throw error;
+
+        }
+
+
+        state.books =
+            (data || [])
+            .map(convertBook);
+
 
     }catch(error){
 
-        console.warn(
-            "Book view tracking failed:",
+        console.error(
+            "G Nurse books error:",
+            error
+        );
+
+        state.books = [];
+
+        if(status){
+
+            status.textContent =
+                "Unable to load G Nurse books.";
+
+        }
+
+    }
+
+}
+
+
+/* ============================================================
+   LOAD RESOURCE MATERIALS
+============================================================ */
+
+async function loadResourceBooks(){
+
+    try{
+
+        const {
+            data,
+            error
+        } = await supabase
+
+            .from("e_library_resource_books")
+
+            .select(`
+                id,
+                title,
+                category,
+                description,
+                file_url,
+                created_at
+            `)
+
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+        if(error){
+
+            throw error;
+
+        }
+
+
+        state.resourceBooks =
+            (data || [])
+            .map(convertResourceBook);
+
+
+    }catch(error){
+
+        console.error(
+            "Resource books error:",
+            error
+        );
+
+        state.resourceBooks = [];
+
+    }
+
+}
+
+
+/* ============================================================
+   COMBINE ALL INTERNAL BOOKS
+============================================================ */
+
+function buildAllBooks(){
+
+    state.allBooks = [
+
+        ...state.books,
+
+        ...state.resourceBooks
+
+    ];
+
+
+    const categorySet =
+        new Set();
+
+
+    state.allBooks.forEach(book => {
+
+        categorySet.add(
+            normalizeCategory(
+                book.category
+            )
+        );
+
+    });
+
+
+    state.categories =
+        Array.from(categorySet)
+        .sort(
+            (a, b) =>
+                a.localeCompare(b)
+        );
+
+
+    renderCategories();
+
+    renderBooks();
+
+    renderMyLibrary();
+
+}
+
+
+/* ============================================================
+   RENDER CATEGORY BUTTONS
+============================================================ */
+
+function renderCategories(){
+
+    const container =
+        $("categoryContainer");
+
+    if(!container){
+
+        return;
+
+    }
+
+
+    container.innerHTML = "";
+
+
+    const allButton =
+        document.createElement("button");
+
+    allButton.className =
+        "category-button" +
+        (
+            state.currentCategory === "all"
+                ? " active"
+                : ""
+        );
+
+    allButton.dataset.category =
+        "all";
+
+    allButton.textContent =
+        "All";
+
+    container.appendChild(
+        allButton
+    );
+
+
+    state.categories.forEach(category => {
+
+        const button =
+            document.createElement("button");
+
+        button.className =
+            "category-button" +
+            (
+                state.currentCategory === category
+                    ? " active"
+                    : ""
+            );
+
+        button.dataset.category =
+            category;
+
+        button.textContent =
+            category;
+
+        container.appendChild(
+            button
+        );
+
+    });
+
+}
+
+
+/* ============================================================
+   FILTER BOOKS
+============================================================ */
+
+function getFilteredBooks(){
+
+    const term =
+        state.searchTerm
+        .trim()
+        .toLowerCase();
+
+
+    return state.allBooks.filter(book => {
+
+        const matchesCategory =
+            state.currentCategory === "all" ||
+            normalizeCategory(
+                book.category
+            ) === state.currentCategory;
+
+
+        if(!matchesCategory){
+
+            return false;
+
+        }
+
+
+        if(!term){
+
+            return true;
+
+        }
+
+
+        const searchable = [
+
+            book.title,
+
+            book.author,
+
+            book.category,
+
+            book.description
+
+        ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+
+        return searchable.includes(term);
+
+    });
+
+}
+
+
+/* ============================================================
+   BOOK COVER
+============================================================ */
+
+function getBookCover(book){
+
+    if(
+        book &&
+        book.cover_url
+    ){
+
+        return book.cover_url;
+
+    }
+
+
+    return "";
+
+}
+
+
+/* ============================================================
+   CREATE BOOK CARD
+============================================================ */
+
+function createBookCard(book){
+
+    const card =
+        document.createElement("article");
+
+    card.className =
+        "book-card";
+
+
+    const cover =
+        getBookCover(book);
+
+
+    const coverHTML =
+        cover
+
+        ? `
+            <div class="book-cover">
+
+                <img
+                    src="${escapeHTML(cover)}"
+                    alt="${escapeHTML(
+                        book.title ||
+                        "Book"
+                    )}"
+                    loading="lazy">
+
+            </div>
+        `
+
+        : `
+            <div class="book-cover book-cover-placeholder">
+
+                <span>📖</span>
+
+            </div>
+        `;
+
+
+    const sourceLabel =
+        book.sourceType === "resource"
+            ? "Resource Material"
+            : "G Nurse Book";
+
+
+    card.innerHTML = `
+
+        ${coverHTML}
+
+        <div class="book-card-body">
+
+            <span class="book-source">
+                ${escapeHTML(sourceLabel)}
+            </span>
+
+            <h3>
+                ${escapeHTML(
+                    book.title ||
+                    "Untitled Book"
+                )}
+            </h3>
+
+            <p class="book-author">
+                ${escapeHTML(
+                    book.author ||
+                    "G Nurse Research Hub Nigeria"
+                )}
+            </p>
+
+            <p class="book-category">
+                ${escapeHTML(
+                    normalizeCategory(
+                        book.category
+                    )
+                )}
+            </p>
+
+            <p class="book-description">
+                ${escapeHTML(
+                    book.description ||
+                    "Educational reading material."
+                )}
+            </p>
+
+            <div class="book-card-footer">
+
+                <button
+                    type="button"
+                    class="book-read-button">
+
+                    📖 Read
+
+                </button>
+
+            </div>
+
+        </div>
+    `;
+
+
+    const readButton =
+        card.querySelector(
+            ".book-read-button"
+        );
+
+
+    if(readButton){
+
+        readButton.addEventListener(
+            "click",
+            () => {
+
+                openBook(book);
+
+            }
+        );
+
+    }
+
+
+    return card;
+
+}
+
+
+/* ============================================================
+   RENDER BOOKS
+============================================================ */
+
+function renderBooks(){
+
+    const grid =
+        $("bookGrid");
+
+    const empty =
+        $("emptyLibrary");
+
+    const status =
+        $("libraryStatus");
+
+
+    if(!grid){
+
+        return;
+
+    }
+
+
+    const books =
+        getFilteredBooks();
+
+
+    grid.innerHTML = "";
+
+
+    if(status){
+
+        status.textContent =
+            `${books.length} reading material${
+                books.length === 1
+                    ? ""
+                    : "s"
+            } available`;
+
+    }
+
+
+    if(books.length === 0){
+
+        if(empty){
+
+            empty.style.display =
+                "block";
+
+        }
+
+        return;
+
+    }
+
+
+    if(empty){
+
+        empty.style.display =
+            "none";
+
+    }
+
+
+    const fragment =
+        document.createDocumentFragment();
+
+
+    books.forEach(book => {
+
+        fragment.appendChild(
+            createBookCard(book)
+        );
+
+    });
+
+
+    grid.appendChild(
+        fragment
+    );
+
+}
+    /* ============================================================
+   RELATED LIBRARIES
+============================================================ */
+
+async function loadRelatedLibraries(){
+
+    const grid =
+        $("relatedLibrariesGrid");
+
+    if(!grid){
+
+        return;
+
+    }
+
+
+    grid.innerHTML = `
+        <div class="loading-card">
+            Loading related libraries...
+        </div>
+    `;
+
+
+    try{
+
+        const {
+            data,
+            error
+        } = await supabase
+
+            .from("e_library_related_libraries")
+
+            .select(`
+                id,
+                name,
+                description,
+                logo_url,
+                website_url,
+                source_type,
+                source_url,
+                search_enabled,
+                automatic_display,
+                reading_enabled,
+                is_active,
+                display_order
+            `)
+
+            .eq("is_active", true)
+
+            .order(
+                "display_order",
+                {
+                    ascending: true
+                }
+            );
+
+
+        if(error){
+
+            throw error;
+
+        }
+
+
+        state.relatedLibraries =
+            data || [];
+
+
+        renderRelatedLibraries();
+
+
+    }catch(error){
+
+        console.error(
+            "Related libraries error:",
+            error
+        );
+
+        state.relatedLibraries = [];
+
+
+        grid.innerHTML = `
+
+            <div class="empty-state">
+
+                <div>🌐</div>
+
+                <h3>
+                    Related libraries unavailable
+                </h3>
+
+                <p>
+                    Please try again later.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* ============================================================
+   RENDER RELATED LIBRARIES
+============================================================ */
+
+function renderRelatedLibraries(){
+
+    const grid =
+        $("relatedLibrariesGrid");
+
+    if(!grid){
+
+        return;
+
+    }
+
+
+    grid.innerHTML = "";
+
+
+    if(
+        state.relatedLibraries.length === 0
+    ){
+
+        grid.innerHTML = `
+
+            <div class="empty-state">
+
+                <div>🌐</div>
+
+                <h3>
+                    No related libraries
+                </h3>
+
+                <p>
+                    No connected library catalogues are
+                    currently available.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    state.relatedLibraries.forEach(
+        library => {
+
+            const card =
+                document.createElement(
+                    "article"
+                );
+
+            card.className =
+                "related-library-card";
+
+
+            const logoHTML =
+                library.logo_url
+
+                ? `
+                    <img
+                        src="${escapeHTML(
+                            library.logo_url
+                        )}"
+                        alt="${escapeHTML(
+                            library.name
+                        )}"
+                        loading="lazy">
+                `
+
+                : `
+                    <div class="related-logo-placeholder">
+                        🌐
+                    </div>
+                `;
+
+
+            card.innerHTML = `
+
+                <div class="related-library-logo">
+                    ${logoHTML}
+                </div>
+
+                <div class="related-library-info">
+
+                    <h3>
+                        ${escapeHTML(
+                            library.name
+                        )}
+                    </h3>
+
+                    <p>
+                        ${escapeHTML(
+                            library.description ||
+                            "Related library catalogue."
+                        )}
+                    </p>
+
+                    <button
+                        type="button"
+                        class="secondary-button">
+
+                        Open Catalogue
+
+                    </button>
+
+                </div>
+
+            `;
+
+
+            const button =
+                card.querySelector(
+                    ".secondary-button"
+                );
+
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const url =
+                        library.website_url ||
+                        library.source_url;
+
+
+                    if(!url){
+
+                        showToast(
+                            "No catalogue link available."
+                        );
+
+                        return;
+
+                    }
+
+
+                    window.open(
+                        url,
+                        "_blank",
+                        "noopener,noreferrer"
+                    );
+
+                }
+            );
+
+
+            grid.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* ============================================================
+   LOAD SYNCHRONIZED EXTERNAL BOOKS
+============================================================ */
+
+async function loadExternalBooks(){
+
+    const grid =
+        $("externalBooksGrid");
+
+
+    try{
+
+        const {
+            data,
+            error
+        } = await supabase
+
+            .from("e_library_external_books")
+
+            .select(`
+                id,
+                library_id,
+                title,
+                author,
+                description,
+                cover_url,
+                category,
+                read_url,
+                source_url,
+                is_active,
+                last_synced_at,
+                created_at
+            `)
+
+            .eq("is_active", true)
+
+            .order(
+                "title",
+                {
+                    ascending: true
+                }
+            );
+
+
+        if(error){
+
+            throw error;
+
+        }
+
+
+        state.externalBooks =
+            data || [];
+
+
+        renderExternalBooks();
+
+
+    }catch(error){
+
+        console.error(
+            "External books error:",
+            error
+        );
+
+        state.externalBooks = [];
+
+
+        if(grid){
+
+            grid.innerHTML = `
+
+                <div class="empty-state">
+
+                    <div>🌐</div>
+
+                    <h3>
+                        External catalogue unavailable
+                    </h3>
+
+                    <p>
+                        Please try again later.
+                    </p>
+
+                </div>
+
+            `;
+
+        }
+
+    }
+
+}
+
+
+/* ============================================================
+   FILTER EXTERNAL BOOKS
+============================================================ */
+
+function getFilteredExternalBooks(){
+
+    const term =
+        state.externalSearchTerm
+        .trim()
+        .toLowerCase();
+
+
+    if(!term){
+
+        return state.externalBooks;
+
+    }
+
+
+    return state.externalBooks.filter(
+        book => {
+
+            const searchable = [
+
+                book.title,
+
+                book.author,
+
+                book.category,
+
+                book.description
+
+            ]
+            .filter(Boolean)
+            .join(" ")
+            .toLowerCase();
+
+
+            return searchable.includes(term);
+
+        }
+    );
+
+}
+
+
+/* ============================================================
+   RENDER EXTERNAL BOOKS
+============================================================ */
+
+function renderExternalBooks(){
+
+    const grid =
+        $("externalBooksGrid");
+
+    const empty =
+        $("emptyExternalBooks");
+
+
+    if(!grid){
+
+        return;
+
+    }
+
+
+    const books =
+        getFilteredExternalBooks();
+
+
+    grid.innerHTML = "";
+
+
+    if(books.length === 0){
+
+        if(empty){
+
+            empty.style.display =
+                "block";
+
+        }
+
+        return;
+
+    }
+
+
+    if(empty){
+
+        empty.style.display =
+            "none";
+
+    }
+
+
+    books.forEach(
+        book => {
+
+            const card =
+                document.createElement(
+                    "article"
+                );
+
+            card.className =
+                "book-card";
+
+
+            const coverHTML =
+                book.cover_url
+
+                ? `
+                    <div class="book-cover">
+
+                        <img
+                            src="${escapeHTML(
+                                book.cover_url
+                            )}"
+                            alt="${escapeHTML(
+                                book.title ||
+                                "Book"
+                            )}"
+                            loading="lazy">
+
+                    </div>
+                `
+
+                : `
+                    <div class="book-cover book-cover-placeholder">
+                        <span>🌐</span>
+                    </div>
+                `;
+
+
+            card.innerHTML = `
+
+                ${coverHTML}
+
+                <div class="book-card-body">
+
+                    <span class="book-source">
+                        Related Library
+                    </span>
+
+                    <h3>
+                        ${escapeHTML(
+                            book.title ||
+                            "Untitled Book"
+                        )}
+                    </h3>
+
+                    <p class="book-author">
+                        ${escapeHTML(
+                            book.author ||
+                            "Unknown author"
+                        )}
+                    </p>
+
+                    <p class="book-category">
+                        ${escapeHTML(
+                            normalizeCategory(
+                                book.category
+                            )
+                        )}
+                    </p>
+
+                    <p class="book-description">
+                        ${escapeHTML(
+                            book.description ||
+                            "External catalogue record."
+                        )}
+                    </p>
+
+                    <div class="book-card-footer">
+
+                        <button
+                            type="button"
+                            class="book-read-button">
+
+                            🌐 View Source
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            const button =
+                card.querySelector(
+                    ".book-read-button"
+                );
+
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const url =
+                        book.read_url ||
+                        book.source_url;
+
+
+                    if(!url){
+
+                        showToast(
+                            "No source link available."
+                        );
+
+                        return;
+
+                    }
+
+
+                    window.open(
+                        url,
+                        "_blank",
+                        "noopener,noreferrer"
+                    );
+
+                }
+            );
+
+
+            grid.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* ============================================================
+   MY LIBRARY STORAGE
+============================================================ */
+
+const MY_LIBRARY_KEY =
+    "gnurse_elibrary_my_library";
+
+
+function getMyLibrary(){
+
+    try{
+
+        const saved =
+            localStorage.getItem(
+                MY_LIBRARY_KEY
+            );
+
+
+        if(!saved){
+
+            return [];
+
+        }
+
+
+        const parsed =
+            JSON.parse(saved);
+
+
+        return Array.isArray(parsed)
+            ? parsed
+            : [];
+
+
+    }catch(error){
+
+        console.error(
+            "My Library error:",
+            error
+        );
+
+        return [];
+
+    }
+
+}
+
+
+function saveMyLibrary(books){
+
+    try{
+
+        localStorage.setItem(
+            MY_LIBRARY_KEY,
+            JSON.stringify(books)
+        );
+
+    }catch(error){
+
+        console.error(
+            "Save My Library error:",
             error
         );
 
     }
 
-   }
-   <script>
+}
 
-/* =========================================
-   READER
-========================================= */
 
-function openReader(
-    title,
-    content,
-    bookId = null
+/* ============================================================
+   ADD BOOK TO MY LIBRARY
+============================================================ */
+
+function addToMyLibrary(book){
+
+    if(!book || !book.id){
+
+        return;
+
+    }
+
+
+    let books =
+        getMyLibrary();
+
+
+    books =
+        books.filter(
+            item =>
+                item.id !== book.id
+        );
+
+
+    books.unshift({
+
+        id:
+            book.id,
+
+        title:
+            book.title,
+
+        author:
+            book.author,
+
+        category:
+            book.category,
+
+        description:
+            book.description,
+
+        cover_url:
+            book.cover_url || "",
+
+        sourceType:
+            book.sourceType || "gnurse",
+
+        file_url:
+            book.file_url || "",
+
+        savedAt:
+            new Date().toISOString()
+
+    });
+
+
+    books =
+        books.slice(0,50);
+
+
+    saveMyLibrary(
+        books
+    );
+
+
+    renderMyLibrary();
+
+}
+
+
+/* ============================================================
+   RENDER MY LIBRARY
+============================================================ */
+
+function renderMyLibrary(){
+
+    const grid =
+        $("myLibraryBooks");
+
+    const empty =
+        $("emptyMyLibrary");
+
+
+    if(!grid){
+
+        return;
+
+    }
+
+
+    const saved =
+        getMyLibrary();
+
+
+    grid.innerHTML = "";
+
+
+    if(saved.length === 0){
+
+        if(empty){
+
+            empty.style.display =
+                "block";
+
+        }
+
+        return;
+
+    }
+
+
+    if(empty){
+
+        empty.style.display =
+            "none";
+
+    }
+
+
+    saved.forEach(
+        savedBook => {
+
+            const original =
+                state.allBooks.find(
+                    book =>
+                        book.id ===
+                        savedBook.id
+                );
+
+
+            if(original){
+
+                grid.appendChild(
+                    createBookCard(
+                        original
+                    )
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+/* ============================================================
+   READER POSITION STORAGE
+============================================================ */
+
+const READER_STATE_PREFIX =
+    "gnurse_elibrary_reader_";
+
+
+function getReaderState(bookId){
+
+    try{
+
+        const saved =
+            localStorage.getItem(
+                READER_STATE_PREFIX +
+                bookId
+            );
+
+
+        if(!saved){
+
+            return {
+                scroll:0
+            };
+
+        }
+
+
+        const parsed =
+            JSON.parse(saved);
+
+
+        return {
+
+            scroll:
+                Number(parsed.scroll) || 0
+
+        };
+
+
+    }catch(error){
+
+        return {
+            scroll:0
+        };
+
+    }
+
+}
+
+
+function saveReaderState(
+    bookId,
+    scroll
 ){
 
-    const reader =
-        document.getElementById(
-            "reader"
+    if(!bookId){
+
+        return;
+
+    }
+
+
+    try{
+
+        localStorage.setItem(
+
+            READER_STATE_PREFIX +
+            bookId,
+
+            JSON.stringify({
+
+                scroll:
+                    Math.max(
+                        0,
+                        Number(scroll) || 0
+                    ),
+
+                savedAt:
+                    Date.now()
+
+            })
+
         );
 
-    const readerTitle =
-        document.getElementById(
-            "readerTitle"
+    }catch(error){
+
+        console.error(
+            "Reader state error:",
+            error
         );
 
-    const readerContent =
-        document.getElementById(
-            "readerContent"
+    }
+
+}
+
+
+/* ============================================================
+   READER FONT STORAGE
+============================================================ */
+
+const READER_FONT_KEY =
+    "gnurse_elibrary_font_size";
+
+
+function loadReaderFont(){
+
+    const saved =
+        localStorage.getItem(
+            READER_FONT_KEY
         );
+
+
+    if(saved){
+
+        const value =
+            Number(saved);
+
+
+        if(
+            value >= 14 &&
+            value <= 28
+        ){
+
+            state.readerFontSize =
+                value;
+
+        }
+
+    }
+
+}
+
+
+function saveReaderFont(){
+
+    localStorage.setItem(
+        READER_FONT_KEY,
+        String(
+            state.readerFontSize
+        )
+    );
+
+}
+
+
+/* ============================================================
+   READER THEME STORAGE
+============================================================ */
+
+const READER_THEME_KEY =
+    "gnurse_elibrary_theme";
+
+
+function loadReaderTheme(){
+
+    const saved =
+        localStorage.getItem(
+            READER_THEME_KEY
+        );
+
 
     if(
-        !reader ||
-        !readerTitle ||
-        !readerContent
+        saved === "light" ||
+        saved === "sepia" ||
+        saved === "dark" ||
+        saved === "auto"
     ){
 
-        return;
+        state.readerTheme =
+            saved;
 
     }
 
-    currentReaderBookId =
-        bookId;
+}
 
-    readerTitle.textContent =
-        title || "Reading";
 
-    readerContent.innerHTML =
-        content ||
-        `
-            <p>
-                No reading content is
-                available for this book yet.
-            </p>
-        `;
+/* ============================================================
+   SAVE READER THEME
+============================================================ */
 
-    readerContent.style.fontSize =
-        currentFontSize + "px";
+function saveReaderTheme(){
 
-    reader.classList.add(
-        "open"
+    localStorage.setItem(
+        READER_THEME_KEY,
+        state.readerTheme
     );
 
-    document.body.style.overflow =
-        "hidden";
-
-    if(bookId){
-
-        trackBookOpen(
-            bookId
-        );
-
-        loadReadingProgress(
-            bookId
-        );
-
-    }
-
 }
 
 
-/* =========================================
-   CLOSE READER
-========================================= */
+/* ============================================================
+   APPLY READER THEME
+============================================================ */
 
-function closeReader(){
+function applyReaderTheme(){
 
-    const reader =
-        document.getElementById(
-            "reader"
-        );
+    const shell =
+        $("readerShell");
 
-    if(!reader){
+
+    if(!shell){
+
         return;
-    }
-
-    reader.classList.remove(
-        "open"
-    );
-
-    document.body.style.overflow =
-        "";
-
-    currentReaderBookId =
-        null;
-
-}
-
-
-/* =========================================
-   FONT SIZE
-========================================= */
-
-function changeFontSize(
-    change
-){
-
-    const readerContent =
-        document.getElementById(
-            "readerContent"
-        );
-
-    if(!readerContent){
-        return;
-    }
-
-    currentFontSize +=
-        Number(change || 0);
-
-    if(currentFontSize < 12){
-
-        currentFontSize = 12;
 
     }
 
-    if(currentFontSize > 32){
 
-        currentFontSize = 32;
-
-    }
-
-    readerContent.style.fontSize =
-        currentFontSize + "px";
-
-}
-
-
-/* =========================================
-   READER THEME
-========================================= */
-
-function setReaderTheme(
-    theme
-){
-
-    const reader =
-        document.getElementById(
-            "reader"
-        );
-
-    if(!reader){
-        return;
-    }
-
-    reader.classList.remove(
+    shell.classList.remove(
         "theme-light",
         "theme-sepia",
         "theme-dark"
     );
 
-    if(theme === "sepia"){
 
-        reader.classList.add(
-            "theme-sepia"
-        );
+    let theme =
+        state.readerTheme;
+
+
+    if(theme === "auto"){
+
+        const dark =
+            window.matchMedia &&
+            window.matchMedia(
+                "(prefers-color-scheme: dark)"
+            ).matches;
+
+
+        theme =
+            dark
+                ? "dark"
+                : "light";
 
     }
 
-    else if(theme === "dark"){
 
-        reader.classList.add(
-            "theme-dark"
-        );
+    shell.classList.add(
+        "theme-" + theme
+    );
+
+
+    document
+        .querySelectorAll(
+            ".reader-control[data-theme]"
+        )
+        .forEach(button => {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.theme ===
+                state.readerTheme
+            );
+
+        });
+
+}
+
+
+/* ============================================================
+   APPLY FONT SIZE
+============================================================ */
+
+function applyReaderFont(){
+
+    const content =
+        $("readerContent");
+
+
+    if(!content){
+
+        return;
 
     }
 
-    else{
 
-        reader.classList.add(
-            "theme-light"
+    content.style.fontSize =
+        state.readerFontSize + "px";
+
+}
+
+
+/* ============================================================
+   READER PROGRESS
+============================================================ */
+
+function updateReaderProgress(){
+
+    const body =
+        $("readerBody");
+
+    const bar =
+        $("readerProgressBar");
+
+
+    if(!body || !bar){
+
+        return;
+
+    }
+
+
+    const scrollTop =
+        body.scrollTop;
+
+
+    const scrollHeight =
+        body.scrollHeight -
+        body.clientHeight;
+
+
+    let percent = 0;
+
+
+    if(scrollHeight > 0){
+
+        percent =
+            (
+                scrollTop /
+                scrollHeight
+            ) * 100;
+
+    }
+
+
+    percent =
+        Math.max(
+            0,
+            Math.min(
+                100,
+                percent
+            )
+        );
+
+
+    state.readerProgress =
+        percent;
+
+
+    bar.style.width =
+        percent + "%";
+
+
+    if(
+        state.currentBook &&
+        state.currentBook.id
+    ){
+
+        saveReaderState(
+            state.currentBook.id,
+            scrollTop
         );
 
     }
@@ -2419,422 +4826,1751 @@ function setReaderTheme(
 }
 
 
-/* =========================================
-   AUTO THEME
-========================================= */
+/* ============================================================
+   RESET READER VIEW
+============================================================ */
 
-function setAutoReaderTheme(){
+function resetReaderView(){
 
-    const darkMode =
-        window.matchMedia &&
-        window.matchMedia(
-            "(prefers-color-scheme: dark)"
-        ).matches;
+    const body =
+        $("readerBody");
 
-    setReaderTheme(
-        darkMode
-            ? "dark"
-            : "light"
+    const content =
+        $("readerContent");
+
+    const pdf =
+        $("pdfReader");
+
+
+    if(body){
+
+        body.scrollTop = 0;
+
+    }
+
+
+    if(content){
+
+        content.innerHTML = "";
+
+        content.style.fontSize =
+            state.readerFontSize + "px";
+
+    }
+
+
+    if(pdf){
+
+        pdf.innerHTML = "";
+
+        pdf.style.display =
+            "none";
+
+    }
+
+
+    const bar =
+        $("readerProgressBar");
+
+
+    if(bar){
+
+        bar.style.width =
+            "0%";
+
+        }
+
+}
+
+
+/* ============================================================
+   SHOW READER
+============================================================ */
+
+function showReader(){
+
+    const shell =
+        $("readerShell");
+
+    if(!shell){
+
+        return;
+
+    }
+
+
+    shell.classList.add(
+        "open"
+    );
+
+    shell.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+    document.body.classList.add(
+        "reader-active"
+    );
+
+    state.isReaderOpen =
+        true;
+
+
+    applyReaderTheme();
+
+    applyReaderFont();
+
+    attachReaderScroll();
+
+}
+
+
+/* ============================================================
+   CLOSE READER
+============================================================ */
+
+function closeReader(){
+
+    const shell =
+        $("readerShell");
+
+    const body =
+        $("readerBody");
+
+
+    if(
+        state.readerScrollHandler &&
+        body
+    ){
+
+        body.removeEventListener(
+            "scroll",
+            state.readerScrollHandler
+        );
+
+    }
+
+
+    state.readerScrollHandler =
+        null;
+
+
+    if(shell){
+
+        shell.classList.remove(
+            "open"
+        );
+
+        shell.setAttribute(
+            "aria-hidden",
+            "true"
+        );
+
+    }
+
+
+    document.body.classList.remove(
+        "reader-active"
+    );
+
+
+    state.isReaderOpen =
+        false;
+
+}
+
+
+/* ============================================================
+   READER MESSAGE
+============================================================ */
+
+function showReaderMessage(message){
+
+    const content =
+        $("readerContent");
+
+    const pdf =
+        $("pdfReader");
+
+
+    if(pdf){
+
+        pdf.innerHTML =
+            "";
+
+        pdf.style.display =
+            "none";
+
+    }
+
+
+    if(content){
+
+        content.style.display =
+            "block";
+
+        content.innerHTML = `
+
+            <div class="reader-message">
+
+                <h3>
+                    📖 Reading Mode
+                </h3>
+
+                <p>
+                    ${escapeHTML(message)}
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* ============================================================
+   RENDER PLAIN TEXT
+============================================================ */
+
+function renderPlainText(text){
+
+    const content =
+        $("readerContent");
+
+
+    if(!content){
+
+        return;
+
+    }
+
+
+    content.style.display =
+        "block";
+
+
+    content.innerHTML =
+        "";
+
+
+    const paragraphs =
+        String(text || "")
+        .split(/\n\s*\n/);
+
+
+    paragraphs.forEach(
+        paragraph => {
+
+            const clean =
+                paragraph.trim();
+
+
+            if(!clean){
+
+                return;
+
+            }
+
+
+            const p =
+                document.createElement(
+                    "p"
+                );
+
+
+            p.textContent =
+                clean;
+
+
+            content.appendChild(
+                p
+            );
+
+        }
     );
 
 }
 
 
-/* =========================================
-   READING PROGRESS
-========================================= */
+/* ============================================================
+   RENDER HTML BOOK CONTENT
+============================================================ */
 
-async function loadReadingProgress(
-    bookId
-){
+function renderBookHTML(html){
 
-    if(!bookId){
+    const content =
+        $("readerContent");
+
+
+    if(!content){
+
         return;
+
     }
 
-    try{
 
-        const {
-            data: {
-                user
-            }
-        } =
-        await supabaseClient
-            .auth
-            .getUser();
+    content.style.display =
+        "block";
 
-        if(!user){
-            return;
-        }
 
-        const {
-            data,
-            error
-        } =
-        await supabaseClient
-            .from(
-                "e_library_reading_progress"
-            )
-            .select(
-                "progress_percent,last_position"
-            )
-            .eq(
-                "user_id",
-                user.id
-            )
-            .eq(
-                "book_id",
-                bookId
-            )
-            .maybeSingle();
+    content.innerHTML =
+        "";
 
-        if(error){
 
-            console.warn(
-                "Reading progress error:",
-                error
-            );
-
-            return;
-
-        }
-
-        if(
-            data &&
-            Number(
-                data.progress_percent || 0
-            ) > 0
-        ){
-
-            console.log(
-                "Previous reading progress:",
-                data.progress_percent + "%"
-            );
-
-        }
-
-    }catch(error){
-
-        console.warn(
-            "Could not load reading progress:",
-            error
+    const template =
+        document.createElement(
+            "template"
         );
 
-    }
 
-}
+    template.innerHTML =
+        String(html || "");
 
 
-/* =========================================
-   SAVE READING PROGRESS
-========================================= */
+    /*
+       Remove executable or embedded elements.
+    */
 
-async function saveReadingProgress(){
+    template.content
+        .querySelectorAll(
+            "script,iframe,object,embed,form"
+        )
+        .forEach(
+            element =>
+                element.remove()
+        );
 
-    if(!currentReaderBookId){
-        return;
-    }
 
-    try{
+    /*
+       Remove inline event handlers.
+    */
 
-        const {
-            data: {
-                user
-            }
-        } =
-        await supabaseClient
-            .auth
-            .getUser();
+    template.content
+        .querySelectorAll("*")
+        .forEach(
+            element => {
 
-        if(!user){
-            return;
-        }
-
-        const readerContent =
-            document.getElementById(
-                "readerContent"
-            );
-
-        if(!readerContent){
-            return;
-        }
-
-        const totalHeight =
-            readerContent.scrollHeight -
-            readerContent.clientHeight;
-
-        let progress = 0;
-
-        if(totalHeight > 0){
-
-            progress =
-                (
-                    readerContent.scrollTop /
-                    totalHeight
-                ) * 100;
-
-        }
-
-        progress =
-            Math.max(
-                0,
-                Math.min(
-                    100,
-                    progress
+                Array.from(
+                    element.attributes
                 )
-            );
+                .forEach(
+                    attribute => {
 
-        await supabaseClient
-            .from(
-                "e_library_reading_progress"
-            )
-            .upsert(
-                {
-                    user_id:
-                        user.id,
+                        if(
+                            attribute.name
+                            .toLowerCase()
+                            .startsWith("on")
+                        ){
 
-                    book_id:
-                        currentReaderBookId,
+                            element.removeAttribute(
+                                attribute.name
+                            );
 
-                    progress_percent:
-                        Number(
-                            progress.toFixed(2)
-                        ),
+                        }
 
-                    last_position:
-                        Math.round(
-                            readerContent.scrollTop
-                        ),
+                    }
+                );
 
-                    updated_at:
-                        new Date().toISOString()
-
-                },
-                {
-                    onConflict:
-                        "user_id,book_id"
-                }
-            );
-
-    }catch(error){
-
-        console.warn(
-            "Could not save reading progress:",
-            error
+            }
         );
 
-    }
+
+    content.appendChild(
+        template.content
+    );
 
 }
 
 
-/* =========================================
-   EXTERNAL LIBRARY SEARCH
-========================================= */
+/* ============================================================
+   LOAD BOOK CONTENT
+============================================================ */
 
-async function searchExternalBooks(){
-
-    const input =
-        document.getElementById(
-            "externalSearchInput"
-        );
-
-    const resultsContainer =
-        document.getElementById(
-            "externalResults"
-        );
+async function loadBookContent(book){
 
     if(
-        !input ||
-        !resultsContainer
+        book &&
+        book.content &&
+        String(book.content).trim()
+    ){
+
+        return {
+
+            type:
+                "html",
+
+            content:
+                book.content
+
+        };
+
+    }
+
+
+    return {
+
+        type:
+            "unavailable",
+
+        content:
+            ""
+
+    };
+
+}
+
+
+/* ============================================================
+   OPEN BOOK
+============================================================ */
+
+async function openBook(book){
+
+    if(!book){
+
+        return;
+
+    }
+
+
+    state.currentBook =
+        book;
+
+
+    addToMyLibrary(
+        book
+    );
+
+
+    resetReaderView();
+
+
+    const title =
+        $("readerTitle");
+
+
+    if(title){
+
+        title.textContent =
+            book.title ||
+            "G Nurse E-Library";
+
+    }
+
+
+    showReader();
+
+
+    const content =
+        $("readerContent");
+
+
+    if(content){
+
+        content.style.display =
+            "block";
+
+        content.innerHTML = `
+
+            <div class="reader-loading">
+
+                <div>
+
+                    📖
+
+                    <br><br>
+
+                    Opening reading material...
+
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    /*
+       RESOURCE MATERIAL
+    */
+
+    if(
+        book.sourceType ===
+        "resource"
+    ){
+
+        if(book.file_url){
+
+            await openResourcePDF(
+                book
+            );
+
+        }else{
+
+            showReaderMessage(
+                "This resource does not currently have a readable file."
+            );
+
+        }
+
+        return;
+
+    }
+
+
+    /*
+       G NURSE BOOK
+    */
+
+    const result =
+        await loadBookContent(
+            book
+        );
+
+
+    if(
+        result.type ===
+        "html"
+    ){
+
+        renderBookHTML(
+            result.content
+        );
+
+    }else{
+
+        showReaderMessage(
+
+            "This book is listed in the library, " +
+            "but its reading content is not currently " +
+            "available through the public reader."
+
+        );
+
+    }
+
+
+    restoreReaderPosition();
+
+
+    recordBookView(
+        book
+    );
+
+}
+
+
+/* ============================================================
+   RESTORE READING POSITION
+============================================================ */
+
+function restoreReaderPosition(){
+
+    const body =
+        $("readerBody");
+
+
+    if(
+        !body ||
+        !state.currentBook
     ){
 
         return;
 
     }
 
+
+    const saved =
+        getReaderState(
+            state.currentBook.id
+        );
+
+
+    requestAnimationFrame(
+        () => {
+
+            body.scrollTop =
+                saved.scroll || 0;
+
+            updateReaderProgress();
+
+        }
+    );
+
+}
+
+
+/* ============================================================
+   OPEN RESOURCE PDF
+============================================================ */
+
+async function openResourcePDF(book){
+
+    const content =
+        $("readerContent");
+
+    const pdfContainer =
+        $("pdfReader");
+
+
+    if(!pdfContainer){
+
+        return;
+
+    }
+
+
+    if(!window.pdfjsLib){
+
+        showReaderMessage(
+            "The PDF reader could not be loaded."
+        );
+
+        return;
+
+    }
+
+
+    if(!book.file_url){
+
+        showReaderMessage(
+            "No resource file is available."
+        );
+
+        return;
+
+    }
+
+
+    if(content){
+
+        content.style.display =
+            "none";
+
+    }
+
+
+    pdfContainer.style.display =
+        "block";
+
+
+    pdfContainer.innerHTML = `
+
+        <div class="reader-loading">
+
+            <div>
+
+                📄
+
+                <br><br>
+
+                Loading document...
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    try{
+
+        const response =
+            await fetch(
+                book.file_url
+            );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                "Unable to retrieve the document."
+            );
+
+        }
+
+
+        const arrayBuffer =
+            await response.arrayBuffer();
+
+
+        const loadingTask =
+            pdfjsLib.getDocument({
+
+                data:
+                    arrayBuffer
+
+            });
+
+
+        const pdf =
+            await loadingTask.promise;
+
+
+        pdfContainer.innerHTML =
+            "";
+
+
+        for(
+            let pageNumber = 1;
+            pageNumber <= pdf.numPages;
+            pageNumber++
+        ){
+
+            const page =
+                await pdf.getPage(
+                    pageNumber
+                );
+
+
+            const baseViewport =
+                page.getViewport({
+                    scale:1
+                });
+
+
+            const availableWidth =
+                Math.min(
+                    pdfContainer.clientWidth ||
+                    window.innerWidth - 20,
+                    850
+                );
+
+
+            const scale =
+                Math.max(
+                    1,
+                    availableWidth /
+                    baseViewport.width
+                );
+
+
+            const viewport =
+                page.getViewport({
+                    scale:scale
+                });
+
+
+            const canvas =
+                document.createElement(
+                    "canvas"
+                );
+
+
+            canvas.className =
+                "pdf-page";
+
+
+            canvas.width =
+                Math.floor(
+                    viewport.width
+                );
+
+
+            canvas.height =
+                Math.floor(
+                    viewport.height
+                );
+
+
+            const context =
+                canvas.getContext(
+                    "2d"
+                );
+
+
+            pdfContainer.appendChild(
+                canvas
+            );
+
+
+            await page.render({
+
+                canvasContext:
+                    context,
+
+                viewport:
+                    viewport
+
+            }).promise;
+
+        }
+
+
+        restoreReaderPosition();
+
+
+        recordBookView(
+            book
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "PDF reader error:",
+            error
+        );
+
+
+        pdfContainer.innerHTML = `
+
+            <div class="reader-message">
+
+                <h3>
+                    Unable to open document
+                </h3>
+
+                <p>
+                    The document could not be displayed.
+                    Please check that the resource file
+                    is publicly readable.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+/* ============================================================
+   RECORD BOOK VIEW
+============================================================ */
+
+async function recordBookView(book){
+
+    if(
+        !book ||
+        !book.id
+    ){
+
+        return;
+
+    }
+
+
+    try{
+
+        const {
+            data
+        } =
+            await supabase.auth.getUser();
+
+
+        const user =
+            data &&
+            data.user;
+
+
+        if(!user){
+
+            return;
+
+        }
+
+
+        await supabase
+            .from("e_library_book_views")
+            .insert({
+
+                user_id:
+                    user.id,
+
+                book_id:
+                    book.id
+
+            });
+
+
+    }catch(error){
+
+        /*
+           Tracking errors must never
+           stop the reader.
+        */
+
+        console.log(
+            "Book view was not recorded:",
+            error.message
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   CHANGE READER FONT
+============================================================ */
+
+function changeReaderFont(amount){
+
+    state.readerFontSize =
+        Math.max(
+            14,
+            Math.min(
+                28,
+                state.readerFontSize +
+                amount
+            )
+        );
+
+
+    applyReaderFont();
+
+    saveReaderFont();
+
+}
+
+
+/* ============================================================
+   RESET READER FONT
+============================================================ */
+
+function resetReaderFont(){
+
+    state.readerFontSize =
+        18;
+
+
+    applyReaderFont();
+
+    saveReaderFont();
+
+}
+
+
+/* ============================================================
+   SET READER THEME
+============================================================ */
+
+function setReaderTheme(theme){
+
+    if(
+        ![
+            "light",
+            "sepia",
+            "dark",
+            "auto"
+        ].includes(theme)
+    ){
+
+        return;
+
+    }
+
+
+    state.readerTheme =
+        theme;
+
+
+    saveReaderTheme();
+
+    applyReaderTheme();
+
+}
+
+
+/* ============================================================
+   READER KEYBOARD
+============================================================ */
+
+function handleReaderKeyboard(event){
+
+    if(
+        !state.isReaderOpen
+    ){
+
+        return;
+
+    }
+
+
+    if(
+        event.key ===
+        "Escape"
+    ){
+
+        closeReader();
+
+        return;
+
+    }
+
+
+    if(
+        event.key === "+" ||
+        event.key === "="
+    ){
+
+        changeReaderFont(
+            1
+        );
+
+    }
+
+
+    if(
+        event.key === "-"
+    ){
+
+        changeReaderFont(
+            -1
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   READER INITIALIZATION
+============================================================ */
+
+function initializeReader(){
+
+    loadReaderFont();
+
+    loadReaderTheme();
+
+    applyReaderTheme();
+
+    applyReaderFont();
+
+    attachReaderScroll();
+
+    attachReaderResize();
+
+    protectReaderInterface();
+
+    }
+    
+      /* =========================================================
+   PART 4 — EVENT CONNECTIONS, SEARCH, NAVIGATION & STARTUP
+   ========================================================= */
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+function setupNavigation(){
+
+    document.querySelectorAll("[data-section]")
+    .forEach(button => {
+
+        button.addEventListener("click", function(){
+
+            const section =
+                this.getAttribute("data-section");
+
+            if(section){
+
+                showSection(section);
+
+                closeMenu();
+
+            }
+
+        });
+
+    });
+
+}
+
+
+/* =========================================================
+   MENU
+   ========================================================= */
+
+function setupMenu(){
+
+    const menuButton =
+        $("menuButton");
+
+    const menuOverlay =
+        $("menuOverlay");
+
+    const closeMenuButton =
+        $("closeMenuButton");
+
+
+    if(menuButton){
+
+        menuButton.addEventListener(
+            "click",
+            function(){
+
+                if(menuOverlay){
+
+                    menuOverlay.classList.add(
+                        "active"
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    if(closeMenuButton){
+
+        closeMenuButton.addEventListener(
+            "click",
+            closeMenu
+        );
+
+    }
+
+
+    if(menuOverlay){
+
+        menuOverlay.addEventListener(
+            "click",
+            function(event){
+
+                if(event.target === menuOverlay){
+
+                    closeMenu();
+
+                }
+
+            }
+        );
+
+    }
+
+}
+
+
+function closeMenu(){
+
+    const menuOverlay =
+        $("menuOverlay");
+
+    if(menuOverlay){
+
+        menuOverlay.classList.remove(
+            "active"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+function setupSearch(){
+
+    const searchInput =
+        $("bookSearch");
+
+    if(!searchInput){
+
+        return;
+
+    }
+
+
+    searchInput.addEventListener(
+        "input",
+        function(){
+
+            state.search =
+                this.value.trim().toLowerCase();
+
+            renderBooks();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CATEGORY FILTER
+   ========================================================= */
+
+function setupCategoryFilter(){
+
+    const categoryContainer =
+        $("categoryList");
+
+    if(!categoryContainer){
+
+        return;
+
+    }
+
+
+    categoryContainer.addEventListener(
+        "click",
+        function(event){
+
+            const button =
+                event.target.closest(
+                    "[data-category]"
+                );
+
+            if(!button){
+
+                return;
+
+            }
+
+
+            state.category =
+                button.getAttribute(
+                    "data-category"
+                ) || "All";
+
+
+            document
+                .querySelectorAll(
+                    "[data-category]"
+                )
+                .forEach(item => {
+
+                    item.classList.remove(
+                        "active"
+                    );
+
+                });
+
+
+            button.classList.add(
+                "active"
+            );
+
+
+            renderBooks();
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   EXTERNAL LIBRARY SEARCH
+   ========================================================= */
+
+function setupExternalSearch(){
+
+    const input =
+        $("externalSearchInput");
+
+    const button =
+        $("externalSearchButton");
+
+
+    if(button){
+
+        button.addEventListener(
+            "click",
+            function(){
+
+                performExternalSearch();
+
+            }
+        );
+
+    }
+
+
+    if(input){
+
+        input.addEventListener(
+            "keydown",
+            function(event){
+
+                if(event.key === "Enter"){
+
+                    event.preventDefault();
+
+                    performExternalSearch();
+
+                }
+
+            }
+        );
+
+    }
+
+}
+
+
+async function performExternalSearch(){
+
+    const input =
+        $("externalSearchInput");
+
+    if(!input){
+
+        return;
+
+    }
+
+
     const query =
-        String(
-            input.value || ""
-        ).trim();
+        input.value.trim().toLowerCase();
+
 
     if(!query){
 
-        resultsContainer.innerHTML = `
-            <div class="empty">
-                🔎 Enter a book title,
-                author or subject.
+        state.externalSearch = "";
+
+        renderExternalBooks();
+
+        return;
+
+    }
+
+
+    state.externalSearch =
+        query;
+
+
+    renderExternalBooks();
+
+}
+
+
+/* =========================================================
+   EXTERNAL BOOK DISPLAY
+   ========================================================= */
+
+function renderExternalBooks(){
+
+    const container =
+        $("externalBooks");
+
+    if(!container){
+
+        return;
+
+    }
+
+
+    let books =
+        state.externalBooks || [];
+
+
+    if(state.externalSearch){
+
+        books =
+            books.filter(book => {
+
+                const title =
+                    String(
+                        book.title || ""
+                    ).toLowerCase();
+
+                const author =
+                    String(
+                        book.author || ""
+                    ).toLowerCase();
+
+                const category =
+                    String(
+                        book.category || ""
+                    ).toLowerCase();
+
+
+                return (
+
+                    title.includes(
+                        state.externalSearch
+                    ) ||
+
+                    author.includes(
+                        state.externalSearch
+                    ) ||
+
+                    category.includes(
+                        state.externalSearch
+                    )
+
+                );
+
+            });
+
+    }
+
+
+    if(!books.length){
+
+        container.innerHTML = `
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    📚
+                </div>
+
+                <h3>
+                    No books found
+                </h3>
+
+                <p>
+                    Try another title, author,
+                    subject or category.
+                </p>
+
             </div>
+
         `;
 
         return;
 
     }
 
-    resultsContainer.innerHTML = `
-        <div class="empty">
-            🌐 Searching external libraries...
+
+    container.innerHTML =
+        books.map(book => {
+
+            const cover =
+                getBookCover(book);
+
+
+            return `
+
+                <article class="book-card">
+
+                    <div class="book-cover">
+
+                        <img
+                            src="${escapeHtml(cover)}"
+                            alt="${escapeHtml(
+                                book.title || "Book"
+                            )}"
+                            loading="lazy"
+                            onerror="
+                                this.src =
+                                'https://via.placeholder.com/300x420?text=Book';
+                            "
+                        >
+
+                    </div>
+
+
+                    <div class="book-info">
+
+                        <h3>
+                            ${escapeHtml(
+                                book.title ||
+                                "Untitled"
+                            )}
+                        </h3>
+
+
+                        <p class="book-author">
+
+                            ${escapeHtml(
+                                book.author ||
+                                "Unknown author"
+                            )}
+
+                        </p>
+
+
+                        <span class="book-source">
+
+                            🌐 ${
+                                escapeHtml(
+                                    book.libraryName ||
+                                    "Related Library"
+                                )
+                            }
+
+                        </span>
+
+
+                        <button
+                            class="book-button"
+                            type="button"
+                            data-external-read="${
+                                escapeHtml(
+                                    book.read_url ||
+                                    book.source_url ||
+                                    ""
+                                )
+                            }"
+                        >
+
+                            Open Catalogue
+
+                        </button>
+
+                    </div>
+
+                </article>
+
+            `;
+
+        }).join("");
+
+
+    container
+        .querySelectorAll(
+            "[data-external-read]"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
+                "click",
+                function(){
+
+                    const url =
+                        this.getAttribute(
+                            "data-external-read"
+                        );
+
+
+                    if(!url){
+
+                        showToast(
+                            "This catalogue record has no reading link.",
+                            "info"
+                        );
+
+                        return;
+
+                    }
+
+
+                    window.open(
+                        url,
+                        "_blank",
+                        "noopener,noreferrer"
+                    );
+
+                }
+            );
+
+        });
+
+}
+
+
+/* =========================================================
+   RELATED LIBRARIES
+   ========================================================= */
+
+async function loadRelatedLibraries(){
+
+    const container =
+        $("relatedLibraries");
+
+    if(!container){
+
+        return;
+
+    }
+
+
+    container.innerHTML = `
+
+        <div class="loading-state">
+
+            <div class="spinner"></div>
+
+            <p>
+                Loading related libraries...
+            </p>
+
         </div>
+
     `;
+
 
     try{
 
-        const response =
-            await fetch(
-                `${OPEN_LIBRARY_API}?q=${encodeURIComponent(
-                    query
-                )}&limit=20`
+        const {
+            data,
+            error
+        } =
+        await supabase
+            .from(
+                "e_library_related_libraries"
+            )
+            .select("*")
+            .eq(
+                "is_active",
+                true
+            )
+            .order(
+                "display_order",
+                {
+                    ascending:true
+                }
             );
 
-        if(!response.ok){
 
-            throw new Error(
-                "External library request failed."
-            );
+        if(error){
+
+            throw error;
 
         }
 
-        const data =
-            await response.json();
 
-        const books =
-            Array.isArray(data.docs)
-                ? data.docs
-                : [];
+        state.relatedLibraries =
+            data || [];
 
-        if(books.length === 0){
 
-            resultsContainer.innerHTML = `
-                <div class="empty">
-                    📚 No matching books were found.
+        if(!state.relatedLibraries.length){
+
+            container.innerHTML = `
+
+                <div class="empty-state">
+
+                    <div class="empty-icon">
+                        🌐
+                    </div>
+
+                    <h3>
+                        No related libraries yet
+                    </h3>
+
+                    <p>
+                        More library catalogues
+                        will appear here.
+                    </p>
+
                 </div>
+
             `;
 
             return;
 
         }
 
-        resultsContainer.innerHTML = "";
 
-        books.forEach(
-            (book, index) => {
+        container.innerHTML =
+            state.relatedLibraries
+                .map(library => {
 
-                const title =
-                    String(
-                        book.title ||
-                        "Untitled"
-                    );
+                    const logo =
+                        library.logo_url ||
+                        "https://via.placeholder.com/120?text=Library";
 
-                const author =
-                    Array.isArray(
-                        book.author_name
-                    )
-                    ?
-                    book.author_name
-                        .slice(0, 2)
-                        .join(", ")
-                    :
-                    "Unknown author";
 
-                const year =
-                    book.first_publish_year
-                    ||
-                    "";
+                    return `
 
-                const coverId =
-                    book.cover_i;
+                        <article class="library-card">
 
-                const coverURL =
-                    coverId
-                    ?
-                    `https://covers.openlibrary.org/b/id/${coverId}-M.jpg`
-                    :
-                    "";
-
-                const card =
-                    document.createElement(
-                        "div"
-                    );
-
-                card.className =
-                    "external-book";
-
-                card.innerHTML = `
-
-                    <div class="external-cover">
-
-                        ${
-                            coverURL
-                            ?
-                            `<img
-                                src="${coverURL}"
-                                alt="${escapeHTML(title)}"
+                            <img
+                                src="${escapeHtml(
+                                    logo
+                                )}"
+                                alt="${escapeHtml(
+                                    library.name
+                                )}"
                                 loading="lazy"
-                            >`
-                            :
-                            `📖`
-                        }
+                                onerror="
+                                    this.src =
+                                    'https://via.placeholder.com/120?text=Library';
+                                "
+                            >
 
-                    </div>
+                            <div>
 
-                    <div class="external-info">
+                                <h3>
+                                    ${escapeHtml(
+                                        library.name
+                                    )}
+                                </h3>
 
-                        <h3>
-                            ${escapeHTML(title)}
-                        </h3>
+                                <p>
+                                    ${escapeHtml(
+                                        library.description ||
+                                        ""
+                                    )}
+                                </p>
 
-                        <p>
-                            ${escapeHTML(author)}
-                        </p>
+                                <button
+                                    type="button"
+                                    class="book-button"
+                                    data-library-id="${
+                                        escapeHtml(
+                                            library.id
+                                        )
+                                    }"
+                                >
+                                    View Books
+                                </button>
 
-                        ${
-                            year
-                            ?
-                            `<small>
-                                Published:
-                                ${escapeHTML(
-                                    String(year)
-                                )}
-                             </small>`
-                            :
-                            ""
-                        }
+                            </div>
 
-                        <button
-                            class="book-button"
-                            onclick="openExternalBook(${index})"
-                        >
-                            🌐 View in Library
-                        </button>
+                        </article>
 
-                    </div>
+                    `;
 
-                `;
+                }).join("");
 
-                resultsContainer.appendChild(
-                    card
+
+        container
+            .querySelectorAll(
+                "[data-library-id]"
+            )
+            .forEach(button => {
+
+                button.addEventListener(
+                    "click",
+                    function(){
+
+                        const id =
+                            this.getAttribute(
+                                "data-library-id"
+                            );
+
+
+                        showLibraryBooks(id);
+
+                    }
                 );
 
-            }
-        );
+            });
 
-        window.externalLibraryResults =
-            books;
+    }
 
-    }catch(error){
+    catch(error){
 
         console.error(
-            "External library search error:",
+            "Related libraries error:",
             error
         );
 
-        resultsContainer.innerHTML = `
-            <div class="empty">
-                ❌ Unable to search the
-                external library right now.
-                <br><br>
-                Please try again later.
+
+        container.innerHTML = `
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    ⚠️
+                </div>
+
+                <h3>
+                    Unable to load libraries
+                </h3>
+
+                <p>
+                    Please try again later.
+                </p>
+
             </div>
+
         `;
 
     }
@@ -2842,480 +6578,795 @@ async function searchExternalBooks(){
 }
 
 
-/* =========================================
-   OPEN EXTERNAL BOOK
-========================================= */
+/* =========================================================
+   EXTERNAL BOOKS FROM SUPABASE
+   ========================================================= */
 
-function openExternalBook(
-    index
-){
+async function loadExternalBooks(){
 
-    const books =
-        window.externalLibraryResults ||
-        [];
+    try{
 
-    const book =
-        books[index];
+        const {
+            data,
+            error
+        } =
+        await supabase
+            .from(
+                "e_library_external_books"
+            )
+            .select(`
+                id,
+                library_id,
+                title,
+                author,
+                description,
+                cover_url,
+                category,
+                read_url,
+                source_url,
+                is_active,
+                last_synced_at
+            `)
+            .eq(
+                "is_active",
+                true
+            )
+            .order(
+                "title",
+                {
+                    ascending:true
+                }
+            );
 
-    if(!book){
-        return;
+
+        if(error){
+
+            throw error;
+
+        }
+
+
+        state.externalBooks =
+            (data || []).map(book => {
+
+                const library =
+                    state.relatedLibraries
+                        .find(
+                            item =>
+                                item.id ===
+                                book.library_id
+                        );
+
+
+                return {
+
+                    ...book,
+
+                    libraryName:
+                        library
+                            ?.name ||
+                        "Related Library"
+
+                };
+
+            });
+
+
+        renderExternalBooks();
+
     }
 
-    let url = "";
+    catch(error){
 
-    if(book.key){
+        console.error(
+            "External books error:",
+            error
+        );
 
-        url =
-            "https://openlibrary.org" +
-            book.key;
+
+        state.externalBooks = [];
+
+
+        renderExternalBooks();
+
+    }
+
+}
+
+
+/* =========================================================
+   MY LIBRARY
+   ========================================================= */
+
+function loadMyLibrary(){
+
+    const container =
+        $("myLibraryBooks");
+
+    if(!container){
+
+        return;
+
+    }
+
+
+    let saved = [];
+
+
+    try{
+
+        saved =
+            JSON.parse(
+                localStorage.getItem(
+                    "gnurse_my_library"
+                ) || "[]"
+            );
+
+    }
+
+    catch(error){
+
+        saved = [];
+
+    }
+
+
+    if(!Array.isArray(saved)){
+
+        saved = [];
+
+    }
+
+
+    const books =
+        state.allBooks.filter(book =>
+            saved.includes(
+                String(book.id)
+            )
+        );
+
+
+    if(!books.length){
+
+        container.innerHTML = `
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    📖
+                </div>
+
+                <h3>
+                    Your library is empty
+                </h3>
+
+                <p>
+                    Books you save will appear here.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        books
+            .map(createBookCard)
+            .join("");
+
+
+    attachBookCardEvents(
+        container
+    );
+
+}
+
+
+/* =========================================================
+   SAVE / REMOVE MY LIBRARY
+   ========================================================= */
+
+function toggleMyLibrary(bookId){
+
+    const key =
+        String(bookId);
+
+
+    let saved = [];
+
+
+    try{
+
+        saved =
+            JSON.parse(
+                localStorage.getItem(
+                    "gnurse_my_library"
+                ) || "[]"
+            );
+
+    }
+
+    catch(error){
+
+        saved = [];
+
+    }
+
+
+    if(!Array.isArray(saved)){
+
+        saved = [];
+
+    }
+
+
+    const index =
+        saved.indexOf(key);
+
+
+    if(index >= 0){
+
+        saved.splice(
+            index,
+            1
+        );
+
+        showToast(
+            "Removed from My Library.",
+            "info"
+        );
 
     }
 
     else{
 
-        url =
-            "https://openlibrary.org/search?q=" +
-            encodeURIComponent(
-                book.title || ""
-            );
+        saved.push(key);
+
+        showToast(
+            "Added to My Library.",
+            "success"
+        );
 
     }
 
-    window.open(
-        url,
-        "_blank",
-        "noopener,noreferrer"
+
+    localStorage.setItem(
+        "gnurse_my_library",
+        JSON.stringify(saved)
     );
+
+
+    loadMyLibrary();
+
+    renderBooks();
 
 }
 
 
-/* =========================================
-   READER SCROLL PROGRESS
-========================================= */
+/* =========================================================
+   BOOK CARD EVENTS
+   ========================================================= */
 
-function handleReaderScroll(){
+function attachBookCardEvents(
+    container
+){
 
-    const readerContent =
-        document.getElementById(
-            "readerContent"
-        );
+    if(!container){
 
-    if(!readerContent){
         return;
-    }
-
-    clearTimeout(
-        window.progressSaveTimer
-    );
-
-    window.progressSaveTimer =
-        setTimeout(
-            saveReadingProgress,
-            800
-        );
-
-}
-
-
-/* =========================================
-   KEYBOARD CONTROLS
-========================================= */
-
-document.addEventListener(
-    "keydown",
-    function(event){
-
-        const reader =
-            document.getElementById(
-                "reader"
-            );
-
-        if(
-            event.key === "Escape" &&
-            reader &&
-            reader.classList.contains(
-                "open"
-            )
-        ){
-
-            closeReader();
-
-        }
 
     }
-);
 
 
-/* =========================================
-   READER BACKGROUND CLICK
-========================================= */
+    container
+        .querySelectorAll(
+            "[data-open-book]"
+        )
+        .forEach(button => {
 
-document.addEventListener(
-    "click",
-    function(event){
-
-        const reader =
-            document.getElementById(
-                "reader"
-            );
-
-        if(
-            reader &&
-            event.target === reader
-        ){
-
-            closeReader();
-
-        }
-
-    }
-);
-
-
-/* =========================================
-   READER SCROLL LISTENER
-========================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function(){
-
-        const readerContent =
-            document.getElementById(
-                "readerContent"
-            );
-
-        if(readerContent){
-
-            readerContent.addEventListener(
-                "scroll",
-                handleReaderScroll
-            );
-
-        }
-
-    }
-);
-
-</script>
-<script>
-
-/* =========================================
-   SEARCH EVENTS
-========================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function(){
-
-        /* -----------------------------
-           LOAD LIBRARY
-        ----------------------------- */
-
-        loadGurseBooks();
-
-
-        /* -----------------------------
-           MAIN SEARCH
-        ----------------------------- */
-
-        const searchInput =
-            document.getElementById(
-                "librarySearchInput"
-            );
-
-        if(searchInput){
-
-            searchInput.addEventListener(
-                "input",
-                function(){
-
-                    searchGurseBooks(
-                        this.value
-                    );
-
-                }
-            );
-
-        }
-
-
-        /* -----------------------------
-           EXTERNAL LIBRARY SEARCH
-        ----------------------------- */
-
-        const externalInput =
-            document.getElementById(
-                "externalSearchInput"
-            );
-
-        if(externalInput){
-
-            externalInput.addEventListener(
-                "keydown",
-                function(event){
-
-                    if(
-                        event.key === "Enter"
-                    ){
-
-                        searchExternalBooks();
-
-                    }
-
-                }
-            );
-
-        }
-
-
-        /* -----------------------------
-           READER FONT SIZE BUTTONS
-        ----------------------------- */
-
-        const fontMinus =
-            document.getElementById(
-                "fontMinus"
-            );
-
-        const fontNormal =
-            document.getElementById(
-                "fontNormal"
-            );
-
-        const fontPlus =
-            document.getElementById(
-                "fontPlus"
-            );
-
-        if(fontMinus){
-
-            fontMinus.addEventListener(
+            button.addEventListener(
                 "click",
                 function(){
 
-                    changeFontSize(-2);
-
-                }
-            );
-
-        }
-
-        if(fontNormal){
-
-            fontNormal.addEventListener(
-                "click",
-                function(){
-
-                    currentFontSize = 18;
-
-                    const content =
-                        document.getElementById(
-                            "readerContent"
+                    const id =
+                        this.getAttribute(
+                            "data-open-book"
                         );
 
-                    if(content){
 
-                        content.style.fontSize =
-                            "18px";
+                    const book =
+                        state.allBooks.find(
+                            item =>
+                                String(
+                                    item.id
+                                ) ===
+                                String(id)
+                        );
+
+
+                    if(book){
+
+                        openBook(book);
 
                     }
 
                 }
             );
 
-        }
+        });
 
-        if(fontPlus){
 
-            fontPlus.addEventListener(
+    container
+        .querySelectorAll(
+            "[data-save-book]"
+        )
+        .forEach(button => {
+
+            button.addEventListener(
                 "click",
                 function(){
 
-                    changeFontSize(2);
+                    const id =
+                        this.getAttribute(
+                            "data-save-book"
+                        );
+
+
+                    toggleMyLibrary(id);
 
                 }
             );
 
-        }
+        });
+
+}
 
 
-        /* -----------------------------
-           READER THEME BUTTONS
-        ----------------------------- */
+/* =========================================================
+   READER CLOSE
+   ========================================================= */
 
-        const lightButton =
-            document.getElementById(
-                "themeLight"
-            );
+function setupReader(){
 
-        const sepiaButton =
-            document.getElementById(
-                "themeSepia"
-            );
-
-        const darkButton =
-            document.getElementById(
-                "themeDark"
-            );
-
-        const autoButton =
-            document.getElementById(
-                "themeAuto"
-            );
+    const closeButton =
+        $("closeReaderButton");
 
 
-        if(lightButton){
+    if(closeButton){
 
-            lightButton.addEventListener(
-                "click",
-                function(){
-
-                    setReaderTheme(
-                        "light"
-                    );
-
-                }
-            );
-
-        }
-
-
-        if(sepiaButton){
-
-            sepiaButton.addEventListener(
-                "click",
-                function(){
-
-                    setReaderTheme(
-                        "sepia"
-                    );
-
-                }
-            );
-
-        }
-
-
-        if(darkButton){
-
-            darkButton.addEventListener(
-                "click",
-                function(){
-
-                    setReaderTheme(
-                        "dark"
-                    );
-
-                }
-            );
-
-        }
-
-
-        if(autoButton){
-
-            autoButton.addEventListener(
-                "click",
-                function(){
-
-                    setAutoReaderTheme();
-
-                }
-            );
-
-        }
-
-
-        /* -----------------------------
-           CLOSE READER BUTTON
-        ----------------------------- */
-
-        const closeReaderButton =
-            document.getElementById(
-                "closeReader"
-            );
-
-        if(closeReaderButton){
-
-            closeReaderButton.addEventListener(
-                "click",
-                function(){
-
-                    closeReader();
-
-                }
-            );
-
-        }
-
-
-              /* -----------------------------
-           EXTERNAL SEARCH BUTTON
-        ----------------------------- */
-
-        if (externalSearchButton) {
-
-            externalSearchButton.addEventListener(
-                "click",
-                function () {
-
-                    searchExternalBooks();
-
-                }
-            );
-
-        }
-
-
-        /* -----------------------------
-           NAVIGATION LINKS
-        ----------------------------- */
-/* -----------------------------
-   NAVIGATION
------------------------------ */
-
-document.querySelectorAll("a[data-section]").forEach(
-    function(link) {
-
-        link.addEventListener(
+        closeButton.addEventListener(
             "click",
-            function(event) {
+            closeReader
+        );
 
-                event.preventDefault();
+    }
 
-                const section =
-                    this.getAttribute("data-section");
 
-                if (section) {
-                    showSection(section);
-                }
+    const readerMenuButton =
+        $("readerMenuButton");
+
+
+    if(readerMenuButton)  
+        {
+
+    readerMenuButton.addEventListener(
+        "click",
+        function(){
+
+            closeReader();
+
+            showSection(
+                "home"
+            );
+
+        }
+    );
+
+}
+
+}
+
+
+/* =========================================================
+   READER THEME BUTTONS
+   ========================================================= */
+
+function setupReaderControls(){
+
+    const light =
+        $("readerLight");
+
+    const sepia =
+        $("readerSepia");
+
+    const dark =
+        $("readerDark");
+
+    const auto =
+        $("readerAuto");
+
+
+    if(light){
+
+        light.addEventListener(
+            "click",
+            function(){
+
+                state.readerTheme =
+                    "light";
+
+                saveReaderTheme();
+
+                applyReaderTheme();
 
             }
         );
 
     }
-);
 
 
-/* -----------------------------
-   OPEN HOME BY DEFAULT
------------------------------ */
+    if(sepia){
 
-showSection("home");
-        
+        sepia.addEventListener(
+            "click",
+            function(){
+
+                state.readerTheme =
+                    "sepia";
+
+                saveReaderTheme();
+
+                applyReaderTheme();
+
+            }
+        );
+
+    }
 
 
-        /* -----------------------------
-           DEFAULT PAGE
-        ----------------------------- */
+    if(dark){
 
-        showSection("home");
+        dark.addEventListener(
+            "click",
+            function(){
 
-    });
+                state.readerTheme =
+                    "dark";
+
+                saveReaderTheme();
+
+                applyReaderTheme();
+
+            }
+        );
+
+    }
+
+
+    if(auto){
+
+        auto.addEventListener(
+            "click",
+            function(){
+
+                state.readerTheme =
+                    "auto";
+
+                saveReaderTheme();
+
+                applyReaderTheme();
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   FONT CONTROLS
+   ========================================================= */
+
+function setupFontControls(){
+
+    const decrease =
+        $("fontDecrease");
+
+    const reset =
+        $("fontReset");
+
+    const increase =
+        $("fontIncrease");
+
+
+    if(decrease){
+
+        decrease.addEventListener(
+            "click",
+            function(){
+
+                changeReaderFont(
+                    -1
+                );
+
+            }
+        );
+
+    }
+
+
+    if(reset){
+
+        reset.addEventListener(
+            "click",
+            function(){
+
+                state.readerFontSize =
+                    18;
+
+                saveReaderFont();
+
+                applyReaderFont();
+
+            }
+        );
+
+    }
+
+
+    if(increase){
+
+        increase.addEventListener(
+            "click",
+            function(){
+
+                changeReaderFont(
+                    1
+                );
+
+            }
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SYSTEM THEME
+   ========================================================= */
+
+function setupSystemTheme(){
+
+    if(!window.matchMedia){
+
+        return;
+
+    }
+
+
+    const media =
+        window.matchMedia(
+            "(prefers-color-scheme: dark)"
+        );
+
+
+    media.addEventListener(
+        "change",
+        function(){
+
+            if(
+                state.readerTheme ===
+                "auto"
+            ){
+
+                applyReaderTheme();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   GLOBAL KEYBOARD SUPPORT
+   ========================================================= */
+
+function setupKeyboard(){
+
+    document.addEventListener(
+        "keydown",
+        function(event){
+
+            if(
+                event.key ===
+                "Escape"
+            ){
+
+                const reader =
+                    $("reader");
+
+
+                if(
+                    reader &&
+                    reader.classList.contains(
+                        "active"
+                    )
+                ){
+
+                    closeReader();
+
+                    return;
+
+                }
+
+
+                closeMenu();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   INITIAL DATA LOAD
+   ========================================================= */
+
+async function initializeLibrary(){
+
+    initializeReader();
+
+
+    showSection(
+        "home"
+    );
+
+
+    try{
+
+        await loadGNurseBooks();
+
+    }
+
+    catch(error){
+
+        console.error(
+            "G Nurse books error:",
+            error
+        );
+
+    }
+
+
+    try{
+
+        await loadResourceBooks();
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Resource books error:",
+            error
+        );
+
+    }
+
+
+    buildAllBooks();
+
+    renderCategories();
+
+    renderBooks();
+
+    loadMyLibrary();
+
+
+    try{
+
+        await loadRelatedLibraries();
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Related libraries error:",
+            error
+        );
+
+    }
+
+
+    try{
+
+        await loadExternalBooks();
+
+    }
+
+    catch(error){
+
+        console.error(
+            "External books error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   FINAL APP STARTUP
+   ========================================================= */
+
+function startLibraryApp(){
+
+    setupNavigation();
+
+    setupMenu();
+
+    setupSearch();
+
+    setupCategoryFilter();
+
+    setupExternalSearch();
+
+    setupReader();
+
+    setupReaderControls();
+
+    setupFontControls();
+
+    setupSystemTheme();
+
+    setupKeyboard();
+
+    initializeLibrary();
+
+}
+
+
+/* =========================================================
+   WAIT FOR PAGE
+   ========================================================= */
+
+if(
+    document.readyState ===
+    "loading"
+){
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        startLibraryApp
+    );
+
+}
+
+else{
+
+    startLibraryApp();
+
+}
+
+
+/* =========================================================
+   FINAL DOCUMENT CLOSE
+   ========================================================= */
 
 </script>
 
 </body>
+
 </html>
