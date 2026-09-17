@@ -5512,7 +5512,220 @@ window.addEventListener(
 /* =====================================================
    G NURSE CHAT APPLICATION COMPLETE
    ===================================================== */
-</script>
+/* =====================================================
+   DIRECT START CHAT DIAGNOSTIC
+   This bypasses the previous Start Chat wrappers.
+   ===================================================== */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const directStartButton = document.getElementById("startChatButton");
+
+    if (!directStartButton) {
+        console.error("G NURSE ERROR: startChatButton was not found.");
+        return;
+    }
+
+    directStartButton.addEventListener("click", async function (event) {
+
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        const name = document.getElementById("visitorName")?.value.trim();
+        const email = document.getElementById("visitorEmail")?.value.trim();
+        const phone = document.getElementById("visitorPhone")?.value.trim();
+
+        const status = document.getElementById("startStatus");
+
+        function diagnostic(message) {
+            console.log("G NURSE:", message);
+
+            if (status) {
+                status.textContent = message;
+                status.style.display = "block";
+            }
+        }
+
+        try {
+
+            diagnostic("Testing connection...");
+
+            if (!name) {
+                diagnostic("ERROR: Please enter your name.");
+                return;
+            }
+
+            if (!email && !phone) {
+                diagnostic("ERROR: Enter either email or phone.");
+                return;
+            }
+
+            diagnostic("STEP 1: Checking Supabase...");
+
+            if (!window.supabaseClient) {
+                diagnostic(
+                    "ERROR: Supabase client was not found. The Supabase configuration in Part 2 is not available."
+                );
+                return;
+            }
+
+            diagnostic("STEP 2: Checking authentication...");
+
+            const {
+                data: sessionData,
+                error: sessionError
+            } = await supabaseClient.auth.getSession();
+
+            if (sessionError) {
+                diagnostic(
+                    "AUTH ERROR: " + sessionError.message
+                );
+                console.error(sessionError);
+                return;
+            }
+
+            console.log("Existing session:", sessionData);
+
+            diagnostic("STEP 3: Creating anonymous visitor...");
+
+            let {
+                data: userData,
+                error: userError
+            } = await supabaseClient.auth.getUser();
+
+            if (userError || !userData?.user) {
+
+                const anonymousResult =
+                    await supabaseClient.auth.signInAnonymously();
+
+                if (anonymousResult.error) {
+                    diagnostic(
+                        "ANONYMOUS LOGIN ERROR: " +
+                        anonymousResult.error.message
+                    );
+
+                    console.error(
+                        anonymousResult.error
+                    );
+
+                    return;
+                }
+
+                userData = anonymousResult.data;
+
+                console.log(
+                    "Anonymous user created:",
+                    userData
+                );
+            }
+
+            const user = userData?.user;
+
+            if (!user) {
+                diagnostic(
+                    "ERROR: Supabase did not return a user."
+                );
+                return;
+            }
+
+            diagnostic(
+                "STEP 4 SUCCESS: User ID " + user.id
+            );
+
+            diagnostic(
+                "STEP 5: Checking conversations table..."
+            );
+
+            const {
+                data: conversations,
+                error: conversationError
+            } = await supabaseClient
+                .from("g_nurse_conversations")
+                .select("*")
+                .eq("visitor_user_id", user.id)
+                .limit(1);
+
+            if (conversationError) {
+
+                diagnostic(
+                    "CONVERSATION READ ERROR: " +
+                    conversationError.message
+                );
+
+                console.error(
+                    "Conversation error:",
+                    conversationError
+                );
+
+                return;
+            }
+
+            console.log(
+                "Existing conversations:",
+                conversations
+            );
+
+            diagnostic(
+                "STEP 6: Creating conversation test..."
+            );
+
+            const {
+                data: newConversation,
+                error: insertError
+            } = await supabaseClient
+                .from("g_nurse_conversations")
+                .insert({
+                    visitor_user_id: user.id,
+                    visitor_token: crypto.randomUUID(),
+                    visitor_name: name,
+                    visitor_email: email || null,
+                    visitor_phone: phone || null,
+                    status: "open"
+                })
+                .select()
+                .single();
+
+            if (insertError) {
+
+                diagnostic(
+                    "CONVERSATION INSERT ERROR: " +
+                    insertError.message
+                );
+
+                console.error(
+                    "Insert error:",
+                    insertError
+                );
+
+                return;
+            }
+
+            console.log(
+                "New conversation:",
+                newConversation
+            );
+
+            diagnostic(
+                "SUCCESS! Supabase connection and conversation creation are working."
+            );
+
+        } catch (error) {
+
+            console.error(
+                "G NURSE UNKNOWN ERROR:",
+                error
+            );
+
+            diagnostic(
+                "UNKNOWN ERROR: " +
+                (error?.message || String(error))
+            );
+        }
+
+    }, true);
+
+});
+    </script>
 
 
 </body>
