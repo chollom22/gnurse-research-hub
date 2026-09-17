@@ -3492,11 +3492,659 @@ async function uploadVoiceNote(
         );
 
     }
+/* =========================================================
+   FINAL PAGE CONNECTION
+   ========================================================= */
 
+async function startChatGNurse() {
+    try {
+        showLoading("Connecting to G Nurse...");
+
+        let { data: sessionData } =
+            await supabaseClient.auth.getSession();
+
+        let session = sessionData?.session;
+        let user = session?.user || null;
+
+        /*
+         * The public Chat G Nurse page must use
+         * an anonymous Supabase user.
+         */
+
+        if (user && !user.is_anonymous) {
+            await supabaseClient.auth.signOut();
+            user = null;
+        }
+
+        if (!user) {
+            const { data, error } =
+                await supabaseClient.auth.signInAnonymously();
+
+            if (error) {
+                console.error(error);
+                throw error;
+            }
+
+            user = data.user;
+        }
+
+        currentUser = user;
+
+        localStorage.setItem(
+            "gnurse_visitor_user_id",
+            currentUser.id
+        );
+
+        await loadOrCreateConversation();
+        await updateVisitorInformation();
+        await loadMessages();
+        await loadNotifications();
+
+        subscribeToMessages();
+        subscribeToNotifications();
+
+        hideLoading();
+        showChatInterface();
+
+    } catch (error) {
+
+        console.error(
+            "Chat G Nurse startup error:",
+            error
+        );
+
+        hideLoading();
+        showStartScreen();
+
+        alert(
+            "Unable to connect to G Nurse Chat. Please refresh the page and try again."
+        );
+    }
 }
 
 
 /* =========================================================
-   END OF JAVASCRIPT FUNCTIONS
+   LOAD OR CREATE VISITOR CONVERSATION
    ========================================================= */
- 
+
+async function loadOrCreateConversation() {
+
+    if (!currentUser) {
+        throw new Error("Visitor is not authenticated.");
+    }
+
+    const savedConversationId =
+        localStorage.getItem(
+            "gnurse_conversation_id"
+        );
+
+    if (savedConversationId) {
+
+        const { data, error } =
+            await supabaseClient
+                .from("g_nurse_conversations")
+                .select("*")
+                .eq("id", savedConversationId)
+                .eq(
+                    "visitor_user_id",
+                    currentUser.id
+                )
+                .maybeSingle();
+
+        if (!error && data) {
+            currentConversation = data;
+            return;
+        }
+    }
+
+    const { data: existing, error: existingError } =
+        await supabaseClient
+            .from("g_nurse_conversations")
+            .select("*")
+            .eq(
+                "visitor_user_id",
+                currentUser.id
+            )
+            .order("created_at", {
+                ascending: true
+            })
+            .limit(1)
+            .maybeSingle();
+
+    if (existingError) {
+        throw existingError;
+    }
+
+    if (existing) {
+
+        currentConversation = existing;
+
+        localStorage.setItem(
+            "gnurse_conversation_id",
+            existing.id
+        );
+
+        return;
+    }
+
+    const visitorName =
+        localStorage.getItem(
+            "gnurse_visitor_name"
+        ) || "Visitor";
+
+    const visitorEmail =
+        localStorage.getItem(
+            "gnurse_visitor_email"
+        ) || null;
+
+    const visitorPhone =
+        localStorage.getItem(
+            "gnurse_visitor_phone"
+        ) || null;
+
+    const { data: created, error: createError } =
+        await supabaseClient
+            .from("g_nurse_conversations")
+            .insert({
+                visitor_user_id:
+                    currentUser.id,
+
+                visitor_token:
+                    currentUser.id,
+
+                visitor_name:
+                    visitorName,
+
+                visitor_email:
+                    visitorEmail,
+
+                visitor_phone:
+                    visitorPhone,
+
+                status:
+                    "open"
+            })
+            .select("*")
+            .single();
+
+    if (createError) {
+        throw createError;
+    }
+
+    currentConversation = created;
+
+    localStorage.setItem(
+        "gnurse_conversation_id",
+        created.id
+    );
+}
+
+
+/* =========================================================
+   SAVE VISITOR DETAILS
+   ========================================================= */
+
+function saveVisitorDetails() {
+
+    const nameInput =
+        document.getElementById(
+            "visitorName"
+        );
+
+    const emailInput =
+        document.getElementById(
+            "visitorEmail"
+        );
+
+    const phoneInput =
+        document.getElementById(
+            "visitorPhone"
+        );
+
+    const name =
+        nameInput?.value.trim() || "";
+
+    const email =
+        emailInput?.value.trim() || "";
+
+    const phone =
+        phoneInput?.value.trim() || "";
+
+    if (!name) {
+
+        alert(
+            "Please enter your name."
+        );
+
+        return false;
+    }
+
+    if (!email && !phone) {
+
+        alert(
+            "Please enter your email address or phone number."
+        );
+
+        return false;
+    }
+
+    localStorage.setItem(
+        "gnurse_visitor_name",
+        name
+    );
+
+    localStorage.setItem(
+        "gnurse_visitor_email",
+        email
+    );
+
+    localStorage.setItem(
+        "gnurse_visitor_phone",
+        phone
+    );
+
+    return true;
+}
+
+
+/* =========================================================
+   UPDATE VISITOR INFORMATION
+   ========================================================= */
+
+async function updateVisitorInformation() {
+
+    if (
+        !currentUser ||
+        !currentConversation
+    ) {
+        return;
+    }
+
+    const visitorName =
+        localStorage.getItem(
+            "gnurse_visitor_name"
+        ) || "Visitor";
+
+    const visitorEmail =
+        localStorage.getItem(
+            "gnurse_visitor_email"
+        ) || null;
+
+    const visitorPhone =
+        localStorage.getItem(
+            "gnurse_visitor_phone"
+        ) || null;
+
+    const { error } =
+        await supabaseClient
+            .from("g_nurse_conversations")
+            .update({
+                visitor_name:
+                    visitorName,
+
+                visitor_email:
+                    visitorEmail,
+
+                visitor_phone:
+                    visitorPhone,
+
+                updated_at:
+                    new Date().toISOString()
+            })
+            .eq(
+                "id",
+                currentConversation.id
+            )
+            .eq(
+                "visitor_user_id",
+                currentUser.id
+            );
+
+    if (error) {
+        console.error(
+            "Visitor information update failed:",
+            error
+        );
+    }
+}
+
+
+/* =========================================================
+   START BUTTON
+   ========================================================= */
+
+const startChatButton =
+    document.getElementById(
+        "startChatButton"
+    );
+
+if (startChatButton) {
+
+    startChatButton.addEventListener(
+        "click",
+        async function () {
+
+            if (!saveVisitorDetails()) {
+                return;
+            }
+
+            await startChatGNurse();
+
+        }
+    );
+}
+
+
+/* =========================================================
+   SEND BUTTON
+   ========================================================= */
+
+const sendButton =
+    document.getElementById(
+        "sendButton"
+    );
+
+if (sendButton) {
+
+    sendButton.addEventListener(
+        "click",
+        async function () {
+
+            await sendMessage();
+
+        }
+    );
+}
+
+
+/* =========================================================
+   ENTER KEY SEND
+   ========================================================= */
+
+const messageInput =
+    document.getElementById(
+        "messageInput"
+    );
+
+if (messageInput) {
+
+    messageInput.addEventListener(
+        "keydown",
+        async function (event) {
+
+            if (
+                event.key === "Enter" &&
+                !event.shiftKey
+            ) {
+
+                event.preventDefault();
+
+                await sendMessage();
+
+            }
+
+        }
+    );
+}
+
+
+/* =========================================================
+   IMAGE UPLOAD
+   ========================================================= */
+
+const imageInput =
+    document.getElementById(
+        "imageInput"
+    );
+
+if (imageInput) {
+
+    imageInput.addEventListener(
+        "change",
+        async function () {
+
+            const file =
+                this.files?.[0];
+
+            if (!file) {
+                return;
+            }
+
+            await uploadAndSendFile(file);
+
+            this.value = "";
+
+        }
+    );
+}
+
+
+/* =========================================================
+   FILE UPLOAD
+   ========================================================= */
+
+const fileInput =
+    document.getElementById(
+        "fileInput"
+    );
+
+if (fileInput) {
+
+    fileInput.addEventListener(
+        "change",
+        async function () {
+
+            const file =
+                this.files?.[0];
+
+            if (!file) {
+                return;
+            }
+
+            await uploadAndSendFile(file);
+
+            this.value = "";
+
+        }
+    );
+}
+
+
+/* =========================================================
+   VOICE BUTTON
+   ========================================================= */
+
+const voiceButton =
+    document.getElementById(
+        "voiceButton"
+    );
+
+if (voiceButton) {
+
+    voiceButton.addEventListener(
+        "click",
+        async function () {
+
+            if (!mediaRecorder) {
+
+                await startVoiceRecording();
+
+            } else if (
+                mediaRecorder.state ===
+                "recording"
+            ) {
+
+                stopVoiceRecording();
+
+            }
+
+        }
+    );
+}
+
+
+/* =========================================================
+   NOTIFICATION BUTTON
+   ========================================================= */
+
+const notificationButton =
+    document.getElementById(
+        "notificationButton"
+    );
+
+if (notificationButton) {
+
+    notificationButton.addEventListener(
+        "click",
+        async function () {
+
+            const panel =
+                document.getElementById(
+                    "notificationPanel"
+                );
+
+            if (!panel) {
+                return;
+            }
+
+            panel.classList.toggle(
+                "show"
+            );
+
+        }
+    );
+}
+
+
+/* =========================================================
+   MARK ALL NOTIFICATIONS READ
+   ========================================================= */
+
+const markAllReadButton =
+    document.getElementById(
+        "markAllReadButton"
+    );
+
+if (markAllReadButton) {
+
+    markAllReadButton.addEventListener(
+        "click",
+        async function () {
+
+            const { error } =
+                await supabaseClient.rpc(
+                    "g_nurse_mark_all_notifications_read"
+                );
+
+            if (error) {
+
+                console.error(error);
+
+                return;
+            }
+
+            await loadNotifications();
+
+        }
+    );
+}
+
+
+/* =========================================================
+   INITIAL PAGE STATE
+   ========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async function () {
+
+        if (
+            "Notification" in window &&
+            Notification.permission ===
+            "default"
+        ) {
+
+            try {
+
+                await Notification.requestPermission();
+
+            } catch (error) {
+
+                console.log(
+                    "Notification permission:",
+                    error
+                );
+
+            }
+        }
+
+        const name =
+            localStorage.getItem(
+                "gnurse_visitor_name"
+            );
+
+        const email =
+            localStorage.getItem(
+                "gnurse_visitor_email"
+            );
+
+        const phone =
+            localStorage.getItem(
+                "gnurse_visitor_phone"
+            );
+
+        const nameInput =
+            document.getElementById(
+                "visitorName"
+            );
+
+        const emailInput =
+            document.getElementById(
+                "visitorEmail"
+            );
+
+        const phoneInput =
+            document.getElementById(
+                "visitorPhone"
+            );
+
+        if (nameInput && name) {
+            nameInput.value = name;
+        }
+
+        if (emailInput && email) {
+            emailInput.value = email;
+        }
+
+        if (phoneInput && phone) {
+            phoneInput.value = phone;
+        }
+
+        if (
+            name &&
+            (email || phone)
+        ) {
+
+            try {
+
+                await startChatGNurse();
+
+            } catch (error) {
+
+                console.error(error);
+
+                showStartScreen();
+
+            }
+
+        } else {
+
+            showStartScreen();
+
+        }
+
+    }
+);
+ </script>
+</body>
+</html>
