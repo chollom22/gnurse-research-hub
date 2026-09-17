@@ -3590,88 +3590,38 @@ if (bookSearch) {
 /* =====================================================
    BOOK ACTIONS — FIXED
 ===================================================== */
+// BOOK ACTIONS
 
-document.addEventListener(
-    "click",
-    function(event) {
+document.addEventListener("click", function (event) {
 
-        const readButton =
-            event.target.closest(
-                'button[data-action="read"]'
-            );
+    const readButton = event.target.closest(
+        'button[data-action="read"]'
+    );
 
+    if (!readButton) {
+        return;
+    }
 
-        if (readButton) {
+    event.preventDefault();
+    event.stopPropagation();
 
-            event.preventDefault();
-            event.stopPropagation();
+    const bookId = readButton.getAttribute("data-id");
+    const bookType =
+        readButton.getAttribute("data-type") || "book";
 
+    if (!bookId) {
+        showToast("Book information is missing.");
+        return;
+    }
 
-            const bookId =
-                readButton.getAttribute(
-                    "data-id"
-                );
+    if (typeof openBook !== "function") {
+        showToast("Reader is not ready. Please refresh the page.");
+        return;
+    }
 
+    openBook(bookId, bookType);
 
-            const bookType =
-                readButton.getAttribute(
-                    "data-type"
-                ) || "book";
-
-
-            if (!bookId) {
-
-                showToast(
-                    "This book could not be opened."
-                );
-
-                return;
-
-            }
-
-
-            openBook(
-                bookId,
-                bookType
-            );
-
-            return;
-
-        }
-
-
-        const saveButton =
-            event.target.closest(
-                'button[data-action="save"]'
-            );
-
-
-        if (saveButton) {
-
-            event.preventDefault();
-            event.stopPropagation();
-
-
-            const bookId =
-                saveButton.getAttribute(
-                    "data-id"
-                );
-
-
-            if (!bookId) {
-                return;
-            }
-
-
-            toggleSavedBook(
-                bookId
-            );
-
-        }
-
-    },
-    false
-);
+}, true);
 
 /* =====================================================
    SAVE / UNSAVE
