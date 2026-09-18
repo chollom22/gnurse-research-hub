@@ -12,7 +12,6 @@
 
     <title>Chat G Nurse</title>
 
-    <!-- Supabase -->
     <script
         src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
     ></script>
@@ -29,9 +28,11 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            font-family: Arial, sans-serif;
-            background: #f3f7f8;
-            color: #17252a;
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+            background: #f2f7f7;
         }
 
         body {
@@ -41,61 +42,77 @@
         button,
         input,
         textarea {
-            font: inherit;
+            font-family: inherit;
         }
 
         button {
             cursor: pointer;
         }
 
-        .app {
+        /* =========================================
+           MAIN APP
+        ========================================= */
+
+        #app {
             width: 100%;
             height: 100vh;
             display: flex;
             flex-direction: column;
+            background: #ffffff;
         }
 
-        /* ==============================
+        /* =========================================
            HEADER
-        ============================== */
+        ========================================= */
 
-        .topbar {
-            height: 64px;
+        #header {
+            height: 62px;
             flex-shrink: 0;
             background: #07562f;
             color: white;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 14px;
-            box-shadow: 0 2px 8px rgba(0,0,0,.15);
+            padding: 0 15px;
+            box-shadow:
+                0 2px 8px rgba(
+                    0,
+                    0,
+                    0,
+                    0.15
+                );
             z-index: 20;
         }
 
-        .topbar-title {
+        .header-title {
             display: flex;
             align-items: center;
-            gap: 9px;
-            font-weight: 700;
-            font-size: 18px;
+            gap: 10px;
+            font-size: 19px;
+            font-weight: bold;
         }
 
-        .topbar-title span {
+        .header-title span:first-child {
             font-size: 25px;
         }
 
-        .notification-button {
+        #notificationButton {
+            position: relative;
             width: 42px;
             height: 42px;
             border: none;
             border-radius: 50%;
-            background: rgba(255,255,255,.15);
+            background: rgba(
+                255,
+                255,
+                255,
+                0.15
+            );
             color: white;
-            position: relative;
-            font-size: 20px;
+            font-size: 21px;
         }
 
-        .notification-badge {
+        #notificationBadge {
             position: absolute;
             top: -2px;
             right: -2px;
@@ -105,62 +122,94 @@
             border-radius: 20px;
             background: #e53935;
             color: white;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
-            display: none;
             align-items: center;
             justify-content: center;
+            display: none;
         }
 
-        /* ==============================
-           MAIN
-        ============================== */
+        /* =========================================
+           CONTENT
+        ========================================= */
 
-        .main {
+        #content {
             flex: 1;
             min-height: 0;
             position: relative;
             overflow: hidden;
         }
 
-        .start-screen,
-        .chat-screen {
+        #welcomeScreen,
+        #chatScreen {
             width: 100%;
             height: 100%;
         }
 
-        .start-screen {
+        /* =========================================
+           WELCOME
+        ========================================= */
+
+        #welcomeScreen {
             overflow-y: auto;
-            padding: 25px 16px 40px;
+            padding: 25px 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .welcome {
-            max-width: 600px;
-            margin: 25px auto;
-            background: white;
-            border-radius: 18px;
-            padding: 25px 20px;
-            box-shadow: 0 4px 18px rgba(0,0,0,.08);
+        .welcome-box {
+            width: 100%;
+            max-width: 520px;
+            margin: auto;
+            text-align: center;
         }
 
         .welcome-icon {
-            text-align: center;
-            font-size: 55px;
-            margin-bottom: 8px;
+            width: 85px;
+            height: 85px;
+            margin: 0 auto 18px;
+            border-radius: 50%;
+            background: #07562f;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            box-shadow:
+                0 8px 25px rgba(
+                    7,
+                    86,
+                    47,
+                    0.25
+                );
         }
 
-        .welcome h1 {
-            text-align: center;
-            margin: 0 0 10px;
+        .welcome-box h1 {
+            margin: 0 0 8px;
             color: #07562f;
-            font-size: 25px;
+            font-size: 27px;
         }
 
-        .welcome p {
-            text-align: center;
-            color: #607078;
+        .welcome-box p {
+            margin: 0 0 25px;
+            color: #555;
             line-height: 1.6;
-            margin-bottom: 25px;
+            font-size: 15px;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow:
+                0 5px 25px rgba(
+                    0,
+                    0,
+                    0,
+                    0.08
+                );
+            text-align: left;
         }
 
         .form-group {
@@ -169,62 +218,97 @@
 
         .form-group label {
             display: block;
-            margin-bottom: 6px;
-            font-weight: 600;
+            margin-bottom: 7px;
+            color: #333;
             font-size: 14px;
+            font-weight: bold;
         }
 
         .form-group input {
             width: 100%;
-            border: 1px solid #ccd7da;
+            height: 48px;
+            border: 1px solid #d5dede;
             border-radius: 10px;
-            padding: 13px;
+            padding: 0 13px;
             outline: none;
-            background: #fff;
+            font-size: 15px;
+            background: #fafcfc;
         }
 
         .form-group input:focus {
             border-color: #07562f;
+            box-shadow:
+                0 0 0 3px rgba(
+                    7,
+                    86,
+                    47,
+                    0.08
+                );
         }
 
-        .primary-button {
+        #startChatButton {
             width: 100%;
+            height: 50px;
             border: none;
             border-radius: 11px;
-            padding: 14px;
             background: #07562f;
             color: white;
-            font-weight: 700;
             font-size: 16px;
+            font-weight: bold;
+            margin-top: 5px;
         }
 
-        .primary-button:disabled {
-            opacity: .6;
+        #startChatButton:active {
+            transform: scale(0.98);
+        }
+
+        #startChatButton:disabled {
+            opacity: 0.6;
             cursor: not-allowed;
         }
 
-        /* ==============================
-           CHAT SCREEN
-        ============================== */
+        /* =========================================
+           CHAT
+        ========================================= */
 
-        .chat-screen {
+        #chatScreen {
             display: none;
             flex-direction: column;
-            background: #e9f1ef;
+            background: #eef5f2;
         }
 
-        .messages {
+        #chatHeader {
+            height: 55px;
+            flex-shrink: 0;
+            background: white;
+            border-bottom: 1px solid #dce5e1;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+        }
+
+        #backButton {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: transparent;
+            font-size: 24px;
+            color: #07562f;
+        }
+
+        #chatTitle {
+            flex: 1;
+            font-size: 16px;
+            font-weight: bold;
+            color: #222;
+            padding-left: 5px;
+        }
+
+        #messages {
             flex: 1;
             min-height: 0;
             overflow-y: auto;
-            padding: 15px;
-        }
-
-        .empty-chat {
-            text-align: center;
-            color: #718087;
-            margin-top: 35px;
-            font-size: 14px;
+            padding: 15px 12px;
         }
 
         .message-row {
@@ -244,219 +328,308 @@
             max-width: 82%;
             padding: 10px 12px;
             border-radius: 14px;
-            word-wrap: break-word;
-            overflow-wrap: anywhere;
-            box-shadow: 0 1px 3px rgba(0,0,0,.08);
+            position: relative;
+            word-break: break-word;
         }
 
-        .message-row.visitor .message-bubble {
+        .message-row.visitor
+        .message-bubble {
             background: #07562f;
             color: white;
             border-bottom-right-radius: 4px;
         }
 
-        .message-row.admin .message-bubble {
+        .message-row.admin
+        .message-bubble {
             background: white;
-            color: #17252a;
+            color: #222;
             border-bottom-left-radius: 4px;
+            box-shadow:
+                0 2px 5px rgba(
+                    0,
+                    0,
+                    0,
+                    0.05
+                );
+        }
+
+        .message-text {
+            font-size: 15px;
+            line-height: 1.45;
         }
 
         .message-time {
             display: block;
             margin-top: 5px;
             font-size: 10px;
-            opacity: .7;
-            text-align: right;
+            opacity: 0.7;
         }
 
         .message-file {
-            display: block;
-            margin-top: 7px;
-            text-decoration: none;
+            border: none;
+            background: rgba(
+                255,
+                255,
+                255,
+                0.12
+            );
             color: inherit;
-            font-weight: 600;
+            padding: 8px;
+            border-radius: 8px;
+            width: 100%;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        .admin .message-file {
+            background: #eef5f2;
         }
 
         .message-image {
-            display: block;
             max-width: 220px;
             max-height: 260px;
             border-radius: 10px;
-            margin-top: 5px;
+            display: block;
+            cursor: pointer;
         }
 
-        /* ==============================
-           COMPOSER
-        ============================== */
+        .message-audio {
+            width: 220px;
+            max-width: 100%;
+        }
 
-        .composer {
+        .message-actions {
+            margin-top: 6px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .unsend-button {
+            border: none;
+            background: transparent;
+            color: inherit;
+            opacity: 0.7;
+            font-size: 10px;
+            padding: 2px 0;
+        }
+
+        /* =========================================
+           MESSAGE COMPOSER
+        ========================================= */
+
+        #composer {
             flex-shrink: 0;
             background: white;
-            border-top: 1px solid #d7e0e2;
+            border-top: 1px solid #dce5e1;
             padding: 8px;
         }
 
-        .composer-row {
+        #attachmentPreview {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 8px 10px;
+            margin-bottom: 7px;
+            border-radius: 8px;
+            background: #eef5f2;
+            color: #07562f;
+            font-size: 12px;
+        }
+
+        #composerRow {
             display: flex;
             align-items: flex-end;
-            gap: 7px;
+            gap: 6px;
         }
 
-        .composer textarea {
-            flex: 1;
-            min-height: 43px;
-            max-height: 110px;
-            resize: none;
-            border: 1px solid #ccd7da;
-            border-radius: 12px;
-            padding: 11px;
-            outline: none;
-        }
-
-        .composer textarea:focus {
-            border-color: #07562f;
-        }
-
-        .icon-button {
-            width: 43px;
-            height: 43px;
+        .composer-button {
             flex-shrink: 0;
+            width: 42px;
+            height: 42px;
             border: none;
             border-radius: 50%;
-            background: #eef3f2;
+            background: #eef5f2;
             color: #07562f;
             font-size: 19px;
         }
 
-        .send-button {
+        #messageInput {
+            flex: 1;
+            min-width: 0;
+            min-height: 42px;
+            max-height: 140px;
+            resize: none;
+            border: 1px solid #d5dede;
+            border-radius: 21px;
+            padding: 11px 14px;
+            outline: none;
+            font-size: 14px;
+            line-height: 1.35;
+            overflow-y: auto;
+        }
+
+        #messageInput:focus {
+            border-color: #07562f;
+        }
+
+        #sendButton {
             background: #07562f;
             color: white;
         }
 
-        .recording-bar {
-            display: none;
-            align-items: center;
-            justify-content: space-between;
-            background: #fff3f3;
-            border: 1px solid #ffcaca;
-            border-radius: 10px;
-            padding: 8px 10px;
-            margin-bottom: 7px;
-            color: #b42318;
-            font-size: 13px;
+        #sendButton:disabled {
+            opacity: 0.5;
         }
 
-        .recording-bar.active {
-            display: flex;
+        #recordingStatus {
+            min-height: 16px;
+            text-align: center;
+            color: #d32f2f;
+            font-size: 11px;
+            font-weight: bold;
         }
 
-        .recording-stop {
-            border: none;
-            background: #d32f2f;
-            color: white;
-            border-radius: 8px;
-            padding: 7px 10px;
-        }
-
-        .attachment-preview {
-            display: none;
-            background: #f1f5f4;
-            border-radius: 9px;
-            padding: 7px 10px;
-            margin-bottom: 7px;
-            font-size: 12px;
-        }
-
-        /* ==============================
+        /* =========================================
            NOTIFICATIONS
-        ============================== */
+        ========================================= */
 
-        .notification-panel {
+        #notificationPanel {
+            display: none;
             position: absolute;
-            top: 10px;
+            top: 8px;
             right: 10px;
-            width: min(340px, calc(100% - 20px));
-            max-height: 70%;
-            overflow-y: auto;
+            width: min(
+                350px,
+                calc(100% - 20px)
+            );
+            max-height: 70vh;
             background: white;
             border-radius: 14px;
-            box-shadow: 0 8px 30px rgba(0,0,0,.2);
-            display: none;
-            z-index: 50;
+            box-shadow:
+                0 8px 35px rgba(
+                    0,
+                    0,
+                    0,
+                    0.2
+                );
+            z-index: 100;
+            overflow: hidden;
+            flex-direction: column;
         }
 
-        .notification-panel.open {
-            display: block;
-        }
-
-        .notification-header {
-            padding: 12px;
-            border-bottom: 1px solid #e4eaeb;
+        #notificationPanelHeader {
+            height: 50px;
+            flex-shrink: 0;
+            padding: 0 12px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            font-weight: 700;
+            justify-content: space-between;
+            border-bottom: 1px solid #eee;
         }
 
-        .mark-all-button {
+        #notificationPanelHeader strong {
+            color: #07562f;
+        }
+
+        #closeNotificationsButton,
+        #markAllNotificationsButton {
             border: none;
-            background: none;
+            background: transparent;
             color: #07562f;
             font-size: 12px;
+            font-weight: bold;
+        }
+
+        #notificationList {
+            overflow-y: auto;
+            padding: 5px;
         }
 
         .notification-item {
-            padding: 12px;
-            border-bottom: 1px solid #edf1f2;
+            padding: 11px;
+            border-radius: 9px;
+            margin: 3px;
+            cursor: pointer;
+        }
+
+        .notification-item:hover {
+            background: #f2f7f5;
         }
 
         .notification-item.unread {
-            background: #edf8f2;
+            background: #eaf5ef;
         }
 
         .notification-item strong {
             display: block;
-            margin-bottom: 4px;
+            font-size: 13px;
+            color: #07562f;
+            margin-bottom: 3px;
+        }
+
+        .notification-item div {
+            font-size: 12px;
+            color: #444;
         }
 
         .notification-item small {
-            color: #748087;
+            display: block;
+            margin-top: 5px;
+            color: #888;
+            font-size: 10px;
         }
 
-        /* ==============================
-           LOADING
-        ============================== */
+        .empty-notifications {
+            padding: 25px;
+            text-align: center;
+            color: #888;
+            font-size: 13px;
+        }
 
-        .loading {
-            position: absolute;
+        /* =========================================
+           LOADING
+        ========================================= */
+
+        #loading {
+            position: fixed;
             inset: 0;
-            background: rgba(255,255,255,.82);
             display: none;
             align-items: center;
             justify-content: center;
-            z-index: 100;
-        }
-
-        .loading.active {
-            display: flex;
+            background: rgba(
+                0,
+                0,
+                0,
+                0.35
+            );
+            z-index: 1000;
         }
 
         .loading-box {
+            min-width: 180px;
+            padding: 22px;
+            border-radius: 15px;
             background: white;
-            padding: 22px 28px;
-            border-radius: 14px;
-            box-shadow: 0 5px 25px rgba(0,0,0,.15);
             text-align: center;
+            box-shadow:
+                0 10px 35px rgba(
+                    0,
+                    0,
+                    0,
+                    0.2
+                );
         }
 
         .spinner {
-            width: 34px;
-            height: 34px;
-            border: 4px solid #dbe7e3;
+            width: 35px;
+            height: 35px;
+            margin: 0 auto 12px;
+            border: 4px solid #dce9e3;
             border-top-color: #07562f;
             border-radius: 50%;
-            animation: spin .8s linear infinite;
-            margin: 0 auto 12px;
+            animation:
+                spin 0.8s linear infinite;
         }
 
         @keyframes spin {
@@ -465,25 +638,17 @@
             }
         }
 
-        .hidden {
-            display: none !important;
-        }
+        @media (
+            max-width: 480px
+        ) {
 
-        @media (max-width: 480px) {
-
-            .topbar {
-                height: 58px;
-            }
-
-            .welcome {
-                margin: 10px auto;
-                padding: 20px 16px;
+            .welcome-box h1 {
+                font-size: 24px;
             }
 
             .message-bubble {
                 max-width: 88%;
             }
-
         }
 
     </style>
@@ -492,24 +657,22 @@
 
 <body>
 
-<div class="app">
+<div id="app">
 
-    <header class="topbar">
+    <header id="header">
 
-        <div class="topbar-title">
+        <div class="header-title">
             <span>💬</span>
-            <div>Chat G Nurse</div>
+            <span>Chat G Nurse</span>
         </div>
 
         <button
             type="button"
-            class="notification-button"
             id="notificationButton"
         >
             🔔
 
             <span
-                class="notification-badge"
                 id="notificationBadge"
             >
                 0
@@ -519,19 +682,21 @@
 
     </header>
 
-    <main class="main">
 
-        <!-- START SCREEN -->
+    <main id="content">
+
+        <!-- =====================================
+             WELCOME SCREEN
+        ====================================== -->
 
         <section
-            class="start-screen"
-            id="startScreen"
+            id="welcomeScreen"
         >
 
-            <div class="welcome">
+            <div class="welcome-box">
 
                 <div class="welcome-icon">
-                    👩‍⚕️
+                    💬
                 </div>
 
                 <h1>
@@ -539,147 +704,177 @@
                 </h1>
 
                 <p>
-                    Send a message directly to G Nurse.
-                    You can also send pictures, files
-                    and voice notes.
+                    Send a message directly to
+                    G Nurse. You can also send
+                    pictures, files and voice notes.
                 </p>
 
-                <div class="form-group">
 
-                    <label for="visitorName">
-                        Your Name
-                    </label>
+                <div class="form-card">
 
-                    <input
-                        type="text"
-                        id="visitorName"
-                        placeholder="Enter your name"
-                        autocomplete="name"
+                    <div class="form-group">
+
+                        <label
+                            for="visitorName"
+                        >
+                            Your Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="visitorName"
+                            placeholder="Enter your name"
+                            autocomplete="name"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label
+                            for="visitorEmail"
+                        >
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="visitorEmail"
+                            placeholder="Enter your email"
+                            autocomplete="email"
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label
+                            for="visitorPhone"
+                        >
+                            Phone Number
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="visitorPhone"
+                            placeholder="Enter your phone number"
+                            autocomplete="tel"
+                        >
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="startChatButton"
                     >
+                        Start Chat
+                    </button>
 
                 </div>
-
-                <div class="form-group">
-
-                    <label for="visitorEmail">
-                        Email
-                    </label>
-
-                    <input
-                        type="email"
-                        id="visitorEmail"
-                        placeholder="Enter your email"
-                        autocomplete="email"
-                    >
-
-                </div>
-
-                <div class="form-group">
-
-                    <label for="visitorPhone">
-                        Phone Number
-                    </label>
-
-                    <input
-                        type="tel"
-                        id="visitorPhone"
-                        placeholder="Enter your phone number"
-                        autocomplete="tel"
-                    >
-
-                </div>
-
-                <button
-                    type="button"
-                    class="primary-button"
-                    id="startChatButton"
-                >
-                    Start Chat
-                </button>
 
             </div>
 
         </section>
 
-        <!-- CHAT SCREEN -->
+
+        <!-- =====================================
+             CHAT SCREEN
+        ====================================== -->
 
         <section
-            class="chat-screen"
             id="chatScreen"
         >
 
-            <div
-                class="messages"
-                id="messages"
-            >
+            <div id="chatHeader">
 
-                <div
-                    class="empty-chat"
-                    id="emptyChat"
+                <button
+                    type="button"
+                    id="backButton"
                 >
-                    No messages yet. Start the conversation.
+                    ←
+                </button>
+
+                <div id="chatTitle">
+                    G Nurse
                 </div>
 
             </div>
 
-            <div class="composer">
+
+            <div id="messages">
 
                 <div
-                    class="recording-bar"
-                    id="recordingBar"
+                    id="emptyChat"
+                    style="
+                        text-align:center;
+                        padding:40px 20px;
+                        color:#777;
+                        font-size:14px;
+                    "
                 >
-
-                    <span id="recordingTime">
-                        🔴 Recording 00:00
-                    </span>
-
-                    <button
-                        type="button"
-                        class="recording-stop"
-                        id="stopRecordingButton"
-                    >
-                        Stop
-                    </button>
-
+                    Start a conversation with
+                    G Nurse.
                 </div>
 
+            </div>
+
+
+            <div id="composer">
+
                 <div
-                    class="attachment-preview"
+                    id="recordingStatus"
+                ></div>
+
+
+                <div
                     id="attachmentPreview"
-                >
-                    <span id="attachmentName"></span>
-                </div>
+                ></div>
 
-                <div class="composer-row">
+
+                <div id="composerRow">
+
+                    <input
+                        type="file"
+                        id="fileInput"
+                        hidden
+                    >
+
 
                     <button
                         type="button"
-                        class="icon-button"
-                        id="attachmentButton"
+                        class="composer-button"
+                        id="fileButton"
                         title="Attach file"
                     >
                         📎
                     </button>
 
+
                     <textarea
                         id="messageInput"
-                        placeholder="Type a message..."
                         rows="1"
+                        placeholder="Type a message..."
                     ></textarea>
+
 
                     <button
                         type="button"
-                        class="icon-button"
+                        class="composer-button"
                         id="voiceButton"
                         title="Voice note"
                     >
-                        🎙️
+                        🎤
                     </button>
+
 
                     <button
                         type="button"
-                        class="icon-button send-button"
+                        class="composer-button"
                         id="sendButton"
+                              id="sendButton"
                         title="Send"
                     >
                         ➤
@@ -687,56 +882,74 @@
 
                 </div>
 
-                <input
-                    type="file"
-                    id="fileInput"
-                    class="hidden"
-                    accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip"
-                >
-
             </div>
 
         </section>
 
-        <!-- NOTIFICATIONS -->
+
+        <!-- =====================================
+             NOTIFICATION PANEL
+        ====================================== -->
 
         <div
-            class="notification-panel"
             id="notificationPanel"
         >
 
-            <div class="notification-header">
+            <div
+                id="notificationPanelHeader"
+            >
 
-                <span>
+                <strong>
                     Notifications
-                </span>
+                </strong>
 
-                <button
-                    type="button"
-                    class="mark-all-button"
-                    id="markAllNotifications"
-                >
-                    Mark all read
-                </button>
+                <div>
+
+                    <button
+                        type="button"
+                        id="markAllNotificationsButton"
+                    >
+                        Mark all
+                    </button>
+
+                    <button
+                        type="button"
+                        id="closeNotificationsButton"
+                    >
+                        ✕
+                    </button>
+
+                </div>
 
             </div>
 
-            <div id="notificationList"></div>
+
+            <div
+                id="notificationList"
+            ></div>
 
         </div>
 
-        <!-- LOADING -->
+
+        <!-- =====================================
+             LOADING SCREEN
+        ====================================== -->
 
         <div
-            class="loading"
             id="loading"
         >
 
-            <div class="loading-box">
+            <div
+                class="loading-box"
+            >
 
-                <div class="spinner"></div>
+                <div
+                    class="spinner"
+                ></div>
 
-                <div id="loadingText">
+                <div
+                    id="loadingText"
+                >
                     Please wait...
                 </div>
 
@@ -746,11 +959,13 @@
 
     </main>
 
-    </div>
-    <script>
+</div>
+
+
+<script>
 
 /* =========================================================
-   1. SUPABASE CONFIGURATION
+   SUPABASE CONFIGURATION
 ========================================================= */
 
 const SUPABASE_URL =
@@ -758,6 +973,7 @@ const SUPABASE_URL =
 
 const SUPABASE_KEY =
     "sb_publishable_9JL2ALhTGlVZ57hUV0mTdQ_c2hdT8O8";
+
 
 const supabaseClient =
     window.supabase.createClient(
@@ -767,79 +983,108 @@ const supabaseClient =
 
 
 /* =========================================================
-   2. APPLICATION STATE
+   APPLICATION STATE
 ========================================================= */
 
 let currentUser = null;
-let currentConversation = null;
-let realtimeChannel = null;
 
-let mediaRecorder = null;
-let recordedChunks = [];
-let recordingTimer = null;
-let recordingSeconds = 0;
+let currentConversation = null;
+
+let realtimeChannel = null;
 
 let selectedFile = null;
 
+let mediaRecorder = null;
+
+let recordedChunks = [];
+
+let recordingTimer = null;
+
+let recordingSeconds = 0;
+
 
 /* =========================================================
-   3. ELEMENTS
+   ELEMENT REFERENCES
 ========================================================= */
 
-const startScreen =
-    document.getElementById("startScreen");
+const welcomeScreen =
+    document.getElementById(
+        "welcomeScreen"
+    );
 
 const chatScreen =
-    document.getElementById("chatScreen");
+    document.getElementById(
+        "chatScreen"
+    );
 
-const visitorName =
-    document.getElementById("visitorName");
+const visitorNameInput =
+    document.getElementById(
+        "visitorName"
+    );
 
-const visitorEmail =
-    document.getElementById("visitorEmail");
+const visitorEmailInput =
+    document.getElementById(
+        "visitorEmail"
+    );
 
-const visitorPhone =
-    document.getElementById("visitorPhone");
+const visitorPhoneInput =
+    document.getElementById(
+        "visitorPhone"
+    );
 
 const startChatButton =
-    document.getElementById("startChatButton");
+    document.getElementById(
+        "startChatButton"
+    );
+
+const backButton =
+    document.getElementById(
+        "backButton"
+    );
 
 const messages =
-    document.getElementById("messages");
+    document.getElementById(
+        "messages"
+    );
 
 const emptyChat =
-    document.getElementById("emptyChat");
+    document.getElementById(
+        "emptyChat"
+    );
 
 const messageInput =
-    document.getElementById("messageInput");
+    document.getElementById(
+        "messageInput"
+    );
 
 const sendButton =
-    document.getElementById("sendButton");
-
-const attachmentButton =
-    document.getElementById("attachmentButton");
-
-const fileInput =
-    document.getElementById("fileInput");
-
-const attachmentPreview =
-    document.getElementById("attachmentPreview");
-
-const attachmentName =
-    document.getElementById("attachmentName");
+    document.getElementById(
+        "sendButton"
+    );
 
 const voiceButton =
-    document.getElementById("voiceButton");
-
-const recordingBar =
-    document.getElementById("recordingBar");
-
-const recordingTime =
-    document.getElementById("recordingTime");
-
-const stopRecordingButton =
     document.getElementById(
-        "stopRecordingButton"
+        "voiceButton"
+    );
+
+const fileButton =
+    document.getElementById(
+        "fileButton"
+    );
+
+const fileInput =
+    document.getElementById(
+        "fileInput"
+    );
+
+const attachmentPreview =
+    document.getElementById(
+        "attachmentPreview"
+    );
+
+const recordingStatus =
+    document.getElementById(
+        "recordingStatus"
     );
 
 const notificationButton =
@@ -862,61 +1107,77 @@ const notificationList =
         "notificationList"
     );
 
-const markAllNotifications =
+const closeNotificationsButton =
     document.getElementById(
-        "markAllNotifications"
+        "closeNotificationsButton"
+    );
+
+const markAllNotificationsButton =
+    document.getElementById(
+        "markAllNotificationsButton"
     );
 
 const loading =
-    document.getElementById("loading");
+    document.getElementById(
+        "loading"
+    );
 
 const loadingText =
-    document.getElementById("loadingText");
+    document.getElementById(
+        "loadingText"
+    );
 
 
 /* =========================================================
-   4. LOADING FUNCTIONS
+   LOADING HELPERS
 ========================================================= */
 
-function showLoading(text) {
+function showLoading(
+    text = "Please wait..."
+) {
 
     loadingText.textContent =
-        text || "Please wait...";
+        text;
 
-    loading.classList.add("active");
+    loading.style.display =
+        "flex";
 }
 
 
 function hideLoading() {
 
-    loading.classList.remove("active");
+    loading.style.display =
+        "none";
 }
 
 
 /* =========================================================
-   5. SAFE TEXT
+   SAFE HTML
 ========================================================= */
 
-function escapeHTML(value) {
+function escapeHTML(
+    value
+) {
 
-    if (value === null || value === undefined) {
-        return "";
-    }
+    const div =
+        document.createElement(
+            "div"
+        );
 
-    return String(value)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    div.textContent =
+        value ?? "";
+
+    return div.innerHTML;
 }
 
 
 /* =========================================================
-   6. DATE / TIME
+   TIME FORMAT
 ========================================================= */
 
-function formatMessageTime(value) {
+function formatMessageTime(
+    value
+) {
 
     if (!value) {
         return "";
@@ -936,69 +1197,57 @@ function formatMessageTime(value) {
 
 
 /* =========================================================
-   7. LOCAL VISITOR DETAILS
+   VISITOR DETAILS
 ========================================================= */
 
-function saveVisitorDetails() {
-
-    const details = {
-
-        name:
-            visitorName.value.trim(),
-
-        email:
-            visitorEmail.value.trim(),
-
-        phone:
-            visitorPhone.value.trim()
-
-    };
+function saveVisitorDetails(
+    name,
+    email,
+    phone
+) {
 
     localStorage.setItem(
-        "g_nurse_visitor_details",
-        JSON.stringify(details)
+        "g_nurse_visitor",
+        JSON.stringify({
+            name:
+                name || "",
+
+            email:
+                email || "",
+
+            phone:
+                phone || ""
+        })
     );
 }
 
 
 function loadVisitorDetails() {
 
-    const saved =
-        localStorage.getItem(
-            "g_nurse_visitor_details"
-        );
-
-    if (!saved) {
-        return;
-    }
-
     try {
 
-        const details =
-            JSON.parse(saved);
+        const value =
+            localStorage.getItem(
+                "g_nurse_visitor"
+            );
 
-        visitorName.value =
-            details.name || "";
+        if (!value) {
+            return null;
+        }
 
-        visitorEmail.value =
-            details.email || "";
-
-        visitorPhone.value =
-            details.phone || "";
-
-    } catch (error) {
-
-        console.error(
-            "Visitor details error:",
-            error
+        return JSON.parse(
+            value
         );
 
+    } catch {
+
+        return null;
     }
 }
 
 
 /* =========================================================
-   8. ANONYMOUS AUTHENTICATION
+   ANONYMOUS AUTHENTICATION
 ========================================================= */
 
 async function ensureAuthenticated() {
@@ -1006,74 +1255,79 @@ async function ensureAuthenticated() {
     try {
 
         const {
-            data,
-            error
+            data: sessionData
         } =
-            await supabaseClient.auth.getUser();
+            await supabaseClient
+                .auth
+                .getSession();
+
 
         if (
-            !error &&
-            data &&
-            data.user
+            sessionData?.session?.user
         ) {
 
             currentUser =
-                data.user;
+                sessionData.session.user;
 
-            return currentUser;
+            return true;
         }
 
 
         const {
-            data: authData,
-            error: authError
+            data,
+            error
         } =
-            await supabaseClient.auth
+            await supabaseClient
+                .auth
                 .signInAnonymously();
 
-        if (authError) {
 
-            console.error(
-                "Anonymous authentication error:",
-                authError
-            );
-
-            throw authError;
+        if (error) {
+            throw error;
         }
 
-        currentUser =
-            authData.user;
 
-        return currentUser;
+        currentUser =
+            data?.user || null;
+
+
+        return !!currentUser;
 
     } catch (error) {
 
         console.error(
-            "Authentication failed:",
+            "Authentication error:",
             error
         );
 
-        throw error;
+        alert(
+            "Unable to connect to Chat G Nurse."
+        );
+
+        return false;
     }
 }
 
 
 /* =========================================================
-   9. GET EXISTING VISITOR CONVERSATION
+   FIND EXISTING CONVERSATION
 ========================================================= */
 
-async function findMyConversation() {
+async function findExistingConversation() {
 
     if (!currentUser) {
         return null;
     }
+
 
     const {
         data,
         error
     } =
         await supabaseClient
-            .from("g_nurse_conversations")
+            .from(
+                "g_nurse_conversations"
+            )
             .select("*")
             .eq(
                 "visitor_user_id",
@@ -1088,66 +1342,38 @@ async function findMyConversation() {
             .limit(1)
             .maybeSingle();
 
+
     if (error) {
-
-        console.error(
-            "Conversation lookup error:",
-            error
-        );
-
         throw error;
     }
+
 
     return data || null;
 }
 
 
 /* =========================================================
-   10. CREATE CONVERSATION
+   CREATE CONVERSATION
 ========================================================= */
 
-async function createConversation() {
-
-    const name =
-        visitorName.value.trim();
-
-    const email =
-        visitorEmail.value.trim();
-
-    const phone =
-        visitorPhone.value.trim();
-
-    if (!name) {
-
-        alert(
-            "Please enter your name."
-        );
-
-        visitorName.focus();
-
-        return null;
-    }
-
-    if (!email && !phone) {
-
-        alert(
-            "Please enter your email or phone number."
-        );
-
-        visitorEmail.focus();
-
-        return null;
-    }
+async function createConversation(
+    name,
+    email,
+    phone
+) {
 
     const visitorToken =
-        crypto.randomUUID();
+        currentUser.id;
+
 
     const {
         data,
         error
     } =
         await supabaseClient
-            .from("g_nurse_conversations")
+            .from(
+                "g_nurse_conversations"
+            )
             .insert({
 
                 visitor_token:
@@ -1169,109 +1395,206 @@ async function createConversation() {
                     "open"
 
             })
-            .select()
+            .select("*")
             .single();
 
+
     if (error) {
-
-        console.error(
-            "Conversation creation error:",
-            error
-        );
-
         throw error;
     }
+
 
     return data;
 }
 
 
 /* =========================================================
-   11. OPEN VISITOR CHAT
+   START CHAT
 ========================================================= */
 
-async function openChat() {
+async function startChat() {
 
-    showLoading(
-        "Opening your chat..."
-    );
+    const name =
+        visitorNameInput.value.trim();
+
+    const email =
+        visitorEmailInput.value.trim();
+
+    const phone =
+        visitorPhoneInput.value.trim();
+
+
+    if (!name) {
+
+        alert(
+            "Please enter your name."
+        );
+
+        visitorNameInput.focus();
+
+        return;
+    }
+
+
+    startChatButton.disabled =
+        true;
+
 
     try {
 
-        await ensureAuthenticated();
+        showLoading(
+            "Starting chat..."
+        );
+
+
+        const authenticated =
+            await ensureAuthenticated();
+
+
+        if (!authenticated) {
+            return;
+        }
+
+
+        saveVisitorDetails(
+            name,
+            email,
+            phone
+        );
+
 
         let conversation =
-            await findMyConversation();
+            await findExistingConversation();
+
 
         if (!conversation) {
 
             conversation =
-                await createConversation();
+                await createConversation(
+                    name,
+                    email,
+                    phone
+                );
+
+        } else {
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from(
+                        "g_nurse_conversations"
+                    )
+                    .update({
+
+                        visitor_name:
+                            name,
+
+                        visitor_email:
+                            email || null,
+
+                        visitor_phone:
+                            phone || null,
+
+                        status:
+                            "open",
+
+                        updated_at:
+                            new Date()
+                                .toISOString()
+
+                    })
+                    .eq(
+                        "id",
+                        conversation.id
+                    )
+                    .eq(
+                        "visitor_user_id",
+                        currentUser.id
+                    );
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            conversation =
+                {
+                    ...conversation,
+
+                    visitor_name:
+                        name,
+
+                    visitor_email:
+                        email || null,
+
+                    visitor_phone:
+                        phone || null,
+
+                    status:
+                        "open"
+                };
         }
 
-        if (!conversation) {
-            return;
-        }
 
         currentConversation =
             conversation;
 
-        saveVisitorDetails();
 
-        startScreen.style.display =
+        welcomeScreen.style.display =
             "none";
 
         chatScreen.style.display =
             "flex";
 
+
         await loadMessages();
 
+
         await loadNotifications();
+
 
         startRealtime();
 
     } catch (error) {
 
         console.error(
-            "Open chat error:",
+            "Start chat error:",
             error
         );
 
         alert(
-            "Unable to open Chat G Nurse. Please try again."
+            "Unable to start the chat. Please try again."
         );
 
     } finally {
 
         hideLoading();
+
+        startChatButton.disabled =
+            false;
     }
 }
 
 
 /* =========================================================
-   12. START CHAT BUTTON
+   START BUTTON — DIRECTLY CONNECTED
 ========================================================= */
 
 startChatButton.addEventListener(
     "click",
-    openChat
+    startChat
 );
-
-
-/* =========================================================
-   13. MESSAGE LOADING
-========================================================= */
+  /* =====================================================
+   LOAD MESSAGES
+===================================================== */
 
 async function loadMessages() {
 
-    if (!currentConversation) {
-        return;
-    }
+    if (!currentConversation) return;
 
-    const {
-        data,
-        error
-    } =
+    const { data, error } =
         await supabaseClient
             .from("g_nurse_messages")
             .select("*")
@@ -1279,20 +1602,15 @@ async function loadMessages() {
                 "conversation_id",
                 currentConversation.id
             )
-            .order(
-                "created_at",
-                {
-                    ascending: true
-                }
-            );
+            .order("created_at", {
+                ascending: true
+            });
 
     if (error) {
-
         console.error(
-            "Message loading error:",
+            "Load messages error:",
             error
         );
-
         return;
     }
 
@@ -1304,29 +1622,27 @@ async function loadMessages() {
             emptyChat
         );
 
-    } else {
+        return;
+    }
 
-        data.forEach(
-            function(message) {
+    for (const message of data) {
 
-                renderMessage(
-                    message
-                );
-
-            }
+        await renderMessage(
+            message
         );
     }
 
-    messages.scrollTop =
-        messages.scrollHeight;
+    scrollMessagesToBottom();
 }
 
 
-/* =========================================================
-   14. RENDER MESSAGE
-========================================================= */
+/* =====================================================
+   RENDER ONE MESSAGE
+===================================================== */
 
-function renderMessage(message) {
+async function renderMessage(message) {
+
+    if (!message) return;
 
     const row =
         document.createElement("div");
@@ -1347,154 +1663,84 @@ function renderMessage(message) {
 
     if (message.deleted_at) {
 
-        bubble.innerHTML =
-            "<em>This message was unsent.</em>";
+        bubble.innerHTML = `
+            <div style="
+                font-style:italic;
+                opacity:.65;
+            ">
+                Message unsent
+            </div>
+            <div class="message-time">
+                ${escapeHTML(
+                    formatMessageTime(
+                        message.created_at
+                    )
+                )}
+            </div>
+        `;
 
-    } else {
+        row.appendChild(bubble);
+        messages.appendChild(row);
 
-        if (message.message) {
-
-            const text =
-                document.createElement("div");
-
-            text.innerHTML =
-                escapeHTML(
-                    message.message
-                ).replace(
-                    /\n/g,
-                    "<br>"
-                );
-
-            bubble.appendChild(
-                text
-            );
-        }
+        return;
+    }
 
 
-        if (message.attachment_url) {
+    /* TEXT MESSAGE */
 
-            const attachment =
-                document.createElement("div");
+    if (message.message) {
 
-            attachment.className =
-                "message-file";
+        const text =
+            document.createElement("div");
 
-            attachment.textContent =
-                "📎 " +
-                (
-                    message.attachment_name ||
-                    "Attachment"
-                );
+        text.className =
+            "message-text";
 
-            attachment.style.cursor =
-                "pointer";
+        text.textContent =
+            message.message;
 
-            attachment.addEventListener(
-                "click",
-                function() {
+        bubble.appendChild(text);
+    }
 
-                    openPrivateFile(
-                        message
-                    );
 
-                }
+    /* IMAGE / FILE ATTACHMENT */
+
+    if (message.attachment_url) {
+
+        const attachment =
+            await createAttachmentElement(
+                message
             );
 
+        if (attachment) {
             bubble.appendChild(
                 attachment
-            );
-        }
-
-
-        if (message.voice_url) {
-
-            const audio =
-                document.createElement("audio");
-
-            audio.controls = true;
-
-            audio.style.width =
-                "220px";
-
-            audio.style.marginTop =
-                "7px";
-
-            audio.dataset.messageId =
-                message.id;
-
-            audio.addEventListener(
-                "play",
-                function() {
-
-                    markVoiceListened(
-                        message.id
-                    );
-
-                }
-            );
-
-            getPrivateUrl(
-                message.voice_url
-            ).then(
-                function(url) {
-
-                    if (url) {
-                        audio.src = url;
-                    }
-
-                }
-            );
-
-            bubble.appendChild(
-                audio
-            );
-        }
-
-
-        if (
-            message.attachment_type &&
-            message.attachment_type.startsWith(
-                "image/"
-            )
-        ) {
-
-            getPrivateUrl(
-                message.attachment_url
-            ).then(
-                function(url) {
-
-                    if (!url) {
-                        return;
-                    }
-
-                    const image =
-                        document.createElement(
-                            "img"
-                        );
-
-                    image.className =
-                        "message-image";
-
-                    image.src =
-                        url;
-
-                    image.alt =
-                        message.attachment_name ||
-                        "Image";
-
-                    bubble.insertBefore(
-                        image,
-                        bubble.firstChild
-                    );
-
-                }
             );
         }
     }
 
 
+    /* VOICE NOTE */
+
+    if (message.voice_url) {
+
+        const voice =
+            await createVoiceElement(
+                message
+            );
+
+        if (voice) {
+            bubble.appendChild(
+                voice
+            );
+        }
+    }
+
+
+    /* TIME */
+
     const time =
-        document.createElement("span");
+        document.createElement("div");
 
     time.className =
         "message-time";
@@ -1504,86 +1750,328 @@ function renderMessage(message) {
             message.created_at
         );
 
-    bubble.appendChild(
-        time
-    );
+    bubble.appendChild(time);
 
-    row.appendChild(
-        bubble
-    );
 
-    messages.appendChild(
-        row
-    );
+    /* UNSEND BUTTON */
 
     if (
-        message.sender_type === "admin" &&
+        message.sender_type ===
+            "visitor"
+        &&
+        !message.deleted_at
+    ) {
+
+        const unsendButton =
+            document.createElement(
+                "button"
+            );
+
+        unsendButton.type =
+            "button";
+
+        unsendButton.textContent =
+            "Unsend";
+
+        unsendButton.style.cssText = `
+            border:none;
+            background:transparent;
+            color:#b00020;
+            font-size:11px;
+            margin-top:4px;
+            cursor:pointer;
+            padding:2px 0;
+        `;
+
+        unsendButton.addEventListener(
+            "click",
+            async () => {
+
+                const confirmed =
+                    confirm(
+                        "Unsend this message?"
+                    );
+
+                if (!confirmed) return;
+
+                await unsendMessage(
+                    message.id
+                );
+            }
+        );
+
+        bubble.appendChild(
+            unsendButton
+        );
+    }
+
+
+    row.appendChild(bubble);
+
+    messages.appendChild(row);
+
+
+    /* MARK ADMIN MESSAGE AS SEEN */
+
+    if (
+        message.sender_type ===
+            "admin"
+        &&
         !message.viewed
     ) {
 
-        markMessageSeen(
+        await markMessageSeen(
             message.id
         );
     }
 }
-        <script>
 
-/* =========================================================
-   8. PRIVATE STORAGE URL
-========================================================= */
 
-async function getPrivateUrl(
-    storagePath
+/* =====================================================
+   ATTACHMENT ELEMENT
+===================================================== */
+
+async function createAttachmentElement(
+    message
 ) {
 
-    if (!storagePath) {
+    try {
+
+        const url =
+            await getSignedAttachmentUrl(
+                message.attachment_url
+            );
+
+        if (!url) return null;
+
+
+        const wrapper =
+            document.createElement("div");
+
+        wrapper.style.marginTop =
+            "8px";
+
+
+        const type =
+            message.attachment_type ||
+            "";
+
+
+        /* IMAGE */
+
+        if (
+            type.startsWith(
+                "image/"
+            )
+        ) {
+
+            const image =
+                document.createElement(
+                    "img"
+                );
+
+            image.src = url;
+
+            image.alt =
+                message.attachment_name ||
+                "Image";
+
+            image.loading =
+                "lazy";
+
+            image.style.cssText = `
+                max-width:100%;
+                border-radius:10px;
+                display:block;
+                cursor:pointer;
+            `;
+
+            image.addEventListener(
+                "click",
+                () => {
+                    window.open(
+                        url,
+                        "_blank",
+                        "noopener,noreferrer"
+                    );
+                }
+            );
+
+            wrapper.appendChild(
+                image
+            );
+
+            return wrapper;
+        }
+
+
+        /* GENERAL FILE */
+
+        const link =
+            document.createElement(
+                "a"
+            );
+
+        link.href = url;
+
+        link.target =
+            "_blank";
+
+        link.rel =
+            "noopener noreferrer";
+
+        link.textContent =
+            "📎 " +
+            (
+                message.attachment_name ||
+                "Open attachment"
+            );
+
+        link.style.cssText = `
+            display:inline-block;
+            color:#07562f;
+            font-weight:600;
+            text-decoration:none;
+            word-break:break-word;
+        `;
+
+        wrapper.appendChild(
+            link
+        );
+
+        return wrapper;
+
+    } catch (error) {
+
+        console.error(
+            "Attachment error:",
+            error
+        );
+
         return null;
     }
+}
 
-    let bucketName = "";
 
-    if (
-        storagePath.startsWith("images/")
-    ) {
+/* =====================================================
+   VOICE NOTE ELEMENT
+===================================================== */
 
-        bucketName =
-            "g-nurse-images";
+async function createVoiceElement(
+    message
+) {
 
-        storagePath =
-            storagePath.replace(
-                "images/",
-                ""
+    try {
+
+        const url =
+            await getSignedVoiceUrl(
+                message.voice_url
             );
 
-    } else if (
-        storagePath.startsWith("files/")
-    ) {
+        if (!url) return null;
 
-        bucketName =
-            "g-nurse-files";
 
-        storagePath =
-            storagePath.replace(
-                "files/",
-                ""
+        const wrapper =
+            document.createElement("div");
+
+        wrapper.style.marginTop =
+            "8px";
+
+
+        const audio =
+            document.createElement(
+                "audio"
             );
 
-    } else if (
-        storagePath.startsWith("voice/")
-    ) {
+        audio.controls = true;
 
-        bucketName =
-            "g-nurse-voice";
+        audio.preload =
+            "metadata";
 
-        storagePath =
-            storagePath.replace(
-                "voice/",
-                ""
-            );
+        audio.src = url;
 
-    } else {
+        audio.style.cssText = `
+            width:100%;
+            max-width:260px;
+        `;
+
+
+        audio.addEventListener(
+            "play",
+            async () => {
+
+                await markVoiceListened(
+                    message.id
+                );
+            },
+            {
+                once: true
+            }
+        );
+
+
+        wrapper.appendChild(
+            audio
+        );
+
+        return wrapper;
+
+    } catch (error) {
+
+        console.error(
+            "Voice error:",
+            error
+        );
 
         return null;
+    }
+}
+
+
+/* =====================================================
+   SIGNED IMAGE / FILE URL
+===================================================== */
+
+async function getSignedAttachmentUrl(
+    storedPath
+) {
+
+    if (!storedPath) return null;
+
+    let bucket =
+        "g-nurse-files";
+
+    let path =
+        storedPath;
+
+
+    if (
+        storedPath.startsWith(
+            "images/"
+        )
+    ) {
+
+        bucket =
+            "g-nurse-images";
+
+        path =
+            storedPath.substring(
+                "images/".length
+            );
+
+    } else if (
+        storedPath.startsWith(
+            "files/"
+        )
+    ) {
+
+        bucket =
+            "g-nurse-files";
+
+        path =
+            storedPath.substring(
+                "files/".length
+            );
     }
 
 
@@ -1593,12 +2081,11 @@ async function getPrivateUrl(
     } =
         await supabaseClient
             .storage
-            .from(bucketName)
+            .from(bucket)
             .createSignedUrl(
-                storagePath,
+                path,
                 3600
             );
-
 
     if (error) {
 
@@ -1610,71 +2097,92 @@ async function getPrivateUrl(
         return null;
     }
 
+    return data?.signedUrl || null;
+}
+
+
+/* =====================================================
+   SIGNED VOICE URL
+===================================================== */
+
+async function getSignedVoiceUrl(
+    storedPath
+) {
+
+    if (!storedPath) return null;
+
+    let path =
+        storedPath;
+
+    if (
+        path.startsWith(
+            "voice/"
+        )
+    ) {
+
+        path =
+            path.substring(
+                "voice/".length
+            );
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .storage
+            .from("g-nurse-voice")
+            .createSignedUrl(
+                path,
+                3600
+            );
+
+    if (error) {
+
+        console.error(
+            "Voice signed URL error:",
+            error
+        );
+
+        return null;
+    }
 
     return data?.signedUrl || null;
 }
 
 
-/* =========================================================
-   9. OPEN PRIVATE FILE
-========================================================= */
+/* =====================================================
+   SCROLL TO BOTTOM
+===================================================== */
 
-async function openPrivateFile(
-    message
-) {
+function scrollMessagesToBottom() {
 
-    if (!message?.attachment_url) {
-        return;
-    }
+    requestAnimationFrame(
+        () => {
 
+            messages.scrollTop =
+                messages.scrollHeight;
 
-    showLoading(
-        "Opening file..."
-    );
-
-
-    const url =
-        await getPrivateUrl(
-            message.attachment_url
-        );
-
-
-    hideLoading();
-
-
-    if (!url) {
-
-        alert(
-            "Unable to open this file."
-        );
-
-        return;
-    }
-
-
-    window.open(
-        url,
-        "_blank",
-        "noopener,noreferrer"
+        }
     );
 }
 
 
-/* =========================================================
-   10. MARK ADMIN MESSAGE AS SEEN
-========================================================= */
+/* =====================================================
+   MARK ADMIN MESSAGE AS SEEN
+===================================================== */
 
 async function markMessageSeen(
     messageId
 ) {
 
-    if (!messageId) {
-        return;
-    }
+    if (!messageId) return;
 
-
-    try {
-
+    const {
+        error
+    } =
         await supabaseClient
             .rpc(
                 "g_nurse_mark_message_seen",
@@ -1684,594 +2192,65 @@ async function markMessageSeen(
                 }
             );
 
-    } catch (error) {
+    if (error) {
 
         console.error(
             "Mark seen error:",
             error
         );
 
-    }
-}
-
-
-/* =========================================================
-   11. SEND TEXT MESSAGE
-========================================================= */
-
-async function sendTextMessage() {
-
-    const text =
-        messageInput
-            .value
-            .trim();
-
-
-    if (!text) {
         return;
     }
 
-
-    if (!currentConversation) {
-
-        alert(
-            "Please start the chat first."
-        );
-
-        return;
-    }
-
-
-    sendButton.disabled = true;
-
-
-    try {
-
-        const {
-            error
-        } =
-            await supabaseClient
-                .from(
-                    "g_nurse_messages"
-                )
-                .insert({
-
-                    conversation_id:
-                        currentConversation.id,
-
-                    sender_type:
-                        "visitor",
-
-                    message:
-                        text
-
-                });
-
-
-        if (error) {
-            throw error;
-        }
-
-
-        messageInput.value = "";
-
-        messageInput.style.height =
-            "auto";
-
-
-        await loadMessages();
-
-    } catch (error) {
-
-        console.error(
-            "Send message error:",
-            error
-        );
-
-        alert(
-            "Message could not be sent."
-        );
-
-    } finally {
-
-        sendButton.disabled = false;
-    }
+    await loadNotifications();
 }
 
 
-/* =========================================================
-   12. DETERMINE STORAGE BUCKET
-========================================================= */
+/* =====================================================
+   MARK VOICE AS LISTENED
+===================================================== */
 
-function getBucketForFile(
-    file
+async function markVoiceListened(
+    messageId
 ) {
 
-    if (!file) {
-        return null;
-    }
-
-
-    if (
-        file.type &&
-        file.type.startsWith(
-            "image/"
-        )
-    ) {
-
-        return "g-nurse-images";
-    }
-
-
-    return "g-nurse-files";
-}
-
-
-/* =========================================================
-   13. CREATE STORAGE PATH
-========================================================= */
-
-function createStoragePath(
-    file
-) {
-
-    const extension =
-        file.name.includes(".")
-            ? file.name
-                .split(".")
-                .pop()
-                .toLowerCase()
-            : "file";
-
-
-    const randomPart =
-        Math.random()
-            .toString(36)
-            .substring(2, 10);
-
-
-    return (
-        currentUser.id +
-        "/" +
-        currentConversation.id +
-        "/" +
-        Date.now() +
-        "_" +
-        randomPart +
-        "." +
-        extension
-    );
-}
-
-
-/* =========================================================
-   14. UPLOAD ATTACHMENT
-========================================================= */
-
-async function uploadAttachment(
-    file
-) {
-
-    if (!file) {
-        return null;
-    }
-
-
-    const bucket =
-        getBucketForFile(
-            file
-        );
-
-
-    const path =
-        createStoragePath(
-            file
-        );
-
+    if (!messageId) return;
 
     const {
         error
     } =
         await supabaseClient
-            .storage
-            .from(bucket)
-            .upload(
-                path,
-                file,
+            .rpc(
+                "g_nurse_mark_voice_listened",
                 {
-                    cacheControl:
-                        "3600",
-
-                    upsert:
-                        false
+                    p_message_id:
+                        messageId
                 }
             );
 
-
     if (error) {
-        throw error;
-    }
-
-
-    let attachmentPrefix =
-        "files/";
-
-    if (
-        bucket ===
-        "g-nurse-images"
-    ) {
-
-        attachmentPrefix =
-            "images/";
-    }
-
-
-    return {
-        path:
-            attachmentPrefix +
-            path,
-
-        name:
-            file.name,
-
-        type:
-            file.type ||
-            "application/octet-stream"
-    };
-}
-
-
-/* =========================================================
-   15. SEND ATTACHMENT
-========================================================= */
-
-async function sendAttachment() {
-
-    if (!selectedFile) {
-        return;
-    }
-
-
-    if (!currentConversation) {
-
-        alert(
-            "Please start the chat first."
-        );
-
-        return;
-    }
-
-
-    const file =
-        selectedFile;
-
-
-    sendButton.disabled = true;
-
-
-    try {
-
-        showLoading(
-            "Uploading file..."
-        );
-
-
-        const uploaded =
-            await uploadAttachment(
-                file
-            );
-
-
-        const {
-            error
-        } =
-            await supabaseClient
-                .from(
-                    "g_nurse_messages"
-                )
-                .insert({
-
-                    conversation_id:
-                        currentConversation.id,
-
-                    sender_type:
-                        "visitor",
-
-                    attachment_url:
-                        uploaded.path,
-
-                    attachment_name:
-                        uploaded.name,
-
-                    attachment_type:
-                        uploaded.type
-
-                });
-
-
-        if (error) {
-            throw error;
-        }
-
-
-        selectedFile =
-            null;
-
-        fileInput.value =
-            "";
-
-        attachmentPreview.style.display =
-            "none";
-
-        attachmentPreview.innerHTML =
-            "";
-
-
-        await loadMessages();
-
-    } catch (error) {
 
         console.error(
-            "Attachment error:",
+            "Mark voice listened error:",
             error
         );
-
-        alert(
-            "The file could not be sent."
-        );
-
-    } finally {
-
-        hideLoading();
-
-        sendButton.disabled = false;
     }
 }
 
 
-/* =========================================================
-   16. FILE INPUT
-========================================================= */
-
-fileInput.addEventListener(
-    "change",
-    function () {
-
-        const file =
-            this.files?.[0];
-
-
-        if (!file) {
-
-            selectedFile =
-                null;
-
-            attachmentPreview.style.display =
-                "none";
-
-            attachmentPreview.innerHTML =
-                "";
-
-            return;
-        }
-
-
-        selectedFile =
-            file;
-
-
-        attachmentPreview.style.display =
-            "flex";
-
-
-        attachmentPreview.innerHTML =
-            "";
-
-
-        const name =
-            document.createElement(
-                "span"
-            );
-
-        name.textContent =
-            file.name;
-
-
-        const size =
-            document.createElement(
-                "small"
-            );
-
-        size.textContent =
-            formatFileSize(
-                file.size
-            );
-
-
-        attachmentPreview.appendChild(
-            name
-        );
-
-        attachmentPreview.appendChild(
-            size
-        );
-    }
-);
-
-
-/* =========================================================
-   17. FILE SIZE
-========================================================= */
-
-function formatFileSize(
-    bytes
-) {
-
-    if (!bytes) {
-        return "0 B";
-    }
-
-
-    const units = [
-        "B",
-        "KB",
-        "MB",
-        "GB"
-    ];
-
-
-    let size =
-        bytes;
-
-    let index =
-        0;
-
-
-    while (
-        size >= 1024 &&
-        index <
-            units.length - 1
-    ) {
-
-        size /=
-            1024;
-
-        index++;
-    }
-
-
-    return (
-        size.toFixed(
-            index === 0
-                ? 0
-                : 1
-        ) +
-        " " +
-        units[index]
-    );
-}
-
-
-/* =========================================================
-   18. SEND BUTTON
-========================================================= */
-
-sendButton.addEventListener(
-    "click",
-    async function () {
-
-        if (selectedFile) {
-
-            await sendAttachment();
-
-            return;
-        }
-
-
-        await sendTextMessage();
-    }
-);
-
-
-/* =========================================================
-   19. ENTER TO SEND
-========================================================= */
-
-messageInput.addEventListener(
-    "keydown",
-    async function (event) {
-
-        if (
-            event.key === "Enter" &&
-            !event.shiftKey
-        ) {
-
-            event.preventDefault();
-
-            if (selectedFile) {
-
-                await sendAttachment();
-
-            } else {
-
-                await sendTextMessage();
-            }
-        }
-    }
-);
-
-
-/* =========================================================
-   20. AUTO-GROW MESSAGE BOX
-========================================================= */
-
-messageInput.addEventListener(
-    "input",
-    function () {
-
-        this.style.height =
-            "auto";
-
-        this.style.height =
-            Math.min(
-                this.scrollHeight,
-                140
-            ) + "px";
-    }
-);
-
-
-/* =========================================================
-   21. REMOVE SELECTED FILE
-========================================================= */
-
-if (attachmentPreview) {
-
-    attachmentPreview.addEventListener(
-        "click",
-        function () {
-
-            selectedFile =
-                null;
-
-            fileInput.value =
-                "";
-
-            attachmentPreview.style.display =
-                "none";
-
-            attachmentPreview.innerHTML =
-                "";
-        }
-    );
-}
-
-
-/* =========================================================
-   22. UNSEND MESSAGE
-========================================================= */
+/* =====================================================
+   UNSEND MESSAGE
+===================================================== */
 
 async function unsendMessage(
     messageId
 ) {
 
-    if (!messageId) {
-        return;
-    }
-
-
-    const confirmed =
-        confirm(
-            "Unsend this message?"
-        );
-
-
-    if (!confirmed) {
-        return;
-    }
-
-
     try {
+
+        showLoading(
+            "Unsending message..."
+        );
 
         const {
             data,
@@ -2286,21 +2265,18 @@ async function unsendMessage(
                     }
                 );
 
-
         if (error) {
             throw error;
         }
 
-
         if (!data) {
 
             alert(
-                "This message can no longer be unsent."
+                "This message could not be unsent."
             );
 
             return;
         }
-
 
         await loadMessages();
 
@@ -2312,15 +2288,517 @@ async function unsendMessage(
         );
 
         alert(
-            "Unable to unsend message."
+            "Unable to unsend this message."
         );
+
+    } finally {
+
+        hideLoading();
+    }
+    }
+ /* =====================================================
+   UNSEND MESSAGE
+===================================================== */
+
+async function unsendMessage(messageId) {
+
+    try {
+
+        showLoading(
+            "Unsending message..."
+        );
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .rpc(
+                    "g_nurse_unsend_message",
+                    {
+                        p_message_id:
+                            messageId
+                    }
+                );
+
+        if (error) {
+            throw error;
+        }
+
+        if (!data) {
+
+            alert(
+                "This message could not be unsent."
+            );
+
+            return;
+        }
+
+        await loadMessages();
+
+    } catch (error) {
+
+        console.error(
+            "Unsend error:",
+            error
+        );
+
+        alert(
+            "Unable to unsend this message."
+        );
+
+    } finally {
+
+        hideLoading();
     }
 }
 
 
-/* =========================================================
-   23. VOICE RECORDING
-========================================================= */
+/* =====================================================
+   SEND TEXT MESSAGE
+===================================================== */
+
+async function sendTextMessage() {
+
+    if (!currentConversation) {
+
+        alert(
+            "Please start the chat first."
+        );
+
+        return;
+    }
+
+    const text =
+        messageInput.value.trim();
+
+    if (!text) return;
+
+    sendButton.disabled = true;
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("g_nurse_messages")
+                .insert({
+                    conversation_id:
+                        currentConversation.id,
+                    sender_type:
+                        "visitor",
+                    message:
+                        text
+                })
+                .select("*")
+                .single();
+
+        if (error) {
+            throw error;
+        }
+
+        messageInput.value = "";
+
+        await loadMessages();
+
+        scrollMessagesToBottom();
+
+    } catch (error) {
+
+        console.error(
+            "Send message error:",
+            error
+        );
+
+        alert(
+            "Unable to send your message."
+        );
+
+    } finally {
+
+        sendButton.disabled = false;
+    }
+}
+
+
+/* =====================================================
+   FILE SELECTION
+===================================================== */
+
+fileButton.addEventListener(
+    "click",
+    () => {
+
+        fileInput.click();
+
+    }
+);
+
+
+fileInput.addEventListener(
+    "change",
+    () => {
+
+        const file =
+            fileInput.files?.[0];
+
+        if (!file) {
+
+            selectedFile = null;
+
+            attachmentPreview.innerHTML =
+                "";
+
+            return;
+        }
+
+        selectedFile = file;
+
+        attachmentPreview.innerHTML = `
+            <div style="
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                gap:10px;
+                padding:8px 10px;
+                background:#f1f5f5;
+                border-radius:8px;
+                margin-bottom:8px;
+                font-size:13px;
+            ">
+
+                <span style="
+                    overflow:hidden;
+                    text-overflow:ellipsis;
+                    white-space:nowrap;
+                ">
+                    📎 ${escapeHTML(file.name)}
+                </span>
+
+                <button
+                    type="button"
+                    id="removeAttachmentButton"
+                    style="
+                        border:none;
+                        background:none;
+                        color:#b00020;
+                        cursor:pointer;
+                        font-size:16px;
+                    "
+                >
+                    ✕
+                </button>
+
+            </div>
+        `;
+
+        document
+            .getElementById(
+                "removeAttachmentButton"
+            )
+            ?.addEventListener(
+                "click",
+                clearSelectedFile
+            );
+    }
+);
+
+
+/* =====================================================
+   CLEAR SELECTED FILE
+===================================================== */
+
+function clearSelectedFile() {
+
+    selectedFile = null;
+
+    fileInput.value = "";
+
+    attachmentPreview.innerHTML =
+        "";
+}
+
+
+/* =====================================================
+   UPLOAD ATTACHMENT
+===================================================== */
+
+async function uploadAttachment(file) {
+
+    if (!currentUser) {
+
+        throw new Error(
+            "Visitor authentication is unavailable."
+        );
+    }
+
+    if (!currentConversation) {
+
+        throw new Error(
+            "Conversation is unavailable."
+        );
+    }
+
+
+    const isImage =
+        file.type.startsWith(
+            "image/"
+        );
+
+
+    const bucket =
+        isImage
+            ? "g-nurse-images"
+            : "g-nurse-files";
+
+
+    const folder =
+        isImage
+            ? "images"
+            : "files";
+
+
+    const safeName =
+        file.name.replace(
+            /[^a-zA-Z0-9._-]/g,
+            "_"
+        );
+
+
+    const uniqueName =
+        Date.now() +
+        "_" +
+        Math.random()
+            .toString(36)
+            .substring(2, 10) +
+        "_" +
+        safeName;
+
+
+    const storagePath =
+        currentUser.id +
+        "/" +
+        currentConversation.id +
+        "/" +
+        uniqueName;
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .storage
+            .from(bucket)
+            .upload(
+                storagePath,
+                file,
+                {
+                    upsert: false,
+                    contentType:
+                        file.type ||
+                        "application/octet-stream"
+                }
+            );
+
+
+    if (error) {
+        throw error;
+    }
+
+
+    const databasePath =
+        folder +
+        "/" +
+        storagePath;
+
+
+    const {
+        data,
+        error: messageError
+    } =
+        await supabaseClient
+            .from("g_nurse_messages")
+            .insert({
+                conversation_id:
+                    currentConversation.id,
+                sender_type:
+                    "visitor",
+                message:
+                    null,
+                attachment_url:
+                    databasePath,
+                attachment_name:
+                    file.name,
+                attachment_type:
+                    file.type ||
+                    "application/octet-stream"
+            })
+            .select("*")
+            .single();
+
+
+    if (messageError) {
+
+        await supabaseClient
+            .storage
+            .from(bucket)
+            .remove([
+                storagePath
+            ]);
+
+        throw messageError;
+    }
+
+
+    return data;
+}
+
+
+/* =====================================================
+   SEND SELECTED FILE
+===================================================== */
+
+async function sendSelectedFile() {
+
+    if (!selectedFile) return;
+
+    if (!currentConversation) {
+
+        alert(
+            "Please start the chat first."
+        );
+
+        return;
+    }
+
+
+    sendButton.disabled = true;
+
+    try {
+
+        showLoading(
+            "Uploading file..."
+        );
+
+        await uploadAttachment(
+            selectedFile
+        );
+
+        clearSelectedFile();
+
+        await loadMessages();
+
+        scrollMessagesToBottom();
+
+    } catch (error) {
+
+        console.error(
+            "File upload error:",
+            error
+        );
+
+        alert(
+            "Unable to send the file."
+        );
+
+    } finally {
+
+        hideLoading();
+
+        sendButton.disabled = false;
+    }
+}
+
+
+/* =====================================================
+   SEND BUTTON
+===================================================== */
+
+sendButton.addEventListener(
+    "click",
+    async () => {
+
+        if (selectedFile) {
+
+            await sendSelectedFile();
+
+            return;
+        }
+
+        await sendTextMessage();
+    }
+);
+
+
+/* =====================================================
+   ENTER KEY TO SEND
+===================================================== */
+
+messageInput.addEventListener(
+    "keydown",
+    async (event) => {
+
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
+
+            event.preventDefault();
+
+            if (selectedFile) {
+
+                await sendSelectedFile();
+
+            } else {
+
+                await sendTextMessage();
+            }
+        }
+    }
+);
+
+
+/* =====================================================
+   BACK BUTTON
+===================================================== */
+
+backButton.addEventListener(
+    "click",
+    () => {
+
+        chatScreen.style.display =
+            "none";
+
+        welcomeScreen.style.display =
+            "flex";
+    }
+);
+/* =====================================================
+   VOICE RECORDING
+===================================================== */
+
+voiceButton.addEventListener(
+    "click",
+    async () => {
+
+        if (mediaRecorder &&
+            mediaRecorder.state === "recording") {
+
+            stopVoiceRecording();
+
+        } else {
+
+            await startVoiceRecording();
+        }
+    }
+);
+
+
+/* =====================================================
+   START VOICE RECORDING
+===================================================== */
 
 async function startVoiceRecording() {
 
@@ -2333,33 +2811,28 @@ async function startVoiceRecording() {
         return;
     }
 
-
     if (
         !navigator.mediaDevices ||
         !navigator.mediaDevices.getUserMedia
     ) {
 
         alert(
-            "Voice recording is not supported on this device/browser."
+            "Voice recording is not supported by this browser."
         );
 
         return;
     }
 
-
     try {
 
         const stream =
-            await navigator
-                .mediaDevices
-                .getUserMedia({
-                    audio: true
-                });
+            await navigator.mediaDevices.getUserMedia({
+                audio: true
+            });
 
+        recordedChunks = [];
 
-        recordedChunks =
-            [];
-
+        recordingSeconds = 0;
 
         mediaRecorder =
             new MediaRecorder(
@@ -2368,7 +2841,7 @@ async function startVoiceRecording() {
 
 
         mediaRecorder.ondataavailable =
-            function (event) {
+            event => {
 
                 if (
                     event.data &&
@@ -2383,7 +2856,7 @@ async function startVoiceRecording() {
 
 
         mediaRecorder.onstop =
-            async function () {
+            async () => {
 
                 stream
                     .getTracks()
@@ -2392,28 +2865,44 @@ async function startVoiceRecording() {
                             track.stop()
                     );
 
-
                 await finishVoiceRecording();
             };
 
 
         mediaRecorder.start();
 
+        voiceButton.textContent =
+            "⏹️";
 
-        recordingSeconds =
-            0;
+        recordingStatus.style.display =
+            "block";
 
-
-        updateRecordingUI();
-
+        recordingStatus.textContent =
+            "Recording 00:00";
 
         recordingTimer =
             setInterval(
-                function () {
+                () => {
 
                     recordingSeconds++;
 
-                    updateRecordingUI();
+                    const minutes =
+                        Math.floor(
+                            recordingSeconds /
+                            60
+                        );
+
+                    const seconds =
+                        recordingSeconds %
+                        60;
+
+                    recordingStatus.textContent =
+                        "Recording " +
+                        String(minutes)
+                            .padStart(2, "0") +
+                        ":" +
+                        String(seconds)
+                            .padStart(2, "0");
 
                 },
                 1000
@@ -2427,62 +2916,25 @@ async function startVoiceRecording() {
         );
 
         alert(
-            "Microphone permission is required."
+            "Microphone permission is required to record a voice note."
         );
     }
 }
 
 
-/* =========================================================
-   24. UPDATE RECORDING UI
-========================================================= */
-
-function updateRecordingUI() {
-
-    if (!recordingStatus) {
-        return;
-    }
-
-
-    const minutes =
-        Math.floor(
-            recordingSeconds / 60
-        );
-
-
-    const seconds =
-        recordingSeconds % 60;
-
-
-    recordingStatus.textContent =
-        "Recording " +
-        String(minutes).padStart(
-            2,
-            "0"
-        ) +
-        ":" +
-        String(seconds).padStart(
-            2,
-            "0"
-        );
-}
-
-
-/* =========================================================
-   25. STOP VOICE RECORDING
-========================================================= */
+/* =====================================================
+   STOP VOICE RECORDING
+===================================================== */
 
 function stopVoiceRecording() {
 
     if (
         mediaRecorder &&
-        mediaRecorder.state !==
-            "inactive"
+        mediaRecorder.state === "recording"
     ) {
 
         mediaRecorder.stop();
     }
-
 
     if (recordingTimer) {
 
@@ -2490,147 +2942,73 @@ function stopVoiceRecording() {
             recordingTimer
         );
 
-        recordingTimer =
-            null;
+        recordingTimer = null;
     }
 
-
-    if (recordingStatus) {
-
-        recordingStatus.textContent =
-            "";
-    }
+    voiceButton.textContent =
+        "🎤";
 }
 
 
-/* =========================================================
-   26. FINISH VOICE RECORDING
-========================================================= */
+/* =====================================================
+   FINISH VOICE RECORDING
+===================================================== */
 
 async function finishVoiceRecording() {
 
-    if (
-        !recordedChunks.length ||
-        !currentConversation
-    ) {
+    recordingStatus.style.display =
+        "none";
+
+    voiceButton.textContent =
+        "🎤";
+
+    if (!recordedChunks.length) {
+
+        alert(
+            "No voice recording was captured."
+        );
 
         return;
     }
 
 
-    try {
-
-        showLoading(
-            "Sending voice note..."
+    const blob =
+        new Blob(
+            recordedChunks,
+            {
+                type:
+                    mediaRecorder?.mimeType ||
+                    "audio/webm"
+            }
         );
 
 
-        const mimeType =
-            mediaRecorder?.mimeType ||
-            "audio/webm";
+    recordedChunks = [];
 
 
-        const blob =
-            new Blob(
-                recordedChunks,
-                {
-                    type:
-                        mimeType
-                }
-            );
+    try {
 
+        showLoading(
+            "Uploading voice note..."
+        );
 
-        const extension =
-            mimeType.includes(
-                "mp4"
-            )
-                ? "m4a"
-                : "webm";
-
-
-        const path =
-            currentUser.id +
-            "/" +
-            currentConversation.id +
-            "/" +
-            Date.now() +
-            "_voice." +
-            extension;
-
-
-        const {
-            error:
-                uploadError
-        } =
-            await supabaseClient
-                .storage
-                .from(
-                    "g-nurse-voice"
-                )
-                .upload(
-                    path,
-                    blob,
-                    {
-                        contentType:
-                            mimeType,
-
-                        cacheControl:
-                            "3600",
-
-                        upsert:
-                            false
-                    }
-                );
-
-
-        if (uploadError) {
-            throw uploadError;
-        }
-
-
-        const {
-            error:
-                messageError
-        } =
-            await supabaseClient
-                .from(
-                    "g_nurse_messages"
-                )
-                .insert({
-
-                    conversation_id:
-                        currentConversation.id,
-
-                    sender_type:
-                        "visitor",
-
-                    voice_url:
-                        "voice/" +
-                        path
-
-                });
-
-
-        if (messageError) {
-            throw messageError;
-        }
-
-
-        recordedChunks =
-            [];
-
+        await uploadVoiceNote(
+            blob
+        );
 
         await loadMessages();
+
+        scrollMessagesToBottom();
 
     } catch (error) {
 
         console.error(
-            "Voice error:",
+            "Voice upload error:",
             error
         );
 
         alert(
-            "Voice note could not be sent."
+            "Unable to send the voice note."
         );
 
     } finally {
@@ -2640,52 +3018,126 @@ async function finishVoiceRecording() {
 }
 
 
-/* =========================================================
-   27. VOICE BUTTON
-========================================================= */
+/* =====================================================
+   UPLOAD VOICE NOTE
+===================================================== */
 
-if (voiceButton) {
+async function uploadVoiceNote(
+    blob
+) {
 
-    voiceButton.addEventListener(
-        "click",
-        async function () {
+    if (!currentUser) {
 
-            if (
-                mediaRecorder &&
-                mediaRecorder.state ===
-                    "recording"
-            ) {
+        throw new Error(
+            "Visitor authentication is unavailable."
+        );
+    }
 
-                stopVoiceRecording();
+    if (!currentConversation) {
 
-            } else {
-
-                await startVoiceRecording();
-            }
-        }
-    );
-}
+        throw new Error(
+            "Conversation is unavailable."
+        );
+    }
 
 
-/* =========================================================
-   28. NOTIFICATIONS
-========================================================= */
+    const extension =
+        blob.type.includes(
+            "mp4"
+        )
+            ? "m4a"
+            : "webm";
+
+
+    const fileName =
+        Date.now() +
+        "_" +
+        Math.random()
+            .toString(36)
+            .substring(2, 10) +
+        "." +
+        extension;
+
+
+    const storagePath =
+        currentUser.id +
+        "/" +
+        currentConversation.id +
+        "/" +
+        fileName;
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .storage
+            .from("g-nurse-voice")
+            .upload(
+                storagePath,
+                blob,
+                {
+                    upsert: false,
+                    contentType:
+                        blob.type ||
+                        "audio/webm"
+                }
+            );
+
+
+    if (error) {
+        throw error;
+    }
+
+
+    const databasePath =
+        "voice/" +
+        storagePath;
+
+
+    const {
+        error: messageError
+    } =
+        await supabaseClient
+            .from("g_nurse_messages")
+            .insert({
+                conversation_id:
+                    currentConversation.id,
+                sender_type:
+                    "visitor",
+                message:
+                    null,
+                voice_url:
+                    databasePath
+            });
+
+
+    if (messageError) {
+
+        await supabaseClient
+            .storage
+            .from("g-nurse-voice")
+            .remove([
+                storagePath
+            ]);
+
+        throw messageError;
+    }
+    }    
+/* =====================================================
+   LOAD NOTIFICATIONS
+===================================================== */
 
 async function loadNotifications() {
 
-    if (!currentUser) {
-        return;
-    }
-
+    if (!currentUser) return;
 
     const {
         data,
         error
     } =
         await supabaseClient
-            .from(
-                "g_nurse_notifications"
-            )
+            .from("g_nurse_notifications")
             .select("*")
             .eq(
                 "recipient_user_id",
@@ -2694,23 +3146,20 @@ async function loadNotifications() {
             .order(
                 "created_at",
                 {
-                    ascending:
-                        false
+                    ascending: false
                 }
             )
             .limit(50);
 
-
     if (error) {
 
         console.error(
-            "Notification error:",
+            "Load notifications error:",
             error
         );
 
         return;
     }
-
 
     renderNotifications(
         data || []
@@ -2718,122 +3167,157 @@ async function loadNotifications() {
 }
 
 
-/* =========================================================
-   29. RENDER NOTIFICATIONS
-========================================================= */
+/* =====================================================
+   RENDER NOTIFICATIONS
+===================================================== */
 
 function renderNotifications(
-    notifications
+    notificationData
 ) {
 
-    if (!notificationList) {
-        return;
-    }
-    notificationList.innerHTML = "";
+    notificationList.innerHTML =
+        "";
 
-
-    const unread =
-        notifications.filter(
-            item => !item.is_read
-        ).length;
-
-
-    updateNotificationBadge(
-        unread
-    );
-
-
-    if (!notifications.length) {
+    if (
+        !notificationData ||
+        notificationData.length === 0
+    ) {
 
         notificationList.innerHTML = `
-            <div class="empty-notifications">
+            <div style="
+                padding:30px 15px;
+                text-align:center;
+                color:#777;
+                font-size:14px;
+            ">
                 No notifications yet.
             </div>
         `;
 
+        notificationBadge.textContent =
+            "0";
+
+        notificationBadge.style.display =
+            "none";
+
         return;
     }
 
 
-    notifications.forEach(
-        function (notification) {
+    let unreadCount = 0;
+
+
+    notificationData.forEach(
+        notification => {
+
+            if (
+                !notification.is_read
+            ) {
+
+                unreadCount++;
+            }
+
 
             const item =
                 document.createElement(
                     "div"
                 );
 
-
-            item.className =
-                "notification-item" +
-                (
+            item.style.cssText = `
+                padding:12px;
+                border-bottom:1px solid #eee;
+                cursor:pointer;
+                background:${
                     notification.is_read
-                        ? ""
-                        : " unread"
+                        ? "#ffffff"
+                        : "#eef9f7"
+                };
+            `;
+
+
+            const title =
+                document.createElement(
+                    "div"
+                );
+
+            title.style.cssText = `
+                font-weight:700;
+                font-size:14px;
+                margin-bottom:4px;
+            `;
+
+            title.textContent =
+                notification.title ||
+                "G Nurse";
+
+
+            const body =
+                document.createElement(
+                    "div"
+                );
+
+            body.style.cssText = `
+                font-size:13px;
+                color:#555;
+                line-height:1.4;
+            `;
+
+            body.textContent =
+                notification.body ||
+                "New message";
+
+
+            const time =
+                document.createElement(
+                    "div"
+                );
+
+            time.style.cssText = `
+                margin-top:5px;
+                font-size:11px;
+                color:#888;
+            `;
+
+            time.textContent =
+                formatMessageTime(
+                    notification.created_at
                 );
 
 
-            item.innerHTML = `
-                <strong>
-                    ${escapeHTML(
-                        notification.title ||
-                        "New message"
-                    )}
-                </strong>
+            item.appendChild(
+                title
+            );
 
-                <div>
-                    ${escapeHTML(
-                        notification.body ||
-                        ""
-                    )}
-                </div>
+            item.appendChild(
+                body
+            );
 
-                <small>
-                    ${formatMessageTime(
-                        notification.created_at
-                    )}
-                </small>
-            `;
+            item.appendChild(
+                time
+            );
 
 
             item.addEventListener(
                 "click",
-                async function () {
+                async () => {
+
+                    await markNotificationRead(
+                        notification.id
+                    );
+
+                    notificationPanel.style.display =
+                        "none";
 
                     if (
-                        !notification.is_read
+                        currentConversation &&
+                        notification.conversation_id ===
+                            currentConversation.id
                     ) {
-
-                        await supabaseClient
-                            .rpc(
-                                "g_nurse_mark_notification_read",
-                                {
-                                    p_notification_id:
-                                        notification.id
-                                }
-                            );
-                    }
-
-
-                    if (
-                        notification.conversation_id
-                    ) {
-
-                        if (
-                            currentConversation?.id !==
-                            notification.conversation_id
-                        ) {
-
-                            await openExistingConversation(
-                                notification.conversation_id
-                            );
-                        }
 
                         await loadMessages();
+
+                        scrollMessagesToBottom();
                     }
-
-
-                    await loadNotifications();
                 }
             );
 
@@ -2843,88 +3327,160 @@ function renderNotifications(
             );
         }
     );
+
+
+    if (unreadCount > 0) {
+
+        notificationBadge.textContent =
+            unreadCount > 99
+                ? "99+"
+                : String(unreadCount);
+
+        notificationBadge.style.display =
+            "flex";
+
+    } else {
+
+        notificationBadge.textContent =
+            "0";
+
+        notificationBadge.style.display =
+            "none";
+    }
 }
 
 
-/* =========================================================
-   30. OPEN EXISTING CONVERSATION
-========================================================= */
+/* =====================================================
+   MARK ONE NOTIFICATION AS READ
+===================================================== */
 
-async function openExistingConversation(
-    conversationId
+async function markNotificationRead(
+    notificationId
 ) {
 
-    if (!conversationId) {
+    if (!notificationId) return;
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .rpc(
+                "g_nurse_mark_notification_read",
+                {
+                    p_notification_id:
+                        notificationId
+                }
+            );
+
+    if (error) {
+
+        console.error(
+            "Mark notification error:",
+            error
+        );
+
         return;
     }
 
+    await loadNotifications();
+}
 
-    try {
 
-        const {
-            data,
+/* =====================================================
+   MARK ALL NOTIFICATIONS AS READ
+===================================================== */
+
+async function markAllNotificationsRead() {
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .rpc(
+                "g_nurse_mark_all_notifications_read"
+            );
+
+    if (error) {
+
+        console.error(
+            "Mark all notifications error:",
             error
-        } =
-            await supabaseClient
-                .from(
-                    "g_nurse_conversations"
-                )
-                .select("*")
-                .eq(
-                    "id",
-                    conversationId
-                )
-                .eq(
-                    "visitor_user_id",
-                    currentUser.id
-                )
-                .maybeSingle();
+        );
+
+        alert(
+            "Unable to mark notifications as read."
+        );
+
+        return;
+    }
+
+    await loadNotifications();
+}
 
 
-        if (error) {
-            throw error;
-        }
+/* =====================================================
+   NOTIFICATION BUTTON
+===================================================== */
 
+notificationButton.addEventListener(
+    "click",
+    async () => {
 
-        if (!data) {
+        if (
+            notificationPanel.style.display ===
+            "block"
+        ) {
+
+            notificationPanel.style.display =
+                "none";
+
             return;
         }
 
+        await loadNotifications();
 
-        currentConversation =
-            data;
-
-
-        chatScreen.style.display =
-            "flex";
-
-
-        welcomeScreen.style.display =
-            "none";
-
-
-        await loadMessages();
-
-    } catch (error) {
-
-        console.error(
-            "Open conversation error:",
-            error
-        );
+        notificationPanel.style.display =
+            "block";
     }
-}
+);
 
 
-/* =========================================================
-   31. REALTIME CONNECTION
-========================================================= */
+/* =====================================================
+   CLOSE NOTIFICATIONS
+===================================================== */
+
+closeNotificationsButton.addEventListener(
+    "click",
+    () => {
+
+        notificationPanel.style.display =
+            "none";
+    }
+);
+
+
+/* =====================================================
+   MARK ALL BUTTON
+===================================================== */
+
+markAllNotificationsButton.addEventListener(
+    "click",
+    async () => {
+
+        await markAllNotificationsRead();
+
+    }
+);    
+    /* =====================================================
+   REALTIME CONNECTION
+===================================================== */
 
 function startRealtime() {
 
-    if (!currentUser) {
-        return;
-    }
+    if (!currentConversation) return;
 
+
+    /* Remove previous channel */
 
     if (realtimeChannel) {
 
@@ -2933,344 +3489,214 @@ function startRealtime() {
                 realtimeChannel
             );
 
-        realtimeChannel =
-            null;
+        realtimeChannel = null;
     }
 
 
     realtimeChannel =
         supabaseClient
             .channel(
-                "g-nurse-visitor-" +
-                currentUser.id
+                "g-nurse-chat-" +
+                currentConversation.id +
+                "-" +
+                Date.now()
             );
 
 
-    realtimeChannel
-        .on(
-            "postgres_changes",
-            {
-                event:
-                    "INSERT",
+    /* New messages */
 
-                schema:
-                    "public",
+    realtimeChannel.on(
+        "postgres_changes",
+        {
+            event: "INSERT",
+            schema: "public",
+            table: "g_nurse_messages",
+            filter:
+                "conversation_id=eq." +
+                currentConversation.id
+        },
+        async () => {
 
-                table:
-                    "g_nurse_messages"
-            },
-            async function (payload) {
+            await loadMessages();
 
-                if (
-                    !currentConversation
-                ) {
-                    return;
-                }
-
-
-                if (
-                    payload.new
-                        ?.conversation_id !==
-                    currentConversation.id
-                ) {
-                    return;
-                }
-
-
-                await loadMessages();
-            }
-        )
-        .on(
-            "postgres_changes",
-            {
-                event:
-                    "UPDATE",
-
-                schema:
-                    "public",
-
-                table:
-                    "g_nurse_messages"
-            },
-            async function (payload) {
-
-                if (
-                    !currentConversation
-                ) {
-                    return;
-                }
-
-
-                if (
-                    payload.new
-                        ?.conversation_id !==
-                    currentConversation.id
-                ) {
-                    return;
-                }
-
-
-                await loadMessages();
-            }
-        )
-        .on(
-            "postgres_changes",
-            {
-                event:
-                    "*",
-
-                schema:
-                    "public",
-
-                table:
-                    "g_nurse_notifications",
-
-                filter:
-                    "recipient_user_id=eq." +
-                    currentUser.id
-            },
-            async function () {
-
-                await loadNotifications();
-            }
-        )
-        .subscribe(
-            function (status) {
-
-                console.log(
-                    "G Nurse realtime:",
-                    status
-                );
-            }
-        );
-}
-
-
-/* =========================================================
-   32. CHAT SCREEN BACK BUTTON
-========================================================= */
-
-if (backButton) {
-
-    backButton.addEventListener(
-        "click",
-        function () {
-
-            chatScreen.style.display =
-                "none";
-
-            welcomeScreen.style.display =
-                "flex";
-        }
-    );
-}
-
-
-/* =========================================================
-   33. CLOSE NOTIFICATION PANEL
-========================================================= */
-
-if (closeNotificationsButton) {
-
-    closeNotificationsButton.addEventListener(
-        "click",
-        function () {
-
-            notificationPanel.style.display =
-                "none";
-        }
-    );
-}
-
-
-/* =========================================================
-   34. OPEN NOTIFICATION PANEL
-========================================================= */
-
-if (notificationButton) {
-
-    notificationButton.addEventListener(
-        "click",
-        async function () {
-
-            if (
-                notificationPanel.style.display ===
-                "flex"
-            ) {
-
-                notificationPanel.style.display =
-                    "none";
-
-                return;
-            }
-
-
-            notificationPanel.style.display =
-                "flex";
-
+            scrollMessagesToBottom();
 
             await loadNotifications();
         }
     );
-}
 
 
-/* =========================================================
-   35. START NEW CHAT BUTTON
-========================================================= */
+    /* Message updates */
 
-if (startChatButton) {
+    realtimeChannel.on(
+        "postgres_changes",
+        {
+            event: "UPDATE",
+            schema: "public",
+            table: "g_nurse_messages",
+            filter:
+                "conversation_id=eq." +
+                currentConversation.id
+        },
+        async () => {
 
-    startChatButton.addEventListener(
-        "click",
-        async function () {
+            await loadMessages();
 
-            const name =
-                visitorNameInput
-                    .value
-                    .trim();
-
-
-            const email =
-                visitorEmailInput
-                    .value
-                    .trim();
-
-
-            const phone =
-                visitorPhoneInput
-                    .value
-                    .trim();
+            await loadNotifications();
+        }
+    );
 
 
-            if (!name) {
+    /* Conversation updates */
 
-                alert(
-                    "Please enter your name."
-                );
+    realtimeChannel.on(
+        "postgres_changes",
+        {
+            event: "UPDATE",
+            schema: "public",
+            table: "g_nurse_conversations",
+            filter:
+                "id=eq." +
+                currentConversation.id
+        },
+        async payload => {
 
-                visitorNameInput.focus();
+            if (
+                payload?.new
+            ) {
 
-                return;
+                currentConversation =
+                    {
+                        ...currentConversation,
+                        ...payload.new
+                    };
             }
+        }
+    );
 
 
-            saveVisitorDetails(
-                name,
-                email,
-                phone
+    /* Notifications */
+
+    realtimeChannel.on(
+        "postgres_changes",
+        {
+            event: "*",
+            schema: "public",
+            table: "g_nurse_notifications",
+            filter:
+                "recipient_user_id=eq." +
+                currentUser.id
+        },
+        async () => {
+
+            await loadNotifications();
+        }
+    );
+
+
+    realtimeChannel.subscribe(
+        status => {
+
+            console.log(
+                "G Nurse realtime status:",
+                status
             );
 
-
-            await openChat(
-                name,
-                email,
-                phone
-            );
         }
     );
 }
 
 
-/* =========================================================
-   36. RESTORE SAVED VISITOR DETAILS
-========================================================= */
+/* =====================================================
+   STOP REALTIME
+===================================================== */
+
+function stopRealtime() {
+
+    if (!realtimeChannel) return;
+
+    supabaseClient
+        .removeChannel(
+            realtimeChannel
+        );
+
+    realtimeChannel = null;
+}
+
+
+/* =====================================================
+   RESTORE SAVED VISITOR DETAILS
+===================================================== */
 
 function restoreVisitorDetails() {
 
     const saved =
         loadVisitorDetails();
 
+    if (!saved) return;
 
-    if (!saved) {
-        return;
-    }
+    visitorNameInput.value =
+        saved.name || "";
 
+    visitorEmailInput.value =
+        saved.email || "";
 
-    if (
-        visitorNameInput &&
-        saved.name
-    ) {
-
-        visitorNameInput.value =
-            saved.name;
-    }
-
-
-    if (
-        visitorEmailInput &&
-        saved.email
-    ) {
-
-        visitorEmailInput.value =
-            saved.email;
-    }
-
-
-    if (
-        visitorPhoneInput &&
-        saved.phone
-    ) {
-
-        visitorPhoneInput.value =
-            saved.phone;
-    }
+    visitorPhoneInput.value =
+        saved.phone || "";
 }
 
 
-/* =========================================================
-   37. OPEN CHAT IF EXISTING CONVERSATION EXISTS
-========================================================= */
+/* =====================================================
+   RESTORE EXISTING CHAT
+===================================================== */
 
 async function restoreExistingChat() {
 
-    if (!currentUser) {
-        return;
-    }
-
-
     try {
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from(
-                    "g_nurse_conversations"
-                )
-                .select("*")
-                .eq(
-                    "visitor_user_id",
-                    currentUser.id
-                )
-                .order(
-                    "created_at",
-                    {
-                        ascending:
-                            false
-                    }
-                )
-                .limit(1)
-                .maybeSingle();
+        showLoading(
+            "Connecting..."
+        );
 
 
-        if (error) {
-            throw error;
+        const authenticated =
+            await ensureAuthenticated();
+
+        if (!authenticated) {
+            return;
         }
 
 
-        if (!data) {
+        const saved =
+            loadVisitorDetails();
+
+
+        const conversation =
+            await findExistingConversation();
+
+
+        if (
+            !conversation
+        ) {
+
+            if (saved) {
+
+                visitorNameInput.value =
+                    saved.name || "";
+
+                visitorEmailInput.value =
+                    saved.email || "";
+
+                visitorPhoneInput.value =
+                    saved.phone || "";
+            }
+
             return;
         }
 
 
         currentConversation =
-            data;
-
-
-        const saved =
-            loadVisitorDetails();
+            conversation;
 
 
         if (
@@ -3278,54 +3704,41 @@ async function restoreExistingChat() {
             saved.name
         ) {
 
-            await openExistingConversation(
-                data.id
-            );
-        }
+            visitorNameInput.value =
+                saved.name;
 
-    } catch (error) {
+            visitorEmailInput.value =
+                saved.email || "";
 
-        console.error(
-            "Restore chat error:",
-            error
-        );
-    }
-}
+            visitorPhoneInput.value =
+                saved.phone || "";
 
+        } else {
 
-/* =========================================================
-   38. PAGE STARTUP
-========================================================= */
+            visitorNameInput.value =
+                conversation.visitor_name ||
+                "";
 
-async function initializeChat() {
+            visitorEmailInput.value =
+                conversation.visitor_email ||
+                "";
 
-    try {
-
-        showLoading(
-            "Connecting to G Nurse..."
-        );
-
-
-        restoreVisitorDetails();
-
-
-        const authenticated =
-            await ensureAuthenticated();
-
-
-        if (!authenticated) {
-
-            hideLoading();
-
-            return;
+            visitorPhoneInput.value =
+                conversation.visitor_phone ||
+                "";
         }
 
 
-        await restoreExistingChat();
+        welcomeScreen.style.display =
+            "none";
 
+        chatScreen.style.display =
+            "flex";
+
+
+        await loadMessages();
 
         await loadNotifications();
-
 
         startRealtime();
 
@@ -3333,13 +3746,23 @@ async function initializeChat() {
     } catch (error) {
 
         console.error(
-            "Initialization error:",
+            "Restore chat error:",
             error
         );
 
-        alert(
-            "Unable to connect to G Nurse. Please refresh the page."
-        );
+        /*
+
+           Do not block the page if
+           an old conversation cannot
+           be restored.
+
+        */
+
+        welcomeScreen.style.display =
+            "flex";
+
+        chatScreen.style.display =
+            "none";
 
     } finally {
 
@@ -3348,71 +3771,33 @@ async function initializeChat() {
 }
 
 
-/* =========================================================
-   39. PAGE VISIBILITY
-========================================================= */
+/* =====================================================
+   PAGE INITIALIZATION
+===================================================== */
 
-document.addEventListener(
-    "visibilitychange",
-    async function () {
+async function initializeChat() {
 
-        if (
-            document.visibilityState ===
-            "visible"
-        ) {
+    restoreVisitorDetails();
 
-            if (currentUser) {
+    await restoreExistingChat();
 
-                await loadNotifications();
+}
 
 
-                if (
-                    currentConversation
-                ) {
-
-                    await loadMessages();
-                }
-            }
-        }
-    }
-);
-
-
-/* =========================================================
-   40. CLEAN REALTIME ON PAGE EXIT
-========================================================= */
-
-window.addEventListener(
-    "beforeunload",
-    function () {
-
-        if (realtimeChannel) {
-
-            supabaseClient
-                .removeChannel(
-                    realtimeChannel
-                );
-        }
-    }
-);
-
-
-/* =========================================================
-   41. INITIALIZE
-========================================================= */
+/* =====================================================
+   PAGE START
+===================================================== */
 
 document.addEventListener(
     "DOMContentLoaded",
-    function () {
+    () => {
 
         initializeChat();
+
     }
 );
-
-</script>
+    </script>
 
 </body>
 
 </html>
-
- 
