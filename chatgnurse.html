@@ -1,734 +1,593 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Chat G Nurse | G Nurse Research Hub Nigeria</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-html,
-body {
-    width: 100%;
-    height: 100%;
-    font-family: Arial, sans-serif;
-    background: #f2f7f7;
-    color: #172b2f;
-}
-
-body {
-    overflow: hidden;
-}
-
-button,
-input,
-textarea {
-    font: inherit;
-}
-
-button {
-    cursor: pointer;
-}
-
-.app {
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-/* =========================
-   HEADER
-========================= */
-
-.header {
-    height: 62px;
-    min-height: 62px;
-    background: #07562f;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 14px;
-    box-shadow: 0 2px 8px rgba(0,0,0,.18);
-    z-index: 10;
-}
-
-.header-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.header-title .icon {
-    font-size: 27px;
-}
-
-.header-title h1 {
-    font-size: 18px;
-}
-
-.header-title small {
-    display: block;
-    font-size: 11px;
-    opacity: .8;
-    margin-top: 2px;
-}
-
-.notification-button {
-    width: 42px;
-    height: 42px;
-    border: none;
-    border-radius: 50%;
-    background: rgba(255,255,255,.15);
-    color: white;
-    font-size: 21px;
-    position: relative;
-}
-
-.notification-badge {
-    position: absolute;
-    top: -2px;
-    right: -2px;
-    min-width: 18px;
-    height: 18px;
-    padding: 0 4px;
-    background: #e53935;
-    color: white;
-    border-radius: 20px;
-    font-size: 10px;
-    display: none;
-    align-items: center;
-    justify-content: center;
-}
-
-/* =========================
-   MAIN
-========================= */
-
-.main {
-    flex: 1;
-    min-height: 0;
-    position: relative;
-}
-
-.screen {
-    width: 100%;
-    height: 100%;
-}
-
-/* =========================
-   START SCREEN
-========================= */
-
-.start-screen {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    overflow-y: auto;
-}
-
-.start-card {
-    width: min(440px, 100%);
-    background: white;
-    border-radius: 18px;
-    padding: 28px 22px;
-    box-shadow: 0 5px 25px rgba(0,0,0,.09);
-}
-
-.logo {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    margin: 0 auto 15px;
-    background: #07562f;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 35px;
-}
-
-.start-card h2 {
-    text-align: center;
-    color: #07562f;
-    margin-bottom: 8px;
-}
-
-.start-card p {
-    text-align: center;
-    color: #657477;
-    font-size: 14px;
-    line-height: 1.5;
-    margin-bottom: 24px;
-}
-
-.field {
-    margin-bottom: 15px;
-}
-
-.field label {
-    display: block;
-    font-size: 13px;
-    font-weight: bold;
-    margin-bottom: 6px;
-}
-
-.field input {
-    width: 100%;
-    height: 46px;
-    border: 1px solid #ccd8d9;
-    border-radius: 10px;
-    padding: 0 13px;
-    outline: none;
-    background: #fbfdfd;
-}
-
-.field input:focus {
-    border-color: #07562f;
-}
-
-.primary-button {
-    width: 100%;
-    height: 48px;
-    border: none;
-    border-radius: 11px;
-    background: #07562f;
-    color: white;
-    font-weight: bold;
-    font-size: 15px;
-}
-
-.primary-button:disabled {
-    opacity: .6;
-    cursor: not-allowed;
-}
-
-.status {
-    margin-top: 14px;
-    padding: 11px 13px;
-    border-radius: 9px;
-    font-size: 13px;
-    line-height: 1.4;
-    display: none;
-}
-
-.status.error {
-    display: block;
-    background: #ffebee;
-    color: #b71c1c;
-}
-
-.status.success {
-    display: block;
-    background: #e8f5e9;
-    color: #1b5e20;
-}
-
-.status.info {
-    display: block;
-    background: #e3f2fd;
-    color: #0d47a1;
-}
-
-/* =========================
-   CHAT SCREEN
-========================= */
-
-.chat-screen {
-    display: none;
-    flex-direction: column;
-    height: 100%;
-}
-
-.messages {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    padding: 15px 12px 10px;
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(7,86,47,.025),
-            transparent 65%
-        );
-}
-
-.empty-chat {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: #718083;
-    font-size: 14px;
-    padding: 30px;
-}
-
-.message-row {
-    display: flex;
-    margin-bottom: 10px;
-}
-
-.message-row.visitor {
-    justify-content: flex-end;
-}
-
-.message-row.admin {
-    justify-content: flex-start;
-}
-
-.message-bubble {
-    max-width: 82%;
-    border-radius: 15px;
-    padding: 9px 11px;
-    box-shadow: 0 1px 3px rgba(0,0,0,.08);
-}
-
-.message-row.visitor .message-bubble {
-    background: #d8f3df;
-    border-bottom-right-radius: 4px;
-}
-
-.message-row.admin .message-bubble {
-    background: white;
-    border-bottom-left-radius: 4px;
-}
-
-.message-text {
-    white-space: pre-wrap;
-    word-break: break-word;
-    font-size: 14px;
-    line-height: 1.45;
-}
-
-.message-meta {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    gap: 5px;
-    margin-top: 4px;
-    font-size: 10px;
-    color: #718083;
-}
-
-.message-image {
-    max-width: 230px;
-    max-height: 300px;
-    display: block;
-    border-radius: 10px;
-    object-fit: cover;
-    margin-bottom: 5px;
-}
-
-.file-link {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 9px;
-    border-radius: 9px;
-    background: rgba(0,0,0,.05);
-    color: #07562f;
-    text-decoration: none;
-    font-size: 13px;
-    word-break: break-word;
-}
-
-.voice-player {
-    width: 230px;
-    max-width: 100%;
-}
-
-/* =========================
-   COMPOSER
-========================= */
-
-.composer {
-    background: white;
-    border-top: 1px solid #dce5e5;
-    padding: 8px;
-}
-
-.attachment-preview {
-    display: none;
-    padding: 5px 7px 8px;
-}
-
-.attachment-preview-inner {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: #f0f5f5;
-    border-radius: 9px;
-    padding: 8px;
-    font-size: 12px;
-}
-
-.remove-attachment {
-    margin-left: auto;
-    border: none;
-    background: none;
-    color: #c62828;
-    font-size: 18px;
-}
-
-.composer-row {
-    display: flex;
-    align-items: flex-end;
-    gap: 6px;
-}
-
-.tool-button {
-    width: 42px;
-    height: 42px;
-    flex: 0 0 42px;
-    border: none;
-    border-radius: 50%;
-    background: #edf3f3;
-    color: #07562f;
-    font-size: 20px;
-}
-
-.message-input {
-    flex: 1;
-    min-width: 0;
-    min-height: 42px;
-    max-height: 110px;
-    resize: none;
-    border: 1px solid #ccd8d9;
-    border-radius: 13px;
-    padding: 11px 12px;
-    outline: none;
-}
-
-.message-input:focus {
-    border-color: #07562f;
-}
-
-.send-button {
-    width: 42px;
-    height: 42px;
-    flex: 0 0 42px;
-    border: none;
-    border-radius: 50%;
-    background: #07562f;
-    color: white;
-    font-size: 18px;
-}
-
-/* =========================
-   RECORDING
-========================= */
-
-.recording-panel {
-    display: none;
-    background: #fff4f4;
-    border: 1px solid #ffcdd2;
-    border-radius: 10px;
-    padding: 9px;
-    margin-bottom: 7px;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.recording-panel.active {
-    display: flex;
-}
-
-.recording-info {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: #c62828;
-    font-size: 13px;
-    font-weight: bold;
-}
-
-.recording-dot {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: #e53935;
-    animation: pulse 1s infinite;
-}
-
-@keyframes pulse {
-    50% {
-        opacity: .3;
-    }
-}
-
-.stop-recording {
-    border: none;
-    border-radius: 8px;
-    padding: 7px 10px;
-    background: #c62828;
-    color: white;
-    font-size: 12px;
-}
-
-/* =========================
-   LOADING
-========================= */
-
-.loading-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(255,255,255,.92);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-}
-
-.loading-box {
-    text-align: center;
-    color: #07562f;
-}
-
-.spinner {
-    width: 42px;
-    height: 42px;
-    border: 4px solid #d9e8df;
-    border-top-color: #07562f;
-    border-radius: 50%;
-    animation: spin .8s linear infinite;
-    margin: 0 auto 12px;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* =========================
-   NOTIFICATIONS
-========================= */
-
-.notification-panel {
-    position: fixed;
-    top: 70px;
-    right: 10px;
-    width: min(350px, calc(100% - 20px));
-    max-height: 70vh;
-    overflow-y: auto;
-    background: white;
-    border-radius: 14px;
-    box-shadow: 0 8px 30px rgba(0,0,0,.2);
-    z-index: 50;
-    display: none;
-}
-
-.notification-panel.open {
-    display: block;
-}
-
-.notification-header {
-    padding: 14px;
-    border-bottom: 1px solid #e5eeee;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.notification-header strong {
-    color: #07562f;
-}
-
-.mark-all {
-    border: none;
-    background: none;
-    color: #07562f;
-    font-size: 12px;
-}
-
-.notification-item {
-    padding: 12px 14px;
-    border-bottom: 1px solid #edf2f2;
-}
-
-.notification-item.unread {
-    background: #eef8f1;
-}
-
-.notification-item strong {
-    font-size: 13px;
-}
-
-.notification-item p {
-    font-size: 12px;
-    color: #607174;
-    margin-top: 4px;
-}
-
-.notification-item small {
-    display: block;
-    margin-top: 5px;
-    color: #8a999b;
-    font-size: 10px;
-}
-
-.no-notifications {
-    padding: 25px 15px;
-    text-align: center;
-    color: #788789;
-    font-size: 13px;
-}
-
-/* =========================
-   HIDDEN FILE INPUT
-========================= */
-
-.hidden-file {
-    display: none;
-}
-
-/* =========================
-   UNSEND
-========================= */
-
-.unsend-button {
-    border: none;
-    background: none;
-    color: #888;
-    font-size: 10px;
-    margin-left: 4px;
-}
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 500px) {
-
-    .header {
-        height: 58px;
-        min-height: 58px;
-    }
-
-    .message-bubble {
-        max-width: 88%;
-    }
-
-    .start-card {
-        padding: 24px 18px;
-    }
-}
-</style>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Chat G Nurse</title>
+
+    <!-- Supabase -->
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background: #f3f7f8;
+            color: #17252a;
+        }
+
+        body {
+            overflow: hidden;
+        }
+
+        button,
+        input,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .app {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ==============================
+           HEADER
+        ============================== */
+
+        .topbar {
+            height: 64px;
+            flex-shrink: 0;
+            background: #07562f;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.15);
+            z-index: 20;
+        }
+
+        .topbar-title {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .topbar-title span {
+            font-size: 25px;
+        }
+
+        .notification-button {
+            width: 42px;
+            height: 42px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(255,255,255,.15);
+            color: white;
+            position: relative;
+            font-size: 20px;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            min-width: 19px;
+            height: 19px;
+            padding: 0 5px;
+            border-radius: 20px;
+            background: #e53935;
+            color: white;
+            font-size: 11px;
+            font-weight: bold;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ==============================
+           MAIN
+        ============================== */
+
+        .main {
+            flex: 1;
+            min-height: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .start-screen,
+        .chat-screen {
+            width: 100%;
+            height: 100%;
+        }
+
+        .start-screen {
+            overflow-y: auto;
+            padding: 25px 16px 40px;
+        }
+
+        .welcome {
+            max-width: 600px;
+            margin: 25px auto;
+            background: white;
+            border-radius: 18px;
+            padding: 25px 20px;
+            box-shadow: 0 4px 18px rgba(0,0,0,.08);
+        }
+
+        .welcome-icon {
+            text-align: center;
+            font-size: 55px;
+            margin-bottom: 8px;
+        }
+
+        .welcome h1 {
+            text-align: center;
+            margin: 0 0 10px;
+            color: #07562f;
+            font-size: 25px;
+        }
+
+        .welcome p {
+            text-align: center;
+            color: #607078;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            border: 1px solid #ccd7da;
+            border-radius: 10px;
+            padding: 13px;
+            outline: none;
+            background: #fff;
+        }
+
+        .form-group input:focus {
+            border-color: #07562f;
+        }
+
+        .primary-button {
+            width: 100%;
+            border: none;
+            border-radius: 11px;
+            padding: 14px;
+            background: #07562f;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .primary-button:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        /* ==============================
+           CHAT SCREEN
+        ============================== */
+
+        .chat-screen {
+            display: none;
+            flex-direction: column;
+            background: #e9f1ef;
+        }
+
+        .messages {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            padding: 15px;
+        }
+
+        .empty-chat {
+            text-align: center;
+            color: #718087;
+            margin-top: 35px;
+            font-size: 14px;
+        }
+
+        .message-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .message-row.visitor {
+            justify-content: flex-end;
+        }
+
+        .message-row.admin {
+            justify-content: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 82%;
+            padding: 10px 12px;
+            border-radius: 14px;
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
+            box-shadow: 0 1px 3px rgba(0,0,0,.08);
+        }
+
+        .message-row.visitor .message-bubble {
+            background: #07562f;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-row.admin .message-bubble {
+            background: white;
+            color: #17252a;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-time {
+            display: block;
+            margin-top: 5px;
+            font-size: 10px;
+            opacity: .7;
+            text-align: right;
+        }
+
+        .message-file {
+            display: block;
+            margin-top: 7px;
+            text-decoration: none;
+            color: inherit;
+            font-weight: 600;
+        }
+
+        .message-image {
+            display: block;
+            max-width: 220px;
+            max-height: 260px;
+            border-radius: 10px;
+            margin-top: 5px;
+        }
+
+        /* ==============================
+           COMPOSER
+        ============================== */
+
+        .composer {
+            flex-shrink: 0;
+            background: white;
+            border-top: 1px solid #d7e0e2;
+            padding: 8px;
+        }
+
+        .composer-row {
+            display: flex;
+            align-items: flex-end;
+            gap: 7px;
+        }
+
+        .composer textarea {
+            flex: 1;
+            min-height: 43px;
+            max-height: 110px;
+            resize: none;
+            border: 1px solid #ccd7da;
+            border-radius: 12px;
+            padding: 11px;
+            outline: none;
+        }
+
+        .composer textarea:focus {
+            border-color: #07562f;
+        }
+
+        .icon-button {
+            width: 43px;
+            height: 43px;
+            flex-shrink: 0;
+            border: none;
+            border-radius: 50%;
+            background: #eef3f2;
+            color: #07562f;
+            font-size: 19px;
+        }
+
+        .send-button {
+            background: #07562f;
+            color: white;
+        }
+
+        .recording-bar {
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            background: #fff3f3;
+            border: 1px solid #ffcaca;
+            border-radius: 10px;
+            padding: 8px 10px;
+            margin-bottom: 7px;
+            color: #b42318;
+            font-size: 13px;
+        }
+
+        .recording-bar.active {
+            display: flex;
+        }
+
+        .recording-stop {
+            border: none;
+            background: #d32f2f;
+            color: white;
+            border-radius: 8px;
+            padding: 7px 10px;
+        }
+
+        .attachment-preview {
+            display: none;
+            background: #f1f5f4;
+            border-radius: 9px;
+            padding: 7px 10px;
+            margin-bottom: 7px;
+            font-size: 12px;
+        }
+
+        /* ==============================
+           NOTIFICATIONS
+        ============================== */
+
+        .notification-panel {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: min(340px, calc(100% - 20px));
+            max-height: 70%;
+            overflow-y: auto;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0,0,0,.2);
+            display: none;
+            z-index: 50;
+        }
+
+        .notification-panel.open {
+            display: block;
+        }
+
+        .notification-header {
+            padding: 12px;
+            border-bottom: 1px solid #e4eaeb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+        }
+
+        .mark-all-button {
+            border: none;
+            background: none;
+            color: #07562f;
+            font-size: 12px;
+        }
+
+        .notification-item {
+            padding: 12px;
+            border-bottom: 1px solid #edf1f2;
+        }
+
+        .notification-item.unread {
+            background: #edf8f2;
+        }
+
+        .notification-item strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .notification-item small {
+            color: #748087;
+        }
+
+        /* ==============================
+           LOADING
+        ============================== */
+
+        .loading {
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,.82);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .loading.active {
+            display: flex;
+        }
+
+        .loading-box {
+            background: white;
+            padding: 22px 28px;
+            border-radius: 14px;
+            box-shadow: 0 5px 25px rgba(0,0,0,.15);
+            text-align: center;
+        }
+
+        .spinner {
+            width: 34px;
+            height: 34px;
+            border: 4px solid #dbe7e3;
+            border-top-color: #07562f;
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+            margin: 0 auto 12px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 480px) {
+
+            .topbar {
+                height: 58px;
+            }
+
+            .welcome {
+                margin: 10px auto;
+                padding: 20px 16px;
+            }
+
+            .message-bubble {
+                max-width: 88%;
+            }
+
+        }
+
+    </style>
+
 </head>
 
 <body>
 
 <div class="app">
 
-    <!-- HEADER -->
-    <header class="header">
+    <header class="topbar">
 
-        <div class="header-title">
-
-            <div class="icon">💬</div>
-
-            <div>
-                <h1>Chat G Nurse</h1>
-                <small>Direct communication with G Nurse</small>
-            </div>
-
+        <div class="topbar-title">
+            <span>💬</span>
+            <div>Chat G Nurse</div>
         </div>
 
         <button
             type="button"
             class="notification-button"
             id="notificationButton"
-            aria-label="Notifications"
         >
             🔔
+
             <span
                 class="notification-badge"
                 id="notificationBadge"
-            >0</span>
+            >
+                0
+            </span>
+
         </button>
 
     </header>
 
-
-    <!-- MAIN -->
     <main class="main">
 
         <!-- START SCREEN -->
+
         <section
-            class="screen start-screen"
+            class="start-screen"
             id="startScreen"
         >
 
-            <div class="start-card">
+            <div class="welcome">
 
-                <div class="logo">👩‍⚕️</div>
+                <div class="welcome-icon">
+                    👩‍⚕️
+                </div>
 
-                <h2>Chat with G Nurse</h2>
+                <h1>
+                    Chat G Nurse
+                </h1>
 
                 <p>
                     Send a message directly to G Nurse.
-                    You can also send pictures, files and voice notes.
+                    You can also send pictures, files
+                    and voice notes.
                 </p>
 
-
-                <div class="field">
+                <div class="form-group">
 
                     <label for="visitorName">
-                        Your name
+                        Your Name
                     </label>
 
                     <input
-                        id="visitorName"
                         type="text"
+                        id="visitorName"
                         placeholder="Enter your name"
                         autocomplete="name"
                     >
 
                 </div>
 
-
-                <div class="field">
+                <div class="form-group">
 
                     <label for="visitorEmail">
-                        Email address
+                        Email
                     </label>
 
                     <input
-                        id="visitorEmail"
                         type="email"
+                        id="visitorEmail"
                         placeholder="Enter your email"
                         autocomplete="email"
                     >
 
                 </div>
 
-
-                <div class="field">
+                <div class="form-group">
 
                     <label for="visitorPhone">
-                        Phone number
+                        Phone Number
                     </label>
 
                     <input
-                        id="visitorPhone"
                         type="tel"
+                        id="visitorPhone"
                         placeholder="Enter your phone number"
                         autocomplete="tel"
                     >
 
                 </div>
-
 
                 <button
                     type="button"
@@ -738,20 +597,14 @@ button {
                     Start Chat
                 </button>
 
-
-                <div
-                    class="status"
-                    id="startStatus"
-                ></div>
-
             </div>
 
         </section>
 
-
         <!-- CHAT SCREEN -->
+
         <section
-            class="screen chat-screen"
+            class="chat-screen"
             id="chatScreen"
         >
 
@@ -764,65 +617,25 @@ button {
                     class="empty-chat"
                     id="emptyChat"
                 >
-                    No messages yet.<br>
-                    Send a message to G Nurse.
+                    No messages yet. Start the conversation.
                 </div>
 
             </div>
 
-
             <div class="composer">
 
-                <!-- ATTACHMENT PREVIEW -->
-
                 <div
-                    class="attachment-preview"
-                    id="attachmentPreview"
+                    class="recording-bar"
+                    id="recordingBar"
                 >
 
-                    <div class="attachment-preview-inner">
-
-                        <span id="attachmentPreviewText">
-                            File selected
-                        </span>
-
-                        <button
-                            type="button"
-                            class="remove-attachment"
-                            id="removeAttachment"
-                        >
-                            ×
-                        </button>
-
-                    </div>
-
-                </div>
-
-
-                <!-- RECORDING PANEL -->
-
-                <div
-                    class="recording-panel"
-                    id="recordingPanel"
-                >
-
-                    <div class="recording-info">
-
-                        <span class="recording-dot"></span>
-
-                        <span id="recordingTimer">
-                            00:00
-                        </span>
-
-                        <span>
-                            Recording voice note
-                        </span>
-
-                    </div>
+                    <span id="recordingTime">
+                        🔴 Recording 00:00
+                    </span>
 
                     <button
                         type="button"
-                        class="stop-recording"
+                        class="recording-stop"
                         id="stopRecordingButton"
                     >
                         Stop
@@ -830,47 +643,42 @@ button {
 
                 </div>
 
+                <div
+                    class="attachment-preview"
+                    id="attachmentPreview"
+                >
+                    <span id="attachmentName"></span>
+                </div>
 
                 <div class="composer-row">
 
                     <button
                         type="button"
-                        class="tool-button"
+                        class="icon-button"
                         id="attachmentButton"
                         title="Attach file"
                     >
                         📎
                     </button>
 
-                    <input
-                        type="file"
-                        id="fileInput"
-                        class="hidden-file"
-                        accept="*/*"
-                    >
-
+                    <textarea
+                        id="messageInput"
+                        placeholder="Type a message..."
+                        rows="1"
+                    ></textarea>
 
                     <button
                         type="button"
-                        class="tool-button"
+                        class="icon-button"
                         id="voiceButton"
                         title="Voice note"
                     >
-                        🎤
+                        🎙️
                     </button>
-
-
-                    <textarea
-                        id="messageInput"
-                        class="message-input"
-                        rows="1"
-                        placeholder="Type a message..."
-                    ></textarea>
-
 
                     <button
                         type="button"
-                        class="send-button"
+                        class="icon-button send-button"
                         id="sendButton"
                         title="Send"
                     >
@@ -879,71 +687,70 @@ button {
 
                 </div>
 
+                <input
+                    type="file"
+                    id="fileInput"
+                    class="hidden"
+                    accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip"
+                >
+
             </div>
 
         </section>
 
+        <!-- NOTIFICATIONS -->
+
+        <div
+            class="notification-panel"
+            id="notificationPanel"
+        >
+
+            <div class="notification-header">
+
+                <span>
+                    Notifications
+                </span>
+
+                <button
+                    type="button"
+                    class="mark-all-button"
+                    id="markAllNotifications"
+                >
+                    Mark all read
+                </button>
+
+            </div>
+
+            <div id="notificationList"></div>
+
+        </div>
+
+        <!-- LOADING -->
+
+        <div
+            class="loading"
+            id="loading"
+        >
+
+            <div class="loading-box">
+
+                <div class="spinner"></div>
+
+                <div id="loadingText">
+                    Please wait...
+                </div>
+
+            </div>
+
+        </div>
+
     </main>
 
-</div>
-
-
-<!-- NOTIFICATION PANEL -->
-
-<div
-    class="notification-panel"
-    id="notificationPanel"
->
-
-    <div class="notification-header">
-
-        <strong>Notifications</strong>
-
-        <button
-            type="button"
-            class="mark-all"
-            id="markAllNotifications"
-        >
-            Mark all read
-        </button>
-
     </div>
-
-    <div id="notificationList">
-
-        <div class="no-notifications">
-            No notifications
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- LOADING -->
-
-<div
-    class="loading-overlay"
-    id="loadingOverlay"
->
-
-    <div class="loading-box">
-
-        <div class="spinner"></div>
-
-        <div id="loadingText">
-            Connecting...
-        </div>
-
-    </div>
-
-</div>
-
-
-<script>
+    <script>
 
 /* =========================================================
-   1. SUPABASE
+   1. SUPABASE CONFIGURATION
 ========================================================= */
 
 const SUPABASE_URL =
@@ -960,26 +767,19 @@ const supabaseClient =
 
 
 /* =========================================================
-   2. GLOBAL VARIABLES
+   2. APPLICATION STATE
 ========================================================= */
 
 let currentUser = null;
-
 let currentConversation = null;
-
 let realtimeChannel = null;
 
 let mediaRecorder = null;
-
 let recordedChunks = [];
-
 let recordingTimer = null;
-
 let recordingSeconds = 0;
 
 let selectedFile = null;
-
-let notificationAudioContext = null;
 
 
 /* =========================================================
@@ -1004,9 +804,6 @@ const visitorPhone =
 const startChatButton =
     document.getElementById("startChatButton");
 
-const startStatus =
-    document.getElementById("startStatus");
-
 const messages =
     document.getElementById("messages");
 
@@ -1028,153 +825,171 @@ const fileInput =
 const attachmentPreview =
     document.getElementById("attachmentPreview");
 
-const attachmentPreviewText =
-    document.getElementById("attachmentPreviewText");
-
-const removeAttachment =
-    document.getElementById("removeAttachment");
+const attachmentName =
+    document.getElementById("attachmentName");
 
 const voiceButton =
     document.getElementById("voiceButton");
 
-const recordingPanel =
-    document.getElementById("recordingPanel");
+const recordingBar =
+    document.getElementById("recordingBar");
 
-const recordingTimer =
-    document.getElementById("recordingTimer");
+const recordingTime =
+    document.getElementById("recordingTime");
 
 const stopRecordingButton =
-    document.getElementById("stopRecordingButton");
+    document.getElementById(
+        "stopRecordingButton"
+    );
 
-const loadingOverlay =
-    document.getElementById("loadingOverlay");
+const notificationButton =
+    document.getElementById(
+        "notificationButton"
+    );
+
+const notificationBadge =
+    document.getElementById(
+        "notificationBadge"
+    );
+
+const notificationPanel =
+    document.getElementById(
+        "notificationPanel"
+    );
+
+const notificationList =
+    document.getElementById(
+        "notificationList"
+    );
+
+const markAllNotifications =
+    document.getElementById(
+        "markAllNotifications"
+    );
+
+const loading =
+    document.getElementById("loading");
 
 const loadingText =
     document.getElementById("loadingText");
 
-const notificationButton =
-    document.getElementById("notificationButton");
-
-const notificationBadge =
-    document.getElementById("notificationBadge");
-
-const notificationPanel =
-    document.getElementById("notificationPanel");
-
-const notificationList =
-    document.getElementById("notificationList");
-
-const markAllNotifications =
-    document.getElementById("markAllNotifications");
-
 
 /* =========================================================
-   4. UI HELPERS
+   4. LOADING FUNCTIONS
 ========================================================= */
 
 function showLoading(text) {
 
     loadingText.textContent =
-        text || "Loading...";
+        text || "Please wait...";
 
-    loadingOverlay.style.display =
-        "flex";
+    loading.classList.add("active");
 }
 
 
 function hideLoading() {
 
-    loadingOverlay.style.display =
-        "none";
-}
-
-
-function showStatus(message, type) {
-
-    startStatus.textContent =
-        message || "";
-
-    startStatus.className =
-        "status " + (type || "info");
-}
-
-
-function clearStatus() {
-
-    startStatus.textContent =
-        "";
-
-    startStatus.className =
-        "status";
-}
-
-
-function showChatScreen() {
-
-    startScreen.style.display =
-        "none";
-
-    chatScreen.style.display =
-        "flex";
-}
-
-
-function scrollMessagesToBottom() {
-
-    requestAnimationFrame(() => {
-
-        messages.scrollTop =
-            messages.scrollHeight;
-
-    });
+    loading.classList.remove("active");
 }
 
 
 /* =========================================================
-   5. VISITOR DETAILS
+   5. SAFE TEXT
+========================================================= */
+
+function escapeHTML(value) {
+
+    if (value === null || value === undefined) {
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+/* =========================================================
+   6. DATE / TIME
+========================================================= */
+
+function formatMessageTime(value) {
+
+    if (!value) {
+        return "";
+    }
+
+    const date =
+        new Date(value);
+
+    return date.toLocaleTimeString(
+        [],
+        {
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
+}
+
+
+/* =========================================================
+   7. LOCAL VISITOR DETAILS
 ========================================================= */
 
 function saveVisitorDetails() {
 
+    const details = {
+
+        name:
+            visitorName.value.trim(),
+
+        email:
+            visitorEmail.value.trim(),
+
+        phone:
+            visitorPhone.value.trim()
+
+    };
+
     localStorage.setItem(
-        "gnurse_chat_visitor",
-        JSON.stringify({
-            name: visitorName.value.trim(),
-            email: visitorEmail.value.trim(),
-            phone: visitorPhone.value.trim()
-        })
+        "g_nurse_visitor_details",
+        JSON.stringify(details)
     );
 }
 
 
 function loadVisitorDetails() {
 
+    const saved =
+        localStorage.getItem(
+            "g_nurse_visitor_details"
+        );
+
+    if (!saved) {
+        return;
+    }
+
     try {
 
-        const saved =
-            JSON.parse(
-                localStorage.getItem(
-                    "gnurse_chat_visitor"
-                ) || "null"
-            );
-
-        if (!saved) {
-            return;
-        }
+        const details =
+            JSON.parse(saved);
 
         visitorName.value =
-            saved.name || "";
+            details.name || "";
 
         visitorEmail.value =
-            saved.email || "";
+            details.email || "";
 
         visitorPhone.value =
-            saved.phone || "";
+            details.phone || "";
 
     } catch (error) {
 
         console.error(
-            "Could not load saved visitor details:",
+            "Visitor details error:",
             error
         );
 
@@ -1183,207 +998,115 @@ function loadVisitorDetails() {
 
 
 /* =========================================================
-   6. ANONYMOUS AUTHENTICATION
+   8. ANONYMOUS AUTHENTICATION
 ========================================================= */
 
-async function getOrCreateAnonymousUser() {
+async function ensureAuthenticated() {
 
-    const {
-        data,
-        error
-    } = await supabaseClient.auth.getUser();
+    try {
 
-    if (!error && data?.user) {
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.auth.getUser();
 
-        return data.user;
-    }
+        if (
+            !error &&
+            data &&
+            data.user
+        ) {
 
-    const {
-        data: anonymousData,
-        error: anonymousError
-    } =
-        await supabaseClient.auth.signInAnonymously();
+            currentUser =
+                data.user;
 
-    if (anonymousError) {
+            return currentUser;
+        }
 
-        throw new Error(
-            "Anonymous sign-in failed: " +
-            anonymousError.message
+
+        const {
+            data: authData,
+            error: authError
+        } =
+            await supabaseClient.auth
+                .signInAnonymously();
+
+        if (authError) {
+
+            console.error(
+                "Anonymous authentication error:",
+                authError
+            );
+
+            throw authError;
+        }
+
+        currentUser =
+            authData.user;
+
+        return currentUser;
+
+    } catch (error) {
+
+        console.error(
+            "Authentication failed:",
+            error
         );
+
+        throw error;
     }
-
-    if (!anonymousData?.user) {
-
-        throw new Error(
-            "Supabase did not return a user."
-        );
-    }
-
-    return anonymousData.user;
 }
 
 
 /* =========================================================
-   7. FIND EXISTING CONVERSATION
+   9. GET EXISTING VISITOR CONVERSATION
 ========================================================= */
 
-async function findExistingConversation() {
+async function findMyConversation() {
+
+    if (!currentUser) {
+        return null;
+    }
 
     const {
         data,
         error
-    } = await supabaseClient
-        .from("g_nurse_conversations")
-        .select("*")
-        .eq(
-            "visitor_user_id",
-            currentUser.id
-        )
-        .order(
-            "created_at",
-            {
-                ascending: true
-            }
-        )
-        .limit(1);
+    } =
+        await supabaseClient
+            .from("g_nurse_conversations")
+            .select("*")
+            .eq(
+                "visitor_user_id",
+                currentUser.id
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            )
+            .limit(1)
+            .maybeSingle();
 
     if (error) {
 
-        throw new Error(
-            "Could not check conversations: " +
-            error.message
+        console.error(
+            "Conversation lookup error:",
+            error
         );
+
+        throw error;
     }
 
-    return data?.[0] || null;
+    return data || null;
 }
 
 
 /* =========================================================
-   8. CREATE CONVERSATION
+   10. CREATE CONVERSATION
 ========================================================= */
 
 async function createConversation() {
-
-    const {
-        data,
-        error
-    } = await supabaseClient
-        .from("g_nurse_conversations")
-        .insert({
-            visitor_user_id:
-                currentUser.id,
-
-            visitor_token:
-                crypto.randomUUID(),
-
-            visitor_name:
-                visitorName.value.trim(),
-
-            visitor_email:
-                visitorEmail.value.trim() || null,
-
-            visitor_phone:
-                visitorPhone.value.trim() || null,
-
-            status:
-                "open"
-        })
-        .select()
-        .single();
-
-    if (error) {
-
-        throw new Error(
-            "Could not create conversation: " +
-            error.message
-        );
-    }
-
-    return data;
-}
-
-
-/* =========================================================
-   9. UPDATE CONVERSATION
-========================================================= */
-
-async function updateConversationInformation() {
-
-    const {
-        error
-    } = await supabaseClient
-        .from("g_nurse_conversations")
-        .update({
-            visitor_name:
-                visitorName.value.trim(),
-
-            visitor_email:
-                visitorEmail.value.trim() || null,
-
-            visitor_phone:
-                visitorPhone.value.trim() || null,
-
-            updated_at:
-                new Date().toISOString()
-        })
-        .eq(
-            "id",
-            currentConversation.id
-        )
-        .eq(
-            "visitor_user_id",
-            currentUser.id
-        );
-
-    if (error) {
-
-        throw new Error(
-            "Could not update conversation: " +
-            error.message
-        );
-    }
-}
-
-
-/* =========================================================
-   10. LOAD OR CREATE CONVERSATION
-========================================================= */
-
-async function loadOrCreateConversation() {
-
-    let conversation =
-        await findExistingConversation();
-
-    if (!conversation) {
-
-        conversation =
-            await createConversation();
-
-    }
-
-    currentConversation =
-        conversation;
-
-    if (conversation) {
-
-        await updateConversationInformation();
-
-    }
-
-    return conversation;
-}
-
-
-/* =========================================================
-   11. START CHAT
-========================================================= */
-
-async function startChat() {
-
-    if (startChatButton.disabled) {
-        return;
-    }
 
     const name =
         visitorName.value.trim();
@@ -1394,46 +1117,112 @@ async function startChat() {
     const phone =
         visitorPhone.value.trim();
 
-    clearStatus();
-
     if (!name) {
 
-        showStatus(
-            "Please enter your name.",
-            "error"
+        alert(
+            "Please enter your name."
         );
 
-        return;
+        visitorName.focus();
+
+        return null;
     }
 
     if (!email && !phone) {
 
-        showStatus(
-            "Please enter either your email address or phone number.",
-            "error"
+        alert(
+            "Please enter your email or phone number."
         );
 
-        return;
+        visitorEmail.focus();
+
+        return null;
     }
 
-    startChatButton.disabled =
-        true;
+    const visitorToken =
+        crypto.randomUUID();
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("g_nurse_conversations")
+            .insert({
+
+                visitor_token:
+                    visitorToken,
+
+                visitor_name:
+                    name,
+
+                visitor_email:
+                    email || null,
+
+                visitor_phone:
+                    phone || null,
+
+                visitor_user_id:
+                    currentUser.id,
+
+                status:
+                    "open"
+
+            })
+            .select()
+            .single();
+
+    if (error) {
+
+        console.error(
+            "Conversation creation error:",
+            error
+        );
+
+        throw error;
+    }
+
+    return data;
+}
+
+
+/* =========================================================
+   11. OPEN VISITOR CHAT
+========================================================= */
+
+async function openChat() {
 
     showLoading(
-        "Connecting to G Nurse..."
+        "Opening your chat..."
     );
 
     try {
 
-        currentUser =
-            await getOrCreateAnonymousUser();
+        await ensureAuthenticated();
+
+        let conversation =
+            await findMyConversation();
+
+        if (!conversation) {
+
+            conversation =
+                await createConversation();
+        }
+
+        if (!conversation) {
+            return;
+        }
 
         currentConversation =
-            await loadOrCreateConversation();
+            conversation;
 
         saveVisitorDetails();
 
-        showChatScreen();
+        startScreen.style.display =
+            "none";
+
+        chatScreen.style.display =
+            "flex";
 
         await loadMessages();
 
@@ -1441,450 +1230,36 @@ async function startChat() {
 
         startRealtime();
 
-        requestNotificationPermission();
-
-        hideLoading();
-
     } catch (error) {
 
         console.error(
-            "G NURSE START CHAT ERROR:",
+            "Open chat error:",
             error
         );
 
-        hideLoading();
-
-        showStatus(
-            error?.message ||
-            "Unable to connect to G Nurse.",
-            "error"
+        alert(
+            "Unable to open Chat G Nurse. Please try again."
         );
 
     } finally {
 
-        startChatButton.disabled =
-            false;
-
+        hideLoading();
     }
 }
 
 
+/* =========================================================
+   12. START CHAT BUTTON
+========================================================= */
+
 startChatButton.addEventListener(
     "click",
-    startChat
+    openChat
 );
 
 
 /* =========================================================
-   12. MESSAGE TIME
-========================================================= */
-
-function formatMessageTime(dateString) {
-
-    const date =
-        new Date(dateString);
-
-    return date.toLocaleTimeString(
-        [],
-        {
-            hour: "numeric",
-            minute: "2-digit"
-        }
-    );
-}
-
-
-/* =========================================================
-   13. HTML ESCAPE
-========================================================= */
-
-function escapeHTML(value) {
-
-    return String(value ?? "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-}
-
-
-/* =========================================================
-   14. PRIVATE FILE URL
-========================================================= */
-
-async function getPrivateFileUrl(reference) {
-
-    if (!reference) {
-        return null;
-    }
-
-    const parts =
-        reference.split("/");
-
-    if (parts.length < 2) {
-        return reference;
-    }
-
-    const bucket =
-        parts.shift();
-
-    const path =
-        parts.join("/");
-
-    const {
-        data,
-        error
-    } = await supabaseClient
-        .storage
-        .from(bucket)
-        .createSignedUrl(
-            path,
-            3600
-        );
-
-    if (error) {
-
-        console.error(
-            "Signed URL error:",
-            error
-        );
-
-        return null;
-    }
-
-    return data?.signedUrl || null;
-            }
-    /* =========================================================
-   15. RENDER ONE MESSAGE
-========================================================= */
-
-async function renderMessage(message) {
-
-    if (!message) {
-        return;
-    }
-
-    const row =
-        document.createElement("div");
-
-    row.className =
-        "message-row " +
-        (message.sender_type === "visitor"
-            ? "visitor"
-            : "admin");
-
-    const bubble =
-        document.createElement("div");
-
-    bubble.className =
-        "message-bubble";
-
-    let content = "";
-
-    /* ---------- TEXT ---------- */
-
-    if (message.message) {
-
-        content += `
-            <div class="message-text">
-                ${escapeHTML(message.message)}
-            </div>
-        `;
-    }
-
-
-    /* ---------- IMAGE ---------- */
-
-    if (
-        message.attachment_url &&
-        message.attachment_type &&
-        message.attachment_type.startsWith("image/")
-    ) {
-
-        const imageUrl =
-            await getPrivateFileUrl(
-                message.attachment_url
-            );
-
-        if (imageUrl) {
-
-            content += `
-                <img
-                    class="message-image"
-                    src="${imageUrl}"
-                    alt="Image"
-                    loading="lazy"
-                >
-            `;
-        }
-    }
-
-
-    /* ---------- FILE ---------- */
-
-    else if (message.attachment_url) {
-
-        const fileUrl =
-            await getPrivateFileUrl(
-                message.attachment_url
-            );
-
-        if (fileUrl) {
-
-            content += `
-                <a
-                    class="file-link"
-                    href="${fileUrl}"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    📎
-                    <span>
-                        ${escapeHTML(
-                            message.attachment_name ||
-                            "Attached file"
-                        )}
-                    </span>
-                </a>
-            `;
-        }
-    }
-
-
-    /* ---------- VOICE ---------- */
-
-    if (message.voice_url) {
-
-        const voiceUrl =
-            await getPrivateFileUrl(
-                message.voice_url
-            );
-
-        if (voiceUrl) {
-
-            content += `
-                <audio
-                    class="voice-player"
-                    controls
-                    preload="metadata"
-                    data-message-id="${message.id}"
-                >
-                    <source src="${voiceUrl}">
-                </audio>
-            `;
-        }
-    }
-
-
-    if (!content) {
-
-        content = `
-            <div class="message-text">
-                Message unavailable
-            </div>
-        `;
-    }
-
-
-    bubble.innerHTML =
-        content;
-
-
-    /* ---------- META ---------- */
-
-    const meta =
-        document.createElement("div");
-
-    meta.className =
-        "message-meta";
-
-    const time =
-        document.createElement("span");
-
-    time.textContent =
-        formatMessageTime(
-            message.created_at
-        );
-
-    meta.appendChild(time);
-
-
-    /* ---------- VISITOR MESSAGE STATUS ---------- */
-
-    if (
-        message.sender_type === "visitor"
-    ) {
-
-        const status =
-            document.createElement("span");
-
-        if (message.viewed) {
-
-            status.textContent =
-                "✓✓";
-
-        } else {
-
-            status.textContent =
-                "✓";
-
-        }
-
-        meta.appendChild(status);
-
-
-        /* ---------- UNSEND ---------- */
-
-        if (!message.deleted_at) {
-
-            const unsend =
-                document.createElement("button");
-
-            unsend.type =
-                "button";
-
-            unsend.className =
-                "unsend-button";
-
-            unsend.textContent =
-                "Unsend";
-
-            unsend.addEventListener(
-                "click",
-                () => unsendMessage(message.id)
-            );
-
-            meta.appendChild(unsend);
-        }
-    }
-
-
-    bubble.appendChild(meta);
-
-    row.appendChild(bubble);
-
-    messages.appendChild(row);
-
-
-    /* ---------- ADMIN MESSAGE SEEN ---------- */
-
-    if (
-        message.sender_type === "admin" &&
-        !message.viewed
-    ) {
-
-        markMessageSeen(
-            message.id
-        );
-    }
-
-
-    /* ---------- VOICE LISTENED ---------- */
-
-    const audio =
-        bubble.querySelector(
-            "audio[data-message-id]"
-        );
-
-    if (audio) {
-
-        audio.addEventListener(
-            "play",
-            () => {
-
-                markVoiceListened(
-                    message.id
-                );
-
-            },
-            {
-                once: true
-            }
-        );
-    }
-}
-
-
-/* =========================================================
-   16. RENDER ALL MESSAGES
-========================================================= */
-
-async function renderMessages(messageList) {
-
-    messages.innerHTML = "";
-
-    if (
-        !messageList ||
-        messageList.length === 0
-    ) {
-
-        messages.innerHTML = `
-            <div
-                class="empty-chat"
-                id="emptyChat"
-            >
-                No messages yet.<br>
-                Send a message to G Nurse.
-            </div>
-        `;
-
-        return;
-    }
-
-
-    for (const message of messageList) {
-
-        if (message.deleted_at) {
-
-            const deletedRow =
-                document.createElement("div");
-
-            deletedRow.className =
-                "message-row " +
-                (
-                    message.sender_type === "visitor"
-                        ? "visitor"
-                        : "admin"
-                );
-
-            deletedRow.innerHTML = `
-                <div class="message-bubble">
-
-                    <div
-                        class="message-text"
-                        style="font-style:italic;color:#888;"
-                    >
-                        Message unsent
-                    </div>
-
-                    <div class="message-meta">
-                        ${formatMessageTime(
-                            message.created_at
-                        )}
-                    </div>
-
-                </div>
-            `;
-
-            messages.appendChild(
-                deletedRow
-            );
-
-            continue;
-        }
-
-        await renderMessage(
-            message
-        );
-    }
-
-    scrollMessagesToBottom();
-}
-
-
-/* =========================================================
-   17. LOAD MESSAGES
+   13. MESSAGE LOADING
 ========================================================= */
 
 async function loadMessages() {
@@ -1896,112 +1271,400 @@ async function loadMessages() {
     const {
         data,
         error
-    } = await supabaseClient
-        .from("g_nurse_messages")
-        .select("*")
-        .eq(
-            "conversation_id",
-            currentConversation.id
-        )
-        .order(
-            "created_at",
-            {
-                ascending: true
-            }
-        );
+    } =
+        await supabaseClient
+            .from("g_nurse_messages")
+            .select("*")
+            .eq(
+                "conversation_id",
+                currentConversation.id
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: true
+                }
+            );
 
     if (error) {
 
-        throw new Error(
-            "Could not load messages: " +
-            error.message
+        console.error(
+            "Message loading error:",
+            error
+        );
+
+        return;
+    }
+
+    messages.innerHTML = "";
+
+    if (!data || data.length === 0) {
+
+        messages.appendChild(
+            emptyChat
+        );
+
+    } else {
+
+        data.forEach(
+            function(message) {
+
+                renderMessage(
+                    message
+                );
+
+            }
         );
     }
 
-    await renderMessages(
-        data || []
+    messages.scrollTop =
+        messages.scrollHeight;
+}
+
+
+/* =========================================================
+   14. RENDER MESSAGE
+========================================================= */
+
+function renderMessage(message) {
+
+    const row =
+        document.createElement("div");
+
+    row.className =
+        "message-row " +
+        (
+            message.sender_type === "visitor"
+                ? "visitor"
+                : "admin"
+        );
+
+    const bubble =
+        document.createElement("div");
+
+    bubble.className =
+        "message-bubble";
+
+    if (message.deleted_at) {
+
+        bubble.innerHTML =
+            "<em>This message was unsent.</em>";
+
+    } else {
+
+        if (message.message) {
+
+            const text =
+                document.createElement("div");
+
+            text.innerHTML =
+                escapeHTML(
+                    message.message
+                ).replace(
+                    /\n/g,
+                    "<br>"
+                );
+
+            bubble.appendChild(
+                text
+            );
+        }
+
+
+        if (message.attachment_url) {
+
+            const attachment =
+                document.createElement("div");
+
+            attachment.className =
+                "message-file";
+
+            attachment.textContent =
+                "📎 " +
+                (
+                    message.attachment_name ||
+                    "Attachment"
+                );
+
+            attachment.style.cursor =
+                "pointer";
+
+            attachment.addEventListener(
+                "click",
+                function() {
+
+                    openPrivateFile(
+                        message
+                    );
+
+                }
+            );
+
+            bubble.appendChild(
+                attachment
+            );
+        }
+
+
+        if (message.voice_url) {
+
+            const audio =
+                document.createElement("audio");
+
+            audio.controls = true;
+
+            audio.style.width =
+                "220px";
+
+            audio.style.marginTop =
+                "7px";
+
+            audio.dataset.messageId =
+                message.id;
+
+            audio.addEventListener(
+                "play",
+                function() {
+
+                    markVoiceListened(
+                        message.id
+                    );
+
+                }
+            );
+
+            getPrivateUrl(
+                message.voice_url
+            ).then(
+                function(url) {
+
+                    if (url) {
+                        audio.src = url;
+                    }
+
+                }
+            );
+
+            bubble.appendChild(
+                audio
+            );
+        }
+
+
+        if (
+            message.attachment_type &&
+            message.attachment_type.startsWith(
+                "image/"
+            )
+        ) {
+
+            getPrivateUrl(
+                message.attachment_url
+            ).then(
+                function(url) {
+
+                    if (!url) {
+                        return;
+                    }
+
+                    const image =
+                        document.createElement(
+                            "img"
+                        );
+
+                    image.className =
+                        "message-image";
+
+                    image.src =
+                        url;
+
+                    image.alt =
+                        message.attachment_name ||
+                        "Image";
+
+                    bubble.insertBefore(
+                        image,
+                        bubble.firstChild
+                    );
+
+                }
+            );
+        }
+    }
+
+
+    const time =
+        document.createElement("span");
+
+    time.className =
+        "message-time";
+
+    time.textContent =
+        formatMessageTime(
+            message.created_at
+        );
+
+    bubble.appendChild(
+        time
+    );
+
+    row.appendChild(
+        bubble
+    );
+
+    messages.appendChild(
+        row
+    );
+
+    if (
+        message.sender_type === "admin" &&
+        !message.viewed
+    ) {
+
+        markMessageSeen(
+            message.id
+        );
+    }
+}
+        <script>
+
+/* =========================================================
+   8. PRIVATE STORAGE URL
+========================================================= */
+
+async function getPrivateUrl(
+    storagePath
+) {
+
+    if (!storagePath) {
+        return null;
+    }
+
+    let bucketName = "";
+
+    if (
+        storagePath.startsWith("images/")
+    ) {
+
+        bucketName =
+            "g-nurse-images";
+
+        storagePath =
+            storagePath.replace(
+                "images/",
+                ""
+            );
+
+    } else if (
+        storagePath.startsWith("files/")
+    ) {
+
+        bucketName =
+            "g-nurse-files";
+
+        storagePath =
+            storagePath.replace(
+                "files/",
+                ""
+            );
+
+    } else if (
+        storagePath.startsWith("voice/")
+    ) {
+
+        bucketName =
+            "g-nurse-voice";
+
+        storagePath =
+            storagePath.replace(
+                "voice/",
+                ""
+            );
+
+    } else {
+
+        return null;
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .storage
+            .from(bucketName)
+            .createSignedUrl(
+                storagePath,
+                3600
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Signed URL error:",
+            error
+        );
+
+        return null;
+    }
+
+
+    return data?.signedUrl || null;
+}
+
+
+/* =========================================================
+   9. OPEN PRIVATE FILE
+========================================================= */
+
+async function openPrivateFile(
+    message
+) {
+
+    if (!message?.attachment_url) {
+        return;
+    }
+
+
+    showLoading(
+        "Opening file..."
+    );
+
+
+    const url =
+        await getPrivateUrl(
+            message.attachment_url
+        );
+
+
+    hideLoading();
+
+
+    if (!url) {
+
+        alert(
+            "Unable to open this file."
+        );
+
+        return;
+    }
+
+
+    window.open(
+        url,
+        "_blank",
+        "noopener,noreferrer"
     );
 }
 
 
 /* =========================================================
-   18. SEND TEXT MESSAGE
+   10. MARK ADMIN MESSAGE AS SEEN
 ========================================================= */
 
-async function sendTextMessage() {
-
-    if (!currentConversation) {
-        return;
-    }
-
-    const text =
-        messageInput.value.trim();
-
-    if (!text) {
-        return;
-    }
-
-    sendButton.disabled =
-        true;
-
-    try {
-
-        const {
-            error
-        } = await supabaseClient
-            .from("g_nurse_messages")
-            .insert({
-                conversation_id:
-                    currentConversation.id,
-
-                sender_type:
-                    "visitor",
-
-                message:
-                    text
-            });
-
-        if (error) {
-
-            throw new Error(
-                "Could not send message: " +
-                error.message
-            );
-        }
-
-        messageInput.value =
-            "";
-
-        messageInput.style.height =
-            "42px";
-
-    } catch (error) {
-
-        console.error(
-            "Send message error:",
-            error
-        );
-
-        alert(
-            error.message ||
-            "Unable to send message."
-        );
-
-    } finally {
-
-        sendButton.disabled =
-            false;
-
-        messageInput.focus();
-    }
-}
-
-
-/* =========================================================
-   19. UNSEND MESSAGE
-========================================================= */
-
-async function unsendMessage(
+async function markMessageSeen(
     messageId
 ) {
 
@@ -2009,269 +1672,45 @@ async function unsendMessage(
         return;
     }
 
-    const confirmed =
-        window.confirm(
-            "Unsend this message?"
-        );
-
-    if (!confirmed) {
-        return;
-    }
 
     try {
 
-        const {
-            data,
-            error
-        } = await supabaseClient
+        await supabaseClient
             .rpc(
-                "g_nurse_unsend_message",
+                "g_nurse_mark_message_seen",
                 {
                     p_message_id:
                         messageId
                 }
             );
 
-        if (error) {
-
-            throw new Error(
-                "Could not unsend message: " +
-                error.message
-            );
-        }
-
-        if (!data) {
-
-            throw new Error(
-                "This message could not be unsent."
-            );
-        }
-
-        await loadMessages();
-
     } catch (error) {
 
         console.error(
-            "Unsend error:",
+            "Mark seen error:",
             error
         );
 
-        alert(
-            error.message ||
-            "Unable to unsend message."
-        );
     }
 }
 
 
 /* =========================================================
-   20. SEND BUTTON
+   11. SEND TEXT MESSAGE
 ========================================================= */
 
-sendButton.addEventListener(
-    "click",
-    sendTextMessage
-);
+async function sendTextMessage() {
+
+    const text =
+        messageInput
+            .value
+            .trim();
 
 
-/* =========================================================
-   21. ENTER TO SEND
-========================================================= */
-
-messageInput.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (
-            event.key === "Enter" &&
-            !event.shiftKey
-        ) {
-
-            event.preventDefault();
-
-            sendTextMessage();
-        }
-    }
-);
-
-
-/* =========================================================
-   22. AUTO-RESIZE MESSAGE BOX
-========================================================= */
-
-messageInput.addEventListener(
-    "input",
-    function() {
-
-        this.style.height =
-            "42px";
-
-        this.style.height =
-            Math.min(
-                this.scrollHeight,
-                110
-            ) + "px";
-    }
-);
-
-
-/* =========================================================
-   23. ATTACHMENT BUTTON
-========================================================= */
-
-attachmentButton.addEventListener(
-    "click",
-    function() {
-
-        fileInput.click();
-
-    }
-);
-
-
-/* =========================================================
-   24. SELECT FILE
-========================================================= */
-
-fileInput.addEventListener(
-    "change",
-    function() {
-
-        const file =
-            this.files?.[0];
-
-        if (!file) {
-            return;
-        }
-
-        selectedFile =
-            file;
-
-        attachmentPreviewText.textContent =
-            file.name;
-
-        attachmentPreview.style.display =
-            "block";
-    }
-);
-
-
-/* =========================================================
-   25. REMOVE FILE
-========================================================= */
-
-removeAttachment.addEventListener(
-    "click",
-    function() {
-
-        selectedFile =
-            null;
-
-        fileInput.value =
-            "";
-
-        attachmentPreview.style.display =
-            "none";
-    }
-);
-    /* =========================================================
-   26. UPLOAD FILE TO SUPABASE STORAGE
-========================================================= */
-
-async function uploadFileToStorage(
-    file,
-    bucket
-) {
-
-    if (!file) {
-        throw new Error(
-            "No file selected."
-        );
-    }
-
-    if (!currentUser) {
-        throw new Error(
-            "User session not available."
-        );
-    }
-
-    if (!currentConversation) {
-        throw new Error(
-            "Conversation not available."
-        );
-    }
-
-
-    const safeName =
-        file.name
-            .replace(
-                /[^a-zA-Z0-9._-]/g,
-                "_"
-            );
-
-
-    const uniqueName =
-        Date.now() +
-        "_" +
-        crypto.randomUUID() +
-        "_" +
-        safeName;
-
-
-    const path =
-        currentUser.id +
-        "/" +
-        currentConversation.id +
-        "/" +
-        uniqueName;
-
-
-    const {
-        error
-    } = await supabaseClient
-        .storage
-        .from(bucket)
-        .upload(
-            path,
-            file,
-            {
-                cacheControl:
-                    "3600",
-
-                upsert:
-                    false,
-
-                contentType:
-                    file.type ||
-                    "application/octet-stream"
-            }
-        );
-
-
-    if (error) {
-
-        throw new Error(
-            "File upload failed: " +
-            error.message
-        );
-    }
-
-
-    return path;
-}
-
-
-/* =========================================================
-   27. SEND ATTACHMENT MESSAGE
-========================================================= */
-
-async function sendAttachmentMessage(
-    file
-) {
-
-    if (!file) {
+    if (!text) {
         return;
     }
+
 
     if (!currentConversation) {
 
@@ -2283,77 +1722,275 @@ async function sendAttachmentMessage(
     }
 
 
+    sendButton.disabled = true;
+
+
     try {
 
-        attachmentButton.disabled =
-            true;
+        const {
+            error
+        } =
+            await supabaseClient
+                .from(
+                    "g_nurse_messages"
+                )
+                .insert({
 
-        sendButton.disabled =
-            true;
+                    conversation_id:
+                        currentConversation.id,
+
+                    sender_type:
+                        "visitor",
+
+                    message:
+                        text
+
+                });
 
 
-        let bucket;
-
-
-        if (
-            file.type &&
-            file.type.startsWith(
-                "image/"
-            )
-        ) {
-
-            bucket =
-                "g-nurse-images";
-
-        } else {
-
-            bucket =
-                "g-nurse-files";
+        if (error) {
+            throw error;
         }
 
 
-        const filePath =
-            await uploadFileToStorage(
+        messageInput.value = "";
+
+        messageInput.style.height =
+            "auto";
+
+
+        await loadMessages();
+
+    } catch (error) {
+
+        console.error(
+            "Send message error:",
+            error
+        );
+
+        alert(
+            "Message could not be sent."
+        );
+
+    } finally {
+
+        sendButton.disabled = false;
+    }
+}
+
+
+/* =========================================================
+   12. DETERMINE STORAGE BUCKET
+========================================================= */
+
+function getBucketForFile(
+    file
+) {
+
+    if (!file) {
+        return null;
+    }
+
+
+    if (
+        file.type &&
+        file.type.startsWith(
+            "image/"
+        )
+    ) {
+
+        return "g-nurse-images";
+    }
+
+
+    return "g-nurse-files";
+}
+
+
+/* =========================================================
+   13. CREATE STORAGE PATH
+========================================================= */
+
+function createStoragePath(
+    file
+) {
+
+    const extension =
+        file.name.includes(".")
+            ? file.name
+                .split(".")
+                .pop()
+                .toLowerCase()
+            : "file";
+
+
+    const randomPart =
+        Math.random()
+            .toString(36)
+            .substring(2, 10);
+
+
+    return (
+        currentUser.id +
+        "/" +
+        currentConversation.id +
+        "/" +
+        Date.now() +
+        "_" +
+        randomPart +
+        "." +
+        extension
+    );
+}
+
+
+/* =========================================================
+   14. UPLOAD ATTACHMENT
+========================================================= */
+
+async function uploadAttachment(
+    file
+) {
+
+    if (!file) {
+        return null;
+    }
+
+
+    const bucket =
+        getBucketForFile(
+            file
+        );
+
+
+    const path =
+        createStoragePath(
+            file
+        );
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .storage
+            .from(bucket)
+            .upload(
+                path,
                 file,
-                bucket
+                {
+                    cacheControl:
+                        "3600",
+
+                    upsert:
+                        false
+                }
+            );
+
+
+    if (error) {
+        throw error;
+    }
+
+
+    let attachmentPrefix =
+        "files/";
+
+    if (
+        bucket ===
+        "g-nurse-images"
+    ) {
+
+        attachmentPrefix =
+            "images/";
+    }
+
+
+    return {
+        path:
+            attachmentPrefix +
+            path,
+
+        name:
+            file.name,
+
+        type:
+            file.type ||
+            "application/octet-stream"
+    };
+}
+
+
+/* =========================================================
+   15. SEND ATTACHMENT
+========================================================= */
+
+async function sendAttachment() {
+
+    if (!selectedFile) {
+        return;
+    }
+
+
+    if (!currentConversation) {
+
+        alert(
+            "Please start the chat first."
+        );
+
+        return;
+    }
+
+
+    const file =
+        selectedFile;
+
+
+    sendButton.disabled = true;
+
+
+    try {
+
+        showLoading(
+            "Uploading file..."
+        );
+
+
+        const uploaded =
+            await uploadAttachment(
+                file
             );
 
 
         const {
             error
-        } = await supabaseClient
-            .from("g_nurse_messages")
-            .insert({
+        } =
+            await supabaseClient
+                .from(
+                    "g_nurse_messages"
+                )
+                .insert({
 
-                conversation_id:
-                    currentConversation.id,
+                    conversation_id:
+                        currentConversation.id,
 
-                sender_type:
-                    "visitor",
+                    sender_type:
+                        "visitor",
 
-                message:
-                    null,
+                    attachment_url:
+                        uploaded.path,
 
-                attachment_url:
-                    bucket +
-                    "/" +
-                    filePath,
+                    attachment_name:
+                        uploaded.name,
 
-                attachment_name:
-                    file.name,
+                    attachment_type:
+                        uploaded.type
 
-                attachment_type:
-                    file.type ||
-                    "application/octet-stream"
-            });
+                });
 
 
         if (error) {
-
-            throw new Error(
-                "Could not save attachment message: " +
-                error.message
-            );
+            throw error;
         }
 
 
@@ -2366,6 +2003,11 @@ async function sendAttachmentMessage(
         attachmentPreview.style.display =
             "none";
 
+        attachmentPreview.innerHTML =
+            "";
+
+
+        await loadMessages();
 
     } catch (error) {
 
@@ -2375,74 +2017,309 @@ async function sendAttachmentMessage(
         );
 
         alert(
-            error.message ||
-            "Unable to send attachment."
+            "The file could not be sent."
         );
 
     } finally {
 
-        attachmentButton.disabled =
-            false;
+        hideLoading();
 
-        sendButton.disabled =
-            false;
+        sendButton.disabled = false;
     }
 }
 
 
 /* =========================================================
-   28. FILE SELECTION
+   16. FILE INPUT
 ========================================================= */
 
 fileInput.addEventListener(
     "change",
-    async function() {
+    function () {
 
         const file =
             this.files?.[0];
 
+
         if (!file) {
+
+            selectedFile =
+                null;
+
+            attachmentPreview.style.display =
+                "none";
+
+            attachmentPreview.innerHTML =
+                "";
+
             return;
         }
+
 
         selectedFile =
             file;
 
-        attachmentPreviewText.textContent =
-            file.name;
 
         attachmentPreview.style.display =
-            "block";
+            "flex";
 
-        await sendAttachmentMessage(
-            file
+
+        attachmentPreview.innerHTML =
+            "";
+
+
+        const name =
+            document.createElement(
+                "span"
+            );
+
+        name.textContent =
+            file.name;
+
+
+        const size =
+            document.createElement(
+                "small"
+            );
+
+        size.textContent =
+            formatFileSize(
+                file.size
+            );
+
+
+        attachmentPreview.appendChild(
+            name
+        );
+
+        attachmentPreview.appendChild(
+            size
         );
     }
 );
 
 
 /* =========================================================
-   29. REMOVE SELECTED FILE
+   17. FILE SIZE
 ========================================================= */
 
-removeAttachment.addEventListener(
+function formatFileSize(
+    bytes
+) {
+
+    if (!bytes) {
+        return "0 B";
+    }
+
+
+    const units = [
+        "B",
+        "KB",
+        "MB",
+        "GB"
+    ];
+
+
+    let size =
+        bytes;
+
+    let index =
+        0;
+
+
+    while (
+        size >= 1024 &&
+        index <
+            units.length - 1
+    ) {
+
+        size /=
+            1024;
+
+        index++;
+    }
+
+
+    return (
+        size.toFixed(
+            index === 0
+                ? 0
+                : 1
+        ) +
+        " " +
+        units[index]
+    );
+}
+
+
+/* =========================================================
+   18. SEND BUTTON
+========================================================= */
+
+sendButton.addEventListener(
     "click",
-    function() {
+    async function () {
 
-        selectedFile =
-            null;
+        if (selectedFile) {
 
-        fileInput.value =
-            "";
+            await sendAttachment();
 
-        attachmentPreview.style.display =
-            "none";
+            return;
+        }
+
+
+        await sendTextMessage();
     }
 );
 
 
 /* =========================================================
-   30. VOICE RECORDING
+   19. ENTER TO SEND
+========================================================= */
+
+messageInput.addEventListener(
+    "keydown",
+    async function (event) {
+
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
+
+            event.preventDefault();
+
+            if (selectedFile) {
+
+                await sendAttachment();
+
+            } else {
+
+                await sendTextMessage();
+            }
+        }
+    }
+);
+
+
+/* =========================================================
+   20. AUTO-GROW MESSAGE BOX
+========================================================= */
+
+messageInput.addEventListener(
+    "input",
+    function () {
+
+        this.style.height =
+            "auto";
+
+        this.style.height =
+            Math.min(
+                this.scrollHeight,
+                140
+            ) + "px";
+    }
+);
+
+
+/* =========================================================
+   21. REMOVE SELECTED FILE
+========================================================= */
+
+if (attachmentPreview) {
+
+    attachmentPreview.addEventListener(
+        "click",
+        function () {
+
+            selectedFile =
+                null;
+
+            fileInput.value =
+                "";
+
+            attachmentPreview.style.display =
+                "none";
+
+            attachmentPreview.innerHTML =
+                "";
+        }
+    );
+}
+
+
+/* =========================================================
+   22. UNSEND MESSAGE
+========================================================= */
+
+async function unsendMessage(
+    messageId
+) {
+
+    if (!messageId) {
+        return;
+    }
+
+
+    const confirmed =
+        confirm(
+            "Unsend this message?"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .rpc(
+                    "g_nurse_unsend_message",
+                    {
+                        p_message_id:
+                            messageId
+                    }
+                );
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        if (!data) {
+
+            alert(
+                "This message can no longer be unsent."
+            );
+
+            return;
+        }
+
+
+        await loadMessages();
+
+    } catch (error) {
+
+        console.error(
+            "Unsend error:",
+            error
+        );
+
+        alert(
+            "Unable to unsend message."
+        );
+    }
+}
+
+
+/* =========================================================
+   23. VOICE RECORDING
 ========================================================= */
 
 async function startVoiceRecording() {
@@ -2463,7 +2340,7 @@ async function startVoiceRecording() {
     ) {
 
         alert(
-            "Voice recording is not supported by this browser."
+            "Voice recording is not supported on this device/browser."
         );
 
         return;
@@ -2473,7 +2350,8 @@ async function startVoiceRecording() {
     try {
 
         const stream =
-            await navigator.mediaDevices
+            await navigator
+                .mediaDevices
                 .getUserMedia({
                     audio: true
                 });
@@ -2483,38 +2361,14 @@ async function startVoiceRecording() {
             [];
 
 
-        let options = {};
-
-
-        if (
-            MediaRecorder.isTypeSupported(
-                "audio/webm;codecs=opus"
-            )
-        ) {
-
-            options.mimeType =
-                "audio/webm;codecs=opus";
-
-        } else if (
-            MediaRecorder.isTypeSupported(
-                "audio/webm"
-            )
-        ) {
-
-            options.mimeType =
-                "audio/webm";
-        }
-
-
         mediaRecorder =
             new MediaRecorder(
-                stream,
-                options
+                stream
             );
 
 
         mediaRecorder.ondataavailable =
-            function(event) {
+            function (event) {
 
                 if (
                     event.data &&
@@ -2529,7 +2383,7 @@ async function startVoiceRecording() {
 
 
         mediaRecorder.onstop =
-            async function() {
+            async function () {
 
                 stream
                     .getTracks()
@@ -2539,50 +2393,7 @@ async function startVoiceRecording() {
                     );
 
 
-                const mimeType =
-                    mediaRecorder.mimeType ||
-                    "audio/webm";
-
-
-                const blob =
-                    new Blob(
-                        recordedChunks,
-                        {
-                            type: mimeType
-                        }
-                    );
-
-
-                if (
-                    blob.size === 0
-                ) {
-
-                    recordingPanel
-                        .classList
-                        .remove("active");
-
-                    return;
-                }
-
-
-                try {
-
-                    await sendVoiceNote(
-                        blob
-                    );
-
-                } catch (error) {
-
-                    console.error(
-                        "Voice send error:",
-                        error
-                    );
-
-                    alert(
-                        error.message ||
-                        "Unable to send voice note."
-                    );
-                }
+                await finishVoiceRecording();
             };
 
 
@@ -2592,41 +2403,21 @@ async function startVoiceRecording() {
         recordingSeconds =
             0;
 
-        recordingTimer.textContent =
-            "00:00";
 
-        recordingPanel
-            .classList
-            .add("active");
+        updateRecordingUI();
 
 
         recordingTimer =
-            window.setInterval(
-                function() {
+            setInterval(
+                function () {
 
                     recordingSeconds++;
 
-                    const minutes =
-                        Math.floor(
-                            recordingSeconds / 60
-                        );
-
-                    const seconds =
-                        recordingSeconds % 60;
-
-                    document.getElementById(
-                        "recordingTimer"
-                    ).textContent =
-                        String(minutes)
-                            .padStart(2, "0") +
-                        ":" +
-                        String(seconds)
-                            .padStart(2, "0");
+                    updateRecordingUI();
 
                 },
                 1000
             );
-
 
     } catch (error) {
 
@@ -2636,21 +2427,64 @@ async function startVoiceRecording() {
         );
 
         alert(
-            "Microphone permission is required to record a voice note."
+            "Microphone permission is required."
         );
     }
 }
 
 
 /* =========================================================
-   31. STOP VOICE RECORDING
+   24. UPDATE RECORDING UI
+========================================================= */
+
+function updateRecordingUI() {
+
+    if (!recordingStatus) {
+        return;
+    }
+
+
+    const minutes =
+        Math.floor(
+            recordingSeconds / 60
+        );
+
+
+    const seconds =
+        recordingSeconds % 60;
+
+
+    recordingStatus.textContent =
+        "Recording " +
+        String(minutes).padStart(
+            2,
+            "0"
+        ) +
+        ":" +
+        String(seconds).padStart(
+            2,
+            "0"
+        );
+}
+
+
+/* =========================================================
+   25. STOP VOICE RECORDING
 ========================================================= */
 
 function stopVoiceRecording() {
 
     if (
-        recordingTimer
+        mediaRecorder &&
+        mediaRecorder.state !==
+            "inactive"
     ) {
+
+        mediaRecorder.stop();
+    }
+
+
+    if (recordingTimer) {
 
         clearInterval(
             recordingTimer
@@ -2661,325 +2495,180 @@ function stopVoiceRecording() {
     }
 
 
-    recordingPanel
-        .classList
-        .remove("active");
+    if (recordingStatus) {
 
-
-    if (
-        mediaRecorder &&
-        mediaRecorder.state !== "inactive"
-    ) {
-
-        mediaRecorder.stop();
+        recordingStatus.textContent =
+            "";
     }
 }
 
 
 /* =========================================================
-   32. SEND VOICE NOTE
+   26. FINISH VOICE RECORDING
 ========================================================= */
 
-async function sendVoiceNote(
-    blob
-) {
+async function finishVoiceRecording() {
 
-    if (!currentConversation) {
-        throw new Error(
-            "Conversation not available."
-        );
+    if (
+        !recordedChunks.length ||
+        !currentConversation
+    ) {
+
+        return;
     }
-
-
-    voiceButton.disabled =
-        true;
 
 
     try {
 
-        const extension =
-            blob.type.includes("webm")
-                ? "webm"
-                : "ogg";
+        showLoading(
+            "Sending voice note..."
+        );
 
 
-        const file =
-            new File(
-                [
-                    blob
-                ],
-                "voice_" +
-                Date.now() +
-                "." +
-                extension,
+        const mimeType =
+            mediaRecorder?.mimeType ||
+            "audio/webm";
+
+
+        const blob =
+            new Blob(
+                recordedChunks,
                 {
                     type:
-                        blob.type ||
-                        "audio/webm"
+                        mimeType
                 }
             );
 
 
-        const filePath =
-            await uploadFileToStorage(
-                file,
-                "g-nurse-voice"
-            );
+        const extension =
+            mimeType.includes(
+                "mp4"
+            )
+                ? "m4a"
+                : "webm";
+
+
+        const path =
+            currentUser.id +
+            "/" +
+            currentConversation.id +
+            "/" +
+            Date.now() +
+            "_voice." +
+            extension;
 
 
         const {
-            error
-        } = await supabaseClient
-            .from("g_nurse_messages")
-            .insert({
+            error:
+                uploadError
+        } =
+            await supabaseClient
+                .storage
+                .from(
+                    "g-nurse-voice"
+                )
+                .upload(
+                    path,
+                    blob,
+                    {
+                        contentType:
+                            mimeType,
 
-                conversation_id:
-                    currentConversation.id,
+                        cacheControl:
+                            "3600",
 
-                sender_type:
-                    "visitor",
-
-                message:
-                    null,
-
-                voice_url:
-                    "g-nurse-voice/" +
-                    filePath,
-
-                attachment_name:
-                    file.name,
-
-                attachment_type:
-                    file.type
-            });
+                        upsert:
+                            false
+                    }
+                );
 
 
-        if (error) {
-
-            throw new Error(
-                "Could not save voice message: " +
-                error.message
-            );
+        if (uploadError) {
+            throw uploadError;
         }
+
+
+        const {
+            error:
+                messageError
+        } =
+            await supabaseClient
+                .from(
+                    "g_nurse_messages"
+                )
+                .insert({
+
+                    conversation_id:
+                        currentConversation.id,
+
+                    sender_type:
+                        "visitor",
+
+                    voice_url:
+                        "voice/" +
+                        path
+
+                });
+
+
+        if (messageError) {
+            throw messageError;
+        }
+
+
+        recordedChunks =
+            [];
+
+
+        await loadMessages();
+
+    } catch (error) {
+
+        console.error(
+            "Voice error:",
+            error
+        );
+
+        alert(
+            "Voice note could not be sent."
+        );
 
     } finally {
 
-        voiceButton.disabled =
-            false;
+        hideLoading();
     }
 }
 
 
 /* =========================================================
-   33. VOICE BUTTON
+   27. VOICE BUTTON
 ========================================================= */
 
-voiceButton.addEventListener(
-    "click",
-    function() {
+if (voiceButton) {
 
-        if (
-            mediaRecorder &&
-            mediaRecorder.state ===
-                "recording"
-        ) {
+    voiceButton.addEventListener(
+        "click",
+        async function () {
 
-            stopVoiceRecording();
+            if (
+                mediaRecorder &&
+                mediaRecorder.state ===
+                    "recording"
+            ) {
 
-        } else {
+                stopVoiceRecording();
 
-            startVoiceRecording();
+            } else {
+
+                await startVoiceRecording();
+            }
         }
-    }
-);
-
-
-/* =========================================================
-   34. STOP RECORDING BUTTON
-========================================================= */
-
-stopRecordingButton.addEventListener(
-    "click",
-    stopVoiceRecording
-);
-
-
-/* =========================================================
-   35. NOTIFICATION AUDIO
-========================================================= */
-
-function playNotificationSound() {
-
-    try {
-
-        if (!notificationAudioContext) {
-
-            notificationAudioContext =
-                new (
-                    window.AudioContext ||
-                    window.webkitAudioContext
-                )();
-        }
-
-
-        const oscillator =
-            notificationAudioContext
-                .createOscillator();
-
-        const gain =
-            notificationAudioContext
-                .createGain();
-
-
-        oscillator.frequency.value =
-            880;
-
-        oscillator.type =
-            "sine";
-
-
-        gain.gain.setValueAtTime(
-            0.0001,
-            notificationAudioContext
-                .currentTime
-        );
-
-        gain.gain.exponentialRampToValueAtTime(
-            0.08,
-            notificationAudioContext
-                .currentTime + 0.01
-        );
-
-        gain.gain.exponentialRampToValueAtTime(
-            0.0001,
-            notificationAudioContext
-                .currentTime + 0.18
-        );
-
-
-        oscillator.connect(
-            gain
-        );
-
-        gain.connect(
-            notificationAudioContext
-                .destination
-        );
-
-
-        oscillator.start();
-
-        oscillator.stop(
-            notificationAudioContext
-                .currentTime + 0.2
-        );
-
-    } catch (error) {
-
-        console.error(
-            "Notification sound error:",
-            error
-        );
-    }
-    }
-    /* =========================================================
-   36. NOTIFICATION PERMISSION
-========================================================= */
-
-async function requestNotificationPermission() {
-
-    if (
-        !("Notification" in window)
-    ) {
-        return;
-    }
-
-    try {
-
-        if (
-            Notification.permission ===
-            "default"
-        ) {
-
-            await Notification.requestPermission();
-        }
-
-    } catch (error) {
-
-        console.error(
-            "Notification permission error:",
-            error
-        );
-    }
+    );
 }
 
 
 /* =========================================================
-   37. SHOW BROWSER NOTIFICATION
-========================================================= */
-
-function showBrowserNotification(
-    notification
-) {
-
-    if (
-        !("Notification" in window)
-    ) {
-        return;
-    }
-
-    if (
-        Notification.permission !==
-        "granted"
-    ) {
-        return;
-    }
-
-    try {
-
-        const title =
-            notification.title ||
-            "G Nurse";
-
-        const body =
-            notification.body ||
-            "You have a new message.";
-
-
-        const browserNotification =
-            new Notification(
-                title,
-                {
-                    body: body,
-                    icon:
-                        "/favicon.ico",
-                    tag:
-                        "gnurse-chat"
-                }
-            );
-
-
-        browserNotification.onclick =
-            function() {
-
-                window.focus();
-
-                browserNotification.close();
-            };
-
-
-    } catch (error) {
-
-        console.error(
-            "Browser notification error:",
-            error
-        );
-    }
-}
-
-
-/* =========================================================
-   38. LOAD NOTIFICATIONS
+   28. NOTIFICATIONS
 ========================================================= */
 
 async function loadNotifications() {
@@ -2988,29 +2677,34 @@ async function loadNotifications() {
         return;
     }
 
+
     const {
         data,
         error
-    } = await supabaseClient
-        .from("g_nurse_notifications")
-        .select("*")
-        .eq(
-            "recipient_user_id",
-            currentUser.id
-        )
-        .order(
-            "created_at",
-            {
-                ascending: false
-            }
-        )
-        .limit(50);
+    } =
+        await supabaseClient
+            .from(
+                "g_nurse_notifications"
+            )
+            .select("*")
+            .eq(
+                "recipient_user_id",
+                currentUser.id
+            )
+            .order(
+                "created_at",
+                {
+                    ascending:
+                        false
+                }
+            )
+            .limit(50);
 
 
     if (error) {
 
         console.error(
-            "Could not load notifications:",
+            "Notification error:",
             error
         );
 
@@ -3025,52 +2719,50 @@ async function loadNotifications() {
 
 
 /* =========================================================
-   39. RENDER NOTIFICATIONS
+   29. RENDER NOTIFICATIONS
 ========================================================= */
 
 function renderNotifications(
-    notificationData
+    notifications
 ) {
 
-    notificationList.innerHTML =
-        "";
+    if (!notificationList) {
+        return;
+    }
+    notificationList.innerHTML = "";
 
 
-    if (
-        !notificationData ||
-        notificationData.length === 0
-    ) {
+    const unread =
+        notifications.filter(
+            item => !item.is_read
+        ).length;
+
+
+    updateNotificationBadge(
+        unread
+    );
+
+
+    if (!notifications.length) {
 
         notificationList.innerHTML = `
-            <div class="no-notifications">
-                No notifications
+            <div class="empty-notifications">
+                No notifications yet.
             </div>
         `;
-
-        notificationBadge.style.display =
-            "none";
 
         return;
     }
 
 
-    let unreadCount =
-        0;
-
-
-    notificationData.forEach(
-        function(notification) {
-
-            if (
-                !notification.is_read
-            ) {
-
-                unreadCount++;
-            }
-
+    notifications.forEach(
+        function (notification) {
 
             const item =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
+
 
             item.className =
                 "notification-item" +
@@ -3085,16 +2777,16 @@ function renderNotifications(
                 <strong>
                     ${escapeHTML(
                         notification.title ||
-                        "G Nurse"
+                        "New message"
                     )}
                 </strong>
 
-                <p>
+                <div>
                     ${escapeHTML(
                         notification.body ||
-                        "New message"
+                        ""
                     )}
-                </p>
+                </div>
 
                 <small>
                     ${formatMessageTime(
@@ -3106,41 +2798,42 @@ function renderNotifications(
 
             item.addEventListener(
                 "click",
-                async function() {
+                async function () {
 
                     if (
                         !notification.is_read
                     ) {
 
-                        await markNotificationRead(
-                            notification.id
-                        );
-
-                        notification.is_read =
-                            true;
-
-                        item.classList
-                            .remove(
-                                "unread"
+                        await supabaseClient
+                            .rpc(
+                                "g_nurse_mark_notification_read",
+                                {
+                                    p_notification_id:
+                                        notification.id
+                                }
                             );
-
-                        unreadCount =
-                            Math.max(
-                                0,
-                                unreadCount - 1
-                            );
-
-                        updateNotificationBadge(
-                            unreadCount
-                        );
                     }
 
 
-                    notificationPanel
-                        .classList
-                        .remove(
-                            "open"
-                        );
+                    if (
+                        notification.conversation_id
+                    ) {
+
+                        if (
+                            currentConversation?.id !==
+                            notification.conversation_id
+                        ) {
+
+                            await openExistingConversation(
+                                notification.conversation_id
+                            );
+                        }
+
+                        await loadMessages();
+                    }
+
+
+                    await loadNotifications();
                 }
             );
 
@@ -3150,54 +2843,18 @@ function renderNotifications(
             );
         }
     );
-
-
-    updateNotificationBadge(
-        unreadCount
-    );
 }
 
 
 /* =========================================================
-   40. NOTIFICATION BADGE
+   30. OPEN EXISTING CONVERSATION
 ========================================================= */
 
-function updateNotificationBadge(
-    count
+async function openExistingConversation(
+    conversationId
 ) {
 
-    if (!count || count <= 0) {
-
-        notificationBadge.style.display =
-            "none";
-
-        notificationBadge.textContent =
-            "0";
-
-        return;
-    }
-
-
-    notificationBadge.textContent =
-        count > 99
-            ? "99+"
-            : String(count);
-
-
-    notificationBadge.style.display =
-        "flex";
-}
-
-
-/* =========================================================
-   41. MARK ONE NOTIFICATION READ
-========================================================= */
-
-async function markNotificationRead(
-    notificationId
-) {
-
-    if (!notificationId) {
+    if (!conversationId) {
         return;
     }
 
@@ -3205,64 +2862,53 @@ async function markNotificationRead(
     try {
 
         const {
+            data,
             error
-        } = await supabaseClient
-            .rpc(
-                "g_nurse_mark_notification_read",
-                {
-                    p_notification_id:
-                        notificationId
-                }
-            );
+        } =
+            await supabaseClient
+                .from(
+                    "g_nurse_conversations"
+                )
+                .select("*")
+                .eq(
+                    "id",
+                    conversationId
+                )
+                .eq(
+                    "visitor_user_id",
+                    currentUser.id
+                )
+                .maybeSingle();
 
 
         if (error) {
-
-            console.error(
-                "Mark notification read error:",
-                error
-            );
-        }
-
-    } catch (error) {
-
-        console.error(
-            "Notification read error:",
-            error
-        );
-    }
-}
-
-
-/* =========================================================
-   42. MARK ALL NOTIFICATIONS READ
-========================================================= */
-
-async function markAllNotificationsRead() {
-
-    try {
-
-        const {
-            error
-        } = await supabaseClient
-            .rpc(
-                "g_nurse_mark_all_notifications_read"
-            );
-
-
-        if (error) {
-
             throw error;
         }
 
 
-        await loadNotifications();
+        if (!data) {
+            return;
+        }
 
+
+        currentConversation =
+            data;
+
+
+        chatScreen.style.display =
+            "flex";
+
+
+        welcomeScreen.style.display =
+            "none";
+
+
+        await loadMessages();
 
     } catch (error) {
 
         console.error(
-            "Mark all notifications error:",
+            "Open conversation error:",
             error
         );
     }
@@ -3270,55 +2916,12 @@ async function markAllNotificationsRead() {
 
 
 /* =========================================================
-   43. NOTIFICATION BUTTON
-========================================================= */
-
-notificationButton.addEventListener(
-    "click",
-    async function() {
-
-        notificationPanel
-            .classList
-            .toggle("open");
-
-
-        if (
-            notificationPanel
-                .classList
-                .contains("open")
-        ) {
-
-            await loadNotifications();
-        }
-    }
-);
-
-
-/* =========================================================
-   44. MARK ALL BUTTON
-========================================================= */
-
-markAllNotifications.addEventListener(
-    "click",
-    async function(event) {
-
-        event.stopPropagation();
-
-        await markAllNotificationsRead();
-    }
-);
-
-
-/* =========================================================
-   45. REALTIME CHANNEL
+   31. REALTIME CONNECTION
 ========================================================= */
 
 function startRealtime() {
 
-    if (
-        !currentConversation ||
-        !currentUser
-    ) {
+    if (!currentUser) {
         return;
     }
 
@@ -3338,188 +2941,450 @@ function startRealtime() {
     realtimeChannel =
         supabaseClient
             .channel(
-                "g-nurse-chat-" +
-                currentConversation.id
+                "g-nurse-visitor-" +
+                currentUser.id
             );
 
-
-    /* NEW MESSAGE */
 
     realtimeChannel
         .on(
             "postgres_changes",
             {
-                event: "INSERT",
-                schema: "public",
-                table: "g_nurse_messages",
-                filter:
-                    "conversation_id=eq." +
-                    currentConversation.id
+                event:
+                    "INSERT",
+
+                schema:
+                    "public",
+
+                table:
+                    "g_nurse_messages"
             },
-            async function(payload) {
-
-                const message =
-                    payload.new;
-
+            async function (payload) {
 
                 if (
-                    !message ||
-                    message.deleted_at
+                    !currentConversation
                 ) {
                     return;
                 }
 
 
-                await renderMessage(
-                    message
-                );
-
-
-                scrollMessagesToBottom();
-
-
                 if (
-                    message.sender_type ===
-                    "admin"
-                ) {
-
-                    playNotificationSound();
-                }
-            }
-        );
-
-
-    /* MESSAGE UPDATE */
-
-    realtimeChannel
-        .on(
-            "postgres_changes",
-            {
-                event: "UPDATE",
-                schema: "public",
-                table: "g_nurse_messages",
-                filter:
-                    "conversation_id=eq." +
+                    payload.new
+                        ?.conversation_id !==
                     currentConversation.id
-            },
-            async function() {
+                ) {
+                    return;
+                }
+
 
                 await loadMessages();
             }
-        );
-
-
-    /* NEW NOTIFICATION */
-
-    realtimeChannel
+        )
         .on(
             "postgres_changes",
             {
-                event: "INSERT",
-                schema: "public",
-                table: "g_nurse_notifications",
+                event:
+                    "UPDATE",
+
+                schema:
+                    "public",
+
+                table:
+                    "g_nurse_messages"
+            },
+            async function (payload) {
+
+                if (
+                    !currentConversation
+                ) {
+                    return;
+                }
+
+
+                if (
+                    payload.new
+                        ?.conversation_id !==
+                    currentConversation.id
+                ) {
+                    return;
+                }
+
+
+                await loadMessages();
+            }
+        )
+        .on(
+            "postgres_changes",
+            {
+                event:
+                    "*",
+
+                schema:
+                    "public",
+
+                table:
+                    "g_nurse_notifications",
+
                 filter:
                     "recipient_user_id=eq." +
                     currentUser.id
             },
-            async function(payload) {
+            async function () {
 
-                const notification =
-                    payload.new;
+                await loadNotifications();
+            }
+        )
+        .subscribe(
+            function (status) {
+
+                console.log(
+                    "G Nurse realtime:",
+                    status
+                );
+            }
+        );
+}
 
 
-                playNotificationSound();
+/* =========================================================
+   32. CHAT SCREEN BACK BUTTON
+========================================================= */
+
+if (backButton) {
+
+    backButton.addEventListener(
+        "click",
+        function () {
+
+            chatScreen.style.display =
+                "none";
+
+            welcomeScreen.style.display =
+                "flex";
+        }
+    );
+}
 
 
-                showBrowserNotification(
-                    notification
+/* =========================================================
+   33. CLOSE NOTIFICATION PANEL
+========================================================= */
+
+if (closeNotificationsButton) {
+
+    closeNotificationsButton.addEventListener(
+        "click",
+        function () {
+
+            notificationPanel.style.display =
+                "none";
+        }
+    );
+}
+
+
+/* =========================================================
+   34. OPEN NOTIFICATION PANEL
+========================================================= */
+
+if (notificationButton) {
+
+    notificationButton.addEventListener(
+        "click",
+        async function () {
+
+            if (
+                notificationPanel.style.display ===
+                "flex"
+            ) {
+
+                notificationPanel.style.display =
+                    "none";
+
+                return;
+            }
+
+
+            notificationPanel.style.display =
+                "flex";
+
+
+            await loadNotifications();
+        }
+    );
+}
+
+
+/* =========================================================
+   35. START NEW CHAT BUTTON
+========================================================= */
+
+if (startChatButton) {
+
+    startChatButton.addEventListener(
+        "click",
+        async function () {
+
+            const name =
+                visitorNameInput
+                    .value
+                    .trim();
+
+
+            const email =
+                visitorEmailInput
+                    .value
+                    .trim();
+
+
+            const phone =
+                visitorPhoneInput
+                    .value
+                    .trim();
+
+
+            if (!name) {
+
+                alert(
+                    "Please enter your name."
                 );
 
+                visitorNameInput.focus();
 
-                await loadNotifications();
+                return;
             }
-        );
 
 
-    /* NOTIFICATION UPDATE */
-
-    realtimeChannel
-        .on(
-            "postgres_changes",
-            {
-                event: "UPDATE",
-                schema: "public",
-                table: "g_nurse_notifications",
-                filter:
-                    "recipient_user_id=eq." +
-                    currentUser.id
-            },
-            async function() {
-
-                await loadNotifications();
-            }
-        );
+            saveVisitorDetails(
+                name,
+                email,
+                phone
+            );
 
 
-    realtimeChannel.subscribe(
-        function(status) {
-
-            console.log(
-                "G Nurse realtime status:",
-                status
+            await openChat(
+                name,
+                email,
+                phone
             );
         }
     );
-    }
+}
+
+
 /* =========================================================
-   46. CLOSE NOTIFICATION PANEL WHEN CLICKING OUTSIDE
+   36. RESTORE SAVED VISITOR DETAILS
 ========================================================= */
 
-document.addEventListener(
-    "click",
-    function(event) {
+function restoreVisitorDetails() {
 
-        if (
-            !notificationPanel.contains(event.target) &&
-            !notificationButton.contains(event.target)
-        ) {
+    const saved =
+        loadVisitorDetails();
 
-            notificationPanel
-                .classList
-                .remove("open");
-        }
+
+    if (!saved) {
+        return;
     }
-);
+
+
+    if (
+        visitorNameInput &&
+        saved.name
+    ) {
+
+        visitorNameInput.value =
+            saved.name;
+    }
+
+
+    if (
+        visitorEmailInput &&
+        saved.email
+    ) {
+
+        visitorEmailInput.value =
+            saved.email;
+    }
+
+
+    if (
+        visitorPhoneInput &&
+        saved.phone
+    ) {
+
+        visitorPhoneInput.value =
+            saved.phone;
+    }
+}
 
 
 /* =========================================================
-   47. VISIBILITY CHANGE
+   37. OPEN CHAT IF EXISTING CONVERSATION EXISTS
+========================================================= */
+
+async function restoreExistingChat() {
+
+    if (!currentUser) {
+        return;
+    }
+
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from(
+                    "g_nurse_conversations"
+                )
+                .select("*")
+                .eq(
+                    "visitor_user_id",
+                    currentUser.id
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending:
+                            false
+                    }
+                )
+                .limit(1)
+                .maybeSingle();
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        if (!data) {
+            return;
+        }
+
+
+        currentConversation =
+            data;
+
+
+        const saved =
+            loadVisitorDetails();
+
+
+        if (
+            saved &&
+            saved.name
+        ) {
+
+            await openExistingConversation(
+                data.id
+            );
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Restore chat error:",
+            error
+        );
+    }
+}
+
+
+/* =========================================================
+   38. PAGE STARTUP
+========================================================= */
+
+async function initializeChat() {
+
+    try {
+
+        showLoading(
+            "Connecting to G Nurse..."
+        );
+
+
+        restoreVisitorDetails();
+
+
+        const authenticated =
+            await ensureAuthenticated();
+
+
+        if (!authenticated) {
+
+            hideLoading();
+
+            return;
+        }
+
+
+        await restoreExistingChat();
+
+
+        await loadNotifications();
+
+
+        startRealtime();
+
+
+    } catch (error) {
+
+        console.error(
+            "Initialization error:",
+            error
+        );
+
+        alert(
+            "Unable to connect to G Nurse. Please refresh the page."
+        );
+
+    } finally {
+
+        hideLoading();
+    }
+}
+
+
+/* =========================================================
+   39. PAGE VISIBILITY
 ========================================================= */
 
 document.addEventListener(
     "visibilitychange",
-    async function() {
+    async function () {
 
         if (
-            document.visibilityState === "visible" &&
-            currentConversation
+            document.visibilityState ===
+            "visible"
         ) {
 
-            await loadMessages();
+            if (currentUser) {
 
-            await loadNotifications();
+                await loadNotifications();
+
+
+                if (
+                    currentConversation
+                ) {
+
+                    await loadMessages();
+                }
+            }
         }
     }
 );
 
 
 /* =========================================================
-   48. PAGE LEAVE CLEANUP
+   40. CLEAN REALTIME ON PAGE EXIT
 ========================================================= */
 
 window.addEventListener(
     "beforeunload",
-    function() {
+    function () {
 
         if (realtimeChannel) {
 
@@ -3527,53 +3392,27 @@ window.addEventListener(
                 .removeChannel(
                     realtimeChannel
                 );
-
-            realtimeChannel =
-                null;
-        }
-
-        if (
-            recordingTimer
-        ) {
-
-            clearInterval(
-                recordingTimer
-            );
-
-            recordingTimer =
-                null;
-        }
-
-        if (
-            mediaRecorder &&
-            mediaRecorder.state !== "inactive"
-        ) {
-
-            mediaRecorder.stop();
         }
     }
 );
 
 
 /* =========================================================
-   49. INITIALIZE PAGE
+   41. INITIALIZE
 ========================================================= */
 
 document.addEventListener(
     "DOMContentLoaded",
-    function() {
+    function () {
 
-        loadVisitorDetails();
-
-        console.log(
-            "G Nurse Chat loaded."
-        );
+        initializeChat();
     }
 );
 
 </script>
 
 </body>
+
 </html>
-    
-    
+
+ 
