@@ -1301,8 +1301,9 @@ async function ensureAuthenticated() {
         );
 
         alert(
-            "Unable to connect to Chat G Nurse."
-        );
+    "Unable to connect to G Nurse.\n\n" +
+    (error?.message || "Unknown Supabase error")
+);
 
         return false;
     }
