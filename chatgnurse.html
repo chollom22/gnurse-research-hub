@@ -1455,7 +1455,6 @@ function displayMessage(message) {
     const isVisitor =
         message.sender_type === "visitor";
 
-
     wrapper.className =
         "message-wrapper " +
         (
@@ -1464,7 +1463,6 @@ function displayMessage(message) {
                 : "admin-message"
         );
 
-
     const bubble =
         document.createElement("div");
 
@@ -1472,7 +1470,205 @@ function displayMessage(message) {
         "message-bubble";
 
 
-    if (message.message) {
+    /* =====================================================
+       PHOTO
+    ===================================================== */
+
+    if (
+        message.attachment_url &&
+        message.attachment_type &&
+        message.attachment_type.startsWith("image/")
+    ) {
+
+        const image =
+            document.createElement("img");
+
+        image.src =
+            message.attachment_url;
+
+        image.alt =
+            message.attachment_name ||
+            "Photo";
+
+        image.style.maxWidth =
+            "100%";
+
+        image.style.width =
+            "220px";
+
+        image.style.maxHeight =
+            "300px";
+
+        image.style.objectFit =
+            "cover";
+
+        image.style.borderRadius =
+            "12px";
+
+        image.style.display =
+            "block";
+
+        image.style.cursor =
+            "pointer";
+
+        image.loading =
+            "lazy";
+
+
+        /* Tap photo to view larger */
+
+        image.onclick =
+            function () {
+
+                const viewer =
+                    document.createElement("div");
+
+                viewer.style.position =
+                    "fixed";
+
+                viewer.style.inset =
+                    "0";
+
+                viewer.style.background =
+                    "rgba(0,0,0,0.92)";
+
+                viewer.style.display =
+                    "flex";
+
+                viewer.style.alignItems =
+                    "center";
+
+                viewer.style.justifyContent =
+                    "center";
+
+                viewer.style.zIndex =
+                    "99999";
+
+                viewer.style.padding =
+                    "20px";
+
+
+                const fullImage =
+                    document.createElement("img");
+
+                fullImage.src =
+                    message.attachment_url;
+
+                fullImage.style.maxWidth =
+                    "100%";
+
+                fullImage.style.maxHeight =
+                    "100%";
+
+                fullImage.style.objectFit =
+                    "contain";
+
+                fullImage.style.borderRadius =
+                    "10px";
+
+
+                viewer.appendChild(
+                    fullImage
+                );
+
+                viewer.onclick =
+                    function () {
+                        viewer.remove();
+                    };
+
+
+                document.body.appendChild(
+                    viewer
+                );
+            };
+
+
+        bubble.appendChild(
+            image
+        );
+    }
+
+
+    /* =====================================================
+       DOCUMENT / OTHER FILE
+    ===================================================== */
+
+    else if (
+        message.attachment_url
+    ) {
+
+        const fileBox =
+            document.createElement("div");
+
+        fileBox.style.padding =
+            "10px";
+
+        fileBox.style.borderRadius =
+            "10px";
+
+        fileBox.style.background =
+            "rgba(0,0,0,0.06)";
+
+
+        const fileName =
+            document.createElement("div");
+
+        fileName.textContent =
+            "📎 " +
+            (
+                message.attachment_name ||
+                "Attached file"
+            );
+
+        fileName.style.marginBottom =
+            "7px";
+
+
+        const openButton =
+            document.createElement("a");
+
+        openButton.href =
+            message.attachment_url;
+
+        openButton.target =
+            "_blank";
+
+        openButton.rel =
+            "noopener noreferrer";
+
+        openButton.textContent =
+            "Open file";
+
+        openButton.style.textDecoration =
+            "none";
+
+
+        fileBox.appendChild(
+            fileName
+        );
+
+        fileBox.appendChild(
+            openButton
+        );
+
+        bubble.appendChild(
+            fileBox
+        );
+    }
+
+
+    /* =====================================================
+       TEXT
+    ===================================================== */
+
+    if (
+        message.message &&
+        !(
+            message.attachment_url &&
+            message.attachment_type &&
+            message.attachment_type.startsWith("image/")
+        )
+    ) {
 
         const text =
             document.createElement("div");
@@ -1480,9 +1676,15 @@ function displayMessage(message) {
         text.textContent =
             message.message;
 
-        bubble.appendChild(text);
+        bubble.appendChild(
+            text
+        );
     }
 
+
+    /* =====================================================
+       TIME
+    ===================================================== */
 
     const time =
         document.createElement("div");
@@ -1495,20 +1697,19 @@ function displayMessage(message) {
             message.created_at
         );
 
-    bubble.appendChild(time);
+    bubble.appendChild(
+        time
+    );
 
 
     wrapper.appendChild(
         bubble
     );
 
-
     messagesContainer.appendChild(
         wrapper
     );
 }
-
-
 /* =========================
    MESSAGE TIME
 ========================= */
