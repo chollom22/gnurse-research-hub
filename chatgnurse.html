@@ -1215,59 +1215,7 @@ backButton.onclick =
    SEND BUTTON
 ========================= */
 
-sendButton.onclick =
-    function () {
 
-        const text =
-            messageInput.value.trim();
-
-        if (!text) {
-
-            alert(
-                "Type a message first."
-            );
-
-            messageInput.focus();
-
-            return;
-        }
-
-
-        alert(
-            "Conversation connected successfully. " +
-            "Message sending will be connected in Part 3."
-        );
-    };
-
-
-/* =========================
-   ENTER TO SEND
-========================= */
-
-messageInput.onkeydown =
-    function (event) {
-
-        if (
-            event.key === "Enter" &&
-            !event.shiftKey
-        ) {
-
-            event.preventDefault();
-
-            sendButton.click();
-        }
-    };
-
-
-/* =========================
-   ATTACHMENT
-========================= */
-
-attachmentButton.onclick =
-    function () {
-
-        fileInput.click();
-    };
 
 
 fileInput.onchange =
@@ -1364,42 +1312,338 @@ try {
             "g_nurse_visitor"
         );
 
-
-    if (savedVisitor) {
-
-        const visitor =
-            JSON.parse(savedVisitor);
+/* =========================================================
+   PART 3 - TEXT MESSAGE SENDING
+========================================================= */
 
 
-        if (visitor.name) {
+/* =========================
+   LOAD EXISTING MESSAGES
+========================= */
 
-            visitorName.value =
-                visitor.name;
-        }
+async function loadMessages() {
 
-
-        if (visitor.email) {
-
-            visitorEmail.value =
-                visitor.email;
-        }
-
-
-        if (visitor.phone) {
-
-            visitorPhone.value =
-                visitor.phone;
-        }
+    if (!currentConversation) {
+        return;
     }
 
-} catch (error) {
-
-    console.log(
-        "Could not restore visitor details:",
+    const {
+        data,
         error
+    } = await supabaseClient
+        .from("g_nurse_messages")
+        .select("*")
+        .eq(
+            "conversation_id",
+            currentConversation.id
+        )
+        .is("deleted_at", null)
+        .order(
+            "created_at",
+            {
+                ascending: true
+            }
+        );
+
+    if (error) {
+        console.error(
+            "Load messages error:",
+            error
+        );
+        return;
+    }
+
+    messagesContainer
+        .querySelectorAll(".message-wrapper")
+        .forEach(function(element) {
+            element.remove();
+        });
+
+
+    if (!data || data.length === 0) {
+
+        emptyChat.style.display =
+            "block";
+
+        return;
+    }
+
+
+    emptyChat.style.display =
+        "none";
+
+
+    data.forEach(function(message) {
+
+        displayMessage(message);
+
+    });
+
+
+    scrollMessagesToBottom();
+}
+
+
+/* =========================
+   DISPLAY MESSAGE
+========================= */
+
+function displayMessage(message) {
+
+    const wrapper =
+        document.createElement("div");
+
+    const isVisitor =
+        message.sender_type === "visitor";
+
+
+    wrapper.className =
+        "message-wrapper " +
+        (
+            isVisitor
+                ? "visitor-message"
+                : "admin-message"
+        );
+
+
+    const bubble =
+        document.createElement("div");
+
+    bubble.className =
+        "message-bubble";
+
+
+    if (message.message) {
+
+        const text =
+            document.createElement("div");
+
+        text.textContent =
+            message.message;
+
+        bubble.appendChild(text);
+    }
+
+
+    const time =
+        document.createElement("div");
+
+    time.className =
+        "message-time";
+
+    time.textContent =
+        formatMessageTime(
+            message.created_at
+        );
+
+    bubble.appendChild(time);
+
+
+    wrapper.appendChild(
+        bubble
+    );
+
+
+    messagesContainer.appendChild(
+        wrapper
     );
 }
 
-    </script>
+
+/* =========================
+   MESSAGE TIME
+========================= */
+
+function formatMessageTime(dateValue) {
+
+    if (!dateValue) {
+        return "";
+    }
+
+    const date =
+        new Date(dateValue);
+
+    if (isNaN(date.getTime())) {
+        return "";
+    }
+
+    return date.toLocaleTimeString(
+        [],
+        {
+            hour: "2-digit",
+            minute: "2-digit"
+        }
+    );
+}
+
+
+/* =========================
+   SCROLL TO BOTTOM
+========================= */
+
+function scrollMessagesToBottom() {
+
+    setTimeout(function() {
+
+        messagesContainer.scrollTop =
+            messagesContainer.scrollHeight;
+
+    }, 50);
+}
+
+
+/* =========================
+   SEND TEXT MESSAGE
+========================= */
+
+async function sendTextMessage() {
+
+    const text =
+        messageInput.value.trim();
+
+
+    if (!text) {
+
+        messageInput.focus();
+
+        return;
+    }
+
+
+    if (!currentConversation) {
+
+        alert(
+            "Your chat connection is not ready. Please go back and start the chat again."
+        );
+
+        return;
+    }
+
+
+    sendButton.disabled =
+        true;
+
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("g_nurse_messages")
+            .insert({
+                conversation_id:
+                    currentConversation.id,
+
+                sender_type:
+                    "visitor",
+
+                message:
+                    text
+            })
+            .select("*")
+            .single();
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        /* Clear input */
+
+        messageInput.value =
+            "";
+
+        messageInput.style.height =
+            "42px";
+
+
+        /* Remove empty message */
+
+        emptyChat.style.display =
+            "none";
+
+
+        /* Display immediately */
+
+        displayMessage(data);
+
+
+        /* Scroll down */
+
+        scrollMessagesToBottom();
+
+
+        /* Update conversation time */
+
+        await supabaseClient
+            .from("g_nurse_conversations")
+            .update({
+                updated_at:
+                    new Date().toISOString()
+            })
+            .eq(
+                "id",
+                currentConversation.id
+            );
+
+
+    } catch (error) {
+
+        console.error(
+            "Send message error:",
+            error
+        );
+
+
+        alert(
+            "Message could not be sent.\n\n" +
+            (
+                error.message ||
+                "Please try again."
+            )
+        );
+
+    } finally {
+
+        sendButton.disabled =
+            false;
+
+        messageInput.focus();
+    }
+}
+
+
+/* =========================
+   SEND BUTTON
+========================= */
+
+sendButton.onclick =
+    async function() {
+
+        await sendTextMessage();
+
+    };
+
+
+/* =========================
+   ENTER TO SEND
+========================= */
+
+messageInput.onkeydown =
+    function(event) {
+
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
+
+            event.preventDefault();
+
+            sendButton.click();
+        }
+    };
+</script>
 </body>
      </html>
