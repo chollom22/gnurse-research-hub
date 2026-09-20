@@ -168,55 +168,81 @@ body {
 
 /* CHAT SCREEN */
 #chatScreen {
-    position:absolute;
-    inset:0;
-    background:#f4f7f6;
-    display:none;
-    flex-direction:column;
-    overflow:hidden;
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    background: #f4f7f6;
+    overflow: hidden;
 }
 
 #chatScreen.active {
-    display:flex;
+    display: flex;
 }
+
+/* =========================
+   CHAT HEADER — FIXED
+========================= */
 
 .chat-header {
-    height:58px;
-    min-height:58px;
-    flex-shrink:0;
-    background:white;
-    border-bottom:1px solid #ddd;
-    display:flex;
-    align-items:center;
-    padding:0 10px;
-    gap:10px;
+    flex: 0 0 58px;
+    height: 58px;
+    background: #ffffff;
+    border-bottom: 1px solid #ddd;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 10px;
+    gap: 10px;
+
+    position: relative;
+    z-index: 20;
 }
+
+/* =========================
+   MESSAGES — ONLY THIS SCROLLS
+========================= */
 
 #messagesContainer {
-    flex:1;
-    min-height:0;
-    overflow-y:auto;
-    overflow-x:hidden;
-    padding:15px 12px 20px;
-    position:relative;
-    -webkit-overflow-scrolling:touch;
+    flex: 1 1 auto;
+    min-height: 0;
+
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding: 15px 12px 20px;
+
+    -webkit-overflow-scrolling: touch;
 }
+
+/* =========================
+   COMPOSER — FIXED AT BOTTOM
+========================= */
 
 .composer {
-    flex-shrink:0;
-    width:100%;
-    background:white;
-    border-top:1px solid #ddd;
-    padding:8px;
-    position:relative;
-    z-index:10;
+    flex: 0 0 auto;
+
+    width: 100%;
+
+    background: #ffffff;
+    border-top: 1px solid #ddd;
+
+    padding: 8px;
+
+    position: relative;
+    z-index: 30;
 }
 
+/* =========================
+   COMPOSER ROW
+========================= */
+
 .composer-row {
-    display:flex;
-    align-items:flex-end;
-    gap:6px;
-}
+    display: flex;
+    align-items: flex-end;
+    gap: 6px;
+    }
 
 /* MESSAGES */
 
