@@ -1677,6 +1677,213 @@ sendButton.onclick =
         await sendTextMessage();
 
     };
+    /* =========================================================
+   PART 4 - FILE SENDING
+========================================================= */
+
+attachmentButton.onclick = function () {
+    fileInput.click();
+};
+
+
+fileInput.onchange = async function () {
+
+    const file = fileInput.files[0];
+
+    if (!file) {
+        return;
+    }
+
+    if (!currentConversation) {
+        alert("Please start the chat first.");
+        fileInput.value = "";
+        return;
+    }
+
+    selectedFilePreview.textContent =
+        "Uploading: " + file.name;
+
+    attachmentButton.disabled = true;
+
+    try {
+
+        const fileExtension =
+            file.name.includes(".")
+                ? file.name.split(".").pop()
+                : "file";
+
+        const safeExtension =
+            fileExtension.replace(
+                /[^a-zA-Z0-9]/g,
+                ""
+            );
+
+        const filePath =
+            currentConversation.id +
+            "/" +
+            Date.now() +
+            "_" +
+            Math.random()
+                .toString(36)
+                .substring(2, 10) +
+            "." +
+            safeExtension;
+
+
+        /* =========================
+           UPLOAD FILE
+        ========================= */
+
+        const {
+            error: uploadError
+        } = await supabaseClient
+            .storage
+            .from("g-nurse-files")
+            .upload(
+                filePath,
+                file,
+                {
+                    cacheControl: "3600",
+                    upsert: false
+                }
+            );
+
+
+        if (uploadError) {
+            throw uploadError;
+        }
+
+
+        /* =========================
+           GET FILE URL
+        ========================= */
+
+        const {
+            data: urlData
+        } = supabaseClient
+            .storage
+            .from("g-nurse-files")
+            .getPublicUrl(filePath);
+
+
+        if (!urlData || !urlData.publicUrl) {
+            throw new Error(
+                "Unable to create file URL."
+            );
+        }
+
+
+        /* =========================
+           SAVE MESSAGE
+        ========================= */
+
+        const {
+            data: messageData,
+            error: messageError
+        } = await supabaseClient
+            .from("g_nurse_messages")
+            .insert({
+                conversation_id:
+                    currentConversation.id,
+
+                sender_type:
+                    "visitor",
+
+                message:
+                    "📎 " + file.name,
+
+                attachment_url:
+                    urlData.publicUrl,
+
+                attachment_name:
+                    file.name,
+
+                attachment_type:
+                    file.type || "application/octet-stream"
+            })
+            .select("*")
+            .single();
+
+
+        if (messageError) {
+            throw messageError;
+        }
+
+
+        /* =========================
+           DISPLAY MESSAGE
+        ========================= */
+
+        emptyChat.style.display = "none";
+
+        displayMessage(messageData);
+
+        scrollMessagesToBottom();
+
+
+        /* =========================
+           UPDATE CONVERSATION
+        ========================= */
+
+        const {
+            error: conversationError
+        } = await supabaseClient
+            .from("g_nurse_conversations")
+            .update({
+                updated_at:
+                    new Date().toISOString()
+            })
+            .eq(
+                "id",
+                currentConversation.id
+            );
+
+        if (conversationError) {
+            console.error(
+                "Conversation update error:",
+                conversationError
+            );
+        }
+
+
+        selectedFilePreview.textContent =
+            "File sent successfully.";
+
+        fileInput.value = "";
+
+
+        setTimeout(function () {
+
+            selectedFilePreview.textContent =
+                "";
+
+        }, 2000);
+
+
+    } catch (error) {
+
+        console.error(
+            "File sending error:",
+            error
+        );
+
+        selectedFilePreview.textContent =
+            "";
+
+        alert(
+            "File could not be sent.\n\n" +
+            (
+                error.message ||
+                "Please try again."
+            )
+        );
+
+    } finally {
+
+        attachmentButton.disabled = false;
+
+    }
+};
 
 
 /* =========================
