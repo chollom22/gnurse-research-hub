@@ -1303,14 +1303,39 @@ notificationButton.onclick =
 
 /* =========================
    RESTORE VISITOR DETAILS
-========================= */
-
+========================= +/
 try {
 
     const savedVisitor =
         localStorage.getItem(
             "g_nurse_visitor"
         );
+
+    if (savedVisitor) {
+
+        const visitor =
+            JSON.parse(savedVisitor);
+
+        if (visitor.name) {
+            visitorName.value = visitor.name;
+        }
+
+        if (visitor.email) {
+            visitorEmail.value = visitor.email;
+        }
+
+        if (visitor.phone) {
+            visitorPhone.value = visitor.phone;
+        }
+    }
+
+} catch (error) {
+
+    console.error(
+        "Restore visitor details error:",
+        error
+    );
+}
 
 /* =========================================================
    PART 3 - TEXT MESSAGE SENDING
