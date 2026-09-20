@@ -715,186 +715,653 @@ body {
 
 </div>
 
+<script>
+/* =========================================================
+   G NURSE CHAT - PART 2
+   Supabase connection + anonymous visitor + conversation
+   ========================================================= */
 
- <script>
-const startChatButton = document.getElementById("startChatButton");
-const visitorName = document.getElementById("visitorName");
-const visitorEmail = document.getElementById("visitorEmail");
-const visitorPhone = document.getElementById("visitorPhone");
 
-const welcomeScreen = document.getElementById("welcomeScreen");
-const chatScreen = document.getElementById("chatScreen");
-const backButton = document.getElementById("backButton");
+/* =========================
+   SUPABASE CONFIGURATION
+========================= */
 
-const messageInput = document.getElementById("messageInput");
-const sendButton = document.getElementById("sendButton");
+const SUPABASE_URL =
+    "https://bmiechymiyedubezhcqk.supabase.co";
 
-const attachmentButton = document.getElementById("attachmentButton");
-const fileInput = document.getElementById("fileInput");
-const selectedFilePreview = document.getElementById("selectedFilePreview");
+const SUPABASE_KEY =
+    "sb_publishable_9JL2ALhTGlZV57hUV0mTdQ_c2hdT8O8";
 
-const voiceButton = document.getElementById("voiceButton");
-const notificationButton = document.getElementById("notificationButton");
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================
+   HTML ELEMENTS
+========================= */
+
+const startChatButton =
+    document.getElementById("startChatButton");
+
+const visitorName =
+    document.getElementById("visitorName");
+
+const visitorEmail =
+    document.getElementById("visitorEmail");
+
+const visitorPhone =
+    document.getElementById("visitorPhone");
+
+const welcomeScreen =
+    document.getElementById("welcomeScreen");
+
+const chatScreen =
+    document.getElementById("chatScreen");
+
+const backButton =
+    document.getElementById("backButton");
+
+const messageInput =
+    document.getElementById("messageInput");
+
+const sendButton =
+    document.getElementById("sendButton");
+
+const attachmentButton =
+    document.getElementById("attachmentButton");
+
+const fileInput =
+    document.getElementById("fileInput");
+
+const selectedFilePreview =
+    document.getElementById("selectedFilePreview");
+
+const voiceButton =
+    document.getElementById("voiceButton");
+
+const notificationButton =
+    document.getElementById("notificationButton");
+
+const messagesContainer =
+    document.getElementById("messagesContainer");
+
+const emptyChat =
+    document.getElementById("emptyChat");
+
+const loadingOverlay =
+    document.getElementById("loadingOverlay");
+
+
+/* =========================
+   CHAT VARIABLES
+========================= */
+
+let currentUser = null;
+
+let currentConversation = null;
+
+let visitorToken = null;
+
+
+/* =========================
+   LOADING
+========================= */
+
+function showLoading(text) {
+
+    if (!loadingOverlay) return;
+
+    const box =
+        loadingOverlay.querySelector(".loading-box");
+
+    if (box) {
+        box.textContent =
+            text || "Connecting to G Nurse...";
+    }
+
+    loadingOverlay.style.display = "flex";
+}
+
+
+function hideLoading() {
+
+    if (!loadingOverlay) return;
+
+    loadingOverlay.style.display = "none";
+}
+
+
+/* =========================
+   VISITOR TOKEN
+========================= */
+
+function getVisitorToken() {
+
+    try {
+
+        let token =
+            localStorage.getItem(
+                "g_nurse_visitor_token"
+            );
+
+        if (!token) {
+
+            token =
+                "visitor_" +
+                Date.now() +
+                "_" +
+                Math.random()
+                    .toString(36)
+                    .substring(2, 12);
+
+            localStorage.setItem(
+                "g_nurse_visitor_token",
+                token
+            );
+        }
+
+        return token;
+
+    } catch (error) {
+
+        console.error(
+            "Visitor token error:",
+            error
+        );
+
+        return (
+            "visitor_" +
+            Date.now()
+        );
+    }
+}
+
+
+/* =========================
+   ANONYMOUS AUTHENTICATION
+========================= */
+
+async function ensureAuthenticated() {
+
+    /* Check existing session first */
+
+    const {
+        data: sessionData,
+        error: sessionError
+    } =
+        await supabaseClient.auth.getSession();
+
+    if (sessionError) {
+        throw sessionError;
+    }
+
+    if (
+        sessionData &&
+        sessionData.session &&
+        sessionData.session.user
+    ) {
+
+        currentUser =
+            sessionData.session.user;
+
+        return currentUser;
+    }
+
+
+    /* Create anonymous user */
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.auth.signInAnonymously();
+
+    if (error) {
+        throw error;
+    }
+
+    if (!data || !data.user) {
+
+        throw new Error(
+            "Anonymous authentication did not return a user."
+        );
+    }
+
+    currentUser =
+        data.user;
+
+    return currentUser;
+}
+
+
+/* =========================
+   FIND OR CREATE CONVERSATION
+========================= */
+
+async function getOrCreateConversation() {
+
+    if (!currentUser) {
+
+        throw new Error(
+            "Visitor authentication is missing."
+        );
+    }
+
+    visitorToken =
+        getVisitorToken();
+
+
+    /* First look for this visitor's conversation */
+
+    const {
+        data: existingConversation,
+        error: findError
+    } =
+        await supabaseClient
+            .from("g_nurse_conversations")
+            .select("*")
+            .eq(
+                "visitor_user_id",
+                currentUser.id
+            )
+            .order(
+                "updated_at",
+                { ascending: false }
+            )
+            .limit(1)
+            .maybeSingle();
+
+
+    if (findError) {
+        throw findError;
+    }
+
+
+    /* Existing conversation found */
+
+    if (existingConversation) {
+
+        currentConversation =
+            existingConversation;
+
+        /* Update visitor information */
+
+        const {
+            data: updatedConversation,
+            error: updateError
+        } =
+            await supabaseClient
+                .from("g_nurse_conversations")
+                .update({
+                    visitor_token: visitorToken,
+                    visitor_name:
+                        visitorName.value.trim(),
+                    visitor_email:
+                        visitorEmail.value.trim(),
+                    visitor_phone:
+                        visitorPhone.value.trim(),
+                    updated_at:
+                        new Date().toISOString()
+                })
+                .eq(
+                    "id",
+                    existingConversation.id
+                )
+                .select("*")
+                .single();
+
+
+        if (updateError) {
+            throw updateError;
+        }
+
+        currentConversation =
+            updatedConversation;
+
+        localStorage.setItem(
+            "g_nurse_conversation_id",
+            currentConversation.id
+        );
+
+        return currentConversation;
+    }
+
+
+    /* =========================
+       CREATE NEW CONVERSATION
+    ========================= */
+
+    const {
+        data: newConversation,
+        error: createError
+    } =
+        await supabaseClient
+            .from("g_nurse_conversations")
+            .insert({
+                visitor_token: visitorToken,
+                visitor_name:
+                    visitorName.value.trim(),
+                visitor_email:
+                    visitorEmail.value.trim(),
+                visitor_phone:
+                    visitorPhone.value.trim(),
+                visitor_user_id:
+                    currentUser.id,
+                status: "open"
+            })
+            .select("*")
+            .single();
+
+
+    if (createError) {
+        throw createError;
+    }
+
+
+    currentConversation =
+        newConversation;
+
+
+    localStorage.setItem(
+        "g_nurse_conversation_id",
+        currentConversation.id
+    );
+
+
+    return currentConversation;
+}
 
 
 /* =========================
    START CHAT
 ========================= */
 
-startChatButton.onclick = function () {
+startChatButton.onclick =
+    async function () {
 
-    const name = visitorName.value.trim();
-    const email = visitorEmail.value.trim();
-    const phone = visitorPhone.value.trim();
+        const name =
+            visitorName.value.trim();
 
-    if (name === "") {
-        alert("Please enter your name.");
-        visitorName.focus();
-        return;
-    }
+        const email =
+            visitorEmail.value.trim();
 
-    if (email === "" && phone === "") {
-        alert("Please enter your email address or phone number.");
-        visitorEmail.focus();
-        return;
-    }
+        const phone =
+            visitorPhone.value.trim();
 
-    try {
-        localStorage.setItem(
-            "g_nurse_visitor",
-            JSON.stringify({
-                name: name,
-                email: email,
-                phone: phone
-            })
+
+        /* Validate name */
+
+        if (!name) {
+
+            alert(
+                "Please enter your name."
+            );
+
+            visitorName.focus();
+
+            return;
+        }
+
+
+        /* Require email OR phone */
+
+        if (!email && !phone) {
+
+            alert(
+                "Please enter your email address or phone number."
+            );
+
+            visitorEmail.focus();
+
+            return;
+        }
+
+
+        /* Save visitor locally */
+
+        try {
+
+            localStorage.setItem(
+                "g_nurse_visitor",
+                JSON.stringify({
+                    name: name,
+                    email: email,
+                    phone: phone
+                })
+            );
+
+        } catch (error) {
+
+            console.log(
+                "Could not save visitor:",
+                error
+            );
+        }
+
+
+        /* Disable button */
+
+        startChatButton.disabled =
+            true;
+
+
+        showLoading(
+            "Connecting to G Nurse..."
         );
-    } catch (error) {
-        console.log("Local storage unavailable:", error);
-    }
 
-    welcomeScreen.style.display = "none";
-    chatScreen.style.display = "flex";
 
-    messageInput.focus();
-};
+        try {
+
+            /* Authenticate visitor */
+
+            await ensureAuthenticated();
+
+
+            /* Find/create conversation */
+
+            await getOrCreateConversation();
+
+
+            /* Open chat */
+
+            welcomeScreen.style.display =
+                "none";
+
+            chatScreen.style.display =
+                "flex";
+
+
+            messageInput.focus();
+
+
+            console.log(
+                "G Nurse conversation ready:",
+                currentConversation
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Start Chat error:",
+                error
+            );
+
+
+            alert(
+                "Unable to start the chat.\n\n" +
+                (error.message ||
+                 "Please try again.")
+            );
+
+        } finally {
+
+            hideLoading();
+
+            startChatButton.disabled =
+                false;
+        }
+    };
 
 
 /* =========================
    BACK BUTTON
 ========================= */
 
-backButton.onclick = function () {
+backButton.onclick =
+    function () {
 
-    chatScreen.style.display = "none";
-    welcomeScreen.style.display = "block";
+        chatScreen.style.display =
+            "none";
 
-};
+        welcomeScreen.style.display =
+            "block";
+    };
 
 
 /* =========================
    SEND BUTTON
 ========================= */
 
-sendButton.onclick = function () {
+sendButton.onclick =
+    function () {
 
-    const text = messageInput.value.trim();
+        const text =
+            messageInput.value.trim();
 
-    if (text === "") {
-        alert("Type a message first.");
-        messageInput.focus();
-        return;
-    }
+        if (!text) {
 
-    alert("Start Chat is working correctly. Supabase message sending will be connected next.");
+            alert(
+                "Type a message first."
+            );
 
-};
+            messageInput.focus();
+
+            return;
+        }
+
+
+        alert(
+            "Conversation connected successfully. " +
+            "Message sending will be connected in Part 3."
+        );
+    };
 
 
 /* =========================
    ENTER TO SEND
 ========================= */
 
-messageInput.onkeydown = function (event) {
+messageInput.onkeydown =
+    function (event) {
 
-    if (event.key === "Enter" && !event.shiftKey) {
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
 
-        event.preventDefault();
+            event.preventDefault();
 
-        sendButton.click();
-
-    }
-
-};
+            sendButton.click();
+        }
+    };
 
 
 /* =========================
    ATTACHMENT
 ========================= */
 
-attachmentButton.onclick = function () {
+attachmentButton.onclick =
+    function () {
 
-    fileInput.click();
-
-};
-
-
-fileInput.onchange = function () {
-
-    const file = fileInput.files[0];
-
-    if (!file) return;
-
-    selectedFilePreview.style.display = "flex";
-
-    selectedFilePreview.innerHTML = "";
-
-    const fileName = document.createElement("span");
-
-    fileName.textContent = "📎 " + file.name;
-
-    const removeButton = document.createElement("button");
-
-    removeButton.type = "button";
-
-    removeButton.textContent = "✕";
-
-    removeButton.onclick = function () {
-
-        fileInput.value = "";
-
-        selectedFilePreview.innerHTML = "";
-
-        selectedFilePreview.style.display = "none";
-
+        fileInput.click();
     };
 
-    selectedFilePreview.appendChild(fileName);
 
-    selectedFilePreview.appendChild(removeButton);
+fileInput.onchange =
+    function () {
 
-};
+        const file =
+            fileInput.files[0];
+
+        if (!file) return;
+
+
+        selectedFilePreview.style.display =
+            "flex";
+
+        selectedFilePreview.innerHTML =
+            "";
+
+
+        const fileName =
+            document.createElement("span");
+
+        fileName.textContent =
+            "📎 " + file.name;
+
+
+        const removeButton =
+            document.createElement("button");
+
+        removeButton.type =
+            "button";
+
+        removeButton.textContent =
+            "✕";
+
+
+        removeButton.onclick =
+            function () {
+
+                fileInput.value =
+                    "";
+
+                selectedFilePreview.innerHTML =
+                    "";
+
+                selectedFilePreview.style.display =
+                    "none";
+            };
+
+
+        selectedFilePreview.appendChild(
+            fileName
+        );
+
+        selectedFilePreview.appendChild(
+            removeButton
+        );
+    };
 
 
 /* =========================
    VOICE
 ========================= */
 
-voiceButton.onclick = function () {
+voiceButton.onclick =
+    function () {
 
-    alert("Voice recording will be connected in the next part.");
-
-};
+        alert(
+            "Voice recording will be connected in Part 4."
+        );
+    };
 
 
 /* =========================
    NOTIFICATIONS
 ========================= */
 
-notificationButton.onclick = function () {
+notificationButton.onclick =
+    function () {
 
-    alert("Notifications will be connected in the next part.");
-
-};
+        alert(
+            "Notifications will be connected later."
+        );
+    };
 
 
 /* =========================
@@ -904,25 +1371,36 @@ notificationButton.onclick = function () {
 try {
 
     const savedVisitor =
-        localStorage.getItem("g_nurse_visitor");
+        localStorage.getItem(
+            "g_nurse_visitor"
+        );
+
 
     if (savedVisitor) {
 
         const visitor =
             JSON.parse(savedVisitor);
 
+
         if (visitor.name) {
-            visitorName.value = visitor.name;
+
+            visitorName.value =
+                visitor.name;
         }
+
 
         if (visitor.email) {
-            visitorEmail.value = visitor.email;
+
+            visitorEmail.value =
+                visitor.email;
         }
+
 
         if (visitor.phone) {
-            visitorPhone.value = visitor.phone;
-        }
 
+            visitorPhone.value =
+                visitor.phone;
+        }
     }
 
 } catch (error) {
@@ -931,8 +1409,8 @@ try {
         "Could not restore visitor details:",
         error
     );
-
 }
- </script>  
+
+    </script>
 </body>
      </html>
