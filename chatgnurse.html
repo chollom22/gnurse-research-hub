@@ -1967,19 +1967,28 @@ fileInput.onchange = async function () {
         ========================= */
 
         const {
-            data: urlData
-        } = supabaseClient
-            .storage
-            .from("g-nurse-files")
-            .getPublicUrl(filePath);
+    data: signedUrlData,
+    error: signedUrlError
+} = await supabaseClient
+    .storage
+    .from("g-nurse-files")
+    .createSignedUrl(
+        filePath,
+        60 * 60 * 24
+    );
 
+if (signedUrlError) {
+    throw signedUrlError;
+}
 
-        if (!urlData || !urlData.publicUrl) {
-            throw new Error(
-                "Unable to create file URL."
-            );
-        }
+const fileUrl =
+    signedUrlData?.signedUrl;
 
+if (!fileUrl) {
+    throw new Error(
+        "Unable to create secure file URL."
+    );
+}
 
         /* =========================
            SAVE MESSAGE
