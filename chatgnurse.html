@@ -716,145 +716,50 @@ body {
 </div>
 
 
-<script>
+ <script>
+const startChatButton = document.getElementById("startChatButton");
+const visitorName = document.getElementById("visitorName");
+const visitorEmail = document.getElementById("visitorEmail");
+const visitorPhone = document.getElementById("visitorPhone");
 
-/*
- * PART 1
- * Basic Chat G Nurse interface.
- *
- * Do not add Supabase functions here yet.
- * The next part will use these exact IDs.
- */
+const welcomeScreen = document.getElementById("welcomeScreen");
+const chatScreen = document.getElementById("chatScreen");
+const backButton = document.getElementById("backButton");
 
+const messageInput = document.getElementById("messageInput");
+const sendButton = document.getElementById("sendButton");
 
-const startChatButton =
-    document.getElementById(
-        "startChatButton"
-    );
+const attachmentButton = document.getElementById("attachmentButton");
+const fileInput = document.getElementById("fileInput");
+const selectedFilePreview = document.getElementById("selectedFilePreview");
 
-const visitorName =
-    document.getElementById(
-        "visitorName"
-    );
-
-const visitorEmail =
-    document.getElementById(
-        "visitorEmail"
-    );
-
-const visitorPhone =
-    document.getElementById(
-        "visitorPhone"
-    );
-
-const welcomeScreen =
-    document.getElementById(
-        "welcomeScreen"
-    );
-
-const chatScreen =
-    document.getElementById(
-        "chatScreen"
-    );
-
-const backButton =
-    document.getElementById(
-        "backButton"
-    );
-
-const messagesContainer =
-    document.getElementById(
-        "messagesContainer"
-    );
-
-const emptyChat =
-    document.getElementById(
-        "emptyChat"
-    );
-
-const messageInput =
-    document.getElementById(
-        "messageInput"
-    );
-
-const sendButton =
-    document.getElementById(
-        "sendButton"
-    );
-
-const attachmentButton =
-    document.getElementById(
-        "attachmentButton"
-    );
-
-const fileInput =
-    document.getElementById(
-        "fileInput"
-    );
-
-const voiceButton =
-    document.getElementById(
-        "voiceButton"
-    );
-
-const selectedFilePreview =
-    document.getElementById(
-        "selectedFilePreview"
-    );
-
-const notificationButton =
-    document.getElementById(
-        "notificationButton"
-    );
+const voiceButton = document.getElementById("voiceButton");
+const notificationButton = document.getElementById("notificationButton");
 
 
-/*
- * Start button test.
- * For Part 1, this only opens the chat.
- * Supabase connection will be added after
- * this basic button is confirmed working.
- */
+/* =========================
+   START CHAT
+========================= */
 
-startChatButton.addEventListener(
-    "click",
-    function () {
+startChatButton.onclick = function () {
 
-        const name =
-            visitorName.value.trim();
+    const name = visitorName.value.trim();
+    const email = visitorEmail.value.trim();
+    const phone = visitorPhone.value.trim();
 
-        const email =
-            visitorEmail.value.trim();
+    if (name === "") {
+        alert("Please enter your name.");
+        visitorName.focus();
+        return;
+    }
 
-        const phone =
-            visitorPhone.value.trim();
+    if (email === "" && phone === "") {
+        alert("Please enter your email address or phone number.");
+        visitorEmail.focus();
+        return;
+    }
 
-
-        if (!name) {
-
-            alert(
-                "Please enter your name."
-            );
-
-            visitorName.focus();
-
-            return;
-
-        }
-
-
-        if (!email && !phone) {
-
-            alert(
-                "Please enter your email address or phone number."
-            );
-
-            visitorEmail.focus();
-
-            return;
-
-        }
-
-
+    try {
         localStorage.setItem(
             "g_nurse_visitor",
             JSON.stringify({
@@ -863,296 +768,171 @@ startChatButton.addEventListener(
                 phone: phone
             })
         );
+    } catch (error) {
+        console.log("Local storage unavailable:", error);
+    }
+
+    welcomeScreen.style.display = "none";
+    chatScreen.style.display = "flex";
+
+    messageInput.focus();
+};
 
 
-        welcomeScreen.classList.add(
-            "hidden"
-        );
+/* =========================
+   BACK BUTTON
+========================= */
 
-        chatScreen.classList.add(
-            "active"
-        );
+backButton.onclick = function () {
+
+    chatScreen.style.display = "none";
+    welcomeScreen.style.display = "block";
+
+};
 
 
+/* =========================
+   SEND BUTTON
+========================= */
+
+sendButton.onclick = function () {
+
+    const text = messageInput.value.trim();
+
+    if (text === "") {
+        alert("Type a message first.");
         messageInput.focus();
+        return;
+    }
+
+    alert("Start Chat is working correctly. Supabase message sending will be connected next.");
+
+};
+
+
+/* =========================
+   ENTER TO SEND
+========================= */
+
+messageInput.onkeydown = function (event) {
+
+    if (event.key === "Enter" && !event.shiftKey) {
+
+        event.preventDefault();
+
+        sendButton.click();
 
     }
-);
 
+};
 
-/*
- * Back button.
- */
 
-backButton.addEventListener(
-    "click",
-    function () {
+/* =========================
+   ATTACHMENT
+========================= */
 
-        chatScreen.classList.remove(
-            "active"
-        );
+attachmentButton.onclick = function () {
 
-        welcomeScreen.classList.remove(
-            "hidden"
-        );
+    fileInput.click();
 
-    }
-);
+};
 
 
-/*
- * Attachment button.
- */
+fileInput.onchange = function () {
 
-attachmentButton.addEventListener(
-    "click",
-    function () {
+    const file = fileInput.files[0];
 
-        fileInput.click();
+    if (!file) return;
 
-    }
-);
+    selectedFilePreview.style.display = "flex";
 
+    selectedFilePreview.innerHTML = "";
 
-/*
- * Display selected file.
- */
+    const fileName = document.createElement("span");
 
-fileInput.addEventListener(
-    "change",
-    function () {
+    fileName.textContent = "📎 " + file.name;
 
-        const file =
-            fileInput.files[0];
+    const removeButton = document.createElement("button");
 
-        if (!file) {
-            return;
-        }
+    removeButton.type = "button";
 
+    removeButton.textContent = "✕";
 
-        selectedFilePreview.style.display =
-            "flex";
+    removeButton.onclick = function () {
 
+        fileInput.value = "";
 
-        selectedFilePreview.innerHTML =
-            "";
+        selectedFilePreview.innerHTML = "";
 
+        selectedFilePreview.style.display = "none";
 
-        const name =
-            document.createElement(
-                "span"
-            );
+    };
 
-        name.textContent =
-            "📎 " + file.name;
+    selectedFilePreview.appendChild(fileName);
 
+    selectedFilePreview.appendChild(removeButton);
 
-        const remove =
-            document.createElement(
-                "button"
-            );
+};
 
-        remove.type =
-            "button";
 
-        remove.textContent =
-            "✕";
+/* =========================
+   VOICE
+========================= */
 
+voiceButton.onclick = function () {
 
-        remove.onclick =
-            function () {
+    alert("Voice recording will be connected in the next part.");
 
-                fileInput.value =
-                    "";
+};
 
-                selectedFilePreview.style.display =
-                    "none";
 
-                selectedFilePreview.innerHTML =
-                    "";
+/* =========================
+   NOTIFICATIONS
+========================= */
 
-            };
+notificationButton.onclick = function () {
 
+    alert("Notifications will be connected in the next part.");
 
-        selectedFilePreview.appendChild(
-            name
-        );
+};
 
-        selectedFilePreview.appendChild(
-            remove
-        );
 
-    }
-);
-
-
-/*
- * Message box automatically grows.
- */
-
-messageInput.addEventListener(
-    "input",
-    function () {
-
-        messageInput.style.height =
-            "auto";
-
-        messageInput.style.height =
-            Math.min(
-                messageInput.scrollHeight,
-                120
-            ) + "px";
-
-    }
-);
-
-
-/*
- * Enter = send.
- * Shift + Enter = new line.
- *
- * Actual sending will be added
- * in the next part.
- */
-
-messageInput.addEventListener(
-    "keydown",
-    function (event) {
-
-        if (
-            event.key === "Enter" &&
-            !event.shiftKey
-        ) {
-
-            event.preventDefault();
-
-            sendButton.click();
-
-        }
-
-    }
-);
-
-
-/*
- * Part 1 send-button test.
- */
-
-sendButton.addEventListener(
-    "click",
-    function () {
-
-        const text =
-            messageInput.value.trim();
-
-
-        if (!text) {
-
-            alert(
-                "Type a message first."
-            );
-
-            messageInput.focus();
-
-            return;
-
-        }
-
-
-        alert(
-            "The chat interface is working. Message sending will be connected to Supabase in the next part."
-        );
-
-    }
-);
-
-
-/*
- * Voice button placeholder.
- * Actual recording will be added later.
- */
-
-voiceButton.addEventListener(
-    "click",
-    function () {
-
-        alert(
-            "Voice recording will be connected in the next part."
-        );
-
-    }
-);
-
-
-/*
- * Notification button placeholder.
- */
-
-notificationButton.addEventListener(
-    "click",
-    function () {
-
-        alert(
-            "Notifications will be connected in the next part."
-        );
-
-    }
-);
-
-
-/*
- * Restore visitor details.
- */
+/* =========================
+   RESTORE VISITOR DETAILS
+========================= */
 
 try {
 
-    const saved =
-        localStorage.getItem(
-            "g_nurse_visitor"
-        );
+    const savedVisitor =
+        localStorage.getItem("g_nurse_visitor");
 
-
-    if (saved) {
+    if (savedVisitor) {
 
         const visitor =
-            JSON.parse(saved);
-
+            JSON.parse(savedVisitor);
 
         if (visitor.name) {
-
-            visitorName.value =
-                visitor.name;
-
+            visitorName.value = visitor.name;
         }
-
 
         if (visitor.email) {
-
-            visitorEmail.value =
-                visitor.email;
-
+            visitorEmail.value = visitor.email;
         }
 
-
         if (visitor.phone) {
-
-            visitorPhone.value =
-                visitor.phone;
-
+            visitorPhone.value = visitor.phone;
         }
 
     }
 
 } catch (error) {
 
-    console.error(
-        "Visitor details error:",
+    console.log(
+        "Could not restore visitor details:",
         error
     );
 
 }
-
-</script>
-
+ </script>  
 </body>
      </html>
