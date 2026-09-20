@@ -793,6 +793,13 @@ const fileInput =
 
 const selectedFilePreview =
     document.getElementById("selectedFilePreview");
+    fileInput.addEventListener("change", function () {
+    const file = fileInput.files[0];
+
+    if (file) {
+        alert("File selected successfully:\n\n" + file.name);
+    }
+});
 
 const voiceButton =
     document.getElementById("voiceButton");
