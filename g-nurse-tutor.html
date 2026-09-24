@@ -9,266 +9,346 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-* {
-    box-sizing: border-box;
+*{
+    box-sizing:border-box;
 }
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #eef4f6;
-    color: #172033;
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#eef6f7;
+    color:#123;
 }
 
-.header {
-    background: #087f8c;
-    color: white;
-    padding: 18px;
-    text-align: center;
-    font-size: 21px;
-    font-weight: bold;
+header{
+    background:#087f8c;
+    color:white;
+    padding:18px;
+    text-align:center;
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
 }
 
-.container {
-    width: 100%;
-    max-width: 800px;
-    margin: auto;
-    padding: 15px;
+header h1{
+    margin:0;
+    font-size:22px;
 }
 
-.card {
-    background: white;
-    border-radius: 18px;
-    padding: 18px;
-    margin-bottom: 16px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+header p{
+    margin:6px 0 0;
+    font-size:13px;
+    opacity:.9;
 }
 
-h2, h3 {
-    margin-top: 0;
+.container{
+    width:100%;
+    max-width:900px;
+    margin:auto;
+    padding:15px;
 }
 
-label {
-    display: block;
-    font-weight: bold;
-    margin-top: 12px;
-    margin-bottom: 6px;
+.card{
+    background:white;
+    border-radius:15px;
+    padding:18px;
+    margin-bottom:15px;
+    box-shadow:0 3px 12px rgba(0,0,0,.08);
 }
 
-input,
-textarea {
-    width: 100%;
-    padding: 13px;
-    border: 1px solid #ccd5dc;
-    border-radius: 10px;
-    font-size: 15px;
+label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:6px;
 }
 
-textarea {
-    min-height: 80px;
-    resize: vertical;
+input,textarea{
+    width:100%;
+    padding:13px;
+    border:1px solid #ccd;
+    border-radius:9px;
+    font-size:15px;
+    margin-bottom:12px;
 }
 
-video {
-    width: 100%;
-    background: #000;
-    border-radius: 15px;
-    display: block;
-    min-height: 220px;
-    object-fit: cover;
+textarea{
+    min-height:80px;
+    resize:vertical;
 }
 
-button {
-    width: 100%;
-    border: 0;
-    border-radius: 11px;
-    padding: 14px;
-    margin-top: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
+button{
+    border:none;
+    border-radius:9px;
+    padding:12px 17px;
+    font-size:15px;
+    cursor:pointer;
+    margin:4px;
 }
 
-.camera-btn {
-    background: #0b5ed7;
-    color: white;
+.primary{
+    background:#087f8c;
+    color:white;
 }
 
-.start-btn {
-    background: #087f8c;
-    color: white;
+.success{
+    background:#16803c;
+    color:white;
 }
 
-.end-btn {
-    background: #c62828;
-    color: white;
+.danger{
+    background:#c62828;
+    color:white;
 }
 
-.question {
-    border-bottom: 1px solid #e5e7eb;
-    padding: 12px 0;
+.secondary{
+    background:#e7eef0;
+    color:#123;
 }
 
-.question:last-child {
-    border-bottom: 0;
+button:disabled{
+    opacity:.5;
+    cursor:not-allowed;
 }
 
-.question-name {
-    font-weight: bold;
+video{
+    width:100%;
+    background:#111;
+    border-radius:14px;
+    display:block;
 }
 
-.question-time {
-    color: #7a8490;
-    font-size: 12px;
-    margin-top: 4px;
+.status{
+    padding:12px;
+    border-radius:9px;
+    background:#eef7f8;
+    margin:10px 0;
+    font-size:14px;
 }
 
-.status {
-    padding: 12px;
-    border-radius: 10px;
-    background: #edf2f7;
-    margin-top: 10px;
-    font-size: 14px;
+.live{
+    color:#16803c;
+    font-weight:bold;
 }
 
-.live {
-    background: #e7f7ed;
-    color: #137333;
-    font-weight: bold;
+.room-code{
+    font-size:28px;
+    font-weight:bold;
+    letter-spacing:5px;
+    text-align:center;
+    padding:15px;
+    background:#f1f8f9;
+    border-radius:12px;
+    color:#087f8c;
 }
 
-.hidden {
-    display: none;
+.stats{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
 }
 
-.room-box {
-    background: #f1f5f9;
-    padding: 13px;
-    border-radius: 10px;
-    word-break: break-all;
-    margin-top: 10px;
+.stat{
+    flex:1;
+    min-width:130px;
+    padding:15px;
+    border-radius:12px;
+    background:#f4f7f8;
+    text-align:center;
 }
 
-.copy-btn {
-    background: #334155;
-    color: white;
+.stat strong{
+    display:block;
+    font-size:25px;
+    color:#087f8c;
 }
 
-.count {
-    font-size: 28px;
-    font-weight: bold;
-    color: #087f8c;
+.question{
+    border:1px solid #ddd;
+    border-radius:10px;
+    padding:12px;
+    margin-bottom:10px;
+    background:#fafafa;
 }
 
-.small {
-    color: #64748b;
-    font-size: 13px;
+.question-name{
+    font-weight:bold;
+    color:#087f8c;
+}
+
+.question-time{
+    font-size:11px;
+    color:#777;
+    margin-top:5px;
+}
+
+.hidden{
+    display:none !important;
+}
+
+.controls{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    margin-top:10px;
+}
+
+.notice{
+    background:#fff8df;
+    border-left:4px solid #e6a700;
+    padding:12px;
+    border-radius:7px;
+    font-size:13px;
+}
+
+.error{
+    color:#b00020;
+    font-weight:bold;
+}
+
+.success-text{
+    color:#16803c;
+    font-weight:bold;
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">
-    🎥 G Nurse Meet — Tutor
-</div>
+<header>
+    <h1>🎓 G Nurse Meet</h1>
+    <p>Tutor Control Panel</p>
+</header>
 
 <div class="container">
 
-    <!-- MEETING DETAILS -->
+    <!-- MEETING SETUP -->
     <div class="card">
 
-        <h2>Create Live Class</h2>
+        <h2>Start G Nurse Meet</h2>
 
-        <label for="meetingTitle">
-            Meeting Title
-        </label>
+        <label for="meetingTitle">Meeting Title</label>
 
         <input
             id="meetingTitle"
             type="text"
-            placeholder="Example: Medical-Surgical Nursing Class">
+            placeholder="Example: Medical-Surgical Nursing Tutorial"
+        >
 
-        <label for="tutorName">
-            Tutor Name
-        </label>
+        <label for="tutorName">Tutor Name</label>
 
         <input
             id="tutorName"
             type="text"
-            placeholder="Enter tutor name">
+            placeholder="Enter tutor name"
+        >
 
-        <button
-            class="camera-btn"
-            id="cameraButton"
-            onclick="startCamera()">
-            📷 Turn On Camera & Microphone
-        </button>
+        <label for="meetingDescription">Description</label>
 
-    </div>
+        <textarea
+            id="meetingDescription"
+            placeholder="Enter a short description"
+        ></textarea>
 
-
-    <!-- VIDEO -->
-    <div class="card">
-
-        <h3>🎥 Tutor Camera</h3>
-
-        <video
-            id="tutorVideo"
-            autoplay
-            muted
-            playsinline>
-        </video>
-
-        <div
-            id="cameraStatus"
-            class="status">
-            Camera and microphone are currently OFF.
+        <div class="notice">
+            <strong>Important:</strong>
+            Only the tutor's camera and microphone are enabled.
+            Students join with their camera and microphone OFF.
         </div>
 
-    </div>
-
-
-    <!-- START MEETING -->
-    <div class="card">
-
-        <button
-            id="startButton"
-            class="start-btn"
-            onclick="startMeeting()">
-            🟢 START G NURSE MEET
-        </button>
-
-        <button
-            id="endButton"
-            class="end-btn hidden"
-            onclick="endMeeting()">
-            🔴 END MEETING
-        </button>
-
-        <div
-            id="meetingStatus"
-            class="status">
-            No meeting is currently running.
-        </div>
-
-        <div
-            id="roomArea"
-            class="hidden">
-
-            <p class="small">
-                Share this room code with your students:
-            </p>
-
-            <div
-                id="roomCode"
-                class="room-box">
-            </div>
+        <div class="controls">
 
             <button
-                class="copy-btn"
-                onclick="copyRoomCode()">
-                📋 COPY ROOM CODE
+                id="cameraBtn"
+                class="secondary"
+                onclick="startCamera()"
+            >
+                🎥 Turn On Camera & Mic
+            </button>
+
+            <button
+                id="startBtn"
+                class="primary"
+                onclick="startMeeting()"
+                disabled
+            >
+                ▶ Start Meeting
+            </button>
+
+            <button
+                id="endBtn"
+                class="danger hidden"
+                onclick="endMeeting()"
+            >
+                ⛔ End Meeting
+            </button>
+
+        </div>
+
+        <div id="statusBox" class="status">
+            Camera and microphone are not active.
+        </div>
+
+    </div>
+
+
+    <!-- ROOM -->
+    <div id="roomCard" class="card hidden">
+
+        <h2>Live Meeting</h2>
+
+        <div class="room-code" id="roomCode">
+            --------
+        </div>
+
+        <p style="text-align:center;">
+            Give this room code to your students.
+        </p>
+
+        <div class="stats">
+
+            <div class="stat">
+                <strong id="participantCount">0</strong>
+                Participants
+            </div>
+
+            <div class="stat">
+                <strong id="connectionCount">0</strong>
+                Connections
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- TUTOR VIDEO -->
+    <div class="card">
+
+        <h2>🎥 Tutor Camera</h2>
+
+        <video
+            id="localVideo"
+            autoplay
+            muted
+            playsinline
+        ></video>
+
+        <div class="controls">
+
+            <button
+                id="muteBtn"
+                class="secondary"
+                onclick="toggleMicrophone()"
+                disabled
+            >
+                🎤 Mute Microphone
+            </button>
+
+            <button
+                id="cameraToggleBtn"
+                class="secondary"
+                onclick="toggleCamera()"
+                disabled
+            >
+                📷 Turn Camera Off
             </button>
 
         </div>
@@ -276,33 +356,13 @@ button {
     </div>
 
 
-    <!-- PARTICIPANTS -->
-    <div class="card">
-
-        <h3>👥 Students Watching</h3>
-
-        <div
-            id="participantCount"
-            class="count">
-            0
-        </div>
-
-        <div class="small">
-            Camera and microphone remain OFF for students.
-        </div>
-
-    </div>
-
-
     <!-- QUESTIONS -->
-    <div class="card">
+    <div id="questionsCard" class="card hidden">
 
-        <h3>💬 Student Questions</h3>
+        <h2>💬 Student Questions</h2>
 
-        <div id="questions">
-            <p class="small">
-                No questions yet.
-            </p>
+        <div id="questionsList">
+            <p>No questions yet.</p>
         </div>
 
     </div>
@@ -312,146 +372,262 @@ button {
 
 <script>
 
-/* =====================================================
-   SUPABASE CONFIGURATION
-   ===================================================== */
+/* =========================================================
+   SUPABASE
+========================================================= */
 
 const SUPABASE_URL =
     "https://bmiechymiyedubezhcqk.supabase.co";
 
 /*
-   USE YOUR PUBLIC/PUBLISHABLE KEY HERE.
+ IMPORTANT:
+ Replace this with your existing Supabase
+ publishable/public key.
 
-   DO NOT USE:
-   - service_role key
-   - secret key
+ DO NOT put your service_role or secret key here.
 */
 
-const SUPABASE_KEY =
-    "sb_publishable_9JL2ALhTGlZV57hUV0mTdQ_c2hdT8O8";
+const SUPABASE_ANON_KEY =
+    "YOUR_SUPABASE_PUBLISHABLE_KEY";
 
 
 const supabaseClient =
-    window.supabase.createClient(
+    supabase.createClient(
         SUPABASE_URL,
-        SUPABASE_KEY
+        SUPABASE_ANON_KEY
     );
 
 
-/* =====================================================
+/* =========================================================
    GLOBAL VARIABLES
-   ===================================================== */
+========================================================= */
 
-let tutorStream = null;
-let currentMeetingId = null;
-let currentRoomCode = null;
-let questionChannel = null;
+let localStream = null;
+
+let currentMeeting = null;
+
+let meetingId = null;
+
+let roomCode = null;
+
+let tutorId =
+    "tutor-" +
+    crypto.randomUUID();
+
+let signalChannel = null;
+
 let participantChannel = null;
 
+let questionChannel = null;
 
-/* =====================================================
-   START CAMERA
-   ===================================================== */
 
-async function startCamera() {
+/*
+ One RTCPeerConnection for each student.
 
-    const status =
-        document.getElementById("cameraStatus");
+ Example:
 
-    const button =
-        document.getElementById("cameraButton");
+ peerConnections = {
+     student123: RTCPeerConnection,
+     student456: RTCPeerConnection
+ }
+*/
 
-    try {
+const peerConnections = {};
 
-        tutorStream =
-            await navigator.mediaDevices.getUserMedia({
-                video: true,
-                audio: true
-            });
+const pendingIceCandidates = {};
 
-        const video =
-            document.getElementById("tutorVideo");
 
-        video.srcObject = tutorStream;
+/* =========================================================
+   ICE SERVERS
+========================================================= */
 
-        status.textContent =
-            "Camera and microphone are ON.";
+const rtcConfiguration = {
 
-        status.classList.add("live");
+    iceServers: [
 
-        button.textContent =
-            "✅ Camera & Microphone ON";
+        {
+            urls:
+            "stun:stun.l.google.com:19302"
+        },
 
-    } catch (error) {
+        {
+            urls:
+            "stun:stun1.l.google.com:19302"
+        }
 
-        console.error(error);
+    ]
 
-        status.textContent =
-            "Unable to access camera or microphone. Please allow browser permissions.";
+};
 
-        status.classList.remove("live");
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const localVideo =
+    document.getElementById("localVideo");
+
+const cameraBtn =
+    document.getElementById("cameraBtn");
+
+const startBtn =
+    document.getElementById("startBtn");
+
+const endBtn =
+    document.getElementById("endBtn");
+
+const statusBox =
+    document.getElementById("statusBox");
+
+const roomCard =
+    document.getElementById("roomCard");
+
+const questionsCard =
+    document.getElementById("questionsCard");
+
+const roomCodeElement =
+    document.getElementById("roomCode");
+
+const participantCountElement =
+    document.getElementById("participantCount");
+
+const connectionCountElement =
+    document.getElementById("connectionCount");
+
+const questionsList =
+    document.getElementById("questionsList");
+
+const muteBtn =
+    document.getElementById("muteBtn");
+
+const cameraToggleBtn =
+    document.getElementById("cameraToggleBtn");
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function setStatus(message, type = "") {
+
+    statusBox.textContent = message;
+
+    statusBox.className = "status";
+
+    if(type === "error"){
+        statusBox.classList.add("error");
+    }
+
+    if(type === "success"){
+        statusBox.classList.add("success-text");
     }
 }
 
 
-/* =====================================================
-   CREATE ROOM CODE
-   ===================================================== */
+/* =========================================================
+   ROOM CODE
+========================================================= */
 
-function generateRoomCode() {
+function generateRoomCode(){
 
     const characters =
         "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
     let code = "";
 
-    for (let i = 0; i < 8; i++) {
+    for(let i = 0; i < 8; i++){
 
         code +=
-            characters.charAt(
+            characters[
                 Math.floor(
-                    Math.random() * characters.length
+                    Math.random() *
+                    characters.length
                 )
-            );
+            ];
+
     }
 
     return code;
 }
 
 
-/* =====================================================
+/* =========================================================
+   CAMERA
+========================================================= */
+
+async function startCamera(){
+
+    try{
+
+        setStatus(
+            "Requesting permission for camera and microphone..."
+        );
+
+        localStream =
+            await navigator.mediaDevices.getUserMedia({
+
+                video: {
+                    width: {
+                        ideal: 1280
+                    },
+
+                    height: {
+                        ideal: 720
+                    },
+
+                    facingMode: "user"
+                },
+
+                audio: true
+
+            });
+
+
+        localVideo.srcObject =
+            localStream;
+
+
+        cameraBtn.disabled = true;
+
+        startBtn.disabled = false;
+
+        muteBtn.disabled = false;
+
+        cameraToggleBtn.disabled = false;
+
+
+        setStatus(
+            "Camera and microphone are ready. You can start the meeting.",
+            "success"
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+        setStatus(
+            "Unable to access camera/microphone: " +
+            error.message,
+            "error"
+        );
+
+        alert(
+            "Please allow camera and microphone permission in your browser."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
    START MEETING
-   ===================================================== */
+========================================================= */
 
-async function startMeeting() {
+async function startMeeting(){
 
-    const title =
-        document.getElementById("meetingTitle")
-        .value.trim();
-
-    const tutorName =
-        document.getElementById("tutorName")
-        .value.trim();
-
-    const status =
-        document.getElementById("meetingStatus");
-
-    if (!title) {
-
-        alert("Please enter the meeting title.");
-
-        return;
-    }
-
-    if (!tutorName) {
-
-        alert("Please enter the tutor name.");
-
-        return;
-    }
-
-
-    if (!tutorStream) {
+    if(!localStream){
 
         alert(
             "Please turn on the camera and microphone first."
@@ -461,60 +637,109 @@ async function startMeeting() {
     }
 
 
-    currentRoomCode =
-        generateRoomCode();
+    const title =
+        document.getElementById("meetingTitle")
+        .value.trim();
+
+    const tutorName =
+        document.getElementById("tutorName")
+        .value.trim();
+
+    const description =
+        document.getElementById("meetingDescription")
+        .value.trim();
 
 
-    try {
+    if(!title){
+
+        alert("Enter the meeting title.");
+
+        return;
+    }
+
+
+    if(!tutorName){
+
+        alert("Enter the tutor name.");
+
+        return;
+    }
+
+
+    startBtn.disabled = true;
+
+
+    try{
+
+        roomCode =
+            generateRoomCode();
+
+
+        setStatus(
+            "Creating G Nurse Meet..."
+        );
+
 
         const {
             data,
             error
         } = await supabaseClient
+
             .from("g_nurse_meetings")
+
             .insert({
 
                 title: title,
 
                 description:
-                    "G Nurse live tutor classroom",
+                    description || null,
 
                 status: "live",
 
-                tutor_name: tutorName,
+                tutor_name:
+                    tutorName,
 
-                room_code: currentRoomCode,
+                room_code:
+                    roomCode,
 
                 started_at:
                     new Date().toISOString()
 
             })
+
             .select()
+
             .single();
 
 
-        if (error) {
-
-            console.error(error);
+        if(error){
 
             throw error;
+
         }
 
 
-        currentMeetingId =
+        currentMeeting =
+            data;
+
+        meetingId =
             data.id;
 
 
-        /* Register tutor */
+        /*
+         Add tutor to participants.
+        */
 
         const {
             error: participantError
         } = await supabaseClient
+
             .from("g_nurse_meet_participants")
+
             .insert({
 
                 meeting_id:
-                    currentMeetingId,
+                    meetingId,
 
                 participant_name:
                     tutorName,
@@ -525,288 +750,916 @@ async function startMeeting() {
             });
 
 
-        if (participantError) {
+        if(participantError){
 
-            console.error(
+            console.warn(
+                "Tutor participant insert:",
                 participantError
             );
+
         }
 
 
-        status.textContent =
-            "🔴 G NURSE MEET IS LIVE";
-
-        status.classList.add("live");
+        roomCodeElement.textContent =
+            roomCode;
 
 
-        document
-            .getElementById("roomArea")
-            .classList.remove("hidden");
+        roomCard.classList.remove(
+            "hidden"
+        );
+
+        questionsCard.classList.remove(
+            "hidden"
+        );
 
 
-        document
-            .getElementById("roomCode")
-            .textContent =
-                currentRoomCode;
+        endBtn.classList.remove(
+            "hidden"
+        );
 
 
-        document
-            .getElementById("startButton")
-            .classList.add("hidden");
+        startBtn.classList.add(
+            "hidden"
+        );
 
 
-        document
-            .getElementById("endButton")
-            .classList.remove("hidden");
+        cameraBtn.classList.add(
+            "hidden"
+        );
 
 
-        listenForQuestions();
+        setStatus(
+            "🟢 G Nurse Meet is LIVE. Waiting for students...",
+            "success"
+        );
 
-        listenForParticipants();
 
-        updateParticipantCount();
+        /*
+         Start Supabase realtime signaling.
+        */
 
-    } catch (error) {
+        await setupSignalChannel();
+
+
+        await setupParticipantChannel();
+
+
+        await setupQuestionChannel();
+
+
+        /*
+         Load existing questions.
+        */
+
+        await loadQuestions();
+
+
+        /*
+         Load current participant count.
+        */
+
+        await updateParticipantCount();
+
+
+    }catch(error){
 
         console.error(error);
 
-        alert(
-            "Unable to start the meeting: " +
-            error.message
+        setStatus(
+            "Unable to start meeting: " +
+            error.message,
+            "error"
         );
+
+        startBtn.disabled = false;
+
     }
+
 }
 
 
-/* =====================================================
-   END MEETING
-   ===================================================== */
+/* =========================================================
+   SIGNAL CHANNEL
+========================================================= */
 
-async function endMeeting() {
+async function setupSignalChannel(){
 
-    if (!currentMeetingId) {
+    signalChannel =
+
+        supabaseClient
+
+        .channel(
+            "g-nurse-signals-" +
+            meetingId +
+            "-" +
+            tutorId
+        )
+
+        .on(
+
+            "postgres_changes",
+
+            {
+
+                event: "INSERT",
+
+                schema: "public",
+
+                table: "g_nurse_meet_signals",
+
+                filter:
+                    "meeting_id=eq." +
+                    meetingId
+
+            },
+
+            async(payload) => {
+
+                try{
+
+                    await handleSignal(
+                        payload.new
+                    );
+
+                }catch(error){
+
+                    console.error(
+                        "Signal error:",
+                        error
+                    );
+
+                }
+
+            }
+
+        )
+
+        .subscribe((status) => {
+
+            console.log(
+                "Signal channel:",
+                status
+            );
+
+        });
+
+}
+
+
+/* =========================================================
+   HANDLE WEBRTC SIGNAL
+========================================================= */
+
+async function handleSignal(signal){
+
+    /*
+     Ignore our own messages.
+    */
+
+    if(signal.sender_id === tutorId){
+
         return;
     }
 
 
-    try {
+    /*
+     Ignore signals not meant for this tutor,
+     except broadcast-style messages where
+     receiver_id is null.
+    */
 
-        const {
-            error
-        } = await supabaseClient
-            .from("g_nurse_meetings")
-            .update({
+    if(
+        signal.receiver_id &&
+        signal.receiver_id !== tutorId
+    ){
 
-                status: "ended",
+        return;
+    }
 
-                ended_at:
-                    new Date().toISOString()
 
-            })
-            .eq(
-                "id",
-                currentMeetingId
+    const studentId =
+        signal.sender_id;
+
+
+    /* =====================================================
+       STUDENT OFFER
+    ===================================================== */
+
+    if(signal.signal_type === "offer"){
+
+        await handleStudentOffer(
+            studentId,
+            signal.signal_data
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       STUDENT ICE CANDIDATE
+    ===================================================== */
+
+    if(
+        signal.signal_type ===
+        "ice-candidate"
+    ){
+
+        await handleStudentIceCandidate(
+            studentId,
+            signal.signal_data
+        );
+
+        return;
+    }
+
+}
+
+
+/* =========================================================
+   CREATE CONNECTION FOR STUDENT
+========================================================= */
+
+async function createPeerConnection(
+    studentId
+){
+
+    /*
+     Close old connection if one exists.
+    */
+
+    if(peerConnections[studentId]){
+
+        try{
+
+            peerConnections[
+                studentId
+            ].close();
+
+        }catch(e){}
+
+    }
+
+
+    const pc =
+        new RTCPeerConnection(
+            rtcConfiguration
+        );
+
+
+    peerConnections[studentId] =
+        pc;
+
+
+    /*
+     Add tutor's camera and microphone.
+    */
+
+    if(localStream){
+
+        localStream
+            .getTracks()
+            .forEach(track => {
+
+                pc.addTrack(
+                    track,
+                    localStream
+                );
+
+            });
+
+    }
+
+
+    /*
+     Send ICE candidates to student.
+    */
+
+    pc.onicecandidate =
+        async(event) => {
+
+            if(!event.candidate){
+
+                return;
+
+            }
+
+
+            await sendSignal(
+
+                studentId,
+
+                "ice-candidate",
+
+                event.candidate.toJSON()
+
+            );
+
+        };
+
+
+    /*
+     Monitor connection.
+    */
+
+    pc.onconnectionstatechange =
+        () => {
+
+            console.log(
+                "Student:",
+                studentId,
+                "Connection:",
+                pc.connectionState
             );
 
 
-        if (error) {
-
-            throw error;
-        }
+            updateConnectionCount();
 
 
-        if (tutorStream) {
+            if(
+                pc.connectionState ===
+                "failed" ||
 
-            tutorStream
-                .getTracks()
-                .forEach(
-                    track => track.stop()
-                );
+                pc.connectionState ===
+                "closed"
+            ){
 
-            tutorStream = null;
-        }
+                try{
 
+                    pc.close();
 
-        document
-            .getElementById("tutorVideo")
-            .srcObject = null;
+                }catch(e){}
 
+                delete peerConnections[
+                    studentId
+                ];
 
-        document
-            .getElementById("meetingStatus")
-            .textContent =
-                "Meeting ended.";
+                updateConnectionCount();
 
+            }
 
-        document
-            .getElementById("meetingStatus")
-            .classList.remove("live");
+        };
 
 
-        document
-            .getElementById("endButton")
-            .classList.add("hidden");
+    return pc;
 
-
-        document
-            .getElementById("startButton")
-            .classList.remove("hidden");
-
-
-        document
-            .getElementById("cameraButton")
-            .textContent =
-                "📷 Turn On Camera & Microphone";
-
-
-        if (questionChannel) {
-
-            await supabaseClient
-                .removeChannel(
-                    questionChannel
-                );
-
-            questionChannel = null;
-        }
-
-
-        if (participantChannel) {
-
-            await supabaseClient
-                .removeChannel(
-                    participantChannel
-                );
-
-            participantChannel = null;
-        }
-
-
-    } catch (error) {
-
-        console.error(error);
-
-        alert(
-            "Unable to end the meeting: " +
-            error.message
-        );
-    }
 }
 
 
-/* =====================================================
-   COPY ROOM CODE
-   ===================================================== */
+/* =========================================================
+   STUDENT OFFER
+========================================================= */
 
-async function copyRoomCode() {
+async function handleStudentOffer(
+    studentId,
+    offer
+){
 
-    if (!currentRoomCode) {
-        return;
+    console.log(
+        "Received offer from student:",
+        studentId
+    );
+
+
+    const pc =
+        await createPeerConnection(
+            studentId
+        );
+
+
+    await pc.setRemoteDescription(
+        new RTCSessionDescription(
+            offer
+        )
+    );
+
+
+    /*
+     Add ICE candidates that arrived
+     before remote description.
+    */
+
+    if(
+        pendingIceCandidates[
+            studentId
+        ]
+    ){
+
+        for(
+            const candidate
+            of pendingIceCandidates[
+                studentId
+            ]
+        ){
+
+            try{
+
+                await pc.addIceCandidate(
+                    candidate
+                );
+
+            }catch(error){
+
+                console.error(
+                    error
+                );
+
+            }
+
+        }
+
+        delete pendingIceCandidates[
+            studentId
+        ];
+
     }
 
-    try {
 
-        await navigator.clipboard.writeText(
-            currentRoomCode
+    const answer =
+        await pc.createAnswer();
+
+
+    await pc.setLocalDescription(
+        answer
+    );
+
+
+    /*
+     Send answer back to student.
+    */
+
+    await sendSignal(
+
+        studentId,
+
+        "answer",
+
+        answer
+
+    );
+
+
+    updateConnectionCount();
+
+}
+
+/* =========================================================
+   STUDENT ICE CANDIDATE
+========================================================= */
+
+async function handleStudentIceCandidate(
+    studentId,
+    candidateData
+){
+
+    const pc =
+        peerConnections[studentId];
+
+
+    const candidate =
+        new RTCIceCandidate(
+            candidateData
         );
 
-        alert(
-            "Room code copied."
+
+    if(
+        pc &&
+        pc.remoteDescription
+    ){
+
+        try{
+
+            await pc.addIceCandidate(
+                candidate
+            );
+
+        }catch(error){
+
+            console.error(
+                "ICE candidate error:",
+                error
+            );
+
+        }
+
+    }else{
+
+        /*
+         Student's ICE candidate arrived
+         before the remote description.
+        */
+
+        if(
+            !pendingIceCandidates[studentId]
+        ){
+
+            pendingIceCandidates[studentId] = [];
+
+        }
+
+
+        pendingIceCandidates[studentId].push(
+            candidate
         );
 
-    } catch (error) {
-
-        alert(
-            "Unable to copy room code."
-        );
     }
+
 }
 
 
-/* =====================================================
-   LISTEN FOR QUESTIONS
-   ===================================================== */
+/* =========================================================
+   SEND WEBRTC SIGNAL
+========================================================= */
 
-function listenForQuestions() {
+async function sendSignal(
+    receiverId,
+    signalType,
+    signalData
+){
 
-    if (!currentMeetingId) {
+    if(!meetingId){
+
         return;
+
     }
 
+
+    const {
+        error
+    } = await supabaseClient
+
+        .from("g_nurse_meet_signals")
+
+        .insert({
+
+            meeting_id:
+                meetingId,
+
+            sender_id:
+                tutorId,
+
+            receiver_id:
+                receiverId,
+
+            signal_type:
+                signalType,
+
+            signal_data:
+                signalData
+
+        });
+
+
+    if(error){
+
+        console.error(
+            "Signal sending failed:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   PARTICIPANT REALTIME CHANNEL
+========================================================= */
+
+async function setupParticipantChannel(){
+
+    participantChannel =
+
+        supabaseClient
+
+        .channel(
+            "g-nurse-participants-" +
+            meetingId
+        )
+
+        .on(
+
+            "postgres_changes",
+
+            {
+
+                event: "*",
+
+                schema: "public",
+
+                table:
+                    "g_nurse_meet_participants",
+
+                filter:
+                    "meeting_id=eq." +
+                    meetingId
+
+            },
+
+            async function(){
+
+                await updateParticipantCount();
+
+            }
+
+        )
+
+        .subscribe(function(status){
+
+            console.log(
+                "Participant channel:",
+                status
+            );
+
+        });
+
+}
+
+
+/* =========================================================
+   UPDATE PARTICIPANT COUNT
+========================================================= */
+
+async function updateParticipantCount(){
+
+    if(!meetingId){
+
+        return;
+
+    }
+
+
+    const {
+        count,
+        error
+    } = await supabaseClient
+
+        .from(
+            "g_nurse_meet_participants"
+        )
+
+        .select(
+            "id",
+            {
+                count: "exact",
+                head: true
+            }
+        )
+
+        .eq(
+            "meeting_id",
+            meetingId
+        )
+
+        .is(
+            "left_at",
+            null
+        );
+
+
+    if(error){
+
+        console.error(
+            "Participant count error:",
+            error
+        );
+
+        return;
+
+    }
+
+
+    participantCountElement.textContent =
+        count || 0;
+
+}
+
+
+/* =========================================================
+   UPDATE WEBRTC CONNECTION COUNT
+========================================================= */
+
+function updateConnectionCount(){
+
+    let activeConnections = 0;
+
+
+    Object.values(
+        peerConnections
+    ).forEach(function(pc){
+
+        if(
+            pc.connectionState ===
+                "connected" ||
+
+            pc.connectionState ===
+                "connecting"
+        ){
+
+            activeConnections++;
+
+        }
+
+    });
+
+
+    connectionCountElement.textContent =
+        activeConnections;
+
+}
+
+
+/* =========================================================
+   QUESTIONS REALTIME CHANNEL
+========================================================= */
+
+async function setupQuestionChannel(){
 
     questionChannel =
+
         supabaseClient
-            .channel(
-                "g-nurse-meet-questions-" +
-                currentMeetingId
-            )
-            .on(
-                "postgres_changes",
-                {
-                    event: "INSERT",
 
-                    schema: "public",
+        .channel(
+            "g-nurse-questions-" +
+            meetingId
+        )
 
-                    table:
-                        "g_nurse_meet_questions",
+        .on(
 
-                    filter:
-                        "meeting_id=eq." +
-                        currentMeetingId
+            "postgres_changes",
 
-                },
+            {
 
-                payload => {
+                event: "INSERT",
 
-                    addQuestion(
-                        payload.new
-                    );
-                }
+                schema: "public",
 
-            )
-            .subscribe();
+                table:
+                    "g_nurse_meet_questions",
+
+                filter:
+                    "meeting_id=eq." +
+                    meetingId
+
+            },
+
+            function(payload){
+
+                addQuestionToScreen(
+                    payload.new
+                );
+
+            }
+
+        )
+
+        .subscribe(function(status){
+
+            console.log(
+                "Question channel:",
+                status
+            );
+
+        });
+
 }
 
 
-/* =====================================================
-   DISPLAY QUESTION
-   ===================================================== */
+/* =========================================================
+   LOAD EXISTING QUESTIONS
+========================================================= */
 
-function addQuestion(question) {
+async function loadQuestions(){
 
-    const container =
-        document.getElementById(
-            "questions"
+    const {
+        data,
+        error
+    } = await supabaseClient
+
+        .from(
+            "g_nurse_meet_questions"
+        )
+
+        .select("*")
+
+        .eq(
+            "meeting_id",
+            meetingId
+        )
+
+        .order(
+            "created_at",
+            {
+                ascending: true
+            }
         );
 
 
-    if (
-        container.innerText.trim() ===
-        "No questions yet."
-    ) {
+    if(error){
 
-        container.innerHTML = "";
+        console.error(
+            "Question loading error:",
+            error
+        );
+
+        return;
+
     }
 
 
-    const item =
+    questionsList.innerHTML = "";
+
+
+    if(
+        !data ||
+        data.length === 0
+    ){
+
+        questionsList.innerHTML =
+            "<p>No questions yet.</p>";
+
+        return;
+
+    }
+
+
+    data.forEach(function(question){
+
+        addQuestionToScreen(
+            question
+        );
+
+    });
+
+}
+
+
+/* =========================================================
+   DISPLAY QUESTION
+========================================================= */
+
+function addQuestionToScreen(question){
+
+    if(
+        questionsList.querySelector(
+            '[data-question-id="' +
+            question.id +
+            '"]'
+        )
+    ){
+
+        return;
+
+    }
+
+
+    const emptyMessage =
+        questionsList.querySelector("p");
+
+
+    if(
+        emptyMessage &&
+        emptyMessage.textContent ===
+            "No questions yet."
+    ){
+
+        questionsList.innerHTML = "";
+
+    }
+
+
+    const questionBox =
         document.createElement("div");
 
-    item.className =
+
+    questionBox.className =
         "question";
+
+
+    questionBox.dataset.questionId =
+        question.id;
 
 
     const name =
         document.createElement("div");
 
+
     name.className =
         "question-name";
 
+
     name.textContent =
+        "👤 " +
         question.student_name;
 
 
     const text =
         document.createElement("div");
+
+
+    text.style.marginTop =
+        "8px";
+
 
     text.textContent =
         question.question;
@@ -815,141 +1668,355 @@ function addQuestion(question) {
     const time =
         document.createElement("div");
 
+
     time.className =
         "question-time";
+
 
     time.textContent =
         new Date(
             question.created_at
-        ).toLocaleTimeString();
+        ).toLocaleString();
 
 
-    item.appendChild(name);
+    questionBox.appendChild(name);
 
-    item.appendChild(text);
+    questionBox.appendChild(text);
 
-    item.appendChild(time);
+    questionBox.appendChild(time);
 
 
-    container.prepend(item);
+    questionsList.prepend(
+        questionBox
+    );
+
 }
 
 
-/* =====================================================
-   LISTEN FOR PARTICIPANTS
-   ===================================================== */
+/* =========================================================
+   MICROPHONE ON / OFF
+========================================================= */
 
-function listenForParticipants() {
+function toggleMicrophone(){
 
-    if (!currentMeetingId) {
+    if(!localStream){
+
         return;
+
     }
 
 
-    participantChannel =
-        supabaseClient
-            .channel(
-                "g-nurse-meet-participants-" +
-                currentMeetingId
-            )
-            .on(
-                "postgres_changes",
-                {
-                    event: "*",
+    const audioTracks =
+        localStream.getAudioTracks();
 
-                    schema: "public",
 
-                    table:
-                        "g_nurse_meet_participants",
+    if(
+        audioTracks.length === 0
+    ){
 
-                    filter:
-                        "meeting_id=eq." +
-                        currentMeetingId
+        return;
 
-                },
+    }
 
-                () => {
 
-                    updateParticipantCount();
+    const currentlyEnabled =
+        audioTracks[0].enabled;
 
-                }
 
-            )
-            .subscribe();
+    audioTracks.forEach(function(track){
+
+        track.enabled =
+            !currentlyEnabled;
+
+    });
+
+
+    if(currentlyEnabled){
+
+        muteBtn.textContent =
+            "🔇 Unmute Microphone";
+
+    }else{
+
+        muteBtn.textContent =
+            "🎤 Mute Microphone";
+
+    }
+
 }
 
 
-/* =====================================================
-   UPDATE PARTICIPANT COUNT
-   ===================================================== */
+/* =========================================================
+   CAMERA ON / OFF
+========================================================= */
 
-async function updateParticipantCount() {
+function toggleCamera(){
 
-    if (!currentMeetingId) {
+    if(!localStream){
+
         return;
+
     }
 
 
-    const {
-        count,
-        error
-    } = await supabaseClient
-        .from(
-            "g_nurse_meet_participants"
-        )
-        .select(
-            "id",
-            {
-                count: "exact",
-                head: true
-            }
-        )
-        .eq(
-            "meeting_id",
-            currentMeetingId
-        )
-        .eq(
-            "participant_role",
-            "student"
-        )
-        .is(
-            "left_at",
-            null
+    const videoTracks =
+        localStream.getVideoTracks();
+
+
+    if(
+        videoTracks.length === 0
+    ){
+
+        return;
+
+    }
+
+
+    const currentlyEnabled =
+        videoTracks[0].enabled;
+
+
+    videoTracks.forEach(function(track){
+
+        track.enabled =
+            !currentlyEnabled;
+
+    });
+
+
+    if(currentlyEnabled){
+
+        cameraToggleBtn.textContent =
+            "📷 Turn Camera On";
+
+    }else{
+
+        cameraToggleBtn.textContent =
+            "📷 Turn Camera Off";
+
+    }
+
+}
+
+
+/* =========================================================
+   END MEETING
+========================================================= */
+
+async function endMeeting(){
+
+    if(!meetingId){
+
+        return;
+
+    }
+
+
+    const confirmed =
+        confirm(
+            "Are you sure you want to end this meeting?"
         );
 
 
-    if (!error) {
+    if(!confirmed){
 
-        document
-            .getElementById(
-                "participantCount"
-            )
-            .textContent =
-                count || 0;
+        return;
+
     }
+
+
+    try{
+
+        const {
+            error
+        } = await supabaseClient
+
+            .from(
+                "g_nurse_meetings"
+            )
+
+            .update({
+
+                status:
+                    "ended",
+
+                ended_at:
+                    new Date().toISOString()
+
+            })
+
+            .eq(
+                "id",
+                meetingId
+            );
+
+
+        if(error){
+
+            throw error;
+
+        }
+
+
+        /*
+         Stop tutor camera
+         and microphone.
+        */
+
+        if(localStream){
+
+            localStream
+                .getTracks()
+                .forEach(function(track){
+
+                    track.stop();
+
+                });
+
+        }
+
+
+        /*
+         Close every student
+         WebRTC connection.
+        */
+
+        Object.values(
+            peerConnections
+        ).forEach(function(pc){
+
+            try{
+
+                pc.close();
+
+            }catch(error){
+
+                console.warn(error);
+
+            }
+
+        });
+
+
+        /*
+         Remove realtime channels.
+        */
+
+        if(signalChannel){
+
+            await supabaseClient
+                .removeChannel(
+                    signalChannel
+                );
+
+        }
+
+
+        if(participantChannel){
+
+            await supabaseClient
+                .removeChannel(
+                    participantChannel
+                );
+
+        }
+
+
+        if(questionChannel){
+
+            await supabaseClient
+                .removeChannel(
+                    questionChannel
+                );
+
+        }
+
+
+        localVideo.srcObject =
+            null;
+
+
+        meetingId =
+            null;
+
+
+        currentMeeting =
+            null;
+
+
+        roomCode =
+            null;
+
+
+        endBtn.classList.add(
+            "hidden"
+        );
+
+
+        roomCard.classList.add(
+            "hidden"
+        );
+
+
+        questionsCard.classList.add(
+            "hidden"
+        );
+
+
+        muteBtn.disabled =
+            true;
+
+
+        cameraToggleBtn.disabled =
+            true;
+
+
+        setStatus(
+            "Meeting ended successfully.",
+            "success"
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+
+        alert(
+            "Unable to end meeting: " +
+            error.message
+        );
+
+    }
+
 }
 
 
-/* =====================================================
-   PAGE CLEANUP
-   ===================================================== */
+/* =========================================================
+   PREVENT ACCIDENTAL PAGE CLOSURE
+========================================================= */
 
 window.addEventListener(
     "beforeunload",
-    () => {
+    function(event){
 
-        if (tutorStream) {
+        if(
+            meetingId &&
+            currentMeeting &&
+            currentMeeting.status ===
+                "live"
+        ){
 
-            tutorStream
-                .getTracks()
-                .forEach(
-                    track => track.stop()
-                );
+            event.preventDefault();
+
+            event.returnValue = "";
+
         }
+
     }
 );
 
-</script>
+    </script>
 
 </body>
-          </html>
+</html>
