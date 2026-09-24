@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>G Nurse Meet - Student</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#eef6f7;
+    color:#123;
+}
+
+header{
+    background:#087f8c;
+    color:white;
+    text-align:center;
+    padding:18px;
+}
+
+header h1{
+    margin:0;
+    font-size:22px;
+}
+
+header p{
+    margin:6px 0 0;
+    font-size:13px;
+}
+
+.container{
+    width:100%;
+    max-width:850px;
+    margin:auto;
+    padding:15px;
+}
+
+.card{
+    background:white;
+    border-radius:15px;
+    padding:18px;
+    margin-bottom:15px;
+    box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    margin-bottom:6px;
+}
+
+input,
+textarea{
+    width:100%;
+    padding:13px;
+    border:1px solid #ccd;
+    border-radius:9px;
+    font-size:15px;
+    margin-bottom:12px;
+}
+
+textarea{
+    min-height:90px;
+    resize:vertical;
+}
+
+button{
+    border:none;
+    border-radius:9px;
+    padding:12px 17px;
+    font-size:15px;
+    cursor:pointer;
+    margin:4px;
+}
+
+.primary{
+    background:#087f8c;
+    color:white;
+}
+
+.danger{
+    background:#c62828;
+    color:white;
+}
+
+.secondary{
+    background:#e7eef0;
+    color:#123;
+}
+
+button:disabled{
+    opacity:.5;
+}
+
+.status{
+    padding:12px;
+    border-radius:9px;
+    background:#eef7f8;
+    margin-top:10px;
+    font-size:14px;
+}
+
+.success{
+    color:#16803c;
+    font-weight:bold;
+}
+
+.error{
+    color:#b00020;
+    font-weight:bold;
+}
+
+.hidden{
+    display:none !important;
+}
+
+.room-title{
+    text-align:center;
+}
+
+.live-badge{
+    display:inline-block;
+    background:#16803c;
+    color:white;
+    padding:6px 12px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+}
+
+video{
+    width:100%;
+    background:#111;
+    border-radius:14px;
+    display:block;
+    min-height:220px;
+    object-fit:contain;
+}
+
+.video-label{
+    margin-bottom:8px;
+    font-weight:bold;
+}
+
+.stats{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
+}
+
+.stat{
+    flex:1;
+    background:#f3f7f8;
+    padding:15px;
+    border-radius:12px;
+    text-align:center;
+}
+
+.stat strong{
+    display:block;
+    font-size:24px;
+    color:#087f8c;
+}
+
+.question-status{
+    font-size:13px;
+    margin-top:8px;
+}
+
+.notice{
+    background:#fff8df;
+    border-left:4px solid #e6a700;
+    padding:12px;
+    border-radius:7px;
+    font-size:13px;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <h1>🎓 G Nurse Meet</h1>
+
+    <p>Student Classroom</p>
+
+</header>
+
+
+<div class="container">
+
+
+    <!-- JOIN SECTION -->
+
+    <div
+        id="joinCard"
+        class="card"
+    >
+
+        <h2>Join G Nurse Meet</h2>
+
+        <label>
+            Student Name
+        </label>
+
+        <input
+            id="studentName"
+            type="text"
+            placeholder="Enter your name"
+        >
+
+
+        <label>
+            Meeting Room Code
+        </label>
+
+        <input
+            id="roomCodeInput"
+            type="text"
+            placeholder="Enter 8-character room code"
+            maxlength="8"
+            style="text-transform:uppercase;"
+        >
+
+
+        <div class="notice">
+
+            Your camera and microphone will remain
+            <strong>OFF</strong>.
+
+            You will only receive the tutor's
+            camera and microphone.
+
+        </div>
+
+
+        <br>
+
+
+        <button
+            id="joinBtn"
+            class="primary"
+            onclick="joinMeeting()"
+        >
+
+            ▶ Join G Nurse Meet
+
+        </button>
+
+
+        <div
+            id="joinStatus"
+            class="status"
+        >
+
+            Enter your name and the room code.
+
+        </div>
+
+    </div>
+
+
+
+    <!-- LIVE MEETING -->
+
+    <div
+        id="meetingCard"
+        class="hidden"
+    >
+
+
+        <!-- MEETING INFORMATION -->
+
+        <div class="card">
+
+            <div class="room-title">
+
+                <span class="live-badge">
+                    ● LIVE
+                </span>
+
+                <h2 id="meetingTitle">
+                    G Nurse Meet
+                </h2>
+
+                <p id="meetingDescription"></p>
+
+                <p>
+                    Tutor:
+                    <strong id="tutorName">
+                        -
+                    </strong>
+                </p>
+
+            </div>
+
+
+            <div class="stats">
+
+                <div class="stat">
+
+                    <strong
+                        id="participantCount"
+                    >
+                        0
+                    </strong>
+
+                    Participants
+
+                </div>
+
+
+                <div class="stat">
+
+                    <strong
+                        id="connectionStatus"
+                    >
+                        —
+                    </strong>
+
+                    Video
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- TUTOR VIDEO -->
+
+        <div class="card">
+
+            <div class="video-label">
+                🎥 Tutor Live Video
+            </div>
+
+
+            <video
+                id="remoteVideo"
+                autoplay
+                playsinline
+                controls
+            ></video>
+
+
+            <div
+                id="videoStatus"
+                class="status"
+            >
+
+                Waiting for tutor video...
+
+            </div>
+
+        </div>
+
+
+
+        <!-- QUESTION -->
+
+        <div class="card">
+
+            <h2>
+                💬 Ask the Tutor
+            </h2>
+
+
+            <textarea
+                id="questionInput"
+                placeholder="Type your question here..."
+            ></textarea>
+
+
+            <button
+                id="questionBtn"
+                class="primary"
+                onclick="sendQuestion()"
+            >
+
+                Send Question
+
+            </button>
+
+
+            <div
+                id="questionStatus"
+                class="question-status"
+            ></div>
+
+        </div>
+
+
+
+        <!-- LEAVE -->
+
+        <div class="card">
+
+            <button
+                class="danger"
+                onclick="leaveMeeting()"
+            >
+
+                🚪 Leave Meeting
+
+            </button>
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+/* =========================================================
+   SUPABASE
+========================================================= */
+
+const SUPABASE_URL =
+    "https://bmiechymiyedubezhcqk.supabase.co";
+
+
+/*
+ Replace this with your existing
+ Supabase publishable/public key.
+
+ NEVER use the service_role or secret key.
+*/
+
+const SUPABASE_ANON_KEY =
+    "YOUR_SUPABASE_PUBLISHABLE_KEY";
+
+
+const supabaseClient =
+    supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+
+/* =========================================================
+   GLOBAL VARIABLES
+========================================================= */
+
+let currentMeeting = null;
+
+let meetingId = null;
+
+let studentId =
+    "student-" +
+    crypto.randomUUID();
+
+let studentName = "";
+
+let tutorId = null;
+
+let signalChannel = null;
+
+let participantChannel = null;
+
+let peerConnection = null;
+
+
+/* =========================================================
+   WEBRTC CONFIGURATION
+========================================================= */
+
+const rtcConfiguration = {
+
+    iceServers: [
+
+        {
+            urls:
+                "stun:stun.l.google.com:19302"
+        },
+
+        {
+            urls:
+                "stun:stun1.l.google.com:19302"
+        }
+
+    ]
+
+};
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const joinCard =
+    document.getElementById("joinCard");
+
+const meetingCard =
+    document.getElementById("meetingCard");
+
+const joinBtn =
+    document.getElementById("joinBtn");
+
+const joinStatus =
+    document.getElementById("joinStatus");
+
+const remoteVideo =
+    document.getElementById("remoteVideo");
+
+const videoStatus =
+    document.getElementById("videoStatus");
+
+const connectionStatus =
+    document.getElementById("connectionStatus");
+
+const participantCount =
+    document.getElementById("participantCount");
+
+const questionInput =
+    document.getElementById("questionInput");
+
+const questionBtn =
+    document.getElementById("questionBtn");
+
+const questionStatus =
+    document.getElementById("questionStatus");
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function setJoinStatus(
+    message,
+    type = ""
+){
+
+    joinStatus.textContent =
+        message;
+
+    joinStatus.className =
+        "status";
+
+
+    if(type === "error"){
+
+        joinStatus.classList.add(
+            "error"
+        );
+
+    }
+
+
+    if(type === "success"){
+
+        joinStatus.classList.add(
+            "success"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   FIND MEETING
+========================================================= */
+
+async function findMeeting(roomCode){
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+
+        .from("g_nurse_meetings")
+
+        .select("*")
+
+        .eq(
+            "room_code",
+            roomCode
+        )
+
+        .maybeSingle();
+
+
+    if(error){
+
+        throw error;
+
+    }
+
+
+    return data;
+
+}
+
+
+/* =========================================================
+   JOIN MEETING
+========================================================= */
+
+async function joinMeeting(){
+
+    studentName =
+        document
+            .getElementById("studentName")
+            .value
+            .trim();
+
+
+    const roomCode =
+        document
+            .getElementById("roomCodeInput")
+            .value
+            .trim()
+            .toUpperCase();
+
+
+    if(!studentName){
+
+        setJoinStatus(
+            "Please enter your name.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if(!roomCode){
+
+        setJoinStatus(
+            "Please enter the meeting room code.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    joinBtn.disabled = true;
+
+
+    try{
+
+        setJoinStatus(
+            "Finding meeting..."
+        );
+
+
+        const meeting =
+            await findMeeting(
+                roomCode
+            );
+
+
+        if(!meeting){
+
+            throw new Error(
+                "Meeting not found. Check the room code."
+            );
+
+        }
+
+
+        if(
+            meeting.status !==
+            "live"
+        ){
+
+            throw new Error(
+                "This meeting is not currently live."
+            );
+
+        }
+
+
+        currentMeeting =
+            meeting;
+
+        meetingId =
+            meeting.id;
+
+
+        document
+            .getElementById("meetingTitle")
+            .textContent =
+                meeting.title;
+
+
+        document
+            .getElementById("meetingDescription")
+            .textContent =
+                meeting.description || "";
+
+
+        document
+            .getElementById("tutorName")
+            .textContent =
+                meeting.tutor_name;
+
+
+        /*
+         IMPORTANT:
+         We do NOT request camera or microphone.
+        */
+
+
+        setJoinStatus(
+            "Connecting to tutor..."
+        );
+
+
+        /*
+         Set up realtime BEFORE sending
+         the WebRTC offer.
+        */
+
+        await setupSignalChannel();
+
+
+        await setupParticipantChannel();
+
+
+        /*
+         Register student.
+        */
+
+        const {
+            error: participantError
+        } = await supabaseClient
+
+            .from(
+                "g_nurse_meet_participants"
+            )
+
+            .insert({
+
+                meeting_id:
+                    meetingId,
+
+                participant_name:
+                    studentName,
+
+                participant_role:
+                    "student"
+
+            });
+
+
+        if(participantError){
+
+            throw participantError;
+
+        }
+
+
+        joinCard.classList.add(
+            "hidden"
+        );
+
+
+        meetingCard.classList.remove(
+            "hidden"
+        );
+
+
+        await updateParticipantCount();
+
+
+        /*
+         Create WebRTC connection.
+        */
+
+        await createStudentPeerConnection();
+
+
+        /*
+         Create offer for tutor.
+        */
+
+        const offer =
+            await peerConnection
+                .createOffer();
+
+
+        await peerConnection
+            .setLocalDescription(
+                offer
+            );
+
+
+        /*
+         Send offer to tutor.
+        */
+
+        await sendSignal(
+
+            null,
+
+            "offer",
+
+            offer
+
+        );
+
+
+        setVideoStatus(
+            "Connecting to tutor video..."
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+
+        setJoinStatus(
+            "Unable to join: " +
+            error.message,
+            "error"
+        );
+
+
+        joinBtn.disabled = false;
+
+    }
+
+}
+
+
+/* =========================================================
+   SIGNAL CHANNEL
+========================================================= */
+
+async function setupSignalChannel(){
+
+    signalChannel =
+
+        supabaseClient
+
+        .channel(
+            "g-nurse-student-signals-" +
+            meetingId +
+            "-" +
+            studentId
+        )
+
+        .on(
+
+            "postgres_changes",
+
+            {
+
+                event: "INSERT",
+
+                schema: "public",
+
+                table:
+                    "g_nurse_meet_signals",
+
+                filter:
+                    "meeting_id=eq." +
+                    meetingId
+
+            },
+
+            async function(payload){
+
+                try{
+
+                    await handleSignal(
+                        payload.new
+                    );
+
+                }catch(error){
+
+                    console.error(
+                        "Signal handling error:",
+                        error
+                    );
+
+                }
+
+            }
+
+        )
+
+        .subscribe(function(status){
+
+            console.log(
+                "Student signal channel:",
+                status
+            );
+
+        });
+
+}
+
+
+/* =========================================================
+   HANDLE SIGNAL
+========================================================= */
+
+async function handleSignal(signal){
+
+    /*
+     Ignore our own signal.
+    */
+
+    if(
+        signal.sender_id ===
+        studentId
+    ){
+
+        return;
+
+    }
+
+
+    /*
+     We only want signals sent to this student
+     or broadcast offers.
+    */
+
+    if(
+        signal.receiver_id &&
+        signal.receiver_id !==
+            studentId
+    ){
+
+        return;
+
+    }
+
+
+    /*
+     TUTOR ANSWER
+    */
+
+    if(
+        signal.signal_type ===
+        "answer"
+    ){
+
+        tutorId =
+            signal.sender_id;
+
+
+        await handleTutorAnswer(
+            signal.signal_data
+        );
+
+
+        return;
+
+    }
+
+
+    /*
+     TUTOR ICE CANDIDATE
+    */
+
+    if(
+        signal.signal_type ===
+        "ice-candidate"
+    ){
+
+        tutorId =
+            signal.sender_id;
+
+
+        await handleTutorIceCandidate(
+            signal.signal_data
+        );
+
+
+        return;
+
+    }
+
+}
+
+
+/* =========================================================
+   CREATE STUDENT PEER CONNECTION
+========================================================= */
+
+async function createStudentPeerConnection(){
+
+    peerConnection =
+        new RTCPeerConnection(
+            rtcConfiguration
+        );
+
+
+    /*
+     VERY IMPORTANT:
+
+     We do NOT add any local camera
+     or microphone tracks.
+
+     Therefore the student sends:
+     NO CAMERA
+     NO MICROPHONE
+    */
+
+
+    /*
+     Receive tutor tracks.
+    */
+
+    peerConnection.ontrack =
+        function(event){
+
+            console.log(
+                "Tutor media received."
+            );
+
+
+            if(
+                event.streams &&
+                event.streams[0]
+            ){
+
+                remoteVideo.srcObject =
+                    event.streams[0];
+
+            }
+
+
+            setVideoStatus(
+                "🟢 Tutor video connected.",
+                "success"
+            );
+
+
+            connectionStatus.textContent =
+                "LIVE";
+
+        };
+
+
+    /*
+     ICE candidates.
+    */
+
+    peerConnection.onicecandidate =
+        async function(event){
+
+            if(
+                !event.candidate
+            ){
+
+                return;
+
+            }
+
+
+            await sendSignal(
+
+                tutorId,
+
+                "ice-candidate",
+
+                event.candidate.toJSON()
+
+            );
+
+        };
+
+
+    /*
+     Connection status.
+    */
+
+    peerConnection.onconnectionstatechange =
+        function(){
+
+            console.log(
+                "Student WebRTC state:",
+                peerConnection.connectionState
+            );
+
+
+            if(
+                peerConnection.connectionState ===
+                "connected"
+            ){
+
+                connectionStatus.textContent =
+                    "LIVE";
+
+
+                setVideoStatus(
+                    "🟢 Connected to tutor.",
+                    "success"
+                );
+
+            }
+
+
+            if(
+                peerConnection.connectionState ===
+                "connecting"
+            ){
+
+                connectionStatus.textContent =
+                    "CONNECTING";
+
+            }
+
+
+            if(
+                peerConnection.connectionState ===
+                "disconnected"
+            ){
+
+                connectionStatus.textContent =
+                    "OFFLINE";
+
+
+                setVideoStatus(
+                    "Tutor connection interrupted."
+                );
+
+            }
+
+
+            if(
+                peerConnection.connectionState ===
+                "failed"
+            ){
+
+                connectionStatus.textContent =
+                    "FAILED";
+
+
+                setVideoStatus(
+                    "Video connection failed. Please leave and rejoin.",
+                    "error"
+                );
+
+            }
+
+        };
+
+}
+
+
+/* =========================================================
+   HANDLE TUTOR ANSWER
+========================================================= */
+
+async function handleTutorAnswer(
+    answer
+){
+
+    if(!peerConnection){
+
+        return;
+
+    }
+
+
+    try{
+
+        await peerConnection
+            .setRemoteDescription(
+
+                new RTCSessionDescription(
+                    answer
+                )
+
+            );
+
+
+        setVideoStatus(
+            "Tutor connection established. Waiting for video...",
+            "success"
+        );
+
+
+    }catch(error){
+
+        console.error(
+            "Answer error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   HANDLE TUTOR ICE
+========================================================= */
+
+async function handleTutorIceCandidate(
+    candidateData
+){
+
+    if(!peerConnection){
+
+        return;
+
+    }
+
+
+    try{
+
+        await peerConnection
+            .addIceCandidate(
+
+                new RTCIceCandidate(
+                    candidateData
+                )
+
+            );
+
+    }catch(error){
+
+        console.error(
+            "Tutor ICE error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SEND SIGNAL
+========================================================= */
+
+async function sendSignal(
+    receiverId,
+    signalType,
+    signalData
+){
+
+    if(!meetingId){
+
+        return;
+
+    }
+
+
+    const {
+        error
+    } = await supabaseClient
+
+        .from(
+            "g_nurse_meet_signals"
+        )
+
+        .insert({
+
+            meeting_id:
+                meetingId,
+
+            sender_id:
+                studentId,
+
+            receiver_id:
+                receiverId,
+
+            signal_type:
+                signalType,
+
+            signal_data:
+                              signalData
+
+            });
+
+
+        if(error){
+
+            console.error(
+                "Signal sending error:",
+                error
+            );
+
+            throw error;
+
+        }
+
+}
+
+
+/* =========================================================
+   PARTICIPANT CHANNEL
+========================================================= */
+
+async function setupParticipantChannel(){
+
+    participantChannel =
+
+        supabaseClient
+
+        .channel(
+            "g-nurse-student-participants-" +
+            meetingId
+        )
+
+        .on(
+
+            "postgres_changes",
+
+            {
+
+                event: "*",
+
+                schema: "public",
+
+                table:
+                    "g_nurse_meet_participants",
+
+                filter:
+                    "meeting_id=eq." +
+                    meetingId
+
+            },
+
+            async function(){
+
+                await updateParticipantCount();
+
+            }
+
+        )
+
+        .subscribe(function(status){
+
+            console.log(
+                "Participant channel:",
+                status
+            );
+
+        });
+
+}
+
+
+/* =========================================================
+   PARTICIPANT COUNT
+========================================================= */
+
+async function updateParticipantCount(){
+
+    if(!meetingId){
+
+        return;
+
+    }
+
+
+    const {
+        count,
+        error
+    } = await supabaseClient
+
+        .from(
+            "g_nurse_meet_participants"
+        )
+
+        .select(
+            "id",
+            {
+                count: "exact",
+                head: true
+            }
+        )
+
+        .eq(
+            "meeting_id",
+            meetingId
+        )
+
+        .is(
+            "left_at",
+            null
+        );
+
+
+    if(error){
+
+        console.error(
+            "Participant count error:",
+            error
+        );
+
+        return;
+
+    }
+
+
+    participantCount.textContent =
+        count || 0;
+
+}
+
+
+/* =========================================================
+   VIDEO STATUS
+========================================================= */
+
+function setVideoStatus(
+    message,
+    type = ""
+){
+
+    videoStatus.textContent =
+        message;
+
+    videoStatus.className =
+        "status";
+
+
+    if(type === "success"){
+
+        videoStatus.classList.add(
+            "success"
+        );
+
+    }
+
+
+    if(type === "error"){
+
+        videoStatus.classList.add(
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SEND QUESTION
+========================================================= */
+
+async function sendQuestion(){
+
+    const question =
+        questionInput
+            .value
+            .trim();
+
+
+    if(!question){
+
+        questionStatus.textContent =
+            "Please type your question.";
+
+        return;
+
+    }
+
+
+    if(!meetingId){
+
+        questionStatus.textContent =
+            "You are not inside a meeting.";
+
+        return;
+
+    }
+
+
+    questionBtn.disabled =
+        true;
+
+
+    questionStatus.textContent =
+        "Sending...";
+
+
+    try{
+
+        const {
+            error
+        } = await supabaseClient
+
+            .from(
+                "g_nurse_meet_questions"
+            )
+
+            .insert({
+
+                meeting_id:
+                    meetingId,
+
+                student_name:
+                    studentName,
+
+                question:
+                    question
+
+            });
+
+
+        if(error){
+
+            throw error;
+
+        }
+
+
+        questionInput.value =
+            "";
+
+
+        questionStatus.textContent =
+            "✓ Question sent to tutor.";
+
+        questionStatus.className =
+            "question-status success";
+
+
+    }catch(error){
+
+        console.error(
+            "Question error:",
+            error
+        );
+
+
+        questionStatus.textContent =
+            "Unable to send question: " +
+            error.message;
+
+        questionStatus.className =
+            "question-status error";
+
+    }
+
+
+    questionBtn.disabled =
+        false;
+
+}
+
+
+/* =========================================================
+   LEAVE MEETING
+========================================================= */
+
+async function leaveMeeting(){
+
+    const confirmed =
+        confirm(
+            "Leave this G Nurse Meet?"
+        );
+
+
+    if(!confirmed){
+
+        return;
+
+    }
+
+
+    try{
+
+        if(
+            meetingId &&
+            studentId
+        ){
+
+            await supabaseClient
+
+                .from(
+                    "g_nurse_meet_participants"
+                )
+
+                .update({
+
+                    left_at:
+                        new Date().toISOString()
+
+                })
+
+                .eq(
+                    "meeting_id",
+                    meetingId
+                )
+
+                .eq(
+                    "participant_name",
+                    studentName
+                )
+
+                .eq(
+                    "participant_role",
+                    "student"
+                )
+
+                .is(
+                    "left_at",
+                    null
+                );
+
+        }
+
+    }catch(error){
+
+        console.warn(
+            "Unable to update leave status:",
+            error
+        );
+
+    }
+
+
+    if(peerConnection){
+
+        try{
+
+            peerConnection.close();
+
+        }catch(error){}
+
+        peerConnection =
+            null;
+
+    }
+
+
+    if(signalChannel){
+
+        await supabaseClient
+            .removeChannel(
+                signalChannel
+            );
+
+        signalChannel =
+            null;
+
+    }
+
+
+    if(participantChannel){
+
+        await supabaseClient
+            .removeChannel(
+                participantChannel
+            );
+
+        participantChannel =
+            null;
+
+    }
+
+
+    remoteVideo.srcObject =
+        null;
+
+
+    meetingId =
+        null;
+
+    currentMeeting =
+        null;
+
+    tutorId =
+        null;
+
+
+    meetingCard.classList.add(
+        "hidden"
+    );
+
+
+    joinCard.classList.remove(
+        "hidden"
+    );
+
+
+    joinBtn.disabled =
+        false;
+
+
+    setJoinStatus(
+        "You have left the meeting."
+    );
+
+}
+
+
+/* =========================================================
+   PAGE CLOSING
+========================================================= */
+
+window.addEventListener(
+    "beforeunload",
+    function(){
+
+        if(peerConnection){
+
+            try{
+
+                peerConnection.close();
+
+            }catch(error){}
+
+        }
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>
+             
