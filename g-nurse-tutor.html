@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>G Nurse Meet - Tutor</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #eef4f6;
+    color: #172033;
+}
+
+.header {
+    background: #087f8c;
+    color: white;
+    padding: 18px;
+    text-align: center;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+    padding: 15px;
+}
+
+.card {
+    background: white;
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+}
+
+h2, h3 {
+    margin-top: 0;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-top: 12px;
+    margin-bottom: 6px;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccd5dc;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+video {
+    width: 100%;
+    background: #000;
+    border-radius: 15px;
+    display: block;
+    min-height: 220px;
+    object-fit: cover;
+}
+
+button {
+    width: 100%;
+    border: 0;
+    border-radius: 11px;
+    padding: 14px;
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.camera-btn {
+    background: #0b5ed7;
+    color: white;
+}
+
+.start-btn {
+    background: #087f8c;
+    color: white;
+}
+
+.end-btn {
+    background: #c62828;
+    color: white;
+}
+
+.question {
+    border-bottom: 1px solid #e5e7eb;
+    padding: 12px 0;
+}
+
+.question:last-child {
+    border-bottom: 0;
+}
+
+.question-name {
+    font-weight: bold;
+}
+
+.question-time {
+    color: #7a8490;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.status {
+    padding: 12px;
+    border-radius: 10px;
+    background: #edf2f7;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.live {
+    background: #e7f7ed;
+    color: #137333;
+    font-weight: bold;
+}
+
+.hidden {
+    display: none;
+}
+
+.room-box {
+    background: #f1f5f9;
+    padding: 13px;
+    border-radius: 10px;
+    word-break: break-all;
+    margin-top: 10px;
+}
+
+.copy-btn {
+    background: #334155;
+    color: white;
+}
+
+.count {
+    font-size: 28px;
+    font-weight: bold;
+    color: #087f8c;
+}
+
+.small {
+    color: #64748b;
+    font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    🎥 G Nurse Meet — Tutor
+</div>
+
+<div class="container">
+
+    <!-- MEETING DETAILS -->
+    <div class="card">
+
+        <h2>Create Live Class</h2>
+
+        <label for="meetingTitle">
+            Meeting Title
+        </label>
+
+        <input
+            id="meetingTitle"
+            type="text"
+            placeholder="Example: Medical-Surgical Nursing Class">
+
+        <label for="tutorName">
+            Tutor Name
+        </label>
+
+        <input
+            id="tutorName"
+            type="text"
+            placeholder="Enter tutor name">
+
+        <button
+            class="camera-btn"
+            id="cameraButton"
+            onclick="startCamera()">
+            📷 Turn On Camera & Microphone
+        </button>
+
+    </div>
+
+
+    <!-- VIDEO -->
+    <div class="card">
+
+        <h3>🎥 Tutor Camera</h3>
+
+        <video
+            id="tutorVideo"
+            autoplay
+            muted
+            playsinline>
+        </video>
+
+        <div
+            id="cameraStatus"
+            class="status">
+            Camera and microphone are currently OFF.
+        </div>
+
+    </div>
+
+
+    <!-- START MEETING -->
+    <div class="card">
+
+        <button
+            id="startButton"
+            class="start-btn"
+            onclick="startMeeting()">
+            🟢 START G NURSE MEET
+        </button>
+
+        <button
+            id="endButton"
+            class="end-btn hidden"
+            onclick="endMeeting()">
+            🔴 END MEETING
+        </button>
+
+        <div
+            id="meetingStatus"
+            class="status">
+            No meeting is currently running.
+        </div>
+
+        <div
+            id="roomArea"
+            class="hidden">
+
+            <p class="small">
+                Share this room code with your students:
+            </p>
+
+            <div
+                id="roomCode"
+                class="room-box">
+            </div>
+
+            <button
+                class="copy-btn"
+                onclick="copyRoomCode()">
+                📋 COPY ROOM CODE
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- PARTICIPANTS -->
+    <div class="card">
+
+        <h3>👥 Students Watching</h3>
+
+        <div
+            id="participantCount"
+            class="count">
+            0
+        </div>
+
+        <div class="small">
+            Camera and microphone remain OFF for students.
+        </div>
+
+    </div>
+
+
+    <!-- QUESTIONS -->
+    <div class="card">
+
+        <h3>💬 Student Questions</h3>
+
+        <div id="questions">
+            <p class="small">
+                No questions yet.
+            </p>
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   SUPABASE CONFIGURATION
+   ===================================================== */
+
+const SUPABASE_URL =
+    "https://bmiechymiyedubezhcqk.supabase.co";
+
+/*
+   USE YOUR PUBLIC/PUBLISHABLE KEY HERE.
+
+   DO NOT USE:
+   - service_role key
+   - secret key
+*/
+
+const SUPABASE_KEY =
+    "PASTE_YOUR_PUBLIC_OR_PUBLISHABLE_KEY_HERE";
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =====================================================
+   GLOBAL VARIABLES
+   ===================================================== */
+
+let tutorStream = null;
+let currentMeetingId = null;
+let currentRoomCode = null;
+let questionChannel = null;
+let participantChannel = null;
+
+
+/* =====================================================
+   START CAMERA
+   ===================================================== */
+
+async function startCamera() {
+
+    const status =
+        document.getElementById("cameraStatus");
+
+    const button =
+        document.getElementById("cameraButton");
+
+    try {
+
+        tutorStream =
+            await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: true
+            });
+
+        const video =
+            document.getElementById("tutorVideo");
+
+        video.srcObject = tutorStream;
+
+        status.textContent =
+            "Camera and microphone are ON.";
+
+        status.classList.add("live");
+
+        button.textContent =
+            "✅ Camera & Microphone ON";
+
+    } catch (error) {
+
+        console.error(error);
+
+        status.textContent =
+            "Unable to access camera or microphone. Please allow browser permissions.";
+
+        status.classList.remove("live");
+    }
+}
+
+
+/* =====================================================
+   CREATE ROOM CODE
+   ===================================================== */
+
+function generateRoomCode() {
+
+    const characters =
+        "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+    let code = "";
+
+    for (let i = 0; i < 8; i++) {
+
+        code +=
+            characters.charAt(
+                Math.floor(
+                    Math.random() * characters.length
+                )
+            );
+    }
+
+    return code;
+}
+
+
+/* =====================================================
+   START MEETING
+   ===================================================== */
+
+async function startMeeting() {
+
+    const title =
+        document.getElementById("meetingTitle")
+        .value.trim();
+
+    const tutorName =
+        document.getElementById("tutorName")
+        .value.trim();
+
+    const status =
+        document.getElementById("meetingStatus");
+
+    if (!title) {
+
+        alert("Please enter the meeting title.");
+
+        return;
+    }
+
+    if (!tutorName) {
+
+        alert("Please enter the tutor name.");
+
+        return;
+    }
+
+
+    if (!tutorStream) {
+
+        alert(
+            "Please turn on the camera and microphone first."
+        );
+
+        return;
+    }
+
+
+    currentRoomCode =
+        generateRoomCode();
+
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("g_nurse_meetings")
+            .insert({
+
+                title: title,
+
+                description:
+                    "G Nurse live tutor classroom",
+
+                status: "live",
+
+                tutor_name: tutorName,
+
+                room_code: currentRoomCode,
+
+                started_at:
+                    new Date().toISOString()
+
+            })
+            .select()
+            .single();
+
+
+        if (error) {
+
+            console.error(error);
+
+            throw error;
+        }
+
+
+        currentMeetingId =
+            data.id;
+
+
+        /* Register tutor */
+
+        const {
+            error: participantError
+        } = await supabaseClient
+            .from("g_nurse_meet_participants")
+            .insert({
+
+                meeting_id:
+                    currentMeetingId,
+
+                participant_name:
+                    tutorName,
+
+                participant_role:
+                    "tutor"
+
+            });
+
+
+        if (participantError) {
+
+            console.error(
+                participantError
+            );
+        }
+
+
+        status.textContent =
+            "🔴 G NURSE MEET IS LIVE";
+
+        status.classList.add("live");
+
+
+        document
+            .getElementById("roomArea")
+            .classList.remove("hidden");
+
+
+        document
+            .getElementById("roomCode")
+            .textContent =
+                currentRoomCode;
+
+
+        document
+            .getElementById("startButton")
+            .classList.add("hidden");
+
+
+        document
+            .getElementById("endButton")
+            .classList.remove("hidden");
+
+
+        listenForQuestions();
+
+        listenForParticipants();
+
+        updateParticipantCount();
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Unable to start the meeting: " +
+            error.message
+        );
+    }
+}
+
+
+/* =====================================================
+   END MEETING
+   ===================================================== */
+
+async function endMeeting() {
+
+    if (!currentMeetingId) {
+        return;
+    }
+
+
+    try {
+
+        const {
+            error
+        } = await supabaseClient
+            .from("g_nurse_meetings")
+            .update({
+
+                status: "ended",
+
+                ended_at:
+                    new Date().toISOString()
+
+            })
+            .eq(
+                "id",
+                currentMeetingId
+            );
+
+
+        if (error) {
+
+            throw error;
+        }
+
+
+        if (tutorStream) {
+
+            tutorStream
+                .getTracks()
+                .forEach(
+                    track => track.stop()
+                );
+
+            tutorStream = null;
+        }
+
+
+        document
+            .getElementById("tutorVideo")
+            .srcObject = null;
+
+
+        document
+            .getElementById("meetingStatus")
+            .textContent =
+                "Meeting ended.";
+
+
+        document
+            .getElementById("meetingStatus")
+            .classList.remove("live");
+
+
+        document
+            .getElementById("endButton")
+            .classList.add("hidden");
+
+
+        document
+            .getElementById("startButton")
+            .classList.remove("hidden");
+
+
+        document
+            .getElementById("cameraButton")
+            .textContent =
+                "📷 Turn On Camera & Microphone";
+
+
+        if (questionChannel) {
+
+            await supabaseClient
+                .removeChannel(
+                    questionChannel
+                );
+
+            questionChannel = null;
+        }
+
+
+        if (participantChannel) {
+
+            await supabaseClient
+                .removeChannel(
+                    participantChannel
+                );
+
+            participantChannel = null;
+        }
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Unable to end the meeting: " +
+            error.message
+        );
+    }
+}
+
+
+/* =====================================================
+   COPY ROOM CODE
+   ===================================================== */
+
+async function copyRoomCode() {
+
+    if (!currentRoomCode) {
+        return;
+    }
+
+    try {
+
+        await navigator.clipboard.writeText(
+            currentRoomCode
+        );
+
+        alert(
+            "Room code copied."
+        );
+
+    } catch (error) {
+
+        alert(
+            "Unable to copy room code."
+        );
+    }
+}
+
+
+/* =====================================================
+   LISTEN FOR QUESTIONS
+   ===================================================== */
+
+function listenForQuestions() {
+
+    if (!currentMeetingId) {
+        return;
+    }
+
+
+    questionChannel =
+        supabaseClient
+            .channel(
+                "g-nurse-meet-questions-" +
+                currentMeetingId
+            )
+            .on(
+                "postgres_changes",
+                {
+                    event: "INSERT",
+
+                    schema: "public",
+
+                    table:
+                        "g_nurse_meet_questions",
+
+                    filter:
+                        "meeting_id=eq." +
+                        currentMeetingId
+
+                },
+
+                payload => {
+
+                    addQuestion(
+                        payload.new
+                    );
+                }
+
+            )
+            .subscribe();
+}
+
+
+/* =====================================================
+   DISPLAY QUESTION
+   ===================================================== */
+
+function addQuestion(question) {
+
+    const container =
+        document.getElementById(
+            "questions"
+        );
+
+
+    if (
+        container.innerText.trim() ===
+        "No questions yet."
+    ) {
+
+        container.innerHTML = "";
+    }
+
+
+    const item =
+        document.createElement("div");
+
+    item.className =
+        "question";
+
+
+    const name =
+        document.createElement("div");
+
+    name.className =
+        "question-name";
+
+    name.textContent =
+        question.student_name;
+
+
+    const text =
+        document.createElement("div");
+
+    text.textContent =
+        question.question;
+
+
+    const time =
+        document.createElement("div");
+
+    time.className =
+        "question-time";
+
+    time.textContent =
+        new Date(
+            question.created_at
+        ).toLocaleTimeString();
+
+
+    item.appendChild(name);
+
+    item.appendChild(text);
+
+    item.appendChild(time);
+
+
+    container.prepend(item);
+}
+
+
+/* =====================================================
+   LISTEN FOR PARTICIPANTS
+   ===================================================== */
+
+function listenForParticipants() {
+
+    if (!currentMeetingId) {
+        return;
+    }
+
+
+    participantChannel =
+        supabaseClient
+            .channel(
+                "g-nurse-meet-participants-" +
+                currentMeetingId
+            )
+            .on(
+                "postgres_changes",
+                {
+                    event: "*",
+
+                    schema: "public",
+
+                    table:
+                        "g_nurse_meet_participants",
+
+                    filter:
+                        "meeting_id=eq." +
+                        currentMeetingId
+
+                },
+
+                () => {
+
+                    updateParticipantCount();
+
+                }
+
+            )
+            .subscribe();
+}
+
+
+/* =====================================================
+   UPDATE PARTICIPANT COUNT
+   ===================================================== */
+
+async function updateParticipantCount() {
+
+    if (!currentMeetingId) {
+        return;
+    }
+
+
+    const {
+        count,
+        error
+    } = await supabaseClient
+        .from(
+            "g_nurse_meet_participants"
+        )
+        .select(
+            "id",
+            {
+                count: "exact",
+                head: true
+            }
+        )
+        .eq(
+            "meeting_id",
+            currentMeetingId
+        )
+        .eq(
+            "participant_role",
+            "student"
+        )
+        .is(
+            "left_at",
+            null
+        );
+
+
+    if (!error) {
+
+        document
+            .getElementById(
+                "participantCount"
+            )
+            .textContent =
+                count || 0;
+    }
+}
+
+
+/* =====================================================
+   PAGE CLEANUP
+   ===================================================== */
+
+window.addEventListener(
+    "beforeunload",
+    () => {
+
+        if (tutorStream) {
+
+            tutorStream
+                .getTracks()
+                .forEach(
+                    track => track.stop()
+                );
+        }
+    }
+);
+
+</script>
+
+</body>
+          </html>
