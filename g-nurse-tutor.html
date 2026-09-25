@@ -262,6 +262,10 @@ video{
             >
                 🎥 Turn On Camera & Mic
             </button>
+           
+            <button id="shareScreenBtn" onclick="shareScreen()">
+  🖥️ Share Screen
+            </button>
 
             <button
                 id="startBtn"
@@ -2015,6 +2019,92 @@ window.addEventListener(
 
     }
 );
+    let screenStream = null;
+let screenTrack = null;
+
+async function shareScreen() {
+
+  if (!meetingId) {
+    alert("Start the meeting first.");
+    return;
+  }
+
+  try {
+
+    screenStream = await navigator.mediaDevices.getDisplayMedia({
+      video: true,
+      audio: true
+    });
+
+    screenTrack = screenStream.getVideoTracks()[0];
+
+    // Replace the camera video track for every connected student
+    for (const studentId in peerConnections) {
+
+      const pc = peerConnections[studentId];
+
+      const sender = pc.getSenders().find(
+        sender => sender.track &&
+        sender.track.kind === "video"
+      );
+
+      if (sender) {
+        await sender.replaceTrack(screenTrack);
+      }
+    }
+
+    // Show shared screen on tutor's own video
+    const tutorVideo = document.getElementById("localVideo");
+
+    if (tutorVideo) {
+      tutorVideo.srcObject = screenStream;
+    }
+
+    screenTrack.onended = async () => {
+      await stopScreenShare();
+    };
+
+  } catch (error) {
+
+    console.error("Screen sharing error:", error);
+
+  }
+}
+    async function stopScreenShare() {
+
+  if (!screenStream) return;
+
+  screenStream.getTracks().forEach(track => track.stop());
+
+  screenStream = null;
+  screenTrack = null;
+
+  // Return to the tutor's camera
+  if (localStream) {
+
+    const cameraTrack = localStream.getVideoTracks()[0];
+
+    for (const studentId in peerConnections) {
+
+      const pc = peerConnections[studentId];
+
+      const sender = pc.getSenders().find(
+        sender => sender.track &&
+        sender.track.kind === "video"
+      );
+
+      if (sender && cameraTrack) {
+        await sender.replaceTrack(cameraTrack);
+      }
+    }
+
+    const tutorVideo = document.getElementById("localVideo");
+
+    if (tutorVideo) {
+      tutorVideo.srcObject = localStream;
+    }
+  }
+          }
 
     </script>
 
