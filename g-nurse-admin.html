@@ -3,18 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+
 <title>G Nurse Admin</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{box-sizing:border-box}
+
+*{
+    box-sizing:border-box;
+}
 
 body{
     margin:0;
     font-family:Arial,sans-serif;
-    background:#eef3f1;
-    color:#17201d;
+    background:#f3f6f8;
+    color:#222;
 }
 
 header{
@@ -34,39 +38,51 @@ header h2{
 
 button{
     border:0;
-    border-radius:7px;
+    border-radius:8px;
     padding:10px 14px;
     cursor:pointer;
+    font-size:14px;
+}
+
+#logout{
+    background:white;
+    color:#07562f;
 }
 
 #login{
-    max-width:380px;
-    margin:70px auto;
+    width:min(420px,92%);
+    margin:60px auto;
     background:white;
     padding:25px;
-    border-radius:12px;
-    box-shadow:0 3px 15px #0002;
+    border-radius:14px;
+    box-shadow:0 3px 15px rgba(0,0,0,.08);
 }
 
-input,
-textarea{
-    width:100%;
-    padding:12px;
-    border:1px solid #ccd5d0;
-    border-radius:7px;
-    margin-bottom:10px;
-    font:inherit;
+#login h2{
+    margin-top:0;
+    color:#07562f;
 }
 
-#login button{
+#login input{
     width:100%;
+    padding:13px;
+    margin:7px 0;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:15px;
+}
+
+#loginBtn{
+    width:100%;
+    margin-top:10px;
     background:#07562f;
     color:white;
 }
 
 #error{
     color:#c62828;
-    margin-top:10px;
+    margin-top:12px;
+    font-size:14px;
 }
 
 #app{
@@ -75,8 +91,7 @@ textarea{
 }
 
 #conversations{
-    width:32%;
-    max-width:360px;
+    width:300px;
     background:white;
     border-right:1px solid #ddd;
     overflow-y:auto;
@@ -90,7 +105,7 @@ textarea{
 
 .conversation:hover,
 .conversation.active{
-    background:#e8f3ed;
+    background:#e8f5ee;
 }
 
 .name{
@@ -98,8 +113,8 @@ textarea{
 }
 
 .small{
+    color:#777;
     font-size:12px;
-    color:#65716c;
     margin-top:4px;
 }
 
@@ -112,8 +127,9 @@ textarea{
 
 #visitor{
     background:white;
-    padding:12px;
     border-bottom:1px solid #ddd;
+    padding:12px 15px;
+    min-height:65px;
 }
 
 #messages{
@@ -123,42 +139,49 @@ textarea{
 }
 
 .msg{
-    max-width:78%;
-    padding:10px 12px;
+    max-width:75%;
+    padding:10px;
+    margin:8px 0;
     border-radius:12px;
-    margin-bottom:10px;
     word-wrap:break-word;
 }
 
-.visitor{
+.msg.visitor{
     background:white;
     margin-right:auto;
 }
 
-.admin{
-    background:#d5efdf;
+.msg.gnurse{
+    background:#d9f3e3;
     margin-left:auto;
 }
 
-.time{
-    font-size:10px;
-    color:#69756f;
-    margin-top:5px;
-}
-
 .msg img{
-    max-width:240px;
-    max-height:260px;
     display:block;
-    border-radius:8px;
+    max-width:280px;
+    max-height:280px;
     margin-top:7px;
+    border-radius:8px;
+    cursor:pointer;
 }
 
 .msg a{
     display:block;
     margin-top:7px;
     color:#07562f;
-    font-weight:bold;
+    word-break:break-word;
+}
+
+.msg audio{
+    width:240px;
+    max-width:100%;
+    margin-top:7px;
+}
+
+.time{
+    font-size:10px;
+    color:#777;
+    margin-top:6px;
 }
 
 #composer{
@@ -166,65 +189,95 @@ textarea{
     border-top:1px solid #ddd;
     padding:10px;
     display:flex;
-    gap:8px;
+    align-items:flex-end;
+    gap:7px;
 }
 
 #reply{
-    margin:0;
+    flex:1;
+    min-width:0;
+    min-height:42px;
+    max-height:120px;
     resize:none;
-    max-height:110px;
+    overflow-y:auto;
+    padding:11px;
+    border:1px solid #ccc;
+    border-radius:10px;
+    font-family:Arial,sans-serif;
+    font-size:14px;
+}
+
+.iconBtn{
+    width:43px;
+    height:43px;
+    padding:0;
+    border-radius:50%;
+    background:#e9f1ec;
+    color:#07562f;
+    font-size:20px;
+}
+
+#voiceBtn.recording{
+    background:#c62828;
+    color:white;
 }
 
 #send{
     background:#07562f;
     color:white;
-    align-self:flex-end;
-}
-
-#empty{
-    margin:auto;
-    color:#68746f;
-}
-
-audio{
-    max-width:100%;
-    margin-top:7px;
+    height:43px;
 }
 
 @media(max-width:700px){
 
-    #app{
-        display:none;
-        flex-direction:column;
-    }
-
     #conversations{
-        width:100%;
-        max-width:none;
-        height:38%;
-        border-right:0;
-        border-bottom:1px solid #ddd;
+        width:110px;
     }
 
-    #chat{
-        height:62%;
+    .conversation{
+        padding:10px;
+    }
+
+    .msg{
+        max-width:88%;
+    }
+
+    .msg img{
+        max-width:220px;
+    }
+
+    #composer{
+        gap:4px;
+        padding:7px;
+    }
+
+    .iconBtn{
+        width:38px;
+        height:38px;
+        font-size:17px;
+    }
+
+    #send{
+        height:38px;
+        padding:8px;
     }
 }
+
 </style>
 </head>
 
 <body>
 
 <header>
+
     <h2>G Nurse Admin</h2>
 
-    <button
-        id="logout"
-        style="display:none"
-    >
+    <button id="logout" style="display:none">
         Logout
     </button>
+
 </header>
+
 
 <section id="login">
 
@@ -252,6 +305,7 @@ audio{
 
 </section>
 
+
 <div id="app">
 
     <aside id="conversations">
@@ -264,11 +318,13 @@ audio{
 
     </aside>
 
+
     <main id="chat">
 
         <div id="visitor">
             Select a conversation
         </div>
+
 
         <div id="messages">
 
@@ -278,6 +334,7 @@ audio{
 
         </div>
 
+
         <div id="composer">
 
             <textarea
@@ -285,6 +342,34 @@ audio{
                 rows="1"
                 placeholder="Type your reply..."
             ></textarea>
+
+
+            <button
+                id="fileBtn"
+                class="iconBtn"
+                title="Send file"
+            >
+                📎
+            </button>
+
+
+            <button
+                id="imageBtn"
+                class="iconBtn"
+                title="Send image"
+            >
+                🖼️
+            </button>
+
+
+            <button
+                id="voiceBtn"
+                class="iconBtn"
+                title="Record voice note"
+            >
+                🎤
+            </button>
+
 
             <button id="send">
                 Send
@@ -295,6 +380,21 @@ audio{
     </main>
 
 </div>
+
+
+<input
+    id="fileInput"
+    type="file"
+    style="display:none"
+>
+
+<input
+    id="imageInput"
+    type="file"
+    accept="image/*"
+    style="display:none"
+>
+
 
 <script>
 
@@ -310,9 +410,19 @@ window.supabase.createClient(
     SUPABASE_KEY
 );
 
+
 let currentConversation = null;
+
 let messageChannel = null;
+
 let conversationChannel = null;
+
+let mediaRecorder = null;
+
+let voiceChunks = [];
+
+let isRecording = false;
+
 
 const loginBox =
 document.getElementById("login");
@@ -344,24 +454,42 @@ document.getElementById("reply");
 const sendBtn =
 document.getElementById("send");
 
+const fileBtn =
+document.getElementById("fileBtn");
+
+const imageBtn =
+document.getElementById("imageBtn");
+
+const voiceBtn =
+document.getElementById("voiceBtn");
+
+const fileInput =
+document.getElementById("fileInput");
+
+const imageInput =
+document.getElementById("imageInput");
+
+
 function showError(message){
 
     errorBox.textContent = message;
 
 }
 
+
 async function login(){
 
     showError("");
 
     const email =
-    document.getElementById("email")
-    .value
-    .trim();
+        document.getElementById("email")
+        .value
+        .trim();
 
     const password =
-    document.getElementById("password")
-    .value;
+        document.getElementById("password")
+        .value;
+
 
     if(!email || !password){
 
@@ -372,62 +500,87 @@ async function login(){
         return;
     }
 
+
     loginBtn.disabled = true;
-    loginBtn.textContent = "Logging in...";
+
+    loginBtn.textContent =
+        "Logging in...";
+
 
     const {error} =
-    await supabaseClient.auth
-    .signInWithPassword({
-        email,
-        password
-    });
+        await supabaseClient.auth
+        .signInWithPassword({
+            email,
+            password
+        });
+
 
     loginBtn.disabled = false;
-    loginBtn.textContent = "Login";
+
+    loginBtn.textContent =
+        "Login";
+
 
     if(error){
 
         showError(error.message);
+
         return;
     }
 
-    openAdmin();
+
+    await openAdmin();
+
 }
+
 
 async function openAdmin(){
 
-    loginBox.style.display = "none";
+    loginBox.style.display =
+        "none";
 
-    app.style.display = "flex";
+    app.style.display =
+        "flex";
 
-    logoutBtn.style.display = "block";
+    logoutBtn.style.display =
+        "block";
+
 
     await loadConversations();
 
     subscribeConversations();
+
 }
-    async function loadConversations(){
+    
+async function loadConversations(){
 
     conversationList.innerHTML =
         "<div style='padding:15px'>Loading...</div>";
+
 
     const {data,error} =
         await supabaseClient
         .from("g_nurse_conversations")
         .select("*")
-        .order("updated_at",{ascending:false});
+        .order(
+            "updated_at",
+            {ascending:false}
+        );
+
 
     if(error){
 
         conversationList.innerHTML =
             "<div style='padding:15px;color:#c62828'>" +
-            error.message +
+            escapeHTML(error.message) +
             "</div>";
 
         return;
     }
 
+
     conversationList.innerHTML = "";
+
 
     if(!data || !data.length){
 
@@ -439,14 +592,18 @@ async function openAdmin(){
         return;
     }
 
-    data.forEach(c => {
+
+    data.forEach(function(c){
 
         const div =
             document.createElement("div");
 
-        div.className = "conversation";
+        div.className =
+            "conversation";
 
-        div.dataset.id = c.id;
+        div.dataset.id =
+            c.id;
+
 
         div.innerHTML =
             "<div class='name'>" +
@@ -469,21 +626,26 @@ async function openAdmin(){
             ) +
             "</div>";
 
-        div.onclick = function(){
 
-            openConversation(c);
+        div.onclick =
+            function(){
 
-        };
+                openConversation(c);
+
+            };
+
 
         conversationList.appendChild(div);
 
     });
+
 }
 
 
 async function openConversation(c){
 
     currentConversation = c;
+
 
     document
     .querySelectorAll(".conversation")
@@ -493,6 +655,7 @@ async function openConversation(c){
 
     });
 
+
     const selected =
         document.querySelector(
             ".conversation[data-id='" +
@@ -500,11 +663,13 @@ async function openConversation(c){
             "']"
         );
 
+
     if(selected){
 
         selected.classList.add("active");
 
     }
+
 
     visitorBox.innerHTML =
         "<b>" +
@@ -520,22 +685,32 @@ async function openConversation(c){
 
         (
             c.visitor_phone
-            ? "<br>" +
-              escapeHTML(
-                  c.visitor_phone
-              )
-            : ""
+            ?
+            "<br>" +
+            escapeHTML(c.visitor_phone)
+            :
+            ""
         );
+
 
     await loadMessages();
 
     subscribeMessages();
+
 }
 
 
 async function loadMessages(){
 
     messagesBox.innerHTML = "";
+
+
+    if(!currentConversation){
+
+        return;
+
+    }
+
 
     const {data,error} =
         await supabaseClient
@@ -550,15 +725,17 @@ async function loadMessages(){
             {ascending:true}
         );
 
+
     if(error){
 
         messagesBox.innerHTML =
             "<div style='color:#c62828'>" +
-            error.message +
+            escapeHTML(error.message) +
             "</div>";
 
         return;
     }
+
 
     if(!data || !data.length){
 
@@ -570,13 +747,16 @@ async function loadMessages(){
         return;
     }
 
+
     data.forEach(function(message){
 
         addMessage(message);
 
     });
 
+
     scrollMessages();
+
 }
 
 
@@ -585,30 +765,36 @@ function addMessage(message){
     const div =
         document.createElement("div");
 
+
     div.className =
         "msg " +
         (
-            message.sender_type === "admin"
-            ? "admin"
-            : "visitor"
+            message.sender_type === "gnurse"
+            ?
+            "gnurse"
+            :
+            "visitor"
         );
 
+
     let html = "";
+
 
     if(message.message){
 
         html +=
             "<div>" +
-            escapeHTML(
-                message.message
-            ) +
+            escapeHTML(message.message) +
             "</div>";
+
     }
+
 
     if(message.attachment_url){
 
         const type =
             message.attachment_type || "";
+
 
         if(type.startsWith("image/")){
 
@@ -617,7 +803,9 @@ function addMessage(message){
                 escapeAttr(
                     message.attachment_url
                 ) +
-                "' alt='Attachment'>";
+                "' " +
+                "alt='Image attachment' " +
+                "onclick=\"openImage(this.src)\">";
 
         }else{
 
@@ -626,7 +814,8 @@ function addMessage(message){
                 escapeAttr(
                     message.attachment_url
                 ) +
-                "' target='_blank' " +
+                "' " +
+                "target='_blank' " +
                 "rel='noopener'>" +
 
                 "📎 " +
@@ -637,8 +826,11 @@ function addMessage(message){
                 ) +
 
                 "</a>";
+
         }
+
     }
+
 
     if(message.voice_url){
 
@@ -648,7 +840,9 @@ function addMessage(message){
                 message.voice_url
             ) +
             "'></audio>";
+
     }
+
 
     html +=
         "<div class='time'>" +
@@ -657,9 +851,11 @@ function addMessage(message){
         ).toLocaleString() +
         "</div>";
 
+
     div.innerHTML = html;
 
     messagesBox.appendChild(div);
+
 }
 
 
@@ -674,33 +870,42 @@ async function sendReply(){
         return;
     }
 
+
     const text =
         replyBox.value.trim();
+
 
     if(!text){
 
         return;
+
     }
 
+
     sendBtn.disabled = true;
+
 
     const {data,error} =
         await supabaseClient
         .from("g_nurse_messages")
         .insert({
+
             conversation_id:
                 currentConversation.id,
 
             sender_type:
-                "admin",
+                "gnurse",
 
             message:
                 text
+
         })
         .select("*")
         .single();
 
+
     sendBtn.disabled = false;
+
 
     if(error){
 
@@ -709,62 +914,527 @@ async function sendReply(){
         return;
     }
 
+
     replyBox.value = "";
+
 
     addMessage(data);
 
     scrollMessages();
 
+
+    await updateConversation();
+
+
+    await sendVisitorNotification(
+        data.id,
+        text
+    );
+
+}
+
+
+async function updateConversation(){
+
+    if(!currentConversation){
+
+        return;
+    }
+
+
     await supabaseClient
     .from("g_nurse_conversations")
     .update({
+
         updated_at:
             new Date().toISOString(),
 
         status:
             "open"
+
     })
     .eq(
         "id",
         currentConversation.id
     );
 
-    if(currentConversation.visitor_user_id){
+}
 
+
+async function sendVisitorNotification(
+    messageId,
+    body
+){
+
+    if(!currentConversation){
+
+        return;
+    }
+
+
+    if(!currentConversation.visitor_user_id){
+
+        return;
+    }
+
+
+    await supabaseClient
+    .from("g_nurse_notifications")
+    .insert({
+
+        recipient_user_id:
+            currentConversation.visitor_user_id,
+
+        conversation_id:
+            currentConversation.id,
+
+        message_id:
+            messageId,
+
+        notification_type:
+            "message",
+
+        title:
+            "New message from G Nurse",
+
+        body:
+            body,
+
+        is_read:
+            false
+
+    });
+
+}
+
+
+async function uploadAdminFile(file){
+
+    if(!currentConversation){
+
+        alert(
+            "Select a conversation first."
+        );
+
+        return;
+    }
+
+
+    if(!file){
+
+        return;
+    }
+
+
+    const fileName =
+        Date.now() +
+        "_" +
+        file.name
+        .replace(
+            /[^a-zA-Z0-9._-]/g,
+            "_"
+        );
+
+
+    const path =
+        "admin/" +
+        currentConversation.id +
+        "/" +
+        fileName;
+
+
+    fileBtn.disabled = true;
+
+    imageBtn.disabled = true;
+
+
+    const {error:uploadError} =
         await supabaseClient
-        .from("g_nurse_notifications")
-        .insert({
+        .storage
+        .from("g-nurse-files")
+        .upload(
+            path,
+            file,
+            {
+                contentType:
+                    file.type ||
+                    "application/octet-stream",
 
-            recipient_user_id:
-                currentConversation.visitor_user_id,
+                upsert:false
+            }
+        );
+
+
+    if(uploadError){
+
+        fileBtn.disabled = false;
+
+        imageBtn.disabled = false;
+
+        alert(uploadError.message);
+
+        return;
+    }
+
+
+    const {data:urlData,error:urlError} =
+        await supabaseClient
+        .storage
+        .from("g-nurse-files")
+        .createSignedUrl(
+            path,
+            60 * 60 * 24
+        );
+
+
+    if(urlError){
+
+        fileBtn.disabled = false;
+
+        imageBtn.disabled = false;
+
+        alert(urlError.message);
+
+        return;
+    }
+
+
+    const fileUrl =
+        urlData.signedUrl;
+
+
+    const {data,error} =
+        await supabaseClient
+        .from("g_nurse_messages")
+        .insert({
 
             conversation_id:
                 currentConversation.id,
 
-            message_id:
-                data.id,
+            sender_type:
+                "gnurse",
 
-            notification_type:
-                "message",
+            message:
+                "",
 
-            title:
-                "New message from G Nurse",
+            attachment_url:
+                fileUrl,
 
-            body:
-                text,
+            attachment_name:
+                file.name,
 
-            is_read:
-                false
-        });
+            attachment_type:
+                file.type ||
+                "application/octet-stream"
+
+        })
+        .select("*")
+        .single();
+
+
+    fileBtn.disabled = false;
+
+    imageBtn.disabled = false;
+
+
+    if(error){
+
+        alert(error.message);
+
+        return;
     }
+
+
+    addMessage(data);
+
+    scrollMessages();
+
+
+    await updateConversation();
+
+
+    await sendVisitorNotification(
+        data.id,
+        "G Nurse sent you a file."
+    );
+
     }
-    function subscribeMessages(){
+    
+async function startVoiceRecording(){
+
+    if(!currentConversation){
+
+        alert(
+            "Select a conversation first."
+        );
+
+        return;
+    }
+
+
+    if(isRecording){
+
+        stopVoiceRecording();
+
+        return;
+    }
+
+
+    try{
+
+        const stream =
+            await navigator
+            .mediaDevices
+            .getUserMedia({
+                audio:true
+            });
+
+
+        voiceChunks = [];
+
+
+        mediaRecorder =
+            new MediaRecorder(stream);
+
+
+        mediaRecorder.ondataavailable =
+            function(event){
+
+                if(event.data.size > 0){
+
+                    voiceChunks.push(
+                        event.data
+                    );
+
+                }
+
+            };
+
+
+        mediaRecorder.onstop =
+            async function(){
+
+                stream
+                .getTracks()
+                .forEach(function(track){
+
+                    track.stop();
+
+                });
+
+
+                const audioBlob =
+                    new Blob(
+                        voiceChunks,
+                        {
+                            type:
+                                "audio/webm"
+                        }
+                    );
+
+
+                await uploadVoice(
+                    audioBlob
+                );
+
+            };
+
+
+        mediaRecorder.start();
+
+        isRecording = true;
+
+        voiceBtn.classList.add(
+            "recording"
+        );
+
+        voiceBtn.textContent =
+            "⏹️";
+
+        voiceBtn.title =
+            "Stop recording";
+
+
+    }catch(error){
+
+        alert(
+            "Microphone access failed: " +
+            error.message
+        );
+
+    }
+
+}
+
+
+function stopVoiceRecording(){
+
+    if(
+        mediaRecorder &&
+        isRecording
+    ){
+
+        mediaRecorder.stop();
+
+        isRecording = false;
+
+        voiceBtn.classList.remove(
+            "recording"
+        );
+
+        voiceBtn.textContent =
+            "🎤";
+
+        voiceBtn.title =
+            "Record voice note";
+
+    }
+
+}
+
+
+async function uploadVoice(audioBlob){
+
+    if(!currentConversation){
+
+        return;
+
+    }
+
+
+    const fileName =
+        "voice_" +
+        Date.now() +
+        ".webm";
+
+
+    const path =
+        "admin/" +
+        currentConversation.id +
+        "/" +
+        fileName;
+
+
+    voiceBtn.disabled = true;
+
+
+    const {error:uploadError} =
+        await supabaseClient
+        .storage
+        .from("g-nurse-files")
+        .upload(
+            path,
+            audioBlob,
+            {
+                contentType:
+                    "audio/webm",
+
+                upsert:false
+            }
+        );
+
+
+    if(uploadError){
+
+        voiceBtn.disabled = false;
+
+        alert(uploadError.message);
+
+        return;
+    }
+
+
+    const {data:urlData,error:urlError} =
+        await supabaseClient
+        .storage
+        .from("g-nurse-files")
+        .createSignedUrl(
+            path,
+            60 * 60 * 24
+        );
+
+
+    if(urlError){
+
+        voiceBtn.disabled = false;
+
+        alert(urlError.message);
+
+        return;
+    }
+
+
+    const voiceUrl =
+        urlData.signedUrl;
+
+
+    const {data,error} =
+        await supabaseClient
+        .from("g_nurse_messages")
+        .insert({
+
+            conversation_id:
+                currentConversation.id,
+
+            sender_type:
+                "gnurse",
+
+            message:
+                "",
+
+            voice_url:
+                voiceUrl
+
+        })
+        .select("*")
+        .single();
+
+
+    voiceBtn.disabled = false;
+
+
+    if(error){
+
+        alert(error.message);
+
+        return;
+    }
+
+
+    addMessage(data);
+
+    scrollMessages();
+
+
+    await updateConversation();
+
+
+    await sendVisitorNotification(
+        data.id,
+        "G Nurse sent you a voice note."
+    );
+
+}
+
+
+function subscribeMessages(){
 
     if(messageChannel){
 
         supabaseClient
-        .removeChannel(messageChannel);
+        .removeChannel(
+            messageChannel
+        );
+
     }
+
+
+    if(!currentConversation){
+
+        return;
+
+    }
+
 
     messageChannel =
         supabaseClient
@@ -778,15 +1448,17 @@ async function sendReply(){
                 event:"INSERT",
                 schema:"public",
                 table:"g_nurse_messages",
+
                 filter:
                     "conversation_id=eq." +
                     currentConversation.id
             },
+
             function(payload){
 
                 if(
                     payload.new.sender_type !==
-                    "admin"
+                    "gnurse"
                 ){
 
                     addMessage(
@@ -794,10 +1466,13 @@ async function sendReply(){
                     );
 
                     scrollMessages();
+
                 }
+
             }
         )
         .subscribe();
+
 }
 
 
@@ -809,7 +1484,9 @@ function subscribeConversations(){
         .removeChannel(
             conversationChannel
         );
+
     }
+
 
     conversationChannel =
         supabaseClient
@@ -823,12 +1500,15 @@ function subscribeConversations(){
                 schema:"public",
                 table:"g_nurse_conversations"
             },
+
             function(){
 
                 loadConversations();
+
             }
         )
         .subscribe();
+
 }
 
 
@@ -836,6 +1516,40 @@ function scrollMessages(){
 
     messagesBox.scrollTop =
         messagesBox.scrollHeight;
+
+}
+
+
+function openImage(url){
+
+    const win =
+        window.open(
+            "",
+            "_blank"
+        );
+
+
+    if(!win){
+
+        alert(
+            "Please allow pop-ups to view the image."
+        );
+
+        return;
+    }
+
+
+    win.document.write(
+        "<title>G Nurse Image</title>" +
+        "<body style='margin:0;background:#000;" +
+        "display:flex;align-items:center;" +
+        "justify-content:center'>" +
+        "<img src='" +
+        escapeAttr(url) +
+        "' style='max-width:100%;max-height:100vh'>" +
+        "</body>"
+    );
+
 }
 
 
@@ -847,6 +1561,7 @@ function escapeHTML(value){
     .replace(/>/g,"&gt;")
     .replace(/"/g,"&quot;")
     .replace(/'/g,"&#039;");
+
 }
 
 
@@ -857,19 +1572,26 @@ function escapeAttr(value){
     .replace(/"/g,"&quot;")
     .replace(/</g,"&lt;")
     .replace(/>/g,"&gt;");
+
 }
 
 
-loginBtn.onclick = function(){
+/* TEXT */
 
-    login();
-};
+loginBtn.onclick =
+    function(){
+
+        login();
+
+    };
 
 
-sendBtn.onclick = function(){
+sendBtn.onclick =
+    function(){
 
-    sendReply();
-};
+        sendReply();
+
+    };
 
 
 replyBox.addEventListener(
@@ -884,43 +1606,130 @@ replyBox.addEventListener(
             e.preventDefault();
 
             sendReply();
+
         }
+
     }
 );
 
 
-logoutBtn.onclick = async function(){
+/* FILE */
 
-    await supabaseClient
-    .auth
-    .signOut();
+fileBtn.onclick =
+    function(){
 
-    if(messageChannel){
+        fileInput.click();
+
+    };
+
+
+fileInput.onchange =
+    async function(){
+
+        const file =
+            fileInput.files[0];
+
+
+        if(file){
+
+            await uploadAdminFile(
+                file
+            );
+
+        }
+
+
+        fileInput.value = "";
+
+    };
+
+
+/* IMAGE */
+
+imageBtn.onclick =
+    function(){
+
+        imageInput.click();
+
+    };
+
+
+imageInput.onchange =
+    async function(){
+
+        const file =
+            imageInput.files[0];
+
+
+        if(file){
+
+            await uploadAdminFile(
+                file
+            );
+
+        }
+
+
+        imageInput.value = "";
+
+    };
+
+
+/* VOICE */
+
+voiceBtn.onclick =
+    function(){
+
+        startVoiceRecording();
+
+    };
+
+
+/* LOGOUT */
+
+logoutBtn.onclick =
+    async function(){
+
+        if(messageChannel){
+
+            await supabaseClient
+            .removeChannel(
+                messageChannel
+            );
+
+        }
+
+
+        if(conversationChannel){
+
+            await supabaseClient
+            .removeChannel(
+                conversationChannel
+            );
+
+        }
+
 
         await supabaseClient
-        .removeChannel(
-            messageChannel
-        );
-    }
+        .auth
+        .signOut();
 
-    if(conversationChannel){
 
-        await supabaseClient
-        .removeChannel(
-            conversationChannel
-        );
-    }
+        currentConversation = null;
 
-    currentConversation = null;
+        app.style.display =
+            "none";
 
-    app.style.display = "none";
+        logoutBtn.style.display =
+            "none";
 
-    logoutBtn.style.display = "none";
+        loginBox.style.display =
+            "block";
 
-    loginBox.style.display = "block";
+    };
 
-};
 
+/* RESTORE SESSION */
 
 (async function(){
 
@@ -929,9 +1738,14 @@ logoutBtn.onclick = async function(){
         .auth
         .getSession();
 
-    if(data.session){
 
-        openAdmin();
+    if(
+        data &&
+        data.session
+    ){
+
+        await openAdmin();
+
     }
 
 })();
