@@ -1,741 +1,881 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-<meta charset="UTF-8">
-
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
->
-
-<title>Chat G Nurse</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-html,
-body {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    font-family: Arial, sans-serif;
-    background: #f4f7f6;
-}
-
-body {
-    display: flex;
-    justify-content: center;
-}
-
-.app {
-    width: 100%;
-    max-width: 520px;
-    height: 100vh;
-    background: white;
-    position: relative;
-    overflow: hidden;
-}
-
-/* HEADER */
-
-.top-bar {
-    height: 62px;
-    width: 100%;
-    background: #07562f;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 15px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 20;
-}
-
-.top-title {
-    font-size: 19px;
-    font-weight: bold;
-}
-
-.notification-button {
-    border: none;
-    background: transparent;
-    color: white;
-    font-size: 23px;
-    cursor: pointer;
-}
-
-/* MAIN */
-
-.main {
-    position: absolute;
-    top: 62px;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    overflow: hidden;
-}
-
-/* WELCOME */
-
-#welcomeScreen {
-    width: 100%;
-    height: 100%;
-    overflow-y: auto;
-    padding: 35px 22px 40px;
-}
-
-.welcome-icon {
-    width: 90px;
-    height: 90px;
-    border-radius: 50%;
-    background: #e7f5ee;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 45px;
-    margin: 15px auto 20px;
-}
-
-.welcome-title {
-    text-align: center;
-    color: #07562f;
-    font-size: 25px;
-    margin-bottom: 10px;
-}
-
-.welcome-text {
-    text-align: center;
-    color: #666;
-    line-height: 1.5;
-    font-size: 14px;
-    margin-bottom: 28px;
-}
-
-.form-group {
-    margin-bottom: 16px;
-}
-
-.form-group label {
-    display: block;
-    font-size: 14px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 7px;
-}
-
-.form-group input {
-    width: 100%;
-    height: 48px;
-    border: 1px solid #d5d5d5;
-    border-radius: 10px;
-    padding: 0 14px;
-    font-size: 15px;
-    outline: none;
-    background: white;
-}
-
-.form-group input:focus {
-    border-color: #07562f;
-}
-
-.start-chat-button {
-    width: 100%;
-    height: 50px;
-    border: none;
-    border-radius: 10px;
-    background: #07562f;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 8px;
-}
-
-.start-chat-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-/* CHAT SCREEN */
-#chatScreen {
-    position: absolute;
-    inset: 0;
-    display: none;
-    flex-direction: column;
-    background: #f4f7f6;
-    overflow: hidden;
-}
-
-#chatScreen.active {
-    display: flex;
-}
-
-/* =========================
-   CHAT HEADER — FIXED
-========================= */
-
-.chat-header {
-    flex: 0 0 58px;
-    height: 58px;
-    background: #ffffff;
-    border-bottom: 1px solid #ddd;
-
-    display: flex;
-    align-items: center;
-
-    padding: 0 10px;
-    gap: 10px;
-
-    position: relative;
-    z-index: 20;
-}
-
-/* =========================
-   MESSAGES — ONLY THIS SCROLLS
-========================= */
-
-#messagesContainer {
-    flex: 1 1 auto;
-    min-height: 0;
-
-    overflow-y: auto;
-    overflow-x: hidden;
-
-    padding: 15px 12px 20px;
-
-    -webkit-overflow-scrolling: touch;
-}
-
-/* =========================
-   COMPOSER — FIXED AT BOTTOM
-========================= */
-
-.composer {
-    flex: 0 0 auto;
-
-    width: 100%;
-
-    background: #ffffff;
-    border-top: 1px solid #ddd;
-
-    padding: 8px;
-
-    position: relative;
-    z-index: 30;
-}
-
-/* =========================
-   COMPOSER ROW
-========================= */
-
-.composer-row {
-    display: flex;
-    align-items: flex-end;
-    gap: 6px;
-    }
-
-/* MESSAGES */
-
-#messagesContainer {
-    flex: 1;
-    overflow-y: auto;
-    padding: 15px 12px;
-    position: relative;
-}
-
-.empty-chat {
-    position: absolute;
-    left: 20px;
-    right: 20px;
-    top: 45%;
-    transform: translateY(-50%);
-    text-align: center;
-    color: #777;
-    font-size: 15px;
-}
-
-.empty-chat-icon {
-    font-size: 40px;
-    margin-bottom: 10px;
-}
-
-.message-wrapper {
-    display: flex;
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-.visitor-message {
-    justify-content: flex-end;
-}
-
-.admin-message {
-    justify-content: flex-start;
-}
-
-.message-bubble {
-    max-width: 78%;
-    padding: 9px 12px;
-    border-radius: 14px;
-    font-size: 14px;
-    line-height: 1.4;
-    word-wrap: break-word;
-}
-
-.visitor-message .message-bubble {
-    background: #07562f;
-    color: white;
-    border-bottom-right-radius: 4px;
-}
-
-.admin-message .message-bubble {
-    background: white;
-    color: #222;
-    border: 1px solid #e0e0e0;
-    border-bottom-left-radius: 4px;
-}
-
-.message-time {
-    font-size: 9px;
-    opacity: 0.65;
-    text-align: right;
-    margin-top: 4px;
-}
-
-.unsend-button {
-    border: none;
-    background: transparent;
-    font-size: 10px;
-    margin-top: 4px;
-    cursor: pointer;
-    color: inherit;
-    opacity: 0.7;
-}
-
-/* COMPOSER */
-
-.composer {
-    background: white;
-    border-top: 1px solid #ddd;
-    padding: 8px;
-}
-
-.composer-row {
-    display: flex;
-    align-items: flex-end;
-    gap: 6px;
-}
-
-.composer-button {
-    flex: 0 0 42px;
-    width: 42px;
-    height: 42px;
-    border: none;
-    border-radius: 50%;
-    background: #edf3ef;
-    color: #07562f;
-    font-size: 20px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.composer-button:disabled {
-    opacity: 0.5;
-}
-
-#messageInput {
-    flex: 1;
-    min-width: 0;
-    min-height: 42px;
-    max-height: 120px;
-    resize: none;
-    border: 1px solid #d5d5d5;
-    border-radius: 20px;
-    padding: 11px 14px;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    outline: none;
-}
-
-#messageInput:focus {
-    border-color: #07562f;
-}
-
-.send-button {
-    background: #07562f;
-    color: white;
-}
-
-.recording {
-    background: #b3261e !important;
-    color: white !important;
-}
-
-/* SELECTED FILE */
-
-#selectedFilePreview {
-    display: none;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    background: #f0f5f2;
-    border-radius: 8px;
-    padding: 7px 10px;
-    margin-bottom: 7px;
-    font-size: 12px;
-    color: #333;
-}
-
-#selectedFilePreview button {
-    border: none;
-    background: transparent;
-    color: #b3261e;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-/* FILES AND IMAGES */
-
-.chat-image {
-    display: block;
-    max-width: 220px;
-    max-height: 250px;
-    border-radius: 10px;
-    margin-top: 4px;
-    cursor: pointer;
-}
-
-.file-link {
-    display: block;
-    color: inherit;
-    text-decoration: none;
-    margin-top: 4px;
-    font-weight: bold;
-}
-
-.voice-message {
-    margin-top: 4px;
-}
-
-.voice-message audio {
-    width: 230px;
-    max-width: 100%;
-}
-
-/* HIDDEN */
-
-.hidden {
-    display: none !important;
-}
-
-/* LOADING */
-
-#loadingOverlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.35);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 100;
-}
-
-.loading-box {
-    background: white;
-    border-radius: 12px;
-    padding: 22px 28px;
-    text-align: center;
-    color: #07562f;
-    font-weight: bold;
-}
-
-/* SMALL SCREENS */
-
-@media (max-width: 360px) {
-
-    .composer-button {
-        width: 38px;
-        flex-basis: 38px;
-        height: 38px;
-    }
-
-    #messageInput {
-        min-height: 38px;
-    }
-
-    .message-bubble {
-        max-width: 84%;
-    }
-
-}
-
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0,
+                   maximum-scale=1.0, user-scalable=no">
+
+    <title>Chat G Nurse</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background: #eef4f1;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+        }
+
+        button,
+        input,
+        textarea {
+            font-family: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+        }
+
+        /* =========================
+           MAIN APP
+        ========================= */
+
+        #app {
+            width: 100%;
+            max-width: 520px;
+            height: 100dvh;
+            background: #f7faf8;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* =========================
+           TOP BAR
+        ========================= */
+
+        .topbar {
+            height: 58px;
+            min-height: 58px;
+            background: #07562f;
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            gap: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,.15);
+            z-index: 20;
+        }
+
+        .back-btn {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: transparent;
+            color: white;
+            font-size: 24px;
+        }
+
+        .back-btn:active {
+            background: rgba(255,255,255,.15);
+        }
+
+        .title-area {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            font-size: 11px;
+            opacity: .85;
+            margin-top: 2px;
+        }
+
+        .notification-btn {
+            position: relative;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: transparent;
+            color: white;
+            font-size: 22px;
+        }
+
+        .notification-count {
+            position: absolute;
+            top: 2px;
+            right: 1px;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 4px;
+            border-radius: 10px;
+            background: #e53935;
+            color: white;
+            font-size: 10px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* =========================
+           CONTENT
+        ========================= */
+
+        #content {
+            flex: 1;
+            min-height: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .screen {
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        /* =========================
+           START SCREEN
+        ========================= */
+
+        #startScreen {
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .welcome-card {
+            background: white;
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 3px 15px rgba(0,0,0,.08);
+            margin-bottom: 14px;
+        }
+
+        .welcome-icon {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: #07562f;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 31px;
+            margin-bottom: 14px;
+        }
+
+        .welcome-card h2 {
+            margin: 0 0 8px;
+            color: #07562f;
+            font-size: 22px;
+        }
+
+        .welcome-card p {
+            margin: 0;
+            color: #555;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 18px;
+            padding: 18px;
+            box-shadow: 0 3px 15px rgba(0,0,0,.08);
+        }
+
+        .field {
+            margin-bottom: 13px;
+        }
+
+        .field label {
+            display: block;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #333;
+        }
+
+        .field input {
+            width: 100%;
+            height: 46px;
+            border: 1px solid #ccd5d0;
+            border-radius: 10px;
+            padding: 0 12px;
+            outline: none;
+            font-size: 15px;
+            background: white;
+        }
+
+        .field input:focus {
+            border-color: #07562f;
+        }
+
+        .start-btn {
+            width: 100%;
+            height: 48px;
+            border-radius: 12px;
+            background: #07562f;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .start-btn:active {
+            transform: scale(.99);
+        }
+
+        .status-box {
+            margin-top: 13px;
+            padding: 11px;
+            border-radius: 10px;
+            font-size: 13px;
+            display: none;
+        }
+
+        .status-box.error {
+            display: block;
+            background: #ffebee;
+            color: #b71c1c;
+        }
+
+        .status-box.success {
+            display: block;
+            background: #e8f5e9;
+            color: #1b5e20;
+        }
+
+        /* =========================
+           CHAT SCREEN
+        ========================= */
+
+        #chatScreen {
+            overflow: hidden;
+        }
+
+        .chat-status {
+            height: 34px;
+            min-height: 34px;
+            display: flex;
+            align-items: center;
+            padding: 0 13px;
+            background: #e8f5e9;
+            color: #1b5e20;
+            font-size: 12px;
+            border-bottom: 1px solid #d7e3da;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #43a047;
+            margin-right: 7px;
+        }
+
+        /* =========================
+           ONLY THIS AREA SCROLLS
+        ========================= */
+
+        #messagesContainer {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 14px 11px;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+        }
+
+        .empty-chat {
+            text-align: center;
+            color: #777;
+            font-size: 13px;
+            padding: 35px 20px;
+        }
+
+        .message-row {
+            display: flex;
+            margin-bottom: 9px;
+            width: 100%;
+        }
+
+        .message-row.visitor {
+            justify-content: flex-end;
+        }
+
+        .message-row.admin {
+            justify-content: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 82%;
+            padding: 9px 11px;
+            border-radius: 15px;
+            word-break: break-word;
+            box-shadow: 0 1px 3px rgba(0,0,0,.08);
+        }
+
+        .message-row.visitor .message-bubble {
+            background: #07562f;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message-row.admin .message-bubble {
+            background: white;
+            color: #222;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-text {
+            white-space: pre-wrap;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .message-time {
+            font-size: 9px;
+            opacity: .65;
+            text-align: right;
+            margin-top: 4px;
+        }
+
+        .attachment-image {
+            display: block;
+            width: 100%;
+            max-width: 240px;
+            max-height: 280px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 6px;
+            cursor: pointer;
+        }
+
+        .attachment-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 10px;
+            border-radius: 9px;
+            background: rgba(0,0,0,.06);
+            color: inherit;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .voice-player {
+            width: 220px;
+            max-width: 100%;
+        }
+
+        /* =========================
+           COMPOSER
+        ========================= */
+
+        .composer {
+            min-height: 64px;
+            padding: 8px 8px;
+            background: white;
+            border-top: 1px solid #d8dedb;
+            display: flex;
+            align-items: flex-end;
+            gap: 6px;
+            z-index: 10;
+        }
+
+        .composer-btn {
+            flex: 0 0 40px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #edf2ef;
+            color: #07562f;
+            font-size: 19px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .composer-btn.recording {
+            background: #e53935;
+            color: white;
+        }
+
+        #messageInput {
+            flex: 1;
+            min-width: 0;
+            min-height: 42px;
+            max-height: 120px;
+            padding: 10px 13px;
+            border: 1px solid #ccd5d0;
+            border-radius: 21px;
+            outline: none;
+            background: white;
+            font-family: inherit;
+            font-size: 15px;
+            line-height: 21px;
+            resize: none;
+            overflow-y: hidden;
+        }
+
+        #messageInput:focus {
+            border-color: #07562f;
+        }
+
+        .send-btn {
+            flex: 0 0 42px;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #07562f;
+            color: white;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        /* =========================
+           NOTIFICATIONS
+        ========================= */
+
+        #notificationPanel {
+            position: absolute;
+            top: 58px;
+            right: 8px;
+            width: min(340px, calc(100% - 16px));
+            max-height: 70vh;
+            overflow-y: auto;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 5px 25px rgba(0,0,0,.2);
+            z-index: 100;
+            display: none;
+        }
+
+        #notificationPanel.show {
+            display: block;
+        }
+
+        .notification-header {
+            padding: 14px;
+            border-bottom: 1px solid #eee;
+            font-weight: bold;
+            color: #07562f;
+        }
+
+        .notification-item {
+            padding: 12px 14px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .notification-item.unread {
+            background: #f1f8f3;
+        }
+
+        .notification-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+
+        .notification-body {
+            font-size: 12px;
+            color: #555;
+            line-height: 1.4;
+        }
+
+        .notification-empty {
+            padding: 20px;
+            text-align: center;
+            color: #777;
+            font-size: 13px;
+        }
+
+        /* =========================
+           IMAGE VIEWER
+        ========================= */
+
+        #imageViewer {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,.92);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 500;
+            padding: 15px;
+        }
+
+        #imageViewer.show {
+            display: flex;
+        }
+
+        #imageViewer img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 5px;
+        }
+
+        .close-viewer {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: white;
+            color: #222;
+            font-size: 22px;
+        }
+
+        /* =========================
+           LOADING
+        ========================= */
+
+        #loadingOverlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255,255,255,.75);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        #loadingOverlay.show {
+            display: flex;
+        }
+
+        .loader-box {
+            background: white;
+            padding: 20px 25px;
+            border-radius: 14px;
+            box-shadow: 0 4px 20px rgba(0,0,0,.15);
+            text-align: center;
+        }
+
+        .spinner {
+            width: 35px;
+            height: 35px;
+            border: 4px solid #dce8df;
+            border-top-color: #07562f;
+            border-radius: 50%;
+            animation: spin .8s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (min-width: 521px) {
+            body {
+                background: #dce7e1;
+            }
+
+            #app {
+                box-shadow: 0 0 25px rgba(0,0,0,.15);
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="app">
+<div id="app">
 
-    <!-- TOP BAR -->
+    <!-- =========================
+         TOP BAR
+    ========================= -->
 
-    <div class="top-bar">
+    <div class="topbar">
 
-        <div class="top-title">
-            💬 Chat G Nurse
+        <button
+            class="back-btn"
+            type="button"
+            onclick="goBack()"
+            aria-label="Back">
+            ←
+        </button>
+
+        <div class="title-area">
+            <div class="title">Chat G Nurse</div>
+            <div class="subtitle">Direct support from G Nurse</div>
         </div>
 
         <button
+            class="notification-btn"
             type="button"
-            class="notification-button"
-            id="notificationButton"
-            title="Notifications">
+            onclick="toggleNotifications()"
+            aria-label="Notifications">
             🔔
+            <span
+                id="notificationCount"
+                class="notification-count">
+                0
+            </span>
         </button>
 
     </div>
 
+    <!-- =========================
+         CONTENT
+    ========================= -->
 
-    <div class="main">
+    <div id="content">
 
-        <!-- WELCOME SCREEN -->
+        <!-- =========================
+             START SCREEN
+        ========================= -->
 
-        <section id="welcomeScreen">
+        <section
+            id="startScreen"
+            class="screen active">
 
-            <div class="welcome-icon">
-                💬
-            </div>
+            <div class="welcome-card">
 
-            <h1 class="welcome-title">
-                Chat G Nurse
-            </h1>
-
-            <p class="welcome-text">
-                Start a direct conversation with G Nurse.
-                No public account or visible signup is required.
-                Enter your details below to begin.
-            </p>
-
-
-            <div class="form-group">
-
-                <label for="visitorName">
-                    Your Name
-                </label>
-
-                <input
-                    type="text"
-                    id="visitorName"
-                    placeholder="Enter your name"
-                    autocomplete="name"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label for="visitorEmail">
-                    Email Address
-                </label>
-
-                <input
-                    type="email"
-                    id="visitorEmail"
-                    placeholder="Enter your email"
-                    autocomplete="email"
-                >
-
-            </div>
-
-
-            <div class="form-group">
-
-                <label for="visitorPhone">
-                    Phone Number
-                </label>
-
-                <input
-                    type="tel"
-                    id="visitorPhone"
-                    placeholder="Enter your phone number"
-                    autocomplete="tel"
-                >
-
-            </div>
-
-
-            <button
-                type="button"
-                class="start-chat-button"
-                id="startChatButton">
-
-                Start Chat
-
-            </button>
-
-        </section>
-
-
-        <!-- CHAT SCREEN -->
-
-        <section id="chatScreen">
-
-            <div class="chat-header">
-
-                <button
-                    type="button"
-                    class="back-button"
-                    id="backButton"
-                    title="Back">
-
-                    ‹
-
-                </button>
-
-
-                <div class="chat-avatar">
+                <div class="welcome-icon">
                     👩‍⚕️
                 </div>
 
+                <h2>Welcome to Chat G Nurse</h2>
 
-                <div class="chat-header-info">
+                <p>
+                    Send a direct message to G Nurse.
+                    You can send text, pictures, files
+                    and voice notes.
+                </p>
 
-                    <div class="chat-header-name">
-                        G Nurse
-                    </div>
+            </div>
 
-                    <div class="chat-header-status">
-                        Direct conversation
-                    </div>
+            <div class="form-card">
 
+                <div class="field">
+                    <label for="visitorName">
+                        Your Name
+                    </label>
+
+                    <input
+                        id="visitorName"
+                        type="text"
+                        placeholder="Enter your name"
+                        autocomplete="name">
+                </div>
+
+                <div class="field">
+                    <label for="visitorEmail">
+                        Email
+                    </label>
+
+                    <input
+                        id="visitorEmail"
+                        type="email"
+                        placeholder="Enter your email"
+                        autocomplete="email">
+                </div>
+
+                <div class="field">
+                    <label for="visitorPhone">
+                        Phone Number
+                    </label>
+
+                    <input
+                        id="visitorPhone"
+                        type="tel"
+                        placeholder="Enter your phone number"
+                        autocomplete="tel">
+                </div>
+
+                <button
+                    id="startChatBtn"
+                    class="start-btn"
+                    type="button"
+                    onclick="startChat()">
+                    Start Chat
+                </button>
+
+                <div
+                    id="startStatus"
+                    class="status-box">
                 </div>
 
             </div>
 
+        </section>
 
-            <!-- MESSAGES -->
+        <!-- =========================
+             CHAT SCREEN
+        ========================= -->
+
+        <section
+            id="chatScreen"
+            class="screen">
+
+            <div class="chat-status">
+
+                <span class="status-dot"></span>
+
+                <span id="connectionStatus">
+                    Connected to G Nurse
+                </span>
+
+            </div>
+
+            <!-- ONLY THIS AREA SCROLLS -->
 
             <div id="messagesContainer">
 
                 <div
-                    class="empty-chat"
-                    id="emptyChat">
-
-                    <div class="empty-chat-icon">
-                        💬
-                    </div>
-
-                    <div>
-                        Start a conversation with G Nurse.
-                    </div>
-
+                    id="emptyChat"
+                    class="empty-chat">
+                    No messages yet.<br>
+                    Send a message to G Nurse.
                 </div>
 
             </div>
 
+            <!-- FIXED COMPOSER -->
 
-            <!-- COMPOSER -->
+            <div class="composer">
 
-            <div
-                class="composer"
-                id="composer">
+                <button
+                    class="composer-btn"
+                    type="button"
+                    onclick="openFilePicker()"
+                    aria-label="Attach file">
+                    📎
+                </button>
 
-                <div
-                    id="selectedFilePreview">
+                <input
+                    id="fileInput"
+                    type="file"
+                    accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt">
 
-                </div>
+                <button
+                    id="voiceBtn"
+                    class="composer-btn"
+                    type="button"
+                    onclick="toggleRecording()"
+                    aria-label="Voice note">
+                    🎙️
+                </button>
 
+                <textarea
+                    id="messageInput"
+                    rows="1"
+                    placeholder="Type a message..."
+                    autocomplete="off"></textarea>
 
-                <div class="composer-row">
-
-                    <button
-                        type="button"
-                        class="composer-button"
-                        id="attachmentButton"
-                        title="Attach file">
-
-                        📎
-
-                    </button>
-
-
-                    <input
-                        type="file"
-                        id="fileInput"
-                        hidden
-                        accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
-                    >
-
-
-                    <textarea
-                        id="messageInput"
-                        placeholder="Type a message..."
-                        rows="1"
-                        autocomplete="off">
-                    </textarea>
-
-
-                    <button
-                        type="button"
-                        class="composer-button"
-                        id="voiceButton"
-                        title="Voice note">
-
-                        🎤
-
-                    </button>
-
-
-                    <button
-                        type="button"
-                        class="composer-button send-button"
-                        id="sendButton"
-                        title="Send message">
-
-                        ➤
-
-                    </button>
-
-                </div>
+                <button
+                    class="send-btn"
+                    type="button"
+                    onclick="sendTextMessage()"
+                    aria-label="Send">
+                    ➤
+                </button>
 
             </div>
 
         </section>
 
+        <!-- =========================
+             NOTIFICATION PANEL
+        ========================= -->
+
+        <div id="notificationPanel">
+
+            <div class="notification-header">
+                Notifications
+            </div>
+
+            <div id="notificationList">
+                <div class="notification-empty">
+                    No notifications
+                </div>
+            </div>
+
+        </div>
+
     </div>
 
 </div>
 
+<!-- =========================
+     IMAGE VIEWER
+========================= -->
 
-<!-- LOADING -->
+<div id="imageViewer">
+
+    <button
+        class="close-viewer"
+        type="button"
+        onclick="closeImageViewer()">
+        ×
+    </button>
+
+    <img
+        id="viewerImage"
+        src=""
+        alt="Image">
+
+</div>
+
+<!-- =========================
+     LOADING
+========================= -->
 
 <div id="loadingOverlay">
 
-    <div class="loading-box">
-        Connecting to G Nurse...
+    <div class="loader-box">
+
+        <div class="sp
+            <!-- =========================
+     LOADING
+========================= -->
+
+<div id="loadingOverlay">
+
+    <div class="loader-box">
+
+        <div class="spinner"></div>
+
+        <div id="loadingText">
+            Please wait...
+        </div>
+
     </div>
 
 </div>
 
-<script>
-/* =========================================================
-   G NURSE CHAT - PART 2
-   Supabase connection + anonymous visitor + conversation
-   ========================================================= */
 
+<script>
 
 /* =========================
    SUPABASE CONFIGURATION
@@ -755,11 +895,29 @@ const supabaseClient =
 
 
 /* =========================
-   HTML ELEMENTS
+   GLOBAL VARIABLES
 ========================= */
 
-const startChatButton =
-    document.getElementById("startChatButton");
+let currentUser = null;
+let currentConversation = null;
+
+let messageChannel = null;
+let notificationChannel = null;
+
+let mediaRecorder = null;
+let audioChunks = [];
+let isRecording = false;
+
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const startScreen =
+    document.getElementById("startScreen");
+
+const chatScreen =
+    document.getElementById("chatScreen");
 
 const visitorName =
     document.getElementById("visitorName");
@@ -770,89 +928,127 @@ const visitorEmail =
 const visitorPhone =
     document.getElementById("visitorPhone");
 
-const welcomeScreen =
-    document.getElementById("welcomeScreen");
+const startStatus =
+    document.getElementById("startStatus");
 
-const chatScreen =
-    document.getElementById("chatScreen");
-
-const backButton =
-    document.getElementById("backButton");
-
-const messageInput =
-    document.getElementById("messageInput");
-
-const sendButton =
-    document.getElementById("sendButton");
-
-const attachmentButton =
-    document.getElementById("attachmentButton");
-
-const fileInput =
-    document.getElementById("fileInput");
-
-const selectedFilePreview =
-    document.getElementById("selectedFilePreview");
-    fileInput.addEventListener("change", function () {
-    const file = fileInput.files[0];
-
-    if (file) {
-        alert("File selected successfully:\n\n" + file.name);
-    }
-});
-
-const voiceButton =
-    document.getElementById("voiceButton");
-
-const notificationButton =
-    document.getElementById("notificationButton");
+const startChatBtn =
+    document.getElementById("startChatBtn");
 
 const messagesContainer =
     document.getElementById("messagesContainer");
 
-const emptyChat =
-    document.getElementById("emptyChat");
+const messageInput =
+    document.getElementById("messageInput");
+
+const fileInput =
+    document.getElementById("fileInput");
+
+const voiceBtn =
+    document.getElementById("voiceBtn");
+
+const notificationCount =
+    document.getElementById("notificationCount");
+
+const notificationPanel =
+    document.getElementById("notificationPanel");
+
+const notificationList =
+    document.getElementById("notificationList");
 
 const loadingOverlay =
     document.getElementById("loadingOverlay");
 
+const loadingText =
+    document.getElementById("loadingText");
 
-/* =========================
-   CHAT VARIABLES
-========================= */
-
-let currentUser = null;
-
-let currentConversation = null;
-
-let visitorToken = null;
+const connectionStatus =
+    document.getElementById("connectionStatus");
 
 
 /* =========================
-   LOADING
+   LOADING FUNCTIONS
 ========================= */
 
-function showLoading(text) {
+function showLoading(
+    text = "Please wait..."
+) {
 
-    if (!loadingOverlay) return;
+    loadingText.textContent = text;
 
-    const box =
-        loadingOverlay.querySelector(".loading-box");
-
-    if (box) {
-        box.textContent =
-            text || "Connecting to G Nurse...";
-    }
-
-    loadingOverlay.style.display = "flex";
+    loadingOverlay.classList.add(
+        "show"
+    );
 }
 
 
 function hideLoading() {
 
-    if (!loadingOverlay) return;
+    loadingOverlay.classList.remove(
+        "show"
+    );
+}
 
-    loadingOverlay.style.display = "none";
+
+/* =========================
+   STATUS MESSAGE
+========================= */
+
+function showStartStatus(
+    message,
+    type = "error"
+) {
+
+    startStatus.textContent =
+        message;
+
+    startStatus.className =
+        "status-box " + type;
+}
+
+
+/* =========================
+   RESTORE VISITOR DETAILS
+========================= */
+
+function restoreVisitorDetails() {
+
+    visitorName.value =
+        localStorage.getItem(
+            "g_nurse_visitor_name"
+        ) || "";
+
+    visitorEmail.value =
+        localStorage.getItem(
+            "g_nurse_visitor_email"
+        ) || "";
+
+    visitorPhone.value =
+        localStorage.getItem(
+            "g_nurse_visitor_phone"
+        ) || "";
+}
+
+
+/* =========================
+   SAVE VISITOR DETAILS
+========================= */
+
+function saveVisitorDetails() {
+
+    localStorage.setItem(
+        "g_nurse_visitor_name",
+        visitorName.value.trim()
+    );
+
+    localStorage.setItem(
+        "g_nurse_visitor_email",
+        visitorEmail.value.trim()
+    );
+
+    localStorage.setItem(
+        "g_nurse_visitor_phone",
+        visitorPhone.value.trim()
+    );
 }
 
 
@@ -862,53 +1058,48 @@ function hideLoading() {
 
 function getVisitorToken() {
 
-    try {
+    let token =
+        localStorage.getItem(
+            "g_nurse_visitor_token"
+        );
 
-        let token =
-            localStorage.getItem(
-                "g_nurse_visitor_token"
-            );
+    if (!token) {
 
-        if (!token) {
+        if (
+            window.crypto &&
+            typeof window.crypto.randomUUID ===
+            "function"
+        ) {
 
             token =
-                "visitor_" +
+                window.crypto.randomUUID();
+
+        } else {
+
+            token =
+                "visitor-" +
                 Date.now() +
-                "_" +
+                "-" +
                 Math.random()
                     .toString(36)
-                    .substring(2, 12);
-
-            localStorage.setItem(
-                "g_nurse_visitor_token",
-                token
-            );
+                    .substring(2);
         }
 
-        return token;
-
-    } catch (error) {
-
-        console.error(
-            "Visitor token error:",
-            error
-        );
-
-        return (
-            "visitor_" +
-            Date.now()
+        localStorage.setItem(
+            "g_nurse_visitor_token",
+            token
         );
     }
+
+    return token;
 }
 
 
 /* =========================
-   ANONYMOUS AUTHENTICATION
+   AUTHENTICATION
 ========================= */
 
 async function ensureAuthenticated() {
-
-    /* Check existing session first */
 
     const {
         data: sessionData,
@@ -932,20 +1123,21 @@ async function ensureAuthenticated() {
         return currentUser;
     }
 
-
-    /* Create anonymous user */
-
     const {
         data,
         error
     } =
-        await supabaseClient.auth.signInAnonymously();
+        await supabaseClient.auth
+            .signInAnonymously();
 
     if (error) {
         throw error;
     }
 
-    if (!data || !data.user) {
+    if (
+        !data ||
+        !data.user
+    ) {
 
         throw new Error(
             "Anonymous authentication did not return a user."
@@ -960,27 +1152,35 @@ async function ensureAuthenticated() {
 
 
 /* =========================
-   FIND OR CREATE CONVERSATION
+   CREATE OR RESTORE
+   CONVERSATION
 ========================= */
 
-async function getOrCreateConversation() {
+async function createOrRestoreConversation() {
 
-    if (!currentUser) {
-
-        throw new Error(
-            "Visitor authentication is missing."
-        );
-    }
-
-    visitorToken =
+    const token =
         getVisitorToken();
 
+    const name =
+        visitorName.value.trim();
 
-    /* First look for this visitor's conversation */
+    const email =
+        visitorEmail.value.trim();
+
+    const phone =
+        visitorPhone.value.trim();
+
+
+    let conversation = null;
+
+
+    /* =========================
+       FIND BY USER ID
+    ========================= */
 
     const {
-        data: existingConversation,
-        error: findError
+        data: userConversation,
+        error: userConversationError
     } =
         await supabaseClient
             .from("g_nurse_conversations")
@@ -991,109 +1191,177 @@ async function getOrCreateConversation() {
             )
             .order(
                 "updated_at",
-                { ascending: false }
+                {
+                    ascending: false
+                }
             )
             .limit(1)
             .maybeSingle();
 
 
-    if (findError) {
-        throw findError;
+    if (
+        userConversationError &&
+        userConversationError.code !==
+        "PGRST116"
+    ) {
+
+        throw userConversationError;
     }
 
 
-    /* Existing conversation found */
+    if (userConversation) {
 
-    if (existingConversation) {
+        conversation =
+            userConversation;
 
-        currentConversation =
-            existingConversation;
+    } else {
 
-        /* Update visitor information */
+        /* =========================
+           FIND BY VISITOR TOKEN
+        ========================= */
 
         const {
-            data: updatedConversation,
-            error: updateError
+            data: tokenConversation,
+            error: tokenError
         } =
             await supabaseClient
-                .from("g_nurse_conversations")
-                .update({
-                    visitor_token: visitorToken,
-                    visitor_name:
-                        visitorName.value.trim(),
-                    visitor_email:
-                        visitorEmail.value.trim(),
-                    visitor_phone:
-                        visitorPhone.value.trim(),
-                    updated_at:
-                        new Date().toISOString()
-                })
-                .eq(
-                    "id",
-                    existingConversation.id
+                .from(
+                    "g_nurse_conversations"
                 )
                 .select("*")
-                .single();
+                .eq(
+                    "visitor_token",
+                    token
+                )
+                .order(
+                    "updated_at",
+                    {
+                        ascending: false
+                    }
+                )
+                .limit(1)
+                .maybeSingle();
 
 
-        if (updateError) {
-            throw updateError;
+        if (
+            tokenError &&
+            tokenError.code !==
+            "PGRST116"
+        ) {
+
+            throw tokenError;
         }
 
-        currentConversation =
-            updatedConversation;
 
-        localStorage.setItem(
-            "g_nurse_conversation_id",
-            currentConversation.id
-        );
+        if (tokenConversation) {
 
-        return currentConversation;
+            conversation =
+                tokenConversation;
+
+
+            const {
+                data: updatedConversation,
+                error: updateError
+            } =
+                await supabaseClient
+                    .from(
+                        "g_nurse_conversations"
+                    )
+                    .update({
+                        visitor_name:
+                            name,
+
+                        visitor_email:
+                            email,
+
+                        visitor_phone:
+                            phone,
+
+                        visitor_user_id:
+                            currentUser.id,
+
+                        updated_at:
+                            new Date()
+                                .toISOString()
+                    })
+                    .eq(
+                        "id",
+                        conversation.id
+                    )
+                    .select("*")
+                    .single();
+
+
+            if (updateError) {
+                throw updateError;
+            }
+
+            conversation =
+                updatedConversation;
+
+        } else {
+
+            /* =========================
+               CREATE NEW CONVERSATION
+            ========================= */
+
+            const {
+                data: newConversation,
+                error: createError
+            } =
+                await supabaseClient
+                    .from(
+                        "g_nurse_conversations"
+                    )
+                    .insert({
+                        visitor_token:
+                            token,
+
+                        visitor_name:
+                            name,
+
+                        visitor_email:
+                            email,
+
+                        visitor_phone:
+                            phone,
+
+                        status:
+                            "open",
+
+                        visitor_user_id:
+                            currentUser.id
+                    })
+                    .select("*")
+                    .single();
+
+
+            if (createError) {
+                throw createError;
+            }
+
+            conversation =
+                newConversation;
+        }
     }
 
 
-    /* =========================
-       CREATE NEW CONVERSATION
-    ========================= */
+    if (!conversation) {
 
-    const {
-        data: newConversation,
-        error: createError
-    } =
-        await supabaseClient
-            .from("g_nurse_conversations")
-            .insert({
-                visitor_token: visitorToken,
-                visitor_name:
-                    visitorName.value.trim(),
-                visitor_email:
-                    visitorEmail.value.trim(),
-                visitor_phone:
-                    visitorPhone.value.trim(),
-                visitor_user_id:
-                    currentUser.id,
-                status: "open"
-            })
-            .select("*")
-            .single();
-
-
-    if (createError) {
-        throw createError;
+        throw new Error(
+            "Conversation could not be created."
+        );
     }
 
 
     currentConversation =
-        newConversation;
+        conversation;
 
 
     localStorage.setItem(
         "g_nurse_conversation_id",
-        currentConversation.id
+        conversation.id
     );
-
-
-    return currentConversation;
 }
 
 
@@ -1101,283 +1369,103 @@ async function getOrCreateConversation() {
    START CHAT
 ========================= */
 
-startChatButton.onclick =
-    async function () {
+async function startChat() {
 
-        const name =
-            visitorName.value.trim();
+    const name =
+        visitorName.value.trim();
 
-        const email =
-            visitorEmail.value.trim();
+    const email =
+        visitorEmail.value.trim();
 
-        const phone =
-            visitorPhone.value.trim();
-
-
-        /* Validate name */
-
-        if (!name) {
-
-            alert(
-                "Please enter your name."
-            );
-
-            visitorName.focus();
-
-            return;
-        }
+    const phone =
+        visitorPhone.value.trim();
 
 
-        /* Require email OR phone */
+    if (!name) {
 
-        if (!email && !phone) {
-
-            alert(
-                "Please enter your email address or phone number."
-            );
-
-            visitorEmail.focus();
-
-            return;
-        }
-
-
-        /* Save visitor locally */
-
-        try {
-
-            localStorage.setItem(
-                "g_nurse_visitor",
-                JSON.stringify({
-                    name: name,
-                    email: email,
-                    phone: phone
-                })
-            );
-
-        } catch (error) {
-
-            console.log(
-                "Could not save visitor:",
-                error
-            );
-        }
-
-
-        /* Disable button */
-
-        startChatButton.disabled =
-            true;
-
-
-        showLoading(
-            "Connecting to G Nurse..."
+        showStartStatus(
+            "Please enter your name."
         );
 
+        visitorName.focus();
 
-        try {
-
-            /* Authenticate visitor */
-
-            await ensureAuthenticated();
-
-
-            /* Find/create conversation */
-
-            await getOrCreateConversation();
-            await loadMessages();
-
-
-            /* Open chat */
-
-            welcomeScreen.style.display =
-                "none";
-
-            chatScreen.style.display =
-                "flex";
-
-
-            messageInput.focus();
-
-
-            console.log(
-                "G Nurse conversation ready:",
-                currentConversation
-            );
-
-
-        } catch (error) {
-
-            console.error(
-                "Start Chat error:",
-                error
-            );
-
-
-            alert(
-                "Unable to start the chat.\n\n" +
-                (error.message ||
-                 "Please try again.")
-            );
-
-        } finally {
-
-            hideLoading();
-
-            startChatButton.disabled =
-                false;
-        }
-    };
-
-
-/* =========================
-   BACK BUTTON
-========================= */
-
-backButton.onclick =
-    function () {
-
-        chatScreen.style.display =
-            "none";
-
-        welcomeScreen.style.display =
-            "block";
-    };
-
-
-/* =========================
-   SEND BUTTON
-========================= */
-
-
-
-
-fileInput.onchange =
-    function () {
-
-        const file =
-            fileInput.files[0];
-
-        if (!file) return;
-
-
-        selectedFilePreview.style.display =
-            "flex";
-
-        selectedFilePreview.innerHTML =
-            "";
-
-
-        const fileName =
-            document.createElement("span");
-
-        fileName.textContent =
-            "📎 " + file.name;
-
-
-        const removeButton =
-            document.createElement("button");
-
-        removeButton.type =
-            "button";
-
-        removeButton.textContent =
-            "✕";
-
-
-        removeButton.onclick =
-            function () {
-
-                fileInput.value =
-                    "";
-
-                selectedFilePreview.innerHTML =
-                    "";
-
-                selectedFilePreview.style.display =
-                    "none";
-            };
-
-
-        selectedFilePreview.appendChild(
-            fileName
-        );
-
-        selectedFilePreview.appendChild(
-            removeButton
-        );
-    };
-
-
-/* =========================
-   VOICE
-========================= */
-
-voiceButton.onclick =
-    function () {
-
-        alert(
-            "Voice recording will be connected in Part 4."
-        );
-    };
-
-
-/* =========================
-   NOTIFICATIONS
-========================= */
-
-notificationButton.onclick =
-    function () {
-
-        alert(
-            "Notifications will be connected later."
-        );
-    };
-
-
-/* =========================
-   RESTORE VISITOR DETAILS
-========================= +/
-try {
-
-    const savedVisitor =
-        localStorage.getItem(
-            "g_nurse_visitor"
-        );
-
-    if (savedVisitor) {
-
-        const visitor =
-            JSON.parse(savedVisitor);
-
-        if (visitor.name) {
-            visitorName.value = visitor.name;
-        }
-
-        if (visitor.email) {
-            visitorEmail.value = visitor.email;
-        }
-
-        if (visitor.phone) {
-            visitorPhone.value = visitor.phone;
-        }
+        return;
     }
 
-} catch (error) {
 
-    console.error(
-        "Restore visitor details error:",
-        error
+    if (!email && !phone) {
+
+        showStartStatus(
+            "Please enter your email or phone number."
+        );
+
+        visitorEmail.focus();
+
+        return;
+    }
+
+
+    saveVisitorDetails();
+
+    showLoading(
+        "Connecting to G Nurse..."
     );
-}
 
-/* =========================================================
-   PART 3 - TEXT MESSAGE SENDING
-========================================================= */
+    startChatBtn.disabled =
+        true;
+
+
+    try {
+
+        await ensureAuthenticated();
+
+        await createOrRestoreConversation();
+
+        await loadMessages();
+
+        await loadNotifications();
+
+        setupRealtime();
+
+
+        startScreen.classList.remove(
+            "active"
+        );
+
+        chatScreen.classList.add(
+            "active"
+        );
+
+
+        connectionStatus.textContent =
+            "Connected to G Nurse";
+
+
+        scrollMessagesToBottom();
+
+    } catch (error) {
+
+        console.error(
+            "START CHAT ERROR:",
+            error
+        );
+
+        showStartStatus(
+            getReadableError(error)
+        );
+
+    } finally {
+
+        startChatBtn.disabled =
+            false;
+
+        hideLoading();
+    }
+}
 
 
 /* =========================
-   LOAD EXISTING MESSAGES
+   LOAD MESSAGES
 ========================= */
 
 async function loadMessages() {
@@ -1386,57 +1474,78 @@ async function loadMessages() {
         return;
     }
 
+
     const {
         data,
         error
-    } = await supabaseClient
-        .from("g_nurse_messages")
-        .select("*")
-        .eq(
-            "conversation_id",
-            currentConversation.id
-        )
-        .is("deleted_at", null)
-        .order(
-            "created_at",
-            {
-                ascending: true
-            }
-        );
+    } =
+        await supabaseClient
+            .from(
+                "g_nurse_messages"
+            )
+            .select("*")
+            .eq(
+                "conversation_id",
+                currentConversation.id
+            )
+            .is(
+                "deleted_at",
+                null
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: true
+                }
+            );
+
 
     if (error) {
-        console.error(
-            "Load messages error:",
-            error
+        throw error;
+    }
+
+
+    messagesContainer.innerHTML =
+        "";
+
+
+    if (
+        !data ||
+        data.length === 0
+    ) {
+
+        const empty =
+            document.createElement(
+                "div"
+            );
+
+        empty.className =
+            "empty-chat";
+
+        empty.id =
+            "emptyChat";
+
+        empty.innerHTML =
+            "No messages yet.<br>" +
+            "Send a message to G Nurse.";
+
+        messagesContainer.appendChild(
+            empty
         );
-        return;
-    }
-
-    messagesContainer
-        .querySelectorAll(".message-wrapper")
-        .forEach(function(element) {
-            element.remove();
-        });
-
-
-    if (!data || data.length === 0) {
-
-        emptyChat.style.display =
-            "block";
 
         return;
     }
 
 
-    emptyChat.style.display =
-        "none";
+    data.forEach(
+        function (message) {
 
-
-    data.forEach(function(message) {
-
-        displayMessage(message);
-
-    });
+            displayMessage(
+                message,
+                false
+            );
+        }
+    );
 
 
     scrollMessagesToBottom();
@@ -1447,234 +1556,189 @@ async function loadMessages() {
    DISPLAY MESSAGE
 ========================= */
 
-function displayMessage(message) {
+function displayMessage(
+    message,
+    scroll = true
+) {
 
-    const wrapper =
-        document.createElement("div");
+    if (!message) {
+        return;
+    }
 
-    const isVisitor =
-        message.sender_type === "visitor";
 
-    wrapper.className =
-        "message-wrapper " +
-        (
-            isVisitor
-                ? "visitor-message"
-                : "admin-message"
+    const empty =
+        document.getElementById(
+            "emptyChat"
         );
 
+    if (empty) {
+        empty.remove();
+    }
+
+
+    const row =
+        document.createElement(
+            "div"
+        );
+
+
+    const sender =
+        message.sender_type ===
+        "visitor"
+            ? "visitor"
+            : "admin";
+
+
+    row.className =
+        "message-row " +
+        sender;
+
+
     const bubble =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     bubble.className =
         "message-bubble";
 
 
-    /* =====================================================
-       PHOTO
-    ===================================================== */
+    /* =========================
+       ATTACHMENT
+    ========================= */
 
     if (
-        message.attachment_url &&
-        message.attachment_type &&
-        message.attachment_type.startsWith("image/")
-    ) {
-
-        const image =
-            document.createElement("img");
-
-        image.src =
-            message.attachment_url;
-
-        image.alt =
-            message.attachment_name ||
-            "Photo";
-
-        image.style.maxWidth =
-            "100%";
-
-        image.style.width =
-            "220px";
-
-        image.style.maxHeight =
-            "300px";
-
-        image.style.objectFit =
-            "cover";
-
-        image.style.borderRadius =
-            "12px";
-
-        image.style.display =
-            "block";
-
-        image.style.cursor =
-            "pointer";
-
-        image.loading =
-            "lazy";
-
-
-        /* Tap photo to view larger */
-
-        image.onclick =
-            function () {
-
-                const viewer =
-                    document.createElement("div");
-
-                viewer.style.position =
-                    "fixed";
-
-                viewer.style.inset =
-                    "0";
-
-                viewer.style.background =
-                    "rgba(0,0,0,0.92)";
-
-                viewer.style.display =
-                    "flex";
-
-                viewer.style.alignItems =
-                    "center";
-
-                viewer.style.justifyContent =
-                    "center";
-
-                viewer.style.zIndex =
-                    "99999";
-
-                viewer.style.padding =
-                    "20px";
-
-
-                const fullImage =
-                    document.createElement("img");
-
-                fullImage.src =
-                    message.attachment_url;
-
-                fullImage.style.maxWidth =
-                    "100%";
-
-                fullImage.style.maxHeight =
-                    "100%";
-
-                fullImage.style.objectFit =
-                    "contain";
-
-                fullImage.style.borderRadius =
-                    "10px";
-
-
-                viewer.appendChild(
-                    fullImage
-                );
-
-                viewer.onclick =
-                    function () {
-                        viewer.remove();
-                    };
-
-
-                document.body.appendChild(
-                    viewer
-                );
-            };
-
-
-        bubble.appendChild(
-            image
-        );
-    }
-
-
-    /* =====================================================
-       DOCUMENT / OTHER FILE
-    ===================================================== */
-
-    else if (
         message.attachment_url
     ) {
 
-        const fileBox =
-            document.createElement("div");
-
-        fileBox.style.padding =
-            "10px";
-
-        fileBox.style.borderRadius =
-            "10px";
-
-        fileBox.style.background =
-            "rgba(0,0,0,0.06)";
+        const type =
+            message.attachment_type ||
+            "";
 
 
-        const fileName =
-            document.createElement("div");
+        if (
+            type.startsWith(
+                "image/"
+            )
+        ) {
 
-        fileName.textContent =
-            "📎 " +
-            (
+            const image =
+                document.createElement(
+                    "img"
+                );
+
+            image.className =
+                "attachment-image";
+
+            image.src =
+                message.attachment_url;
+
+            image.alt =
                 message.attachment_name ||
-                "Attached file"
+                "Image";
+
+
+            image.addEventListener(
+                "click",
+                function () {
+
+                    openImageViewer(
+                        message.attachment_url
+                    );
+                }
             );
 
-        fileName.style.marginBottom =
-            "7px";
+
+            bubble.appendChild(
+                image
+            );
+
+        } else {
+
+            const link =
+                document.createElement(
+                    "a"
+                );
+
+            link.className =
+                "attachment-link";
+
+            link.href =
+                message.attachment_url;
+
+            link.target =
+                "_blank";
+
+            link.rel =
+                "noopener noreferrer";
+
+            link.textContent =
+                "📎 " +
+                (
+                    message.attachment_name ||
+                    "Open attachment"
+                );
 
 
-        const openButton =
-            document.createElement("a");
-
-        openButton.href =
-            message.attachment_url;
-
-        openButton.target =
-            "_blank";
-
-        openButton.rel =
-            "noopener noreferrer";
-
-        openButton.textContent =
-            "Open file";
-
-        openButton.style.textDecoration =
-            "none";
+            bubble.appendChild(
+                link
+            );
+        }
+    }
 
 
-        fileBox.appendChild(
-            fileName
-        );
+    /* =========================
+       VOICE NOTE
+    ========================= */
 
-        fileBox.appendChild(
-            openButton
-        );
+    if (
+        message.voice_url
+    ) {
+
+        const audio =
+            document.createElement(
+                "audio"
+            );
+
+        audio.className =
+            "voice-player";
+
+        audio.controls =
+            true;
+
+        audio.preload =
+            "metadata";
+
+        audio.src =
+            message.voice_url;
+
 
         bubble.appendChild(
-            fileBox
+            audio
         );
     }
 
 
-    /* =====================================================
+    /* =========================
        TEXT
-    ===================================================== */
+    ========================= */
 
     if (
         message.message &&
-        !(
-            message.attachment_url &&
-            message.attachment_type &&
-            message.attachment_type.startsWith("image/")
-        )
+        message.message.trim()
     ) {
 
         const text =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
+        text.className =
+            "message-text";
 
         text.textContent =
             message.message;
+
 
         bubble.appendChild(
             text
@@ -1682,73 +1746,102 @@ function displayMessage(message) {
     }
 
 
-    /* =====================================================
+    /* =========================
        TIME
-    ===================================================== */
+    ========================= */
 
     const time =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     time.className =
         "message-time";
 
     time.textContent =
-        formatMessageTime(
+        formatTime(
             message.created_at
         );
+
 
     bubble.appendChild(
         time
     );
 
 
-    wrapper.appendChild(
+    row.appendChild(
         bubble
     );
 
     messagesContainer.appendChild(
-        wrapper
+        row
     );
-}
-/* =========================
-   MESSAGE TIME
-========================= */
 
-function formatMessageTime(dateValue) {
 
-    if (!dateValue) {
-        return "";
+    /* =========================
+       MARK ADMIN MESSAGE VIEWED
+    ========================= */
+
+    if (
+        message.sender_type !==
+        "visitor" &&
+        !message.viewed
+    ) {
+
+        markMessageViewed(
+            message.id
+        );
     }
 
-    const date =
-        new Date(dateValue);
 
-    if (isNaN(date.getTime())) {
-        return "";
+    if (scroll) {
+
+        scrollMessagesToBottom();
     }
-
-    return date.toLocaleTimeString(
-        [],
-        {
-            hour: "2-digit",
-            minute: "2-digit"
-        }
-    );
 }
 
 
 /* =========================
-   SCROLL TO BOTTOM
+   MARK MESSAGE VIEWED
 ========================= */
 
-function scrollMessagesToBottom() {
+async function markMessageViewed(
+    messageId
+) {
 
-    setTimeout(function() {
+    if (!messageId) {
+        return;
+    }
 
-        messagesContainer.scrollTop =
-            messagesContainer.scrollHeight;
 
-    }, 50);
+    const {
+        error
+    } =
+        await supabaseClient
+            .from(
+                "g_nurse_messages"
+            )
+            .update({
+                viewed:
+                    true,
+
+                seen_at:
+                    new Date()
+                        .toISOString()
+            })
+            .eq(
+                "id",
+                messageId
+            );
+
+
+    if (error) {
+
+        console.warn(
+            "Could not mark message viewed:",
+            error
+        );
+    }
 }
 
 
@@ -1758,29 +1851,26 @@ function scrollMessagesToBottom() {
 
 async function sendTextMessage() {
 
-    const text =
-        messageInput.value.trim();
-
-
-    if (!text) {
-
-        messageInput.focus();
-
-        return;
-    }
-
-
     if (!currentConversation) {
 
         alert(
-            "Your chat connection is not ready. Please go back and start the chat again."
+            "Please start the chat first."
         );
 
         return;
     }
 
 
-    sendButton.disabled =
+    const text =
+        messageInput.value.trim();
+
+
+    if (!text) {
+        return;
+    }
+
+
+    messageInput.disabled =
         true;
 
 
@@ -1789,28 +1879,29 @@ async function sendTextMessage() {
         const {
             data,
             error
-        } = await supabaseClient
-            .from("g_nurse_messages")
-            .insert({
-                conversation_id:
-                    currentConversation.id,
+        } =
+            await supabaseClient
+                .from(
+                    "g_nurse_messages"
+                )
+                .insert({
+                    conversation_id:
+                        currentConversation.id,
 
-                sender_type:
-                    "visitor",
+                    sender_type:
+                        "visitor",
 
-                message:
-                    text
-            })
-            .select("*")
-            .single();
+                    message:
+                        text
+                })
+                .select("*")
+                .single();
 
 
         if (error) {
             throw error;
         }
 
-
-        /* Clear input */
 
         messageInput.value =
             "";
@@ -1819,55 +1910,28 @@ async function sendTextMessage() {
             "42px";
 
 
-        /* Remove empty message */
+        if (data) {
 
-        emptyChat.style.display =
-            "none";
-
-
-        /* Display immediately */
-
-        displayMessage(data);
-
-
-        /* Scroll down */
-
-        scrollMessagesToBottom();
-
-
-        /* Update conversation time */
-
-        await supabaseClient
-            .from("g_nurse_conversations")
-            .update({
-                updated_at:
-                    new Date().toISOString()
-            })
-            .eq(
-                "id",
-                currentConversation.id
+            displayMessage(
+                data,
+                true
             );
-
+        }
 
     } catch (error) {
 
         console.error(
-            "Send message error:",
+            "SEND MESSAGE ERROR:",
             error
         );
 
-
         alert(
-            "Message could not be sent.\n\n" +
-            (
-                error.message ||
-                "Please try again."
-            )
+            getReadableError(error)
         );
 
     } finally {
 
-        sendButton.disabled =
+        messageInput.disabled =
             false;
 
         messageInput.focus();
@@ -1876,66 +1940,84 @@ async function sendTextMessage() {
 
 
 /* =========================
-   SEND BUTTON
+   FILE PICKER
 ========================= */
 
-sendButton.onclick =
-    async function() {
+function openFilePicker() {
 
-        await sendTextMessage();
-
-    };
-    /* =========================================================
-   PART 4 - FILE SENDING
-========================================================= */
-
-attachmentButton.onclick = function () {
     fileInput.click();
-};
+}
 
 
-fileInput.onchange = async function () {
+fileInput.addEventListener(
+    "change",
+    async function () {
 
-    const file = fileInput.files[0];
+        const file =
+            this.files &&
+            this.files[0];
+
+
+        if (!file) {
+            return;
+        }
+
+
+        await sendFile(
+            file
+        );
+
+
+        this.value =
+            "";
+    }
+);
+
+
+/* =========================
+   SEND FILE
+========================= */
+
+async function sendFile(
+    file
+) {
+
+    if (!currentConversation) {
+
+        alert(
+            "Please start the chat first."
+        );
+
+        return;
+    }
+
 
     if (!file) {
         return;
     }
 
-    if (!currentConversation) {
-        alert("Please start the chat first.");
-        fileInput.value = "";
-        return;
-    }
 
-    selectedFilePreview.textContent =
-        "Uploading: " + file.name;
+    showLoading(
+        "Uploading file..."
+    );
 
-    attachmentButton.disabled = true;
 
     try {
 
-        const fileExtension =
-            file.name.includes(".")
-                ? file.name.split(".").pop()
-                : "file";
-
-        const safeExtension =
-            fileExtension.replace(
-                /[^a-zA-Z0-9]/g,
-                ""
+        const safeName =
+            file.name.replace(
+                /[^a-zA-Z0-9._-]/g,
+                "_"
             );
 
+
         const filePath =
-            currentConversation.id +
+            "visitors/" +
+            currentUser.id +
             "/" +
             Date.now() +
-            "_" +
-            Math.random()
-                .toString(36)
-                .substring(2, 10) +
-            "." +
-            safeExtension;
+            "-" +
+            safeName;
 
 
         /* =========================
@@ -1944,17 +2026,28 @@ fileInput.onchange = async function () {
 
         const {
             error: uploadError
-        } = await supabaseClient
-            .storage
-            .from("g-nurse-files")
-            .upload(
-                filePath,
-                file,
-                {
-                    cacheControl: "3600",
-                    upsert: false
-                }
-            );
+        } =
+            await supabaseClient
+                 await supabaseClient
+                .storage
+                .from(
+                    "g-nurse-files"
+                )
+                .upload(
+                    filePath,
+                    file,
+                    {
+                        cacheControl:
+                            "3600",
+
+                        upsert:
+                            false,
+
+                        contentType:
+                            file.type ||
+                            "application/octet-stream"
+                    }
+                );
 
 
         if (uploadError) {
@@ -1963,152 +2056,831 @@ fileInput.onchange = async function () {
 
 
         /* =========================
-           GET FILE URL
+           CREATE TEMPORARY URL
         ========================= */
 
         const {
-    data: signedUrlData,
-    error: signedUrlError
-} = await supabaseClient
-    .storage
-    .from("g-nurse-files")
-    .createSignedUrl(
-        filePath,
-        60 * 60 * 24
-    );
-
-if (signedUrlError) {
-    throw signedUrlError;
-}
-
-const fileUrl =
-    signedUrlData?.signedUrl;
-
-if (!fileUrl) {
-    throw new Error(
-        "Unable to create secure file URL."
-    );
-}
-
-        /* =========================
-           SAVE MESSAGE
-        ========================= */
-
-        const {
-            data: messageData,
-            error: messageError
-        } = await supabaseClient
-            .from("g_nurse_messages")
-            .insert({
-                conversation_id:
-                    currentConversation.id,
-
-                sender_type:
-                    "visitor",
-
-                message:
-                    "📎 " + file.name,
-
-                attachment_url:
-                    urlData.publicUrl,
-
-                attachment_name:
-                    file.name,
-
-                attachment_type:
-                    file.type || "application/octet-stream"
-            })
-            .select("*")
-            .single();
+            data: signedUrlData,
+            error: signedUrlError
+        } =
+            await supabaseClient
+                .storage
+                .from(
+                    "g-nurse-files"
+                )
+                .createSignedUrl(
+                    filePath,
+                    60 * 60 * 24
+                );
 
 
-        if (messageError) {
-            throw messageError;
+        if (signedUrlError) {
+            throw signedUrlError;
         }
 
 
-        /* =========================
-           DISPLAY MESSAGE
-        ========================= */
-
-        emptyChat.style.display = "none";
-
-        displayMessage(messageData);
-
-        scrollMessagesToBottom();
+        const fileUrl =
+            signedUrlData &&
+            signedUrlData.signedUrl;
 
 
-        /* =========================
-           UPDATE CONVERSATION
-        ========================= */
+        if (!fileUrl) {
 
-        const {
-            error: conversationError
-        } = await supabaseClient
-            .from("g_nurse_conversations")
-            .update({
-                updated_at:
-                    new Date().toISOString()
-            })
-            .eq(
-                "id",
-                currentConversation.id
-            );
-
-        if (conversationError) {
-            console.error(
-                "Conversation update error:",
-                conversationError
+            throw new Error(
+                "Could not create file URL."
             );
         }
 
 
-        selectedFilePreview.textContent =
-            "File sent successfully.";
+        /* =========================
+           SAVE FILE MESSAGE
+        ========================= */
 
-        fileInput.value = "";
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from(
+                    "g_nurse_messages"
+                )
+                .insert({
+                    conversation_id:
+                        currentConversation.id,
+
+                    sender_type:
+                        "visitor",
+
+                    attachment_url:
+                        fileUrl,
+
+                    attachment_name:
+                        file.name,
+
+                    attachment_type:
+                        file.type ||
+                        "application/octet-stream"
+                })
+                .select("*")
+                .single();
 
 
-        setTimeout(function () {
+        if (error) {
+            throw error;
+        }
 
-            selectedFilePreview.textContent =
-                "";
 
-        }, 2000);
+        if (data) {
 
+            displayMessage(
+                data,
+                true
+            );
+        }
 
     } catch (error) {
 
         console.error(
-            "File sending error:",
+            "FILE SEND ERROR:",
             error
         );
 
-        selectedFilePreview.textContent =
-            "";
-
         alert(
-            "File could not be sent.\n\n" +
-            (
-                error.message ||
-                "Please try again."
-            )
+            getReadableError(error)
         );
 
     } finally {
 
-        attachmentButton.disabled = false;
-
+        hideLoading();
     }
-};
+}
+
+
+/* =========================
+   VOICE RECORDING
+========================= */
+
+async function toggleRecording() {
+
+    if (isRecording) {
+
+        stopRecording();
+
+    } else {
+
+        await startRecording();
+    }
+}
+
+
+/* =========================
+   START RECORDING
+========================= */
+
+async function startRecording() {
+
+    if (!currentConversation) {
+
+        alert(
+            "Please start the chat first."
+        );
+
+        return;
+    }
+
+
+    if (
+        !navigator.mediaDevices ||
+        !navigator.mediaDevices.getUserMedia
+    ) {
+
+        alert(
+            "Voice recording is not supported by this browser."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const stream =
+            await navigator.mediaDevices
+                .getUserMedia({
+                    audio: true
+                });
+
+
+        audioChunks = [];
+
+
+        if (
+            typeof MediaRecorder ===
+            "undefined"
+        ) {
+
+            stream
+                .getTracks()
+                .forEach(
+                    function (track) {
+                        track.stop();
+                    }
+                );
+
+            throw new Error(
+                "Voice recording is not supported."
+            );
+        }
+
+
+        let options = {};
+
+
+        if (
+            MediaRecorder.isTypeSupported &&
+            MediaRecorder.isTypeSupported(
+                "audio/webm"
+            )
+        ) {
+
+            options = {
+                mimeType:
+                    "audio/webm"
+            };
+        }
+
+
+        mediaRecorder =
+            new MediaRecorder(
+                stream,
+                options
+            );
+
+
+        mediaRecorder.addEventListener(
+            "dataavailable",
+            function (event) {
+
+                if (
+                    event.data &&
+                    event.data.size > 0
+                ) {
+
+                    audioChunks.push(
+                        event.data
+                    );
+                }
+            }
+        );
+
+
+        mediaRecorder.addEventListener(
+            "stop",
+            async function () {
+
+                stream
+                    .getTracks()
+                    .forEach(
+                        function (track) {
+                            track.stop();
+                        }
+                    );
+
+
+                const blob =
+                    new Blob(
+                        audioChunks,
+                        {
+                            type:
+                                mediaRecorder.mimeType ||
+                                "audio/webm"
+                        }
+                    );
+
+
+                isRecording =
+                    false;
+
+
+                voiceBtn.classList.remove(
+                    "recording"
+                );
+
+                voiceBtn.textContent =
+                    "🎙️";
+
+
+                await sendVoiceNote(
+                    blob
+                );
+            }
+        );
+
+
+        mediaRecorder.start();
+
+        isRecording =
+            true;
+
+
+        voiceBtn.classList.add(
+            "recording"
+        );
+
+        voiceBtn.textContent =
+            "⏹️";
+
+    } catch (error) {
+
+        console.error(
+            "RECORDING ERROR:",
+            error
+        );
+
+        alert(
+            error.message ||
+            "Microphone permission is required to record a voice note."
+        );
+    }
+}
+
+
+/* =========================
+   STOP RECORDING
+========================= */
+
+function stopRecording() {
+
+    if (
+        mediaRecorder &&
+        mediaRecorder.state !==
+        "inactive"
+    ) {
+
+        mediaRecorder.stop();
+    }
+}
+
+
+/* =========================
+   SEND VOICE NOTE
+========================= */
+
+async function sendVoiceNote(
+    blob
+) {
+
+    if (
+        !blob ||
+        blob.size === 0
+    ) {
+
+        alert(
+            "No voice recording was captured."
+        );
+
+        return;
+    }
+
+
+    showLoading(
+        "Uploading voice note..."
+    );
+
+
+    try {
+
+        const filePath =
+            "visitors/" +
+            currentUser.id +
+            "/voice-" +
+            Date.now() +
+            ".webm";
+
+
+        const {
+            error: uploadError
+        } =
+            await supabaseClient
+                .storage
+                .from(
+                    "g-nurse-files"
+                )
+                .upload(
+                    filePath,
+                    blob,
+                    {
+                        cacheControl:
+                            "3600",
+
+                        upsert:
+                            false,
+
+                        contentType:
+                            "audio/webm"
+                    }
+                );
+
+
+        if (uploadError) {
+            throw uploadError;
+        }
+
+
+        const {
+            data: signedUrlData,
+            error: signedUrlError
+        } =
+            await supabaseClient
+                .storage
+                .from(
+                    "g-nurse-files"
+                )
+                .createSignedUrl(
+                    filePath,
+                    60 * 60 * 24
+                );
+
+
+        if (signedUrlError) {
+            throw signedUrlError;
+        }
+
+
+        const voiceUrl =
+            signedUrlData &&
+            signedUrlData.signedUrl;
+
+
+        if (!voiceUrl) {
+
+            throw new Error(
+                "Could not create voice URL."
+            );
+        }
+
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from(
+                    "g_nurse_messages"
+                )
+                .insert({
+                    conversation_id:
+                        currentConversation.id,
+
+                    sender_type:
+                        "visitor",
+
+                    voice_url:
+                        voiceUrl
+                })
+                .select("*")
+                .single();
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        if (data) {
+
+            displayMessage(
+                data,
+                true
+            );
+        }
+
+    } catch (error) {
+
+        console.error(
+            "VOICE SEND ERROR:",
+            error
+        );
+
+        alert(
+            getReadableError(error)
+        );
+
+    } finally {
+
+        hideLoading();
+    }
+}
+
+
+/* =========================
+   REALTIME
+========================= */
+
+function setupRealtime() {
+
+    cleanupRealtime();
+
+
+    if (!currentConversation) {
+        return;
+    }
+
+
+    /* =========================
+       MESSAGE REALTIME
+    ========================= */
+
+    messageChannel =
+        supabaseClient
+            .channel(
+                "g-nurse-message-" +
+                currentConversation.id
+            )
+            .on(
+                "postgres_changes",
+                {
+                    event:
+                        "INSERT",
+
+                    schema:
+                        "public",
+
+                    table:
+                        "g_nurse_messages",
+
+                    filter:
+                        "conversation_id=eq." +
+                        currentConversation.id
+                },
+                function (payload) {
+
+                    const message =
+                        payload.new;
+
+
+                    if (
+                        message &&
+                        message.sender_type !==
+                        "visitor"
+                    ) {
+
+                        displayMessage(
+                            message,
+                            true
+                        );
+
+                        loadNotifications();
+                    }
+                }
+            )
+            .subscribe(
+                function (status) {
+
+                    console.log(
+                        "Message realtime:",
+                        status
+                    );
+
+
+                    if (
+                        status ===
+                        "SUBSCRIBED"
+                    ) {
+
+                        connectionStatus.textContent =
+                            "Connected to G Nurse";
+
+                    } else if (
+                        status ===
+                        "CHANNEL_ERROR"
+                    ) {
+
+                        connectionStatus.textContent =
+                            "Realtime connection error";
+                    }
+                }
+            );
+
+
+    /* =========================
+       NOTIFICATION REALTIME
+    ========================= */
+
+    if (currentUser) {
+
+        notificationChannel =
+            supabaseClient
+                .channel(
+                    "g-nurse-notification-" +
+                    currentUser.id
+                )
+                .on(
+                    "postgres_changes",
+                    {
+                        event:
+                            "INSERT",
+
+                        schema:
+                            "public",
+
+                        table:
+                            "g_nurse_notifications",
+
+                        filter:
+                            "recipient_user_id=eq." +
+                            currentUser.id
+                    },
+                    function () {
+
+                        loadNotifications();
+                    }
+                )
+                .subscribe(
+                    function (status) {
+
+                        console.log(
+                            "Notification realtime:",
+                            status
+                        );
+                    }
+                );
+    }
+}
+
+
+/* =========================
+   CLEAN REALTIME
+========================= */
+
+function cleanupRealtime() {
+
+    if (messageChannel) {
+
+        supabaseClient.removeChannel(
+            messageChannel
+        );
+
+        messageChannel =
+            null;
+    }
+
+
+    if (notificationChannel) {
+
+        supabaseClient.removeChannel(
+            notificationChannel
+        );
+
+        notificationChannel =
+            null;
+    }
+}
+
+
+/* =========================
+   LOAD NOTIFICATIONS
+========================= */
+
+async function loadNotifications() {
+
+    if (!currentUser) {
+        return;
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from(
+                "g_nurse_notifications"
+            )
+            .select("*")
+            .eq(
+                "recipient_user_id",
+                currentUser.id
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            )
+            .limit(30);
+
+
+    if (error) {
+
+        console.warn(
+            "NOTIFICATION ERROR:",
+            error
+        );
+
+        return;
+    }
+
+
+    notificationList.innerHTML =
+        "";
+
+
+    if (
+        !data ||
+        data.length === 0
+    ) {
+
+        notificationList.innerHTML =
+            '<div class="notification-empty">' +
+            'No notifications' +
+            '</div>';
+
+        notificationCount.style.display =
+            "none";
+
+        return;
+    }
+
+
+    let unread =
+        0;
+
+
+    data.forEach(
+        function (notification) {
+
+            if (
+                !notification.is_read
+            ) {
+
+                unread++;
+            }
+
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+            item.className =
+                "notification-item" +
+                (
+                    notification.is_read
+                        ? ""
+                        : " unread"
+                );
+
+
+            const title =
+                document.createElement(
+                    "div"
+                );
+
+            title.className =
+                "notification-title";
+
+            title.textContent =
+                notification.title ||
+                "G Nurse";
+
+
+            const body =
+                document.createElement(
+                    "div"
+                );
+
+            body.className =
+                "notification-body";
+
+            body.textContent =
+                notification.body ||
+                "";
+
+
+            item.appendChild(
+                title
+            );
+
+            item.appendChild(
+                body
+            );
+
+
+            notificationList.appendChild(
+                item
+            );
+        }
+    );
+
+
+    if (unread > 0) {
+
+        notificationCount.textContent =
+            unread > 99
+                ? "99+"
+                : unread;
+
+        notificationCount.style.display =
+            "flex";
+
+    } else {
+
+        notificationCount.style.display =
+            "none";
+    }
+}
+
+
+/* =========================
+   TOGGLE NOTIFICATIONS
+========================= */
+
+async function toggleNotifications() {
+
+    notificationPanel.classList.toggle(
+        "show"
+    );
+
+
+    if (
+        notificationPanel.classList.contains(
+            "show"
+        )
+    ) {
+
+        await loadNotifications();
+    }
+}
+
+
+/* =========================
+   MESSAGE INPUT AUTO HEIGHT
+========================= */
+
+messageInput.addEventListener(
+    "input",
+    function () {
+
+        this.style.height =
+            "42px";
+
+        this.style.height =
+            Math.min(
+                this.scrollHeight,
+                120
+            ) + "px";
+    }
+);
 
 
 /* =========================
    ENTER TO SEND
 ========================= */
 
-messageInput.onkeydown =
-    function(event) {
+messageInput.addEventListener(
+    "keydown",
+    function (event) {
 
         if (
             event.key === "Enter" &&
@@ -2117,9 +2889,449 @@ messageInput.onkeydown =
 
             event.preventDefault();
 
-            sendButton.click();
+            sendTextMessage();
         }
-    };
+    }
+);
+
+
+/* =========================
+   SCROLL TO BOTTOM
+========================= */
+
+function scrollMessagesToBottom() {
+
+    requestAnimationFrame(
+        function () {
+
+            messagesContainer.scrollTop =
+                messagesContainer.scrollHeight;
+        }
+    );
+}
+
+
+/* =========================
+   IMAGE VIEWER
+========================= */
+
+function openImageViewer(
+    url
+) {
+
+    const viewer =
+        document.getElementById(
+            "imageViewer"
+        );
+
+    const image =
+        document.getElementById(
+            "viewerImage"
+        );
+
+
+    image.src =
+        url;
+
+
+    viewer.classList.add(
+        "show"
+    );
+}
+
+
+function closeImageViewer() {
+
+    const viewer =
+        document.getElementById(
+            "imageViewer"
+        );
+
+    const image =
+        document.getElementById(
+            "viewerImage"
+        );
+
+
+    viewer.classList.remove(
+        "show"
+    );
+
+    image.src =
+        "";
+}
+
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+function goBack() {
+
+    if (
+        chatScreen.classList.contains(
+            "active"
+        )
+    ) {
+
+        cleanupRealtime();
+
+
+        chatScreen.classList.remove(
+            "active"
+        );
+
+        startScreen.classList.add(
+            "active"
+        );
+
+        return;
+    }
+
+
+    if (
+        window.history.length > 1
+    ) {
+
+        window.history.back();
+
+    } else {
+
+        window.location.href =
+            "index.html";
+    }
+}
+
+
+/* =========================
+   FORMAT TIME
+========================= */
+
+function formatTime(
+    value
+) {
+
+    if (!value) {
+        return "";
+    }
+
+
+    const date =
+        new Date(value);
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return "";
+    }
+
+
+    return date.toLocaleTimeString(
+        [],
+        {
+            hour:
+                "2-digit",
+
+            minute:
+                "2-digit"
+        }
+    );
+}
+
+
+/* =========================
+   READABLE ERRORS
+========================= */
+
+function getReadableError(
+    error
+) {
+
+    if (!error) {
+
+        return (
+            "An unknown error occurred."
+        );
+    }
+
+
+    const message =
+        error.message ||
+        error.error_description ||
+        error.details ||
+        String(error);
+
+
+    if (
+        message
+            .toLowerCase()
+            .includes(
+                "signups not allowed"
+            )
+    ) {
+
+        return (
+            "Anonymous sign-in is disabled in Supabase. " +
+            "Enable Anonymous Sign-ins in Authentication settings."
+        );
+    }
+
+
+    if (
+        message
+            .toLowerCase()
+            .includes(
+                "row-level security"
+            )
+    ) {
+
+        return (
+            "Supabase security policy blocked this action. " +
+            "Please check the RLS policy for this table."
+        );
+    }
+
+
+    if (
+        message
+            .toLowerCase()
+            .includes(
+                "permission denied"
+            )
+    ) {
+
+        return (
+            "Permission denied by Supabase. " +
+            "Please check the relevant RLS or Storage policy."
+        );
+    }
+
+
+    return message;
+}
+
+
+/* =========================
+   CLOSE NOTIFICATIONS
+   WHEN CLICKING OUTSIDE
+========================= */
+
+document.addEventListener(
+    "click",
+    function (event) {
+
+        const panel =
+            document.getElementById(
+                "notificationPanel"
+            );
+
+        const button =
+            document.querySelector(
+                ".notification-btn"
+            );
+
+
+        if (
+            panel.classList.contains(
+                "show"
+            ) &&
+            !panel.contains(
+                event.target
+            ) &&
+                     !button.contains(
+                event.target
+            )
+        ) {
+
+            panel.classList.remove(
+                "show"
+            );
+        }
+    }
+);
+
+
+/* =========================
+   IMAGE VIEWER
+========================= */
+
+const imageViewer =
+    document.getElementById(
+        "imageViewer"
+    );
+
+const fullImage =
+    document.getElementById(
+        "fullImage"
+    );
+
+const closeImageBtn =
+    document.getElementById(
+        "closeImageBtn"
+    );
+
+
+function openImage(
+    imageUrl
+) {
+
+    if (!imageViewer ||
+        !fullImage) {
+        return;
+    }
+
+    fullImage.src =
+        imageUrl;
+
+    imageViewer.classList.add(
+        "show"
+    );
+}
+
+
+if (closeImageBtn) {
+
+    closeImageBtn.addEventListener(
+        "click",
+        function () {
+
+            imageViewer.classList.remove(
+                "show"
+            );
+
+            fullImage.src = "";
+        }
+    );
+}
+
+
+if (imageViewer) {
+
+    imageViewer.addEventListener(
+        "click",
+        function (event) {
+
+            if (
+                event.target ===
+                imageViewer
+            ) {
+
+                imageViewer.classList.remove(
+                    "show"
+                );
+
+                fullImage.src = "";
+            }
+        }
+    );
+}
+
+
+/* =========================
+   BACK BUTTON
+========================= */
+
+const backBtn =
+    document.getElementById(
+        "backBtn"
+    );
+
+
+if (backBtn) {
+
+    backBtn.addEventListener(
+        "click",
+        function () {
+
+            if (
+                chatScreen &&
+                startScreen &&
+                chatScreen.classList.contains(
+                    "active"
+                )
+            ) {
+
+                chatScreen.classList.remove(
+                    "active"
+                );
+
+                startScreen.classList.add(
+                    "active"
+                );
+
+            } else {
+
+                window.history.back();
+            }
+        }
+    );
+}
+
+
+/* =========================
+   GLOBAL ERROR HANDLING
+========================= */
+
+window.addEventListener(
+    "error",
+    function (event) {
+
+        console.error(
+            "PAGE ERROR:",
+            event.error ||
+            event.message
+        );
+    }
+);
+
+
+/* =========================
+   START APPLICATION
+========================= */
+
+async function initializeApp() {
+
+    try {
+
+        showLoading(
+            "Connecting to G Nurse..."
+        );
+
+        await ensureAuthenticated();
+
+        await loadNotifications();
+
+        hideLoading();
+
+    } catch (error) {
+
+        console.error(
+            "INITIALIZATION ERROR:",
+            error
+        );
+
+        hideLoading();
+
+        alert(
+            getReadableError(
+                error
+            )
+        );
+    }
+}
+
+
+/* =========================
+   RUN
+========================= */
+
+initializeApp();
+
 </script>
+
 </body>
-     </html>
+</html>
