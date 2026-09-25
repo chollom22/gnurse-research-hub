@@ -1,0 +1,1890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>G Nurse Admin</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: Arial, sans-serif;
+    background: #eef4f0;
+}
+
+body {
+    overflow: hidden;
+}
+
+button,
+input,
+textarea {
+    font: inherit;
+}
+
+.app {
+    width: 100%;
+    height: 100dvh;
+    max-width: 1100px;
+    margin: auto;
+    background: white;
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+#loginScreen {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: #07562f;
+}
+
+.loginCard {
+    width: 100%;
+    max-width: 400px;
+    background: white;
+    border-radius: 18px;
+    padding: 28px 22px;
+    box-shadow: 0 15px 40px rgba(0,0,0,.2);
+}
+
+.loginCard h1 {
+    margin: 0 0 8px;
+    color: #07562f;
+    text-align: center;
+}
+
+.loginCard p {
+    margin: 0 0 22px;
+    color: #666;
+    text-align: center;
+}
+
+.loginCard input {
+    width: 100%;
+    padding: 13px;
+    margin-bottom: 12px;
+    border: 1px solid #ccd5d0;
+    border-radius: 10px;
+    outline: none;
+}
+
+.loginCard button {
+    width: 100%;
+    padding: 13px;
+    border: 0;
+    border-radius: 10px;
+    background: #07562f;
+    color: white;
+    cursor: pointer;
+}
+
+#loginError {
+    margin-top: 12px;
+    color: #c62828;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* =========================
+   ADMIN APP
+========================= */
+
+#adminApp {
+    display: none;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+    min-height: 64px;
+    background: #07562f;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+}
+
+.headerTitle {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.headerSubtitle {
+    font-size: 11px;
+    opacity: .85;
+    margin-top: 3px;
+}
+
+.logoutBtn {
+    border: 1px solid rgba(255,255,255,.4);
+    background: transparent;
+    color: white;
+    border-radius: 8px;
+    padding: 8px 11px;
+    cursor: pointer;
+}
+
+/* =========================
+   MAIN LAYOUT
+========================= */
+
+.main {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    overflow: hidden;
+}
+
+/* =========================
+   CONVERSATIONS
+========================= */
+
+.conversations {
+    width: 340px;
+    min-width: 280px;
+    border-right: 1px solid #dce5df;
+    display: flex;
+    flex-direction: column;
+    background: #f8faf9;
+}
+
+.sectionTitle {
+    padding: 13px;
+    font-weight: bold;
+    border-bottom: 1px solid #dce5df;
+}
+
+.conversationList {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+}
+
+.conversationItem {
+    padding: 13px;
+    border-bottom: 1px solid #e1e7e3;
+    cursor: pointer;
+    background: white;
+}
+
+.conversationItem:hover {
+    background: #f0f7f3;
+}
+
+.conversationItem.active {
+    background: #dff1e6;
+}
+
+.visitorName {
+    font-weight: bold;
+    color: #173b29;
+}
+
+.visitorContact {
+    font-size: 12px;
+    color: #777;
+    margin-top: 4px;
+}
+
+.conversationStatus {
+    display: inline-block;
+    margin-top: 7px;
+    padding: 3px 7px;
+    border-radius: 10px;
+    font-size: 10px;
+    background: #e3f2e9;
+    color: #07562f;
+}
+
+.emptyList {
+    padding: 25px 15px;
+    text-align: center;
+    color: #777;
+}
+
+/* =========================
+   CHAT AREA
+========================= */
+
+.chatArea {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.chatHeader {
+    min-height: 62px;
+    padding: 10px 14px;
+    border-bottom: 1px solid #dce5df;
+    background: white;
+}
+
+.chatVisitorName {
+    font-weight: bold;
+    color: #173b29;
+}
+
+.chatVisitorDetails {
+    font-size: 12px;
+    color: #777;
+    margin-top: 4px;
+}
+
+.messages {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 15px;
+    background: #edf5f0;
+}
+
+.messageRow {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.messageRow.visitor {
+    justify-content: flex-start;
+}
+
+.messageRow.admin {
+    justify-content: flex-end;
+}
+
+.bubble {
+    max-width: 78%;
+    padding: 9px 11px;
+    border-radius: 13px;
+    word-break: break-word;
+}
+
+.messageRow.visitor .bubble {
+    background: white;
+    border: 1px solid #dbe4de;
+}
+
+.messageRow.admin .bubble {
+    background: #07562f;
+    color: white;
+}
+
+.messageTime {
+    font-size: 9px;
+    opacity: .65;
+    margin-top: 5px;
+}
+
+.messageImage {
+    display: block;
+    max-width: 240px;
+    max-height: 300px;
+    border-radius: 9px;
+    cursor: pointer;
+}
+
+.fileLink {
+    display: inline-block;
+    color: inherit;
+    text-decoration: underline;
+    margin-top: 3px;
+}
+
+.voicePlayer {
+    width: 230px;
+    max-width: 100%;
+}
+
+/* =========================
+   COMPOSER
+========================= */
+
+.composer {
+    display: flex;
+    gap: 8px;
+    padding: 10px;
+    border-top: 1px solid #dce5df;
+    background: white;
+}
+
+.composer textarea {
+    flex: 1;
+    min-width: 0;
+    min-height: 42px;
+    max-height: 120px;
+    padding: 10px 13px;
+    border: 1px solid #ccd5d0;
+    border-radius: 21px;
+    outline: none;
+    resize: none;
+    overflow-y: hidden;
+    line-height: 21px;
+}
+
+.sendBtn {
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 50%;
+    background: #07562f;
+    color: white;
+    cursor: pointer;
+}
+
+.sendBtn:disabled {
+    opacity: .5;
+}
+
+/* =========================
+   LOADING
+========================= */
+
+#loading {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,.35);
+    z-index: 1000;
+}
+
+.loadingBox {
+    background: white;
+    padding: 20px 25px;
+    border-radius: 12px;
+}
+
+/* =========================
+   IMAGE VIEWER
+========================= */
+
+#imageViewer {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.88);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    padding: 15px;
+}
+
+#imageViewer.show {
+    display: flex;
+}
+
+#fullImage {
+    max-width: 100%;
+    max-height: 90%;
+    object-fit: contain;
+}
+
+.closeImage {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: white;
+    color: #222;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    .conversations {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .chatArea {
+        display: none;
+    }
+
+    .main.chat-open .conversations {
+        display: none;
+    }
+
+    .main.chat-open .chatArea {
+        display: flex;
+    }
+
+    .bubble {
+        max-width: 88%;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- =========================
+     LOGIN SCREEN
+========================= -->
+
+<section id="loginScreen">
+
+    <div class="loginCard">
+
+        <h1>G Nurse Admin</h1>
+
+        <p>
+            Secure administrator access
+        </p>
+
+        <input
+            type="email"
+            id="adminEmail"
+            placeholder="Admin email"
+            autocomplete="email"
+        >
+
+        <input
+            type="password"
+            id="adminPassword"
+            placeholder="Password"
+            autocomplete="current-password"
+        >
+
+        <button
+            id="loginBtn"
+        >
+            🔐 Login
+        </button>
+
+        <div id="loginError"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     ADMIN APP
+========================= -->
+
+<section id="adminApp">
+
+    <header class="header">
+
+        <div>
+
+            <div class="headerTitle">
+                G Nurse Admin
+            </div>
+
+            <div class="headerSubtitle">
+                Visitor conversations
+            </div>
+
+        </div>
+
+        <button
+            class="logoutBtn"
+            id="logoutBtn"
+        >
+            Logout
+        </button>
+
+    </header>
+
+
+    <main
+        class="main"
+        id="mainLayout"
+    >
+
+        <!-- =========================
+             CONVERSATIONS
+        ========================= -->
+
+        <aside class="conversations">
+
+            <div class="sectionTitle">
+                Conversations
+            </div>
+
+            <div
+                class="conversationList"
+                id="conversationList"
+            >
+                <div class="emptyList">
+                    Loading conversations...
+                </div>
+            </div>
+
+        </aside>
+
+
+        <!-- =========================
+             CHAT
+        ========================= -->
+
+        <section class="chatArea">
+
+            <div class="chatHeader">
+
+                <div
+                    class="chatVisitorName"
+                    id="chatVisitorName"
+                >
+                    Select a conversation
+                </div>
+
+                <div
+                    class="chatVisitorDetails"
+                    id="chatVisitorDetails"
+                >
+                    Visitor details will appear here.
+                </div>
+
+            </div>
+
+
+            <div
+                class="messages"
+                id="messagesContainer"
+            >
+
+                <div class="emptyList">
+                    Select a visitor to view messages.
+                </div>
+
+            </div>
+
+
+            <div class="composer">
+
+                <textarea
+                    id="adminMessageInput"
+                    placeholder="Type your reply..."
+                    rows="1"
+                ></textarea>
+
+                <button
+                    class="sendBtn"
+                    id="sendBtn"
+                    title="Send"
+                >
+                    ➤
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</section>
+
+</div>
+
+
+<!-- =========================
+     LOADING
+========================= -->
+
+<div id="loading">
+
+    <div class="loadingBox">
+        Please wait...
+    </div>
+
+</div>
+
+
+<!-- =========================
+     IMAGE VIEWER
+========================= -->
+
+<div id="imageViewer">
+
+    <button
+        class="closeImage"
+        id="closeImage"
+    >
+        ×
+    </button>
+
+    <img
+        id="fullImage"
+        src=""
+        alt="Full image"
+    >
+
+</div>
+
+
+<script>
+
+/* =========================
+   SUPABASE
+========================= */
+
+const SUPABASE_URL =
+    "https://bmiechymiyedubezhcqk.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_9JL2ALhTGlZV57hUV0mTdQ_c2hdT8O8";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================
+   STATE
+========================= */
+
+let currentUser = null;
+
+let currentConversation = null;
+
+let messageChannel = null;
+
+let conversationsChannel = null;
+
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const loginScreen =
+    document.getElementById(
+        "loginScreen"
+    );
+
+const adminApp =
+    document.getElementById(
+        "adminApp"
+    );
+
+const loginBtn =
+    document.getElementById(
+        "loginBtn"
+    );
+
+const logoutBtn =
+    document.getElementById(
+        "logoutBtn"
+    );
+
+const adminEmail =
+    document.getElementById(
+        "adminEmail"
+    );
+
+const adminPassword =
+    document.getElementById(
+        "adminPassword"
+    );
+
+const loginError =
+    document.getElementById(
+        "loginError"
+    );
+
+const conversationList =
+    document.getElementById(
+        "conversationList"
+    );
+
+const messagesContainer =
+    document.getElementById(
+        "messagesContainer"
+    );
+
+const adminMessageInput =
+    document.getElementById(
+        "adminMessageInput"
+    );
+
+const sendBtn =
+    document.getElementById(
+        "sendBtn"
+    );
+
+const chatVisitorName =
+    document.getElementById(
+        "chatVisitorName"
+    );
+
+const chatVisitorDetails =
+    document.getElementById(
+        "chatVisitorDetails"
+    );
+
+const mainLayout =
+    document.getElementById(
+        "mainLayout"
+    );
+
+const loading =
+    document.getElementById(
+        "loading"
+    );
+
+const imageViewer =
+    document.getElementById(
+        "imageViewer"
+    );
+
+const fullImage =
+    document.getElementById(
+        "fullImage"
+    );
+
+const closeImage =
+    document.getElementById(
+        "closeImage"
+    );
+
+
+/* =========================
+   LOADING
+========================= */
+
+function showLoading(
+    text = "Please wait..."
+) {
+
+    loading.querySelector(
+        ".loadingBox"
+    ).textContent = text;
+
+    loading.style.display =
+        "flex";
+}
+
+
+function hideLoading() {
+
+    loading.style.display =
+        "none";
+}
+
+
+/* =========================
+   LOGIN
+========================= */
+
+async function loginAdmin() {
+
+    loginError.textContent = "";
+
+    const email =
+        adminEmail.value.trim();
+
+    const password =
+        adminPassword.value;
+
+    if (!email ||
+        !password) {
+
+        loginError.textContent =
+            "Enter your email and password.";
+
+        return;
+    }
+
+    try {
+
+        showLoading(
+            "Signing in..."
+        );
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.auth
+                .signInWithPassword({
+                    email,
+                    password
+                });
+
+        if (error) {
+            throw error;
+        }
+
+        currentUser =
+            data.user;
+
+        loginScreen.style.display =
+            "none";
+
+        adminApp.style.display =
+            "flex";
+
+        await loadConversations();
+
+        subscribeToConversations();
+
+        hideLoading();
+
+    } catch (error) {
+
+        hideLoading();
+
+        console.error(
+            "LOGIN ERROR:",
+            error
+        );
+
+        loginError.textContent =
+            error.message ||
+            "Login failed.";
+    }
+}
+
+
+loginBtn.addEventListener(
+    "click",
+    loginAdmin
+);
+
+
+adminPassword.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key ===
+            "Enter"
+        ) {
+
+            loginAdmin();
+        }
+    }
+);
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+logoutBtn.addEventListener(
+    "click",
+    async function() {
+
+        if (messageChannel) {
+
+            await supabaseClient
+                .removeChannel(
+                    messageChannel
+                );
+
+            messageChannel = null;
+        }
+
+        if (conversationsChannel) {
+
+            await supabaseClient
+                .removeChannel(
+                    conversationsChannel
+                );
+
+            conversationsChannel = null;
+        }
+
+        await supabaseClient.auth
+            .signOut();
+
+        currentUser = null;
+
+        currentConversation = null;
+
+        adminApp.style.display =
+            "none";
+
+        loginScreen.style.display =
+            "flex";
+
+        adminEmail.value = "";
+
+        adminPassword.value = "";
+
+        conversationList.innerHTML = "";
+
+        messagesContainer.innerHTML = "";
+
+    }
+);
+
+
+/* =========================
+   LOAD CONVERSATIONS
+========================= */
+
+async function loadConversations() {
+
+    conversationList.innerHTML =
+        `
+        <div class="emptyList">
+            Loading conversations...
+        </div>
+        `;
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from(
+                "g_nurse_conversations"
+            )
+            .select("*")
+            .order(
+                "updated_at",
+                {
+                    ascending: false
+                }
+            );
+
+    if (error) {
+
+        console.error(
+            "CONVERSATIONS ERROR:",
+            error
+        );
+
+        conversationList.innerHTML =
+            `
+            <div class="emptyList">
+                ${escapeHtml(
+                    error.message
+                )}
+            </div>
+            `;
+
+        return;
+    }
+
+    conversationList.innerHTML = "";
+
+    if (
+        !data ||
+        data.length === 0
+    ) {
+
+        conversationList.innerHTML =
+            `
+            <div class="emptyList">
+                No conversations yet.
+            </div>
+            `;
+
+        return;
+    }
+
+    data.forEach(
+        function(conversation) {
+
+            renderConversation(
+                conversation
+            );
+        }
+    );
+}
+
+
+/* =========================
+   RENDER CONVERSATION
+========================= */
+
+function renderConversation(
+    conversation
+) {
+
+    const item =
+        document.createElement(
+            "div"
+        );
+
+    item.className =
+        "conversationItem";
+
+    item.dataset.id =
+        conversation.id;
+
+    if (
+        currentConversation &&
+        currentConversation.id ===
+        conversation.id
+    ) {
+
+        item.classList.add(
+            "active"
+        );
+    }
+
+    const name =
+        conversation.visitor_name ||
+        "Unknown visitor";
+
+    const email =
+        conversation.visitor_email ||
+        "";
+
+    const phone =
+        conversation.visitor_phone ||
+        "";
+
+    const status =
+        conversation.status ||
+        "open";
+
+    item.innerHTML =
+        `
+        <div class="visitorName">
+            ${escapeHtml(name)}
+        </div>
+
+        <div class="visitorContact">
+            ${escapeHtml(
+                email
+            )}
+            ${
+                phone
+                    ? "<br>" +
+                      escapeHtml(phone)
+                    : ""
+            }
+        </div>
+
+        <span class="conversationStatus">
+            ${escapeHtml(status)}
+        </span>
+        `;
+
+    item.addEventListener(
+        "click",
+        function() {
+
+            openConversation(
+                conversation
+            );
+        }
+    );
+
+    conversationList.appendChild(
+        item
+    );
+}
+
+
+/* =========================
+   OPEN CONVERSATION
+========================= */
+
+async function openConversation(
+    conversation
+) {
+
+    currentConversation =
+        conversation;
+
+    document
+        .querySelectorAll(
+            ".conversationItem"
+        )
+        .forEach(
+            function(item) {
+
+                item.classList.toggle(
+                    "active",
+                    item.dataset.id ===
+                    conversation.id
+                );
+            }
+        );
+
+    chatVisitorName.textContent =
+        conversation.visitor_name ||
+        "Unknown visitor";
+
+    chatVisitorDetails.innerHTML =
+        `
+        ${escapeHtml(
+            conversation.visitor_email ||
+            "No email"
+        )}
+        ${
+            conversation.visitor_phone
+                ? " • " +
+                  escapeHtml(
+                      conversation.visitor_phone
+                  )
+                : ""
+        }
+        `;
+
+    mainLayout.classList.add(
+        "chat-open"
+    );
+
+    await loadMessages();
+
+    subscribeToMessages();
+}
+
+
+/* =========================
+   LOAD MESSAGES
+========================= */
+
+async function loadMessages() {
+
+    if (!currentConversation) {
+        return;
+    }
+
+    messagesContainer.innerHTML =
+        `
+        <div class="emptyList">
+            Loading messages...
+        </div>
+        `;
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from(
+                "g_nurse_messages"
+            )
+            .select("*")
+            .eq(
+                "conversation_id",
+                currentConversation.id
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: true
+                }
+            );
+
+    if (error) {
+
+        console.error(
+            "MESSAGES ERROR:",
+                  console.error(
+            "MESSAGES ERROR:",
+            error
+        );
+
+        messagesContainer.innerHTML =
+            `
+            <div class="emptyList">
+                ${escapeHtml(
+                    error.message
+                )}
+            </div>
+            `;
+
+        return;
+    }
+
+    messagesContainer.innerHTML = "";
+
+    if (
+        !data ||
+        data.length === 0
+    ) {
+
+        messagesContainer.innerHTML =
+            `
+            <div class="emptyList">
+                No messages yet.
+            </div>
+            `;
+
+        return;
+    }
+
+    data.forEach(
+        function(message) {
+
+            displayMessage(
+                message,
+                false
+            );
+        }
+    );
+
+    scrollMessages();
+}
+
+
+/* =========================
+   DISPLAY MESSAGE
+========================= */
+
+function displayMessage(
+    message,
+    autoScroll = true
+) {
+
+    if (!message) {
+        return;
+    }
+
+    const row =
+        document.createElement(
+            "div"
+        );
+
+    const isAdmin =
+        message.sender_type ===
+        "admin";
+
+    row.className =
+        "messageRow " +
+        (
+            isAdmin
+                ? "admin"
+                : "visitor"
+        );
+
+    const bubble =
+        document.createElement(
+            "div"
+        );
+
+    bubble.className =
+        "bubble";
+
+    if (
+        message.message
+    ) {
+
+        const text =
+            document.createElement(
+                "div"
+            );
+
+        text.textContent =
+            message.message;
+
+        bubble.appendChild(
+            text
+        );
+    }
+
+
+    /* =========================
+       IMAGE
+    ========================= */
+
+    if (
+        message.attachment_url &&
+        message.attachment_type &&
+        message.attachment_type
+            .startsWith("image/")
+    ) {
+
+        const image =
+            document.createElement(
+                "img"
+            );
+
+        image.className =
+            "messageImage";
+
+        image.src =
+            message.attachment_url;
+
+        image.alt =
+            message.attachment_name ||
+            "Image";
+
+        image.addEventListener(
+            "click",
+            function() {
+
+                fullImage.src =
+                    message.attachment_url;
+
+                imageViewer.classList.add(
+                    "show"
+                );
+            }
+        );
+
+        bubble.appendChild(
+            image
+        );
+    }
+
+    /* =========================
+       OTHER FILE
+    ========================= */
+
+    else if (
+        message.attachment_url
+    ) {
+
+        const link =
+            document.createElement(
+                "a"
+            );
+
+        link.className =
+            "fileLink";
+
+        link.href =
+            message.attachment_url;
+
+        link.target =
+            "_blank";
+
+        link.rel =
+            "noopener";
+
+        link.textContent =
+            "📎 " +
+            (
+                message.attachment_name ||
+                "Open attachment"
+            );
+
+        bubble.appendChild(
+            link
+        );
+    }
+
+
+    /* =========================
+       VOICE
+    ========================= */
+
+    if (
+        message.voice_url
+    ) {
+
+        const audio =
+            document.createElement(
+                "audio"
+            );
+
+        audio.className =
+            "voicePlayer";
+
+        audio.controls =
+            true;
+
+        audio.src =
+            message.voice_url;
+
+        bubble.appendChild(
+            audio
+        );
+    }
+
+
+    /* =========================
+       TIME
+========================= */
+
+    const time =
+        document.createElement(
+            "div"
+        );
+
+    time.className =
+        "messageTime";
+
+    time.textContent =
+        formatTime(
+            message.created_at
+        );
+
+    bubble.appendChild(
+        time
+    );
+
+    row.appendChild(
+        bubble
+    );
+
+    messagesContainer.appendChild(
+        row
+    );
+
+    if (autoScroll) {
+
+        scrollMessages();
+    }
+}
+
+
+/* =========================
+   SEND ADMIN MESSAGE
+========================= */
+
+async function sendAdminMessage() {
+
+    if (!currentConversation) {
+
+        alert(
+            "Select a conversation first."
+        );
+
+        return;
+    }
+
+    const text =
+        adminMessageInput.value.trim();
+
+    if (!text) {
+        return;
+    }
+
+    sendBtn.disabled =
+        true;
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from(
+                    "g_nurse_messages"
+                )
+                .insert({
+
+                    conversation_id:
+                        currentConversation.id,
+
+                    sender_type:
+                        "admin",
+
+                    message:
+                        text
+
+                })
+                .select("*")
+                .single();
+
+        if (error) {
+            throw error;
+        }
+
+        adminMessageInput.value =
+            "";
+
+        adminMessageInput.style.height =
+            "42px";
+
+        if (data) {
+
+            displayMessage(
+                data,
+                true
+            );
+        }
+
+    } catch (error) {
+
+        console.error(
+            "SEND ADMIN MESSAGE ERROR:",
+            error
+        );
+
+        alert(
+            error.message ||
+            "Unable to send message."
+        );
+
+    } finally {
+
+        sendBtn.disabled =
+            false;
+    }
+}
+
+
+sendBtn.addEventListener(
+    "click",
+    sendAdminMessage
+);
+
+
+/* =========================
+   ENTER TO SEND
+========================= */
+
+adminMessageInput.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (
+            event.key === "Enter" &&
+            !event.shiftKey
+        ) {
+
+            event.preventDefault();
+
+            sendAdminMessage();
+        }
+    }
+);
+
+
+/* =========================
+   TEXTAREA AUTO HEIGHT
+========================= */
+
+adminMessageInput.addEventListener(
+    "input",
+    function() {
+
+        this.style.height =
+            "42px";
+
+        this.style.height =
+            Math.min(
+                this.scrollHeight,
+                120
+            ) + "px";
+    }
+        );
+
+
+/* =========================
+   REALTIME MESSAGES
+========================= */
+
+function subscribeToMessages() {
+
+    if (!currentConversation) {
+        return;
+    }
+
+    if (messageChannel) {
+
+        supabaseClient
+            .removeChannel(
+                messageChannel
+            );
+    }
+
+    messageChannel =
+        supabaseClient
+            .channel(
+                "g-nurse-admin-" +
+                currentConversation.id
+            )
+            .on(
+                "postgres_changes",
+                {
+                    event: "INSERT",
+                    schema: "public",
+                    table: "g_nurse_messages",
+                    filter:
+                        "conversation_id=eq." +
+                        currentConversation.id
+                },
+                function(payload) {
+
+                    const message =
+                        payload.new;
+
+                    if (!message) {
+                        return;
+                    }
+
+                    /*
+                     * Visitor messages are received
+                     * here in real time.
+                     */
+
+                    if (
+                        message.sender_type !==
+                        "admin"
+                    ) {
+
+                        displayMessage(
+                            message,
+                            true
+                        );
+                    }
+                }
+            )
+            .subscribe(
+                function(status) {
+
+                    console.log(
+                        "MESSAGE REALTIME:",
+                        status
+                    );
+                }
+            );
+}
+
+
+/* =========================
+   REALTIME CONVERSATIONS
+========================= */
+
+function subscribeToConversations() {
+
+    if (conversationsChannel) {
+
+        supabaseClient
+            .removeChannel(
+                conversationsChannel
+            );
+    }
+
+    conversationsChannel =
+        supabaseClient
+            .channel(
+                "g-nurse-admin-conversations"
+            )
+            .on(
+                "postgres_changes",
+                {
+                    event: "*",
+                    schema: "public",
+                    table: "g_nurse_conversations"
+                },
+                function() {
+
+                    loadConversations();
+                }
+            )
+            .subscribe(
+                function(status) {
+
+                    console.log(
+                        "CONVERSATION REALTIME:",
+                        status
+                    );
+                }
+            );
+}
+
+
+/* =========================
+   SCROLL MESSAGES
+========================= */
+
+function scrollMessages() {
+
+    messagesContainer.scrollTop =
+        messagesContainer.scrollHeight;
+}
+
+
+/* =========================
+   FORMAT TIME
+========================= */
+
+function formatTime(
+    value
+) {
+
+    if (!value) {
+        return "";
+    }
+
+    const date =
+        new Date(value);
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return "";
+    }
+
+    return date.toLocaleString(
+        [],
+        {
+            dateStyle: "short",
+            timeStyle: "short"
+        }
+    );
+}
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHtml(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+}
+
+
+/* =========================
+   CLOSE IMAGE VIEWER
+========================= */
+
+closeImage.addEventListener(
+    "click",
+    function() {
+
+        imageViewer.classList.remove(
+            "show"
+        );
+
+        fullImage.src = "";
+    }
+);
+
+
+imageViewer.addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target ===
+            imageViewer
+        ) {
+
+            imageViewer.classList.remove(
+                "show"
+            );
+
+            fullImage.src = "";
+        }
+    }
+);
+
+
+/* =========================
+   CHECK EXISTING SESSION
+========================= */
+
+async function checkExistingSession() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.auth
+            .getSession();
+
+    if (error) {
+
+        console.error(
+            "SESSION ERROR:",
+            error
+        );
+
+        return;
+    }
+
+    if (
+        data &&
+        data.session &&
+        data.session.user
+    ) {
+
+        currentUser =
+            data.session.user;
+
+        loginScreen.style.display =
+            "none";
+
+        adminApp.style.display =
+            "flex";
+
+        await loadConversations();
+
+        subscribeToConversations();
+    }
+}
+
+
+/* =========================
+   START APPLICATION
+========================= */
+
+checkExistingSession();
+
+</script>
+
+</body>
+</html>
+  
+ 
