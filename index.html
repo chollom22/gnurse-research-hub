@@ -1,1152 +1,1329 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3660632082094744"
-     crossorigin="anonymous"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
-    <meta name="description"
-        content="G Nurse Research Hub Nigeria - Nursing research, academic support, study resources, tests and educational videos.">
-
-    <meta name="theme-color" content="#087f8c">
-
-    <title>G Nurse Research Hub Nigeria</title>
-
-    <link rel="manifest" href="manifest.json">
-
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html,
-        body {
-            width: 100%;
-            height: 100%;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f4f8f9;
-            color: #17343a;
-            overflow: hidden;
-        }
-
-        button,
-        a {
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* =========================
-           TOP FIXED NAVIGATION
-           ========================= */
-
-        .top-nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: calc(64px + env(safe-area-inset-top));
-            padding-top: env(safe-area-inset-top);
-            background: linear-gradient(135deg, #087f8c, #05636e);
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.18);
-        }
-
-        .top-nav-inner {
-            height: 64px;
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            align-items: center;
-            width: 100%;
-        }
-
-        .nav-item {
-            height: 64px;
-            border: none;
-            background: transparent;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 11px;
-            transition: 0.2s;
-            min-width: 0;
-        }
-
-        .nav-item:active {
-            background: rgba(255,255,255,0.18);
-            transform: scale(0.94);
-        }
-
-        .nav-icon {
-            font-size: 22px;
-            line-height: 24px;
-            margin-bottom: 2px;
-        }
-
-        .nav-small {
-            font-size: 9px;
-            opacity: 0.95;
-            white-space: nowrap;
-        }
-
-        /* =========================
-           BOTTOM FIXED NAVIGATION
-           ========================= */
-
-        .bottom-nav {
-            position: fixed;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            height: calc(68px + env(safe-area-inset-bottom));
-            padding-bottom: env(safe-area-inset-bottom);
-            background: white;
-            z-index: 1000;
-            border-top: 1px solid #d5e2e5;
-            box-shadow: 0 -2px 12px rgba(0,0,0,0.12);
-        }
-
-        .bottom-nav-inner {
-            height: 68px;
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            width: 100%;
-        }
-
-        .bottom-item {
-            border: none;
-            background: white;
-            color: #17626c;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: 0.2s;
-            min-width: 0;
-        }
-
-        .bottom-item:active {
-            background: #edf7f8;
-            transform: scale(0.94);
-        }
-
-        .bottom-icon {
-            font-size: 24px;
-            line-height: 27px;
-        }
-
-        .bottom-label {
-            font-size: 9px;
-            margin-top: 2px;
-            white-space: nowrap;
-        }
-
-        /* =========================
-           MAIN SCROLLING AREA
-           ========================= */
-
-        .main-content {
-            position: fixed;
-            top: calc(64px + env(safe-area-inset-top));
-            bottom: calc(68px + env(safe-area-inset-bottom));
-            left: 0;
-            right: 0;
-            overflow-y: auto;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-            padding: 16px;
-        }
-
-        /* =========================
-           HERO
-           ========================= */
-
-        .hero {
-            background: linear-gradient(135deg, #087f8c, #05636e);
-            color: white;
-            border-radius: 22px;
-            padding: 25px 18px;
-            text-align: center;
-            box-shadow: 0 8px 22px rgba(0,0,0,0.14);
-            margin-bottom: 18px;
-        }
-
-        .hero-logo {
-            width: 70px;
-            height: 70px;
-            border-radius: 20px;
-            background: white;
-            color: #087f8c;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 12px;
-            font-size: 38px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-        }
-
-        .hero h1 {
-            font-size: 24px;
-            line-height: 1.2;
-            margin-bottom: 9px;
-        }
-
-        .hero p {
-            font-size: 14px;
-            line-height: 1.6;
-            opacity: 0.96;
-        }
-
-        .hero-tag {
-            display: inline-block;
-            margin-top: 14px;
-            background: rgba(255,255,255,0.17);
-            border: 1px solid rgba(255,255,255,0.3);
-            padding: 8px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-        }
-
-        /* =========================
-           SECTIONS
-           ========================= */
-
-        .section {
-            background: white;
-            border-radius: 18px;
-            padding: 18px;
-            margin-bottom: 16px;
-            box-shadow: 0 3px 12px rgba(0,0,0,0.07);
-        }
-
-        .section h2 {
-            color: #087f8c;
-            font-size: 19px;
-            margin-bottom: 11px;
-        }
-
-        .section p {
-            font-size: 14px;
-            line-height: 1.75;
-            color: #43565b;
-        }
-
-        /* =========================
-           SERVICE CARDS
-           ========================= */
-
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-top: 12px;
-        }
-
-        .service-card {
-            background: #f3fafb;
-            border: 1px solid #dcecef;
-            border-radius: 15px;
-            padding: 14px 10px;
-            text-align: center;
-        }
-
-        .service-card .icon {
-            font-size: 28px;
-            margin-bottom: 7px;
-        }
-
-        .service-card h3 {
-            font-size: 13px;
-            color: #175d66;
-            margin-bottom: 5px;
-        }
-
-        .service-card p {
-            font-size: 11px;
-            line-height: 1.5;
-        }
-
-        /* =========================
-           QUICK ACCESS
-           ========================= */
-
-        .quick-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-top: 12px;
-        }
-
-        .quick-button {
-            text-decoration: none;
-            background: #087f8c;
-            color: white;
-            border-radius: 14px;
-            padding: 14px 10px;
-            text-align: center;
-            font-size: 12px;
-            font-weight: bold;
-            transition: 0.2s;
-        }
-
-        .quick-button:active {
-            transform: scale(0.96);
-        }
-
-        .quick-button span {
-            display: block;
-            font-size: 26px;
-            margin-bottom: 5px;
-        }
-
-        /* =========================
-           CONTACT
-           ========================= */
-
-        .contact-box {
-            background: #f3fafb;
-            border-radius: 15px;
-            padding: 14px;
-            margin-top: 12px;
-        }
-
-        .contact-line {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 0;
-            font-size: 13px;
-        }
-
-        .contact-line span:first-child {
-            font-size: 21px;
-            width: 28px;
-        }
-
-        .contact-line a {
-            color: #087f8c;
-            text-decoration: none;
-            word-break: break-word;
-        }
-
-        /* =========================
-           FOOTER
-           ========================= */
-
-        .footer {
-            text-align: center;
-            padding: 8px 5px 20px;
-            color: #6d7c80;
-            font-size: 11px;
-            line-height: 1.6;
-        }
-
-        /* =========================
-           MENU OVERLAY
-           ========================= */
-
-        .menu-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.45);
-            z-index: 2000;
-            display: none;
-        }
-        .menu-overlay.active {
-    display: flex;
-        }
-
-        .menu-overlay.show {
-            display: block;
-        }
-
-        .menu-panel {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: min(88%, 360px);
-            height: 100%;
-            background: white;
-            overflow-y: auto;
-            padding: calc(18px + env(safe-area-inset-top)) 18px 25px;
-            box-shadow: 5px 0 20px rgba(0,0,0,0.2);
-            animation: slideIn 0.22s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(-100%);
-            }
-
-            to {
-                transform: translateX(0);
-            }
-        }
-
-        .menu-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 18px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #e2ebed;
-        }
-
-        .menu-header h2 {
-            color: #087f8c;
-            font-size: 20px;
-        }
-
-        .close-menu {
-            border: none;
-            background: #edf7f8;
-            color: #087f8c;
-            width: 38px;
-            height: 38px;
-            border-radius: 50%;
-            font-size: 22px;
-            cursor: pointer;
-        }
-
-        .menu-section-title {
-            font-size: 11px;
-            color: #718185;
-            text-transform: uppercase;
-            letter-spacing: 0.6px;
-            margin: 15px 4px 7px;
-        }
-
-        .menu-link {
-            width: 100%;
-            display: flex;
-            align-items: center;
-            gap: 13px;
-            padding: 13px 11px;
-            margin-bottom: 5px;
-            border: none;
-            background: white;
-            border-radius: 12px;
-            color: #23464c;
-            text-align: left;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        .menu-link:active {
-            background: #edf7f8;
-        }
-
-        .menu-link .menu-symbol {
-            width: 30px;
-            text-align: center;
-            font-size: 22px;
-        }
-
-        /* =========================
-           SMALL SCREEN ADJUSTMENTS
-           ========================= */
-
-        @media (max-width: 360px) {
-
-            .nav-icon {
-                font-size: 19px;
-            }
-
-            .nav-small {
-                font-size: 8px;
-            }
-
-            .bottom-icon {
-                font-size: 21px;
-            }
-
-            .bottom-label {
-                font-size: 8px;
-            }
-
-            .hero h1 {
-                font-size: 21px;
-            }
-
-            .services-grid,
-            .quick-grid {
-                gap: 8px;
-            }
-        }
-
-        @media (min-width: 700px) {
-
-            .main-content {
-                padding-left: 10%;
-                padding-right: 10%;
-            }
-
-            .hero h1 {
-                font-size: 32px;
-            }
-
-            .services-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            .quick-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-        /* ==============================
-   FIXED LOWER NAVIGATION
-   ============================== */
-
-.bottom-nav {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    width: 100%;
-    height: 65px;
-
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-
-    background: #07562f;
-
-    z-index: 99999;
-
-    padding-bottom: env(safe-area-inset-bottom);
-
-    box-shadow: 0 -3px 10px rgba(0,0,0,0.25);
-}
-
-.bottom-nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    color: white;
-    text-decoration: none;
-
-    min-width: 0;
-
-    font-size: 12px;
-}
-
-.bottom-nav-item span {
-    font-size: 22px;
-    line-height: 25px;
-}
-
-.bottom-nav-item small {
-    font-size: 10px;
-    margin-top: 2px;
-    white-space: nowrap;
-}
-
-.bottom-nav-item:active {
-    background: rgba(255,255,255,0.15);
-}
-
-
-/* Make sure page content does not hide behind
-   the bottom navigation */
-
-.main-content {
-    padding-bottom: 85px;
-                }
-    </style>
+  <meta charset="UTF-8">
+
+  <!-- Google AdSense -->
+  <script async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3660632082094744"
+    crossorigin="anonymous"></script>
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <meta name="description"
+        content="G Nurse Research Hub Nigeria is a nursing and health education platform providing nursing research support, study resources, educational articles, health education, tests, OSCE preparation, classroom learning and health information.">
+
+  <meta name="keywords"
+        content="nursing research Nigeria, nursing education, nursing articles, nursing students, nursing study materials, nursing tests, OSCE, health education, nursing research">
+
+  <meta name="author"
+        content="G Nurse Research Hub Nigeria">
+
+  <meta name="robots" content="index, follow">
+
+  <meta name="theme-color" content="#07562f">
+
+  <title>G Nurse Research Hub Nigeria | Nursing & Health Education</title>
+
+  <link rel="manifest" href="manifest.json">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f8f6;
+      color: #222;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    /* =========================
+       TOP NAVIGATION
+    ========================== */
+
+    .top-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 62px;
+      background: #07562f;
+      color: white;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .top-nav-inner {
+      height: 100%;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      align-items: center;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .top-nav-item {
+      height: 100%;
+      border: none;
+      background: transparent;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 10px;
+      gap: 3px;
+    }
+
+    .top-nav-item .icon {
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .top-nav-item:hover {
+      background: rgba(255,255,255,0.12);
+    }
+
+    /* =========================
+       MAIN SCROLL AREA
+    ========================== */
+
+    main {
+      position: fixed;
+      top: 62px;
+      bottom: 68px;
+      left: 0;
+      right: 0;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .container {
+      width: min(1100px, 94%);
+      margin: auto;
+    }
+
+    /* =========================
+       HERO
+    ========================== */
+
+    .hero {
+      background:
+        linear-gradient(rgba(7,86,47,0.92), rgba(7,86,47,0.92)),
+        linear-gradient(135deg, #07562f, #087f8c);
+      color: white;
+      text-align: center;
+      padding: 55px 20px;
+    }
+
+    .hero h1 {
+      font-size: clamp(28px, 7vw, 48px);
+      margin-bottom: 15px;
+      line-height: 1.15;
+    }
+
+    .hero p {
+      max-width: 800px;
+      margin: auto;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    .hero-btn {
+      display: inline-block;
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      border: 1px solid white;
+      color: white;
+      background: transparent;
+    }
+
+    .hero-btn.primary {
+      background: white;
+      color: #07562f;
+    }
+
+    /* =========================
+       SECTIONS
+    ========================== */
+
+    section {
+      padding: 42px 0;
+    }
+
+    .section-title {
+      text-align: center;
+      color: #07562f;
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    .section-intro {
+      max-width: 800px;
+      margin: 0 auto 25px;
+      text-align: center;
+      color: #555;
+      line-height: 1.7;
+    }
+
+    .content-box {
+      background: white;
+      border-radius: 14px;
+      padding: 25px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      line-height: 1.8;
+    }
+
+    .content-box p {
+      margin-bottom: 15px;
+    }
+
+    /* =========================
+       SERVICE CARDS
+    ========================== */
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: white;
+      padding: 22px;
+      border-radius: 14px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      border-top: 4px solid #07562f;
+    }
+
+    .card-icon {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+
+    .card h3 {
+      color: #07562f;
+      margin-bottom: 9px;
+    }
+
+    .card p {
+      color: #555;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .card a {
+      display: inline-block;
+      margin-top: 14px;
+      color: #07562f;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    /* =========================
+       ARTICLES
+    ========================== */
+
+    .article-card {
+      background: white;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    }
+
+    .article-card .article-top {
+      background: #e9f5ef;
+      padding: 25px;
+      font-size: 35px;
+    }
+
+    .article-card .article-body {
+      padding: 20px;
+    }
+
+    .article-card h3 {
+      color: #07562f;
+      margin-bottom: 10px;
+    }
+
+    .article-card p {
+      color: #555;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    /* =========================
+       QUICK ACCESS
+    ========================== */
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+    }
+
+    .quick-link {
+      background: white;
+      border-radius: 12px;
+      padding: 20px 12px;
+      text-align: center;
+      text-decoration: none;
+      color: #07562f;
+      font-weight: bold;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+      transition: transform 0.2s;
+    }
+
+    .quick-link:hover {
+      transform: translateY(-2px);
+    }
+
+    .quick-link .big-icon {
+      display: block;
+      font-size: 30px;
+      margin-bottom: 8px;
+    }
+
+    /* =========================
+       CONTACT
+    ========================== */
+
+    .contact-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .contact-item {
+      padding: 15px;
+      background: #f1f7f3;
+      border-radius: 9px;
+    }
+
+    .contact-item strong {
+      color: #07562f;
+    }
+
+    .contact-item a {
+      color: #07562f;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    /* =========================
+       FOOTER
+    ========================== */
+
+    footer {
+      background: #063d23;
+      color: white;
+      padding: 30px 20px;
+      text-align: center;
+    }
+
+    .footer-title {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px 15px;
+      margin: 18px auto;
+      max-width: 900px;
+    }
+
+    .footer-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    .copyright {
+      font-size: 13px;
+      color: #d5e6dc;
+      margin-top: 15px;
+      line-height: 1.6;
+    }
+
+    /* =========================
+       BOTTOM NAVIGATION
+    ========================== */
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 68px;
+      background: #07562f;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      z-index: 1000;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
+    }
+
+    .bottom-nav-item {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 3px;
+      border: none;
+      background: transparent;
+      color: white;
+      text-decoration: none;
+      font-size: 10px;
+      cursor: pointer;
+    }
+
+    .bottom-nav-item .bottom-icon {
+      font-size: 23px;
+      line-height: 1;
+    }
+
+    .bottom-nav-item:hover {
+      background: rgba(255,255,255,0.12);
+    }
+
+    /* =========================
+       MENU OVERLAY
+    ========================== */
+
+    .menu-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      z-index: 2000;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 15px;
+    }
+
+    .menu-overlay.active {
+      display: flex;
+    }
+
+    .menu-panel {
+      width: min(500px, 100%);
+      max-height: 94vh;
+      overflow-y: auto;
+      background: white;
+      border-radius: 15px;
+      margin-top: 5px;
+      padding: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    }
+
+    .menu-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 15px;
+      margin-bottom: 15px;
+    }
+
+    .menu-header h2 {
+      color: #07562f;
+      font-size: 22px;
+    }
+
+    .close-menu {
+      width: 40px;
+      height: 40px;
+      border: none;
+      border-radius: 50%;
+      background: #07562f;
+      color: white;
+      font-size: 23px;
+      cursor: pointer;
+    }
+
+    .menu-heading {
+      color: #777;
+      font-size: 12px;
+      text-transform: uppercase;
+      margin: 18px 0 8px;
+      font-weight: bold;
+    }
+
+    .menu-link {
+      width: 100%;
+      border: none;
+      background: #f3f7f4;
+      color: #222;
+      padding: 14px;
+      margin-bottom: 7px;
+      border-radius: 9px;
+      text-align: left;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    .menu-link:hover {
+      background: #e2efe7;
+      color: #07562f;
+    }
+
+    .menu-link strong {
+      color: #07562f;
+    }
+
+    /* =========================
+       MOBILE
+    ========================== */
+
+    @media (max-width: 700px) {
+
+      .top-nav {
+        height: 58px;
+      }
+
+      .top-nav-inner {
+        grid-template-columns: repeat(7, 1fr);
+      }
+
+      .top-nav-item {
+        font-size: 8px;
+      }
+
+      .top-nav-item .icon {
+        font-size: 19px;
+      }
+
+      main {
+        top: 58px;
+        bottom: 65px;
+      }
+
+      .hero {
+        padding: 40px 15px;
+      }
+
+      .hero p {
+        font-size: 14px;
+      }
+
+      section {
+        padding: 32px 0;
+      }
+
+      .section-title {
+        font-size: 24px;
+      }
+
+      .content-box {
+        padding: 19px;
+      }
+
+      .bottom-nav {
+        height: 65px;
+      }
+
+      .bottom-nav-item {
+        font-size: 9px;
+      }
+
+      .bottom-nav-item .bottom-icon {
+        font-size: 21px;
+      }
+
+      .footer-links {
+        gap: 12px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-    <!-- =====================================================
-         FIXED UPPER NAVIGATION BAR
-         ===================================================== -->
+  <!-- =========================
+       TOP NAVIGATION
+  ========================== -->
 
-    <header class="top-nav">
+  <header class="top-nav">
+    <div class="top-nav-inner">
 
-        <div class="top-nav-inner">
+      <button class="top-nav-item" onclick="openMenu()" aria-label="Open menu">
+        <span class="icon">☰</span>
+        <span>Menu</span>
+      </button>
 
-            <!-- 1. MENU -->
-            <button class="top-nav-item" type="button" onclick="openMenu()">
-    ☰
-            </button>
+      <a class="top-nav-item" href="chatgnurse.html">
+        <span class="icon">💬</span>
+        <span>Chat G Nurse</span>
+      </a>
 
-            <!-- 2. CHAT G NURSE -->
-            <button class="nav-item" onclick="goTo('chatgnurse.html')"
-                aria-label="Chat G Nurse">
-                <span class="nav-icon">💬</span>
-                <span class="nav-small">G Nurse</span>
-            </button>
+      <a class="top-nav-item" href="elibrary.html">
+        <span class="icon">📚</span>
+        <span>E-Library</span>
+      </a>
 
-            <!-- 3. E-LIBRARY -->
-            <button class="nav-item" onclick="goTo('elibrary.html')"
-                aria-label="E-Library">
-                <span class="nav-icon">📚</span>
-                <span class="nav-small">Library</span>
-            </button>
+      <a class="top-nav-item" href="media-broadcast.html">
+        <span class="icon">📰</span>
+        <span>Media</span>
+      </a>
 
-            <!-- 4. MEDIA BROADCAST -->
-            <button class="nav-item" onclick="goTo('media-broadcast.html')"
-                aria-label="Media Broadcast">
-                <span class="nav-icon">📺</span>
-                <span class="nav-small">Media</span>
-            </button>
+      <a class="top-nav-item" href="channel.html">
+        <span class="icon">📺</span>
+        <span>Channel</span>
+      </a>
 
-            <!-- 5. CHANNEL -->
-            <button class="nav-item" onclick="goTo('channel.html')"
-                aria-label="Channel">
-                <span class="nav-icon">📡</span>
-                <span class="nav-small">Channel</span>
-            </button>
+      <a class="top-nav-item" href="articles.html">
+        <span class="icon">📖</span>
+        <span>Articles</span>
+      </a>
 
-            <!-- 6. EPIDEMIOLOGY CHART -->
-            <button class="nav-item" onclick="goTo('epidemiology.html')"
-                aria-label="Epidemiology Chart">
-                <span class="nav-icon">📊</span>
-                <span class="nav-small">Chart</span>
-            </button>
+      <a class="top-nav-item" href="diphtheria-survey.html">
+        <span class="icon">🩺</span>
+        <span>Survey</span>
+      </a>
 
-            <!-- 7. DIPHTHERIA PARTICIPATION -->
-            <button class="nav-item" onclick="goTo('diphtheria-survey.html')"
-                aria-label="Participate in Diphtheria Survey">
-                <span class="nav-icon">📝</span>
-                <span class="nav-small">Survey</span>
-            </button>
+    </div>
+  </header>
+
+
+  <!-- =========================
+       MAIN CONTENT
+  ========================== -->
+
+  <main id="mainContent">
+
+    <!-- HERO -->
+
+    <section class="hero">
+      <div class="container">
+
+        <h1>G Nurse Research Hub Nigeria</h1>
+
+        <p>
+          A nursing and health education platform created to support
+          nursing students, researchers, healthcare learners and people
+          seeking reliable educational health information.
+        </p>
+
+        <div class="hero-buttons">
+          <a href="elibrary.html" class="hero-btn primary">
+            Explore E-Library
+          </a>
+
+          <a href="articles.html" class="hero-btn">
+            Read Nursing Articles
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- DESCRIPTION -->
+
+    <section id="description">
+      <div class="container">
+
+        <h2 class="section-title">
+          About G Nurse Research Hub Nigeria
+        </h2>
+
+        <p class="section-intro">
+          Supporting nursing education, research, professional learning
+          and health knowledge through accessible digital resources.
+        </p>
+
+        <div class="content-box">
+
+          <p>
+            G Nurse Research Hub Nigeria is an educational platform
+            designed to support nursing students, researchers,
+            healthcare learners and other users interested in nursing
+            education and professional development.
+          </p>
+
+          <p>
+            The platform brings together nursing research support,
+            academic resources, educational articles, health education,
+            study materials, tests, examination preparation and other
+            learning resources in one digital environment.
+          </p>
+
+          <p>
+            Users can study nursing topics, explore research information,
+            practise examination questions, prepare for clinical
+            assessments, read health education materials and access
+            educational content designed for learning and professional
+            development.
+          </p>
+
+          <p>
+            G Nurse Research Hub Nigeria aims to make useful nursing and
+            health education information easier to access while
+            encouraging continuous learning and responsible use of
+            health information.
+          </p>
 
         </div>
 
-    </header>
+      </div>
+    </section>
 
 
-    <!-- =====================================================
-         MAIN SCROLLING CONTENT
-         ===================================================== -->
+    <!-- SERVICES -->
 
-    <main class="main-content" id="mainContent">
+    <section id="services">
+      <div class="container">
 
-        <!-- HERO -->
-        <section class="hero" id="home">
+        <h2 class="section-title">Our Services</h2>
 
-            <div class="hero-logo">
-                🩺
+        <p class="section-intro">
+          Explore the educational and research services available on
+          G Nurse Research Hub Nigeria.
+        </p>
+
+        <div class="cards">
+
+          <div class="card">
+            <div class="card-icon">🔬</div>
+            <h3>Research Support</h3>
+            <p>
+              Educational support for nursing research, academic
+              projects, research topics and research-related learning.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">📚</div>
+            <h3>E-Library</h3>
+            <p>
+              Access nursing study materials, research resources and
+              other educational materials through the digital library.
+            </p>
+            <a href="elibrary.html">Open E-Library →</a>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">📺</div>
+            <h3>G Nurse Channel</h3>
+            <p>
+              Educational videos, nursing lessons, health education and
+              other educational broadcast content.
+            </p>
+            <a href="channel.html">Visit Channel →</a>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">📖</div>
+            <h3>Nursing Articles</h3>
+            <p>
+              Read educational articles covering nursing, healthcare,
+              clinical learning and research-related topics.
+            </p>
+            <a href="articles.html">Read Articles →</a>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">📝</div>
+            <h3>Tests & OSCE</h3>
+            <p>
+              Practise nursing questions and prepare for assessments,
+              including OSCE-related learning and examination activities.
+            </p>
+            <a href="tests.html">Open Tests →</a>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">🏫</div>
+            <h3>Classroom</h3>
+            <p>
+              Participate in digital classroom learning and educational
+              sessions provided through the G Nurse platform.
+            </p>
+            <a href="g-nurse-meet-student.html">Enter Classroom →</a>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">💬</div>
+            <h3>Chat G Nurse</h3>
+            <p>
+              Communicate directly with G Nurse Research Hub Nigeria
+              for questions, support and enquiries.
+            </p>
+            <a href="chatgnurse.html">Chat G Nurse →</a>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">🩺</div>
+            <h3>Health Survey</h3>
+            <p>
+              Participate in selected health research and educational
+              survey activities hosted by the platform.
+            </p>
+            <a href="diphtheria-survey.html">Participate →</a>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- NURSING ARTICLES -->
+
+    <section id="articles">
+      <div class="container">
+
+        <h2 class="section-title">Nursing Articles</h2>
+
+        <p class="section-intro">
+          Educational articles will provide original learning content
+          for nursing students, healthcare learners and readers
+          interested in health education.
+        </p>
+
+        <div class="cards">
+
+          <div class="article-card">
+            <div class="article-top">🩺</div>
+            <div class="article-body">
+              <h3>Understanding Blood Pressure Measurement</h3>
+              <p>
+                Learn the basic principles of accurate blood pressure
+                measurement and common errors that can affect readings.
+              </p>
+            </div>
+          </div>
+
+          <div class="article-card">
+            <div class="article-top">👩‍⚕️</div>
+            <div class="article-body">
+              <h3>Importance of Hand Hygiene in Nursing</h3>
+              <p>
+                Explore why correct hand hygiene is an important part
+                of infection prevention and safe nursing practice.
+              </p>
+            </div>
+          </div>
+
+          <div class="article-card">
+            <div class="article-top">📋</div>
+            <div class="article-body">
+              <h3>Introduction to Nursing Research</h3>
+              <p>
+                An educational introduction to nursing research,
+                research questions, evidence and academic learning.
+              </p>
+            </div>
+          </div>
+
+        </div>
+
+        <div style="text-align:center; margin-top:25px;">
+          <a href="articles.html"
+             class="hero-btn"
+             style="background:#07562f; border-color:#07562f;">
+            Explore Nursing Articles
+          </a>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- QUICK ACCESS -->
+
+    <section id="quick-access">
+      <div class="container">
+
+        <h2 class="section-title">Quick Access</h2>
+
+        <p class="section-intro">
+          Quickly access the major learning areas of the platform.
+        </p>
+
+        <div class="quick-grid">
+
+          <a class="quick-link" href="elibrary.html">
+            <span class="big-icon">📚</span>
+            E-Library
+          </a>
+
+          <a class="quick-link" href="channel.html">
+            <s
+                          <a class="quick-link" href="channel.html">
+            <span class="big-icon">📺</span>
+            G Nurse Channel
+          </a>
+
+          <a class="quick-link" href="articles.html">
+            <span class="big-icon">📖</span>
+            Nursing Articles
+          </a>
+
+          <a class="quick-link" href="tests.html">
+            <span class="big-icon">📝</span>
+            Tests
+          </a>
+
+          <a class="quick-link" href="chatgnurse.html">
+            <span class="big-icon">💬</span>
+            Chat G Nurse
+          </a>
+
+          <a class="quick-link" href="diphtheria-survey.html">
+            <span class="big-icon">🩺</span>
+            Health Survey
+          </a>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- ABOUT US -->
+
+    <section id="about">
+      <div class="container">
+
+        <h2 class="section-title">About Us</h2>
+
+        <div class="content-box">
+
+          <p>
+            G Nurse Research Hub Nigeria is a digital educational
+            platform focused on nursing education, research support,
+            academic learning and health information.
+          </p>
+
+          <p>
+            The platform is designed to provide students and other
+            learners with convenient access to educational materials,
+            nursing articles, tests, videos, research resources and
+            other learning opportunities.
+          </p>
+
+          <p>
+            Our goal is to support continuous learning by making
+            educational resources easier to discover and use through
+            a mobile-friendly online platform.
+          </p>
+
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- CONTACT US -->
+
+    <section id="contact">
+      <div class="container">
+
+        <h2 class="section-title">Contact Us</h2>
+
+        <p class="section-intro">
+          For enquiries, support or information about G Nurse Research
+          Hub Nigeria, use the contact options below.
+        </p>
+
+        <div class="content-box">
+
+          <div class="contact-list">
+
+            <div class="contact-item">
+              <strong>Phone:</strong><br>
+              <a href="tel:+2348033581052">
+                +234 803 358 1052
+              </a>
             </div>
 
-            <h1>G Nurse Research Hub Nigeria</h1>
-
-            <p>
-                Your digital nursing education, research and academic
-                support hub.
-            </p>
-
-            <div class="hero-tag">
-                Learn. Research. Prepare. Excel.
+            <div class="contact-item">
+              <strong>Phone:</strong><br>
+              <a href="tel:+2348061851058">
+                +234 806 185 1058
+              </a>
             </div>
 
-        </section>
-
-
-        <!-- =================================================
-             DESCRIPTION OF PAGE
-             THIS IS A SECTION, NOT A PAGE
-             ================================================= -->
-
-        <section class="section" id="description">
-
-            <h2>📖 Description of Page</h2>
-
-            <p>
-                G Nurse Research Hub Nigeria is an educational platform
-                designed to support nursing students, researchers,
-                healthcare learners and other users interested in nursing
-                education and professional development.
-            </p>
-
-            <br>
-
-            <p>
-                The platform provides access to nursing research support,
-                academic resources, educational videos, tests and MCQs,
-                OSCE preparation, communication tools and other learning
-                materials. It is designed to bring useful educational
-                resources together in one convenient digital environment.
-            </p>
-
-            <br>
-
-            <p>
-                Through G Nurse Research Hub Nigeria, users can study,
-                practise examination questions, improve their clinical
-                preparation, access educational content, participate in
-                research activities and connect with other learners.
-            </p>
-
-        </section>
-
-
-        <!-- =================================================
-             OUR SERVICES
-             ================================================= -->
-
-        <section class="section" id="services">
-
-            <h2>🛠️ Our Services</h2>
-
-            <div class="services-grid">
-
-                <div class="service-card">
-                    <div class="icon">🔬</div>
-                    <h3>Research Support</h3>
-                    <p>
-                        Nursing research guidance and academic research
-                        support.
-                    </p>
-                </div>
-
-                <div class="service-card">
-                    <div class="icon">📚</div>
-                    <h3>Academic Resources</h3>
-                    <p>
-                        Study materials and useful nursing resources.
-                    </p>
-                </div>
-
-                <div class="service-card">
-                    <div class="icon">🎥</div>
-                    <h3>Educational Videos</h3>
-                    <p>
-                        Educational tutorials and nursing learning videos.
-                    </p>
-                </div>
-
-                <div class="service-card">
-                    <div class="icon">📝</div>
-                    <h3>Tests & MCQs</h3>
-                    <p>
-                        Practice questions for nursing students and learners.
-                    </p>
-                </div>
-
-                <div class="service-card">
-                    <div class="icon">🩺</div>
-                    <h3>OSCE Preparation</h3>
-                    <p>
-                        Clinical skills and OSCE preparation resources.
-                    </p>
-                </div>
-
-                <div class="service-card">
-                    <div class="icon">💬</div>
-                    <h3>Communication</h3>
-                    <p>
-                        Connect and communicate through G Nurse features.
-                    </p>
-                </div>
-
+            <div class="contact-item">
+              <strong>Email:</strong><br>
+              <a href="mailto:gnurseresearchhub@gmail.com">
+                gnurseresearchhub@gmail.com
+              </a>
             </div>
 
-        </section>
-
-
-        <!-- =================================================
-             QUICK ACCESS
-             ================================================= -->
-
-        <section class="section">
-
-            <h2>⚡ Quick Access</h2>
-
-            <div class="quick-grid">
-
-                <a class="quick-button" href="resources.html">
-                    <span>📚</span>
-                    Resources
-                </a>
-
-                <a class="quick-button" href="videos.html">
-                    <span>🎥</span>
-                    Videos
-                </a>
-
-                <a class="quick-button" href="tests.html">
-                    <span>📝</span>
-                    Tests
-                </a>
-
-                <a class="quick-button" href="osce.html">
-                    <span>🩺</span>
-                    OSCE
-                </a>
-
+            <div class="contact-item">
+              <strong>Direct Support:</strong><br>
+              <a href="chatgnurse.html">
+                Chat with G Nurse Research Hub Nigeria
+              </a>
             </div>
 
-        </section>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
 
 
-        <!-- =================================================
-             ABOUT US
-             ================================================= -->
-
-        <section class="section" id="about">
-
-            <h2>ℹ️ About Us</h2>
-
-            <p>
-                G Nurse Research Hub Nigeria is focused on making nursing
-                education, research support and learning resources more
-                accessible through digital technology.
-            </p>
-
-            <br>
-
-            <p>
-                Our goal is to provide a simple, useful and modern platform
-                where nursing students and other healthcare learners can
-                learn, practise, research, communicate and improve their
-                academic and professional knowledge.
-            </p>
-
-                </section>
-
-        <section class="section" id="contact">
-
-            <h2>📞 Contact Us</h2>
-
-            <p>
-                📱 09049902135
-            </p>
-
-            <p>
-                📱 09031644099
-            </p>
-
-            <p>
-                📧 chollomgodfreychoji@gmail.com
-            </p>
-
-            <p>
-                💬 <a href="chatgnurse.html">Chat G Nurse</a>
-            </p>
-
-        </section>
-    
-
-    </main>
-    <!-- FIXED LOWER NAVIGATION BAR -->
-
-<nav class="bottom-nav">
-
-    <a href="chart2.html" class="bottom-nav-item">
-        <span>👥</span>
-        <small>Chat</small>
-    </a>
-
-    <a href="resources.html" class="bottom-nav-item">
-        <span>📚</span>
-        <small>Resource</small>
-    </a>
-
-    <a href="videos.html" class="bottom-nav-item">
-        <span>🎥</span>
-        <small>Videos</small>
-    </a>
-
-    <a href="tests.html" class="bottom-nav-item">
-        <span>📝</span>
-        <small>Test</small>
-    </a>
-
-    <a href="osce.html" class="bottom-nav-item">
-        <span>🩺</span>
-        <small>OSCE</small>
-    </a>
-
-</nav>
-
-
-    <!-- ============================= -->
     <!-- FOOTER -->
-    <!-- ============================= -->
 
-    <footer class="site-footer">
+    <footer>
 
-        <p>
-            © 2026 G Nurse Research Hub Nigeria
-        </p>
+      <div class="footer-title">
+        G Nurse Research Hub Nigeria
+      </div>
 
-        <p>
-            Nursing Research • Education • Communication • Professional Development
-        </p>
+      <p>
+        Nursing education • Research support • Health education
+      </p>
+
+      <div class="footer-links">
+
+        <a href="index.html">Home</a>
+
+        <a href="articles.html">
+          Nursing Articles
+        </a>
+
+        <a href="elibrary.html">
+          E-Library
+        </a>
+
+        <a href="channel.html">
+          G Nurse Channel
+        </a>
+
+        <a href="tests.html">
+          Tests
+        </a>
+
+        <a href="g-nurse-meet-student.html">
+          Classroom
+        </a>
+
+        <a href="about.html">
+          About Us
+        </a>
+
+        <a href="contact.html">
+          Contact Us
+        </a>
+
+        <a href="privacy-policy.html">
+          Privacy Policy
+        </a>
+
+        <a href="terms.html">
+          Terms & Conditions
+        </a>
+
+        <a href="medical-disclaimer.html">
+          Medical/Health Disclaimer
+        </a>
+
+      </div>
+
+      <div class="copyright">
+        © 2026 G Nurse Research Hub Nigeria.
+        All rights reserved.
+        <br>
+        Educational information provided on this website is intended
+        for learning and general health education.
+      </div>
 
     </footer>
 
-
-    <!-- ============================= -->
-    <!-- MENU OVERLAY -->
-    <!-- ============================= -->
-
-    <div class="menu-overlay" id="menuOverlay" onclick="closeMenuFromOutside(event)">
-
-        <div class="menu-panel" id="menuPanel">
-
-            <button class="close-menu" onclick="closeMenu()">
-                ✕
-            </button>
-
-            <h2>☰ G Nurse Menu</h2>
+  </main>
 
 
-            <!-- UPPER NAVIGATION -->
+  <!-- =========================
+       BOTTOM NAVIGATION
+  ========================== -->
 
-            <h3>Upper Navigation</h3>
+  <nav class="bottom-nav">
 
-            <button onclick="goTo('chatgnurse.html')">
-                💬 Chat G Nurse
-            </button>
+    <a class="bottom-nav-item" href="chatgnurse.html">
+      <span class="bottom-icon">💬</span>
+      <span>Chat</span>
+    </a>
 
-            <button onclick="goTo('elibrary.html')">
-                📚 E-Library
-            </button>
+    <a class="bottom-nav-item" href="elibrary.html">
+      <span class="bottom-icon">📚</span>
+      <span>Library</span>
+    </a>
 
-            <button onclick="goTo('media-broadcast.html')">
-                📺 Media Broadcast
-            </button>
+    <a class="bottom-nav-item" href="channel.html">
+      <span class="bottom-icon">📺</span>
+      <span>Channel</span>
+    </a>
 
-            <button onclick="goTo('channel.html')">
-                📡 Channel
-            </button>
+    <a class="bottom-nav-item" href="tests.html">
+      <span class="bottom-icon">📝</span>
+      <span>Tests</span>
+    </a>
 
-            <button onclick="goTo('epidemiology.html')">
-                📊 Epidemiology Chart
-            </button>
+    <a class="bottom-nav-item" href="articles.html">
+      <span class="bottom-icon">📖</span>
+      <span>Articles</span>
+    </a>
 
-            <button onclick="goTo('diphtheria-survey.html')">
-                📝 Participate in Diphtheria Survey
-            </button>
-
-
-            <!-- LOWER NAVIGATION -->
-
-            <h3>Lower Navigation</h3>
-
-            <button onclick="goTo('chart2.html')">
-                👥 Chat Room
-            </button>
-
-            <button onclick="goTo('resources.html')">
-                📚 Resource Materials
-            </button>
-
-            <button onclick="goTo('videos.html')">
-                🎥 Educational Videos
-            </button>
-
-            <button onclick="goTo('tests.html')">
-                📝 Tests & MCQs
-            </button>
-
-            <button onclick="goTo('osce.html')">
-                🩺 OSCE Exams
-            </button>
+  </nav>
 
 
-            <!-- HOME SECTIONS -->
+  <!-- =========================
+       MENU
+  ========================== -->
 
-            <h3>Homepage</h3>
+  <div class="menu-overlay"
+       id="menuOverlay"
+       onclick="closeMenuFromOutside(event)">
 
-            <button onclick="scrollToSection('home')">
-                🏠 Home
-            </button>
+    <div class="menu-panel">
 
-            <button onclick="scrollToSection('description')">
-                📖 Description of Page
-            </button>
+      <div class="menu-header">
 
-            <button onclick="scrollToSection('services')">
-                🛠️ Services
-            </button>
+        <h2>G Nurse Menu</h2>
 
-            <button onclick="scrollToSection('about')">
-                ℹ️ About Us
-            </button>
+        <button class="close-menu"
+                onclick="closeMenu()"
+                aria-label="Close menu">
+          ×
+        </button>
 
-            <button onclick="scrollToSection('contact')">
-                📞 Contact Us
-            </button>
+      </div>
 
-        </div>
+
+      <div class="menu-heading">
+        Main Navigation
+      </div>
+
+      <button class="menu-link"
+              onclick="goTo('index.html')">
+        🏠 <strong>Home</strong>
+      </button>
+
+      <button class="menu-link"
+              onclick="goTo('chatgnurse.html')">
+        💬 <strong>Chat G Nurse</strong>
+      </button>
+
+      <button class="menu-link"
+              onclick="goTo('elibrary.html')">
+        📚 <strong>E-Library</strong><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Resources, research materials and
+        nursing study materials
+      </button>
+
+      <button class="menu-link"
+              onclick="goTo('media-broadcast.html')">
+        📰 <strong>Media Broadcast</strong>
+      </button>
+
+      <button class="menu-link"
+              onclick="goTo('channel.html')">
+        📺 <strong>G Nurse Channel</strong><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;Educational videos, nursing lessons
+        and health education
+      </button>
+
+      <button class="menu-link"
+              onclick="goTo('articles.html')">
+        📖 <strong>Nursing Articles</strong>
+      </button>
+
+      <button class="menu-link"
+              onclick="goTo('g-nurse-meet-student.html')">
+        🏫 <strong>Classroom</strong>
+      </button>
+
+      <button class="menu-link"
+              onclick="goTo('tests.html')">
+        📝 <strong>Tests</strong><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;CBT, practice tests and OSCE
+      </button>
+
+      <button class="menu-link"
+              onclick="goTo('diphtheria-survey.html')">
+        🩺 <strong>Diphtheria Survey</strong>
+      </button>
+
+
+      <div class="menu-heading">
+        Homepage Sections
+      </div>
+
+      <button class="menu-link"
+              onclick="scrollToSection('description')">
+        ℹ️ About the Platform
+      </button>
+
+      <button class="menu-link"
+              onclick="scrollToSection('services')">
+        🧰 Our Services
+      </button>
+
+      <button class="menu-link"
+              onclick="scrollToSection('articles')">
+        📖 Nursing Articles
+      </button>
+
+      <button class="menu-link"
+              onclick="scrollToSection('about')">
+        👥 About Us
+      </button>
+
+      <button class="menu-link"
+              onclick="scrollToSection('contact')">
+        📞 Contact Us
+      </button>
+
+
+      <div class="menu-heading">
+        Website Information
+      </div>
+
+      <button class="menu-link"
+              onclick="goTo('privacy-policy.html')">
+        🔒 Privacy Policy
+      </button>
+
+      <button class="menu-link"
+              onclick="goTo('terms.html')">
+        📄 Terms & Conditions
+      </button>
+
+      <button class="menu-link"
+              onclick="goTo('medical-disclaimer.html')">
+        ⚕️ Medical/Health Disclaimer
+      </button>
 
     </div>
 
+  </div>
 
-    <!-- ============================= -->
-    <!-- JAVASCRIPT -->
-    <!-- ============================= -->
 
-    <script>
+  <!-- =========================
+       JAVASCRIPT
+  ========================== -->
 
-        /* =========================
-           NAVIGATION
-        ========================= */
+  <script>
 
-        function goTo(page) {
+    function openMenu() {
+      document.getElementById("menuOverlay")
+        .classList.add("active");
+    }
 
-            window.location.href = page;
+    function closeMenu() {
+      document.getElementById("menuOverlay")
+        .classList.remove("active");
+    }
 
+    function closeMenuFromOutside(event) {
+
+      if (
+        event.target ===
+        document.getElementById("menuOverlay")
+      ) {
+        closeMenu();
+      }
+
+    }
+
+    function goTo(page) {
+
+      closeMenu();
+
+      window.location.href = page;
+
+    }
+
+    function scrollToSection(id) {
+
+      closeMenu();
+
+      const element =
+        document.getElementById(id);
+
+      if (element) {
+
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+      }
+
+    }
+
+
+    document.addEventListener(
+      "keydown",
+      function(event) {
+
+        if (event.key === "Escape") {
+          closeMenu();
         }
 
-
-        /* =========================
-           OPEN MENU
-        ========================= */
-
-        function openMenu() {
-
-            document
-                .getElementById("menuOverlay")
-                .classList.add("active");
-
-            document.body.classList.add("menu-open");
-
-        }
+      }
+    );
 
 
-        /* =========================
-           CLOSE MENU
-        ========================= */
+    /* Service Worker */
 
-        function closeMenu() {
+    if ("serviceWorker" in navigator) {
 
-            document
-                .getElementById("menuOverlay")
-                .classList.remove("active");
+      window.addEventListener(
+        "load",
+        function() {
 
-            document.body.classList.remove("menu-open");
+          navigator.serviceWorker
+            .register("service-worker.js")
+            .catch(function(error) {
+
+              console.log(
+                "Service Worker registration failed:",
+                error
+              );
+
+            });
 
         }
+      );
 
+    }
 
-        /* =========================
-           CLOSE MENU WHEN CLICKING
-           OUTSIDE THE MENU
-        ========================= */
-
-        function closeMenuFromOutside(event) {
-
-            if (event.target.id === "menuOverlay") {
-
-                closeMenu();
-
-            }
-
-        }
-
-
-        /* =========================
-           MENU NAVIGATION
-        ========================= */
-
-        function menuGo(page) {
-
-            closeMenu();
-
-            setTimeout(function () {
-
-                window.location.href = page;
-
-            }, 100);
-
-        }
-
-
-        /* =========================
-           HOMEPAGE SECTION SCROLL
-        ========================= */
-
-        function scrollToSection(sectionId) {
-
-            closeMenu();
-
-            const section =
-                document.getElementById(sectionId);
-
-            if (section) {
-
-                setTimeout(function () {
-
-                    section.scrollIntoView({
-                        behavior: "smooth",
-                        block: "start"
-                    });
-
-                }, 100);
-
-            }
-
-        }
-
-
-        /* =========================
-           PREVENT BODY SCROLL
-           WHEN MENU IS OPEN
-        ========================= */
-
-        document.addEventListener(
-            "keydown",
-            function(event) {
-
-                if (
-                    event.key === "Escape"
-                ) {
-
-                    closeMenu();
-
-                }
-
-            }
-        );
-
-
-        /* =========================
-           SERVICE WORKER
-        ========================= */
-
-        if ("serviceWorker" in navigator) {
-
-            window.addEventListener(
-                "load",
-                function() {
-
-                    navigator.serviceWorker
-                        .register("service-worker.js")
-                        .then(function() {
-
-                            console.log(
-                                "Service Worker registered successfully."
-                            );
-
-                        })
-                        .catch(function(error) {
-
-                            console.log(
-                                "Service Worker registration failed:",
-                                error
-                            );
-
-                        });
-
-                }
-            );
-
-        }
-
-    </script>
+  </script>
 
 </body>
-
-</html>
+          </html>
