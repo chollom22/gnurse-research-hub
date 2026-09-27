@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Contact Us | G Nurse Research Hub Nigeria</title>
+
+  <meta name="description" content="Contact G Nurse Research Hub Nigeria for questions, suggestions, research support, nursing education, health education and website enquiries.">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="G Nurse Research Hub Nigeria">
+  <meta name="theme-color" content="#07562f">
+
+  <!-- Google AdSense -->
+  <script async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3660632082094744"
+    crossorigin="anonymous"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f8f6;
+      color: #222;
+      line-height: 1.7;
+    }
+
+    header {
+      background: #07562f;
+      color: white;
+      padding: 17px 15px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .header-inner {
+      max-width: 900px;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .home-btn {
+      color: white;
+      text-decoration: none;
+      background: rgba(255,255,255,0.15);
+      padding: 8px 13px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    main {
+      max-width: 900px;
+      margin: auto;
+      padding: 25px 16px 50px;
+    }
+
+    .hero {
+      background: white;
+      padding: 30px 21px;
+      border-radius: 14px;
+      border-left: 5px solid #07562f;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    }
+
+    .hero h1 {
+      color: #07562f;
+      font-size: 29px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      color: #555;
+      margin-bottom: 0;
+    }
+
+    section {
+      background: white;
+      padding: 22px 20px;
+      margin-bottom: 16px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    h2 {
+      color: #07562f;
+      font-size: 21px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 12px;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .contact-card {
+      background: #eef7f2;
+      border: 1px solid #dce9e2;
+      border-radius: 12px;
+      padding: 18px;
+    }
+
+    .contact-icon {
+      font-size: 28px;
+      margin-bottom: 7px;
+    }
+
+    .contact-card h3 {
+      color: #07562f;
+      font-size: 17px;
+      margin-bottom: 5px;
+    }
+
+    .contact-card p {
+      font-size: 14px;
+      margin-bottom: 5px;
+      color: #555;
+    }
+
+    .contact-card a {
+      color: #07562f;
+      font-weight: bold;
+      text-decoration: none;
+      word-break: break-word;
+    }
+
+    .form-box {
+      margin-top: 18px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 6px;
+      margin-top: 14px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ccd9d2;
+      border-radius: 9px;
+      font-family: inherit;
+      font-size: 15px;
+      outline: none;
+      background: #fff;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #07562f;
+      box-shadow: 0 0 0 2px rgba(7,86,47,0.08);
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    .submit-btn {
+      width: 100%;
+      margin-top: 18px;
+      padding: 14px;
+      border: none;
+      border-radius: 9px;
+      background: #07562f;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .submit-btn:hover {
+      background: #064825;
+    }
+
+    .note {
+      background: #fff7df;
+      border: 1px solid #e6cf83;
+      padding: 16px;
+      border-radius: 10px;
+      margin-top: 16px;
+      font-size: 14px;
+    }
+
+    .note strong {
+      color: #735500;
+    }
+
+    .quick-links {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .quick-links a {
+      display: block;
+      text-align: center;
+      background: #07562f;
+      color: white;
+      text-decoration: none;
+      padding: 12px;
+      border-radius: 9px;
+      font-size: 14px;
+    }
+
+    footer {
+      background: #063f24;
+      color: #dcece3;
+      padding: 28px 16px;
+      text-align: center;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px 16px;
+      margin-bottom: 15px;
+    }
+
+    .footer-links a {
+      color: white;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    footer p {
+      font-size: 13px;
+      margin: 5px 0;
+    }
+
+    @media (max-width: 600px) {
+
+      .brand {
+        font-size: 16px;
+      }
+
+      .hero h1 {
+        font-size: 24px;
+      }
+
+      section {
+        padding: 19px 16px;
+      }
+
+      h2 {
+        font-size: 19px;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .quick-links {
+        grid-template-columns: 1fr;
+      }
+
+      .home-btn {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="header-inner">
+
+    <a href="index.html" class="brand">
+      G Nurse Research Hub Nigeria
+    </a>
+
+    <a href="index.html" class="home-btn">
+      Home
+    </a>
+
+  </div>
+
+</header>
+
+<main>
+
+  <div class="hero">
+
+    <h1>Contact Us</h1>
+
+    <p>
+      We welcome questions, suggestions, educational enquiries,
+      research-related enquiries and feedback about G Nurse Research Hub
+      Nigeria.
+    </p>
+
+  </div>
+
+
+  <section>
+
+    <h2>Get in Touch</h2>
+
+    <p>
+      If you have a question about our educational resources, nursing
+      articles, research materials, tests, classroom features, media
+      content or other services, you can contact us using the information
+      below.
+    </p>
+
+    <div class="contact-grid">
+
+      <div class="contact-card">
+
+        <div class="contact-icon">📧</div>
+
+        <h3>Email</h3>
+
+        <p>
+          Send us an email for general enquiries.
+        </p>
+
+        <a href="mailto:gnurseresearchhub@gmail.com">
+          gnurseresearchhub@gmail.com
+        </a>
+
+      </div>
+
+
+      <div class="contact-card">
+
+        <div class="contact-icon">📞</div>
+
+        <h3>Phone</h3>
+
+        <p>
+          Contact us by telephone.
+        </p>
+
+        <a href="tel:+2348033581052">
+          +234 803 358 1052
+        </a>
+
+      </div>
+
+
+      <div class="contact-card">
+
+        <div class="contact-icon">📱</div>
+
+        <h3>Alternative Phone</h3>
+
+        <p>
+          Additional contact number.
+        </p>
+
+        <a href="tel:+2348061851058">
+          +234 806 185 1058
+        </a>
+
+      </div>
+
+
+      <div class="contact-card">
+
+        <div class="contact-icon">💬</div>
+
+        <h3>Chat G Nurse</h3>
+
+        <p>
+          Send a direct message through our website.
+        </p>
+
+        <a href="chatgnurse.html">
+          Open Chat G Nurse
+        </a>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <section>
+
+    <h2>Send Us a Message</h2>
+
+    <p>
+      You can use the form below to prepare an email message. Selecting
+      "Send Message" will open your device's email application with the
+      information you entered.
+    </p>
+
+    <div class="form-box">
+
+      <form id="contactForm">
+
+        <label for="name">
+          Your Name
+        </label>
+
+        <input
+          type="text"
+          id="name"
+          name="name"
+          placeholder="Enter your name"
+          required
+        >
+
+
+        <label for="email">
+          Your Email
+        </label>
+
+        <input
+          type="email"
+          id="email"
+          name="email"
+          placeholder="Enter your email address"
+          required
+        >
+
+
+        <label for="subject">
+          Subject
+        </label>
+
+        <select id="subject" name="subject" required>
+
+          <option value="">
+            Select a subject
+          </option>
+
+          <option value="General Enquiry">
+            General Enquiry
+          </option>
+
+          <option value="Nursing Education">
+            Nursing Education
+          </option>
+
+          <option value="Research Support">
+            Research Support
+          </option>
+
+          <option value="E-Library">
+            E-Library
+          </option>
+
+          <option value="Nursing Articles">
+            Nursing Articles
+          </option>
+
+          <option value="Tests and OSCE">
+            Tests / OSCE
+          </option>
+
+          <option value="Classroom">
+            Classroom
+          </option>
+
+          <option value="Technical Problem">
+            Technical Problem
+          </option>
+
+          <option value="Feedback">
+            Feedback / Suggestion
+          </option>
+
+        </select>
+
+
+        <label for="message">
+          Your Message
+        </label>
+
+        <textarea
+          id="message"
+          name="message"
+          placeholder="Write your message here..."
+          required
+        ></textarea>
+
+
+        <button type="submit" class="submit-btn">
+          Send Message
+        </button>
+
+      </form>
+
+    </div>
+
+    <div class="note">
+
+      <strong>Note:</strong>
+      For urgent medical problems or emergencies, please contact an
+      appropriate healthcare facility or emergency service rather than
+      using this contact form.
+
+    </div>
+
+  </section>
+
+
+  <section>
+
+    <h2>What You Can Contact Us About</h2>
+
+    <p>
+      Examples of enquiries include:
+    </p>
+
+    <ul style="padding-left:22px;">
+
+      <li>
+        Questions about educational resources
+      </li>
+
+      <li>
+        Suggestions for new nursing or health topics
+      </li>
+
+      <li>
+        Research and academic enquiries
+      </li>
+
+      <li>
+        Problems accessing website features
+      </li>
+
+      <li>
+        Questions about digital learning resources
+      </li>
+
+      <li>
+        Feedback about articles or educational content
+      </li>
+
+      <li>
+        Questions about tests and learning activities
+      </li>
+
+      <li>
+        General website feedback
+      </li>
+
+    </ul>
+
+  </section>
+
+
+  <section>
+
+    <h2>Other Ways to Explore G Nurse</h2>
+
+    <div class="quick-links">
+
+      <a href="articles.html">
+        Nursing Articles
+      </a>
+
+      <a href="elibrary.html">
+        E-Library
+      </a>
+
+      <a href="channel.html">
+        G Nurse Channel
+      </a>
+
+      <a href="tests.html">
+        Tests
+      </a>
+
+      <a href="chatgnurse.html">
+        Chat G Nurse
+      </a>
+
+      <a href="index.html">
+        Homepage
+      </a>
+
+    </div>
+
+  </section>
+
+
+  <section>
+
+    <h2>About G Nurse Research Hub Nigeria</h2>
+
+    <p>
+      G Nurse Research Hub Nigeria is an educational and digital learning
+      platform focused on nursing education, health education, research
+      support and academic development.
+    </p>
+
+    <p>
+      Learn more on our
+      <a href="about.html">About Us</a>
+      page.
+    </p>
+
+  </section>
+
+</main>
+
+
+<footer>
+
+  <div class="footer-links">
+
+    <a href="index.html">
+      Home
+    </a>
+
+    <a href="about.html">
+      About Us
+    </a>
+
+    <a href="contact.html">
+      Contact
+    </a>
+
+    <a href="articles.html">
+      Nursing Articles
+    </a>
+
+    <a href="elibrary.html">
+      E-Library
+    </a>
+
+    <a href="channel.html">
+      G Nurse Channel
+    </a>
+
+    <a href="tests.html">
+      Tests
+    </a>
+
+    <a href="privacy-policy.html">
+      Privacy Policy
+    </a>
+
+    <a href="terms.html">
+      Terms & Conditions
+    </a>
+
+    <a href="medical-disclaimer.html">
+      Medical Disclaimer
+    </a>
+
+  </div>
+
+  <p>
+    © 2026 G Nurse Research Hub Nigeria. All rights reserved.
+  </p>
+
+  <p>
+    Nursing education, research and health information platform.
+  </p>
+
+</footer>
+
+
+<script>
+
+  document.getElementById("contactForm").addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const name =
+      document.getElementById("name").value.trim();
+
+    const email =
+      document.getElementById("email").value.trim();
+
+    const subject =
+      document.getElementById("subject").value;
+
+    const message =
+      document.getElementById("message").value.trim();
+
+    const emailSubject =
+      encodeURIComponent(
+        subject + " - G Nurse Research Hub Nigeria"
+      );
+
+    const emailBody =
+      encodeURIComponent(
+        "Name: " + name +
+        "\nEmail: " + email +
+        "\n\nMessage:\n" + message
+      );
+
+    window.location.href =
+      "mailto:gnurseresearchhub@gmail.com" +
+      "?subject=" + emailSubject +
+      "&body=" + emailBody;
+
+  });
+
+</script>
+
+</body>
+  </html>
