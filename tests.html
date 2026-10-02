@@ -2,8 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3660632082094744"
-     crossorigin="anonymous"></script>
+
+    <script async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3660632082094744"
+        crossorigin="anonymous">
+    </script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Nursing Test | G Nurse Research Hub Nigeria</title>
@@ -53,6 +57,67 @@
         .test-header h2 {
             color: #00695c;
             margin-top: 0;
+        }
+
+        /* SUBJECT SECTION */
+
+        .subjects {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .subjects h2 {
+            color: #00695c;
+            margin-top: 0;
+            text-align: center;
+        }
+
+        .subjects p {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .subject-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .subject-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 65px;
+            padding: 12px;
+            background: #00695c;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        .subject-btn:hover {
+            background: #004d40;
+            transform: translateY(-2px);
+        }
+
+        /* SAMPLE TEST */
+
+        .sample-title {
+            background: #e0f2f1;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .sample-title h2 {
+            color: #00695c;
+            margin: 0 0 5px;
         }
 
         .question {
@@ -134,6 +199,25 @@
             padding: 20px;
             margin-top: 40px;
         }
+
+        @media (max-width: 600px) {
+
+            .subject-grid {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 23px;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            .question {
+                padding: 16px;
+            }
+        }
     </style>
 </head>
 
@@ -144,18 +228,107 @@
     <p>Online Nursing Test</p>
 </header>
 
+
 <div class="container">
 
-    <div class="test-header">
-        <h2>📝 Nursing Practice Test</h2>
-        <p>Answer all questions and submit your test to see your score.</p>
-        <p><strong>Total Questions:</strong> 10</p>
+    <!-- SUBJECTS -->
+
+    <div class="subjects">
+
+        <h2>📚 Nursing Test Subjects</h2>
+
+        <p>
+            Select a subject to begin the test.
+        </p>
+
+        <div class="subject-grid">
+
+            <a href="foundation-of-nursing-test.html"
+               class="subject-btn">
+                🩺 Foundation of Nursing
+            </a>
+
+            <a href="anatomy-test.html"
+               class="subject-btn">
+                🫀 Anatomy
+            </a>
+
+            <a href="physiology-test.html"
+               class="subject-btn">
+                ❤️ Physiology
+            </a>
+
+            <a href="biochemistry-test.html"
+               class="subject-btn">
+                🧪 Biochemistry
+            </a>
+
+            <a href="microbiology-test.html"
+               class="subject-btn">
+                🦠 Microbiology
+            </a>
+
+            <a href="medical-surgical-nursing-test.html"
+               class="subject-btn">
+                🏥 Medical-Surgical Nursing
+            </a>
+
+            <a href="maternal-and-child-health-test.html"
+               class="subject-btn">
+                👩‍🍼 Maternal and Child Health
+            </a>
+
+            <a href="histopathology-test.html"
+               class="subject-btn">
+                🔬 Histopathology
+            </a>
+
+            <a href="epidemiology-test.html"
+               class="subject-btn">
+                📊 Epidemiology
+            </a>
+
+            <a href="community-health-nursing-test.html"
+               class="subject-btn">
+                🌍 Community Health Nursing
+            </a>
+
+            <a href="nutrition-test.html"
+               class="subject-btn">
+                🥗 Nutrition
+            </a>
+
+        </div>
+
     </div>
+
+
+    <!-- EXISTING SAMPLE TEST -->
+
+    <div class="sample-title">
+
+        <h2>📝 Nursing Practice Test</h2>
+
+        <p>
+            This is the existing sample test.
+            It will remain available while the subject tests are added.
+        </p>
+
+        <strong>Total Questions: 10</strong>
+
+    </div>
+
 
     <form id="quizForm">
 
+        <!-- QUESTION 1 -->
+
         <div class="question">
-            <h3>1. Which chamber of the heart pumps oxygenated blood to the systemic circulation?</h3>
+
+            <h3>
+                1. Which chamber of the heart pumps oxygenated blood
+                to the systemic circulation?
+            </h3>
 
             <label class="option">
                 <input type="radio" name="q1" value="A">
@@ -176,11 +349,17 @@
                 <input type="radio" name="q1" value="D">
                 D. Left ventricle
             </label>
+
         </div>
 
 
+        <!-- QUESTION 2 -->
+
         <div class="question">
-            <h3>2. What is the normal adult resting heart rate?</h3>
+
+            <h3>
+                2. What is the normal adult resting heart rate?
+            </h3>
 
             <label class="option">
                 <input type="radio" name="q2" value="A">
@@ -201,11 +380,18 @@
                 <input type="radio" name="q2" value="D">
                 D. 150–180 beats/minute
             </label>
+
         </div>
 
 
+        <!-- QUESTION 3 -->
+
         <div class="question">
-            <h3>3. Which organ is primarily responsible for filtering blood and producing urine?</h3>
+
+            <h3>
+                3. Which organ is primarily responsible for filtering
+                blood and producing urine?
+            </h3>
 
             <label class="option">
                 <input type="radio" name="q3" value="A">
@@ -226,11 +412,17 @@
                 <input type="radio" name="q3" value="D">
                 D. Pancreas
             </label>
+
         </div>
 
 
+        <!-- QUESTION 4 -->
+
         <div class="question">
-            <h3>4. Which vitamin is essential for normal blood clotting?</h3>
+
+            <h3>
+                4. Which vitamin is essential for normal blood clotting?
+            </h3>
 
             <label class="option">
                 <input type="radio" name="q4" value="A">
@@ -251,11 +443,18 @@
                 <input type="radio" name="q4" value="D">
                 D. Vitamin D
             </label>
+
         </div>
 
 
+        <!-- QUESTION 5 -->
+
         <div class="question">
-            <h3>5. Which part of the respiratory system is the main site of gas exchange?</h3>
+
+            <h3>
+                5. Which part of the respiratory system is the main
+                site of gas exchange?
+            </h3>
 
             <label class="option">
                 <input type="radio" name="q5" value="A">
@@ -276,11 +475,18 @@
                 <input type="radio" name="q5" value="D">
                 D. Larynx
             </label>
+
         </div>
 
 
+        <!-- QUESTION 6 -->
+
         <div class="question">
-            <h3>6. Which pulse site is commonly used during routine adult assessment?</h3>
+
+            <h3>
+                6. Which pulse site is commonly used during routine
+                adult assessment?
+            </h3>
 
             <label class="option">
                 <input type="radio" name="q6" value="A">
@@ -301,11 +507,18 @@
                 <input type="radio" name="q6" value="D">
                 D. Femoral
             </label>
+
         </div>
 
 
+        <!-- QUESTION 7 -->
+
         <div class="question">
-            <h3>7. Which blood cells are primarily responsible for fighting infection?</h3>
+
+            <h3>
+                7. Which blood cells are primarily responsible for
+                fighting infection?
+            </h3>
 
             <label class="option">
                 <input type="radio" name="q7" value="A">
@@ -326,11 +539,18 @@
                 <input type="radio" name="q7" value="D">
                 D. Plasma cells
             </label>
+
         </div>
 
 
+        <!-- QUESTION 8 -->
+
         <div class="question">
-            <h3>8. Which position is commonly used when administering an enema?</h3>
+
+            <h3>
+                8. Which position is commonly used when administering
+                an enema?
+            </h3>
 
             <label class="option">
                 <input type="radio" name="q8" value="A">
@@ -351,11 +571,17 @@
                 <input type="radio" name="q8" value="D">
                 D. Standing
             </label>
+
         </div>
 
 
+        <!-- QUESTION 9 -->
+
         <div class="question">
-            <h3>9. Which instrument is used to measure blood pressure?</h3>
+
+            <h3>
+                9. Which instrument is used to measure blood pressure?
+            </h3>
 
             <label class="option">
                 <input type="radio" name="q9" value="A">
@@ -376,11 +602,18 @@
                 <input type="radio" name="q9" value="D">
                 D. Otoscope
             </label>
+
         </div>
 
 
+        <!-- QUESTION 10 -->
+
         <div class="question">
-            <h3>10. What is the primary purpose of hand hygiene in healthcare?</h3>
+
+            <h3>
+                10. What is the primary purpose of hand hygiene
+                in healthcare?
+            </h3>
 
             <label class="option">
                 <input type="radio" name="q10" value="A">
@@ -401,17 +634,21 @@
                 <input type="radio" name="q10" value="D">
                 D. To increase blood pressure
             </label>
+
         </div>
 
 
         <button type="submit" id="submitBtn">
-            Submit Test
+            Submit Sample Test
         </button>
 
     </form>
 
 
+    <!-- RESULT -->
+
     <div id="result">
+
         <h2>Test Result</h2>
 
         <p id="scoreText"></p>
@@ -419,20 +656,27 @@
         <p id="percentageText"></p>
 
         <a href="tests.html" class="back-btn">
-            Take Test Again
+            Return to Tests
         </a>
+
     </div>
 
 </div>
 
 
 <footer>
-    <p>&copy; 2026 G Nurse Research Hub Nigeria</p>
+
+    <p>
+        &copy; 2026 G Nurse Research Hub Nigeria
+    </p>
+
 </footer>
 
 
 <script>
+
     const correctAnswers = {
+
         q1: "D",
         q2: "B",
         q3: "B",
@@ -443,41 +687,79 @@
         q8: "B",
         q9: "C",
         q10: "B"
+
     };
 
-    document.getElementById("quizForm").addEventListener("submit", function(event) {
 
-        event.preventDefault();
+    document
+        .getElementById("quizForm")
+        .addEventListener("submit", function(event) {
 
-        let score = 0;
-        const totalQuestions = Object.keys(correctAnswers).length;
+            event.preventDefault();
 
-        for (const question in correctAnswers) {
+            let score = 0;
 
-            const selectedAnswer = document.querySelector(
-                'input[name="' + question + '"]:checked'
-            );
+            const totalQuestions =
+                Object.keys(correctAnswers).length;
 
-            if (selectedAnswer && selectedAnswer.value === correctAnswers[question]) {
-                score++;
+
+            for (const question in correctAnswers) {
+
+                const selectedAnswer =
+                    document.querySelector(
+                        'input[name="' +
+                        question +
+                        '"]:checked'
+                    );
+
+
+                if (
+                    selectedAnswer &&
+                    selectedAnswer.value ===
+                    correctAnswers[question]
+                ) {
+
+                    score++;
+
+                }
+
             }
-        }
 
-        const percentage = Math.round((score / totalQuestions) * 100);
 
-        document.getElementById("scoreText").textContent =
-            "You scored " + score + " out of " + totalQuestions + ".";
+            const percentage =
+                Math.round(
+                    (score / totalQuestions) * 100
+                );
 
-        document.getElementById("percentageText").textContent =
-            "Percentage: " + percentage + "%";
 
-        document.getElementById("result").style.display = "block";
+            document.getElementById("scoreText")
+                .textContent =
+                "You scored " +
+                score +
+                " out of " +
+                totalQuestions +
+                ".";
 
-        document.getElementById("result").scrollIntoView({
-            behavior: "smooth"
+
+            document.getElementById("percentageText")
+                .textContent =
+                "Percentage: " +
+                percentage +
+                "%";
+
+
+            document.getElementById("result")
+                .style.display = "block";
+
+
+            document.getElementById("result")
+                .scrollIntoView({
+                    behavior: "smooth"
+                });
+
         });
-    });
+
 </script>
 
 </body>
-</html>
+    </html>
